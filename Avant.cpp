@@ -234,26 +234,6 @@ uint8_t AvantSetup::getElevatorPin() {
 
 
 /*
-void Avant::beginSerial(uint8_t xbeeRX, uint8_t xbeeTX) {
-    //use the following if it is an UNO type board
-    #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
-        if(xbeeRX == 0 && xbeeTX == 1) {
-            Serial.begin(57600);
-        }
-        else {
-            ss(xbeeRX, xbeeRX);
-            ss.begin(57600);
-        }
-    #endif
-    
-    //use the following if the is a MEGA type board
-    #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
-    #endif
-    
-    //use the following if it is a micro type board
-    #if defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega16U4__)
-    #endif
-}
 
 void serialEvent() {
   char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
