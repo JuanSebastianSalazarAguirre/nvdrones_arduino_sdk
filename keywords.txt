@@ -1,31 +1,28 @@
 #######################################
-# Syntax Coloring Map For Avant
+# Syntax Coloring Map for Avant
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
-TransmitterConfig	KEYWORD1
-Transmitter	KEYWORD1
+
+Avant	KEYWORD1
+SoftwareSerial KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-getElevatorPort	KEYWORD2
-setElevatorPort	KEYWORD2
-getAilronPort	KEYWORD2
-setAilronPort	KEYWORD2
-getThrottlePort	KEYWORD2
-setThrottlePort	KEYWORD2
-getRudderPort	KEYWORD2
-setRudderPort	KEYWORD2
-getTransmitterPort	KEYWORD2
-setTransmitterPort	KEYWORD2
-getReceiverPort	KEYWORD2
-setReceiverPort	KEYWORD2
-configure	KEYWORD2
-calibrate	KEYWORD2
-transmitData	KEYWORD2
+
+begin	KEYWORD2
+end	KEYWORD2
+read	KEYWORD2
+available	KEYWORD2
+isListening	KEYWORD2
+overflow	KEYWORD2
+flush	KEYWORD2
+listen	KEYWORD2
+
+
 
 #######################################
 # Constants (LITERAL1)

@@ -1,19 +1,39 @@
 #include <Avant.h>
 
-Transmitter tx;
-void setup() {
-  TransmitterConfig conf;
-  conf.setElevatorPort(4);  
-  conf.setAilronPort(5);
-  conf.setThrottlePort(2);
-  conf.setRudderPort(3);
-  conf.setReceiverPort(10);
-  conf.setTransmitterPort(11);
-  tx.configure(conf);
-  tx.calibrate();
+Avant myTrans(11,12);
+
+void receiveDataFromID1(float data) {
+  Serial.print("Data received as ");
+  Serial.println(data);
 }
 
-void loop() {
-  tx.transmitData();
+
+void setup() {
+  /*myTrans.getSetup().setElevatorPin(1);
+  myTrans.getSetup().setElevatorPin(1);
+  myTrans.getSetup().setElevatorPin(1);
+
+  myTrans.I2C().setDeviceId(ID1);
+  
+  //myTrans.I2C().getDevice(ID1).setCallbackFunction(receiveDataFromID1);  
+*/
+  
+  //Serial.println(myTrans.getSetup().getElevatorPin());
+  
+  myTrans.setCallbackFunction(receiveDataFromID1);
 }
+
+
+
+void loop() {
+  
+  //Serial.println(myTrans.getSetup().getElevatorPin());
+  myTrans.getAvantRC().sendSticks();  
+  //myTrans.I2C().getDevice(ID1).read();  //in Hz  
+  myTrans.readData();
+  delay(5000);
+}
+
+
+
 

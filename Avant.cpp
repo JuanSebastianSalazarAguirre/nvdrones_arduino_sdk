@@ -1,4 +1,22 @@
-#include "Avant.h"
+/*
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+The latest version of this library can always be found at
+http://arduiniana.org.
+*/
 
 // When set, _DEBUG co-opts pins 11 and 13 for debugging with an
 // oscilloscope or logic analyzer.  Beware: it also slightly modifies
@@ -12,7 +30,389 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <Arduino.h>
-#include <SoftwareSerial.h>
+#include <Avant.h>
+#include <avr/io.h>
+
+// ***********************************************
+// Avant Class Implementation
+// ***********************************************
+Avant::Avant() {
+    rcService = RCTransmitService(0);
+    rc = AvantRC(rcService);
+}
+Avant::Avant(int hardwareSerialCode) {
+    rcService = RCTransmitService(hardwareSerialCode);
+    rc = AvantRC(rcService);
+}
+Avant::Avant(int txPin, int rxPin) {
+   rcService = RCTransmitService(txPin, rxPin);
+   rc = AvantRC(rcService);
+}
+
+AvantSetup Avant::avantSetup() {return setup;} //sets the analog pins that 
+AvantRC Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
+
+void Avant::setCallbackFunction(void (*function)(float)) {
+    callback = function;
+}
+        
+void Avant::armDrone() {
+    rcService.sendData(-100, 2, 1);
+    rcService.sendData(-100, 2, 2);
+    rcService.sendData(-100, 2, 3);
+    rcService.sendData(-100, 2, 4);
+	delay(500);
+    rcService.sendData(0, 2, 1);
+    rcService.sendData(-100, 2, 2);
+    rcService.sendData(0, 2, 3);
+    rcService.sendData(0, 2, 4);
+}
+
+void Avant::disarmDrone() {
+    rcService.sendData(-70, 2, 2);
+}
+
+void Avant::readData() {
+    callback(3.14);
+}
+
+// ***********************************************
+// RCTransmitService Class Implementation
+// ***********************************************
+RCTransmitService::RCTransmitService() {}
+
+RCTransmitService::RCTransmitService(int txPin , int rxPin) {
+    softwareSerial = SoftwareSerial(txPin, rxPin);
+    isHwSerial0Used = false;
+    isHwSerial1Used = false;
+    isHwSerial2Used = false;
+    isHwSerial3Used = false;
+    isSwSerialUsed = true;
+}
+
+RCTransmitService::RCTransmitService(int hwSerialCode) {
+    if (hwSerialCode == 0) {
+        #if defined(UBRRH) || defined(UBRR0H)
+            Serial.begin(115200);
+        #endif
+        isHwSerial0Used = true;
+        isHwSerial1Used = false;
+        isHwSerial2Used = false;
+        isHwSerial3Used = false;
+        isSwSerialUsed = false;
+    } else if (hwSerialCode == 1) {
+        #if defined(UBRR1H)
+            Serial1.begin(115200);
+        #endif
+        isHwSerial0Used = false;
+        isHwSerial1Used = true;
+        isHwSerial2Used = false;
+        isHwSerial3Used = false;
+        isSwSerialUsed = false;
+    } else if (hwSerialCode == 2) {
+        #if defined(UBRR2H)
+            Serial2.begin(115200);
+        #endif
+        isHwSerial0Used = false;
+        isHwSerial1Used = false;
+        isHwSerial2Used = true;
+        isHwSerial3Used = false;
+        isSwSerialUsed = false;
+    }  else if (hwSerialCode == 3) {
+        #if defined(UBRR3H)
+            Serial3.begin(115200);
+        #endif
+        isHwSerial0Used = false;
+        isHwSerial1Used = false;
+        isHwSerial2Used = false;
+        isHwSerial3Used = true;
+        isSwSerialUsed = false;
+    }
+}        
+
+int RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) {
+    if (isHwSerial0Used) {
+        #if defined(UBRRH) || defined(UBRR0H)
+            Serial.write('$');
+            Serial.write(2);
+            Serial.write(byte(resourceID));
+            Serial.write(byte(actionID));
+            Serial.write(highByte(data));
+            Serial.write(lowByte(data));
+            Serial.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+        #endif
+    } else if (isHwSerial1Used) {
+        #if defined(UBRR1H)
+            Serial1.write('$');
+            Serial1.write(2);
+            Serial1.write(byte(resourceID));
+            Serial1.write(byte(actionID));
+            Serial1.write(highByte(data));
+            Serial1.write(lowByte(data));
+            Serial1.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+        #endif
+    }
+    else if (isHwSerial2Used) {
+        #if defined(UBRR2H)
+            Serial2.write('$');
+            Serial2.write(2);
+            Serial2.write(byte(resourceID));
+            Serial2.write(byte(actionID));
+            Serial2.write(highByte(data));
+            Serial2.write(lowByte(data));
+            Serial2.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+        #endif
+    } else if (isHwSerial3Used) {
+        #if defined(UBRR3H)
+            Serial3.write('$');
+            Serial3.write(2);
+            Serial3.write(byte(resourceID));
+            Serial3.write(byte(actionID));
+            Serial3.write(highByte(data));
+            Serial3.write(lowByte(data));
+            Serial3.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+        #endif
+    } 
+    else if (isSwSerialUsed) {
+        softwareSerial.write('$');
+        softwareSerial.write(2);
+        softwareSerial.write(byte(resourceID));
+        softwareSerial.write(byte(actionID));
+        softwareSerial.write(highByte(data));
+        softwareSerial.write(lowByte(data));
+        softwareSerial.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+    }
+    return data;
+}
+
+// ***********************************************
+// AvantRC Class Implementation
+// ***********************************************
+AvantRC::AvantRC() {};
+AvantRC::AvantRC(RCTransmitService rcTservice) {
+    service = rcTservice;
+}
+void AvantRC::setAilron(int value) {};
+void AvantRC::setElevator(int value){};
+void AvantRC::setThrottle(int value) {};
+void AvantRC::setRudder(int value) {};
+void AvantRC::setFlightMode(int value) {};
+
+int AvantRC::getAilron(){return 0;};
+int AvantRC::getElevator(){return 0;}
+int AvantRC::getThrottle(){return 0;}
+int AvantRC::getRudder(){return 0;}
+int AvantRC::getFlightMode(){return 0;}
+
+void AvantRC::sendSticks(){
+    Serial.println(service.sendData(12,2,1));
+    Serial.println(service.sendData(13,2,2));
+    Serial.println(service.sendData(14,2,3));
+    Serial.println(service.sendData(15,2,4));
+    
+}
+
+int AvantRC::readSensorReading() {
+    return 31415;
+}
+
+// ***********************************************
+// AvantSetup Class Implementation
+// ***********************************************
+AvantSetup::AvantSetup(){};
+AvantSetup::~AvantSetup(){};
+void AvantSetup::setElevatorPin(uint8_t pin) {
+	elevatorPin = pin;
+}
+uint8_t AvantSetup::getElevatorPin() {
+	return elevatorPin;
+}
+
+
+
+
+
+
+/*
+void Avant::beginSerial(uint8_t xbeeRX, uint8_t xbeeTX) {
+    //use the following if it is an UNO type board
+    #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
+        if(xbeeRX == 0 && xbeeTX == 1) {
+            Serial.begin(57600);
+        }
+        else {
+            ss(xbeeRX, xbeeRX);
+            ss.begin(57600);
+        }
+    #endif
+    
+    //use the following if the is a MEGA type board
+    #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+    #endif
+    
+    //use the following if it is a micro type board
+    #if defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega16U4__)
+    #endif
+}
+
+void serialEvent() {
+  char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
+  int length = 0;
+  int resourceID = 0;
+  int actionID = 0;
+  int datasum = 0;
+  while (Serial.available() > 0) { 
+    if (Serial.read() == '$'){  //this is the start of a Data Packet
+      if (Serial.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
+        length = byte(buffer[0]); //get the length of the data
+        resourceID = byte(buffer[1]); //get the resourceID
+        actionID = byte(buffer[2]); //get the actionID
+        char data[length+1]; // create a buffer to store the data and checksum info 
+        if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+          for(int i=0;i<length;i++){
+            datasum = datasum+byte(data[i]);
+          }
+          
+          if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
+            ///////route the data to the appropriate place here
+            switch(resourceID) {
+              case 1:
+                //Flight_Setup
+                Serial.println("got Flight Setup");
+                break;
+              case 2:
+                //Manual_Controls
+                break;
+              case 3:
+                //Mission_Planner
+                break;
+              case 4:
+                //Battery_Status
+                break;
+               case 5:
+                //Pin_Mode
+                break;
+               case 6:
+                //Digital_Write
+                break;
+               case 7:
+                //Analog_Write
+                break;
+               case 8:
+                //Digital_Read
+                break;
+               case 9:
+                //Pose_Data
+                break;
+               case 10:
+                //SPI_Communication
+                break;
+               case 11:
+                //I2C_Communication
+                break;
+               case 12:
+                //Uart_Communication
+                break;
+               case 13:
+                //Transmission_And_Security
+                break;
+               case 14:
+                //Scripting
+                break;
+            }//end of data packet router
+          }//end of checksum
+          else
+            Serial.println("checksum failed");
+        }//end of Serial.readBytes for data and checksum
+        else
+          Serial.println("Data Wrong Size");
+      }//End of Serial.readBytes for buffer
+      else 
+        Serial.println("Packet Missing Header");
+    }//end of if Serial/available
+  }//end of Serial.read
+}
+
+
+void AvantRC::sendSticks() {
+    static unsigned long period;
+    int waitTime = 25;
+    if((long)(millis() - period) >=0) {
+    
+        //sendData(analogRead(AvantSetup::rudderPin), 2, 1);
+        //sendData(analogRead(AvantSetup::throttlePin), 2, 2);
+        //sendData(analogRead(AvantSetup::elevatorPin), 2, 3);
+        //sendData(analogRead(AvantSetup::ailronPin), 2, 4);
+    period += waitTime; 
+  }
+
+}
+    
+uint8_t AvantXbee::id(uint8_t id) {
+    delay(1200);
+    Serial.print("ATID");
+    Serial.write(id);
+    Serial.write(15);
+    char acknowledge[1];
+    Serial.readBytes(&acknowledge[0], 2);
+    Serial.print("ATCN");
+    if (acknowledge[0] == 'O' && acknowledge[1] == 'K')
+      sendData(1, 13, 1);
+    else
+      sendData(1, 100, 1);
+}
+
+
+void Avant::sendData(int data, uint8_t resourceID, uint8_t actionID, bool softwareSerial) {
+
+//use the following if it is an UNO type board
+    #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
+        if(xbeeRX == 0 && xbeeTX == 1) {
+            Serial.begin(57600);
+        }
+        else {
+            ss(xbeeRX, xbeeRX);
+            ss.begin(57600);
+        }
+    #endif
+    
+    //use the following if the is a MEGA type board
+    #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+    #endif
+    
+    //use the following if it is a micro type board
+    #if defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega16U4__)
+    #endif
+    
+    
+    if(softwareSerial == false){
+      Serial.write('$');
+      Serial.write(2);
+      Serial.write(resourceID);
+      Serial.write(actionID);
+      Serial.write(highByte(data));
+      Serial.write(lowByte(data));
+      Serial.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+    }
+    else{
+        ss.write('$');
+        ss.write(2);
+        ss.write(resourceID);
+        ss.write(actionID);
+        ss.write(highByte(data));
+        ss.write(lowByte(data));
+        ss.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+    }
+}
+
+*/
+
+
+
+
+
+//*****************************************************
+//SoftwareSerial Code
 //
 // Lookup table
 //
@@ -326,7 +726,7 @@ SoftwareSerial::~SoftwareSerial()
 void SoftwareSerial::setTX(uint8_t tx)
 {
   pinMode(tx, OUTPUT);
-  digitalWrite(tx, _inverse_logic ? LOW : HIGH);
+  digitalWrite(tx, HIGH);
   _transmitBitMask = digitalPinToBitMask(tx);
   uint8_t port = digitalPinToPort(tx);
   _transmitPortRegister = portOutputRegister(port);
@@ -487,89 +887,3 @@ int SoftwareSerial::peek()
   // Read from "head"
   return _receive_buffer[_receive_buffer_head];
 }
-
-
-TransmitterConfig::TransmitterConfig() {
-		elevatorPort = 4;
-		ailronPort = 5;
-		throttlePort = 2;
-		rudderPort = 3;
-		receiverPort = 10;
-		transmitterPort = 11;
-}
-
-TransmitterConfig::~TransmitterConfig() { }
-Transmitter::Transmitter() {
-	minElevator = 190;
-	maxElevator = 786;
-	minAilron = 155;
-	maxAilron = 837;
-	minThrottle = 273;
-	maxThrottle = 732;
-	minRudder = 177;
-	maxRudder = 845;
-		
-}
-Transmitter::~Transmitter() { }
-void Transmitter::configure(TransmitterConfig conf) {
-	configuration.setElevatorPort(conf.getElevatorPort());
-	configuration.setAilronPort(conf.getAilronPort());
-	configuration.setThrottlePort(conf.getThrottlePort());
-	configuration.setRudderPort(conf.getRudderPort());
-	configuration.setTransmitterPort(conf.getTransmitterPort());
-	configuration.setReceiverPort(conf.getReceiverPort());
-}
-
-void Transmitter::calibrate() {
-
-}
-
-//this creates the appropriate data packet
-//from data and sends it in the necessary form
-void Transmitter::sendData(long data, int resourceID, int actionID) {
-	SoftwareSerial xbee = SoftwareSerial(configuration.getReceiverPort(),configuration.getTransmitterPort());
-	String packet = "$";
-	String data_s = String(data);
-	int length = data_s.length();
-	if (length == 0)
-	length = 1;
-	if (String(length).length() == 1)
-	packet = packet+"0"+String(length);
-	else
-	packet = packet+String(length);
-	//insert resource ID
-	String resourceID_s = String(resourceID);
-	length = resourceID_s.length();
-	if (length == 1)
-	packet = packet+"0"+String(resourceID);
-	else
-	packet = packet+String(resourceID);
-	//insert actionID 
-	String actionID_s = String(actionID);
-	length = actionID_s.length();
-	if (length == 1)
-	packet = packet+"0"+String(actionID);
-	else
-	packet = packet+String(actionID);
-	packet=packet+data_s+"!";
-	xbee.println(packet);
-}
-
-void Transmitter::transmitData() {
-  int elevator = analogRead(configuration.getElevatorPort());
-  int ailron = analogRead(configuration.getAilronPort());
-  int throttle = analogRead(configuration.getThrottlePort());
-  int rudder = analogRead(configuration.getRudderPort());
-  elevator = map(elevator, minElevator, maxElevator, 100, -100);
-  ailron = map(ailron, minAilron, maxAilron, -100, 100);
-  throttle = map(throttle, minThrottle, maxThrottle, 100, -100);
-  rudder = map(rudder, minRudder, maxRudder, -100, 100);
-  sendData(elevator, 1, 3);
-  sendData(ailron, 1, 4);
-  sendData(throttle, 1, 2);
-  sendData(rudder, 1, 1);
-}
-
-
-
-
