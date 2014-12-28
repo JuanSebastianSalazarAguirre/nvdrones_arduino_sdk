@@ -103,6 +103,7 @@ class SoftwareSerial : public Stream
 
 //*****************************************
 //Avant Classes
+//*****************************************
 
 class AvantSetup //stores which analogPins to get stick data from
 {                 //This is only used for the function sendSticks
@@ -172,6 +173,15 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
         void sendSticks();
         int readSensorReading();
 };
+
+class AvantGPIO {
+	private:
+		void pinMode(uint8_t pin, bool logicLevel);
+		void digitalWrite(uint8_t pin,uint8_t value);
+		void analogWrite(uint8_t pin, uint8_t value);
+		void digitalRead(uint8_t pin);
+};
+
 
 class Avant
 {
