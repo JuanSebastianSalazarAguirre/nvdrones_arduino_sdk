@@ -124,6 +124,8 @@ class AvantSetup //stores which analogPins to get stick data from
         uint8_t getThrottlePin();
         void setRudderPin(uint8_t pin);
         uint8_t getRudderPin();
+		void setFlightModePin(uint8_t pin);
+        uint8_t getFlightModePin();
 };
 
 class AvantXbee  //handles configuring the Xbee
@@ -136,8 +138,9 @@ class AvantXbee  //handles configuring the Xbee
 };
 
 
-class RCTransmitService
+class RCTransmitService 
 {
+	friend class AvantResponseHandler;
     private:
         bool isHwSerial0Used;
         bool isHwSerial1Used;
@@ -176,10 +179,24 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
 
 class AvantGPIO {
 	private:
+		RCTransmitService service;
+	public:
+		AvantGPIO();
+		AvantGPIO(RCTransmitService rcTservice);
 		void pinMode(uint8_t pin, bool logicLevel);
-		void digitalWrite(uint8_t pin,uint8_t value);
+		void digitalWrite(uint8_t pin,bool logicLevel);
 		void analogWrite(uint8_t pin, uint8_t value);
 		void digitalRead(uint8_t pin);
+};
+
+class AvantResponseHandler {
+	private:
+		RCTransmitService service;
+	public:
+		AvantResponseHandler();
+		AvantResponseHandler(RCTransmitService rcTservice);
+		void responseHandler();
+		
 };
 
 
@@ -189,6 +206,8 @@ class Avant
         AvantSetup setup;
         AvantRC rc;
         RCTransmitService rcService;
+		AvantGPIO gpio;
+		AvantResponseHandler responseHandler;
         void (*callback)(float);
         
     public:
@@ -197,9 +216,10 @@ class Avant
         Avant(int txPin, int rxPin);
         AvantSetup avantSetup();
         AvantRC avantRC();
+		AvantGPIO avantGPIO();
+		AvantResponseHandler avantResponseHandler();
         void armDrone();
         void disarmDrone();
-
         void setCallbackFunction(void (*function)(float));
         void readData();
 };
