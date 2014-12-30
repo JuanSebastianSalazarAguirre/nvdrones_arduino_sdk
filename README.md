@@ -46,6 +46,9 @@ void loop() {
 
 # Connect with us
 
-- [Facebook](http://facebook.com/NVdevelopers)
-- [Twitter](http://twitter.com/NVdevelopers)
-- [Instagram](http://instagram.com/NVdevelopers)
+Since our mission is to simplyfiy your life to empoer you to create greate solutions using drones. We want to make sure that we all stay in connected with each other. 
+
+- [Facebook](http://facebook.com/NVdevelopers): check what is going on.
+- [Twitter](http://twitter.com/NVdevelopers): ask small questions.
+- [Instagram](http://instagram.com/NVdevelopers): look what we do.
+- [E-Mail](developers@NVdrones.com): no big or small question will be unawsered.
