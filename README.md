@@ -25,9 +25,6 @@ After you opeend the box, red the Getting Started guide and added the SDK to the
 ```{.ino}
 #include <Avant.h>
 
-//
-// Create Avant Transmitter which transmits on HardwareSerial1
-// 
 Avant myTransmitter(1);
 
 void setup() {
