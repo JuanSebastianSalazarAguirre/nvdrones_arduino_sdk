@@ -1,10 +1,10 @@
 # Avant SDK for Arduino
 
-Welcome the the avant SDK project for interacting with the Avant Protocol on Arduino based systems. This project is owned by the [NVdrones](http://nvdrones.com) company, so please visit the company website if you would like to know more about why this project is all about, and how the Avant platform can help you out developing software for a variety of drones.
+Welcome the the Avant SDK for interacting with the Avant Protocol on Arduino-based systems. This project is owned by the [NVdrones](http://nvdrones.com) company, so please visit our website to learn more and how the Avant platform can help you develop software for a variety of drones.
 
 ## Before we start
 
-Before you start using our SDK, please take the time and create an account on our developer website by visiting http://developers.nvdrones.com and read our starter guide so you can get a clear understanding on how to work with our technology and also get full access to the documentation.
+Before you start using our SDK, please take the time and create an account on our developer website by visiting http://developers.nvdrones.com and read our starter guide so you can gain a clear understanding of how to work with our technology, as well as get full access to the documentation.
 
 ## Tools needed 
 
@@ -14,14 +14,14 @@ Before you start using our SDK, please take the time and create an account on ou
 
 ## How to add the library
 
-- Cloned this repository on your local machine, 
-- please open the Arduino IDE and once open, 
-- select Sketch > Import Library > Add Library... and point to the directory where you cloned this SDK. 
-- Once this os done, go back to Sketch > Import Library but this time select the actual library "Avant_Arduino".
+- Clone this repository on your local machine, 
+- Open the Arduino IDE, 
+- Select Sketch > Import Library > Add Library... and point to the directory where you cloned this SDK. 
+- Once this is done, go back to Sketch > Import Library but this time select the actual library "Avant_Arduino".
 
 ## Write your first Hello World app
 
-After you opened the Developer Kit, red the Getting Started guide and added the SDK to the IDE. It is time to write the first app to see if everything works.
+After opening the Developer Kit, read the Getting Started guide and add the SDK to the IDE. It is time to write the first app to see if everything works.
 
 ```{.ino}
 #include <Avant.h>
@@ -47,7 +47,7 @@ Now that you tested everything it is time to get more serious. Visit our [Quick 
 
 ## Connect with us
 
-Since our mission is to simplify your life to empower you to create great solutions using drones. We want to make sure that we all stay in connected with each other. 
+Since our mission is to simplify your life to empower you to create great solutions using drones. We want to make sure that we stay in connected with each other!
 
 - [Facebook](http://facebook.com/NVdevelopers): check what is going on.
 - [Twitter](http://twitter.com/NVdevelopers): ask small questions.
