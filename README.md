@@ -35,9 +35,14 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("Arming ");
+  Serial.println("Arming");
   myTransmitter.armDrone();
+  
+  Serial.println("Waiting...");
   delay(10000);
+  
+  Serial.println("Disarming");
+  myTransmitter.disarmDrone();
 }
 
 ```
