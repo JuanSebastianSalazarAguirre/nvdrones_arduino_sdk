@@ -7,8 +7,8 @@ Before you start using our SDK, please take the time and create an account on ou
 
 # Tools needed 
 
-- Arduino IDE
-- Account on the develoepr site
+- [Arduino IDE](http://arduino.cc/en/main/software)
+- [Account on the develoepr site](http://developers.nvdrones.com)
 - Clone this repositiry
 
 # How to add the library
