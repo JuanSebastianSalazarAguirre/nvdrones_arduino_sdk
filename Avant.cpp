@@ -39,18 +39,21 @@ http://arduiniana.org.
 Avant::Avant() {
     rcService = RCTransmitService(0);
     rc = AvantRC(rcService);
+    setup = AvantSetup(rcService);
 }
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
     rc = AvantRC(rcService);
+    setup = AvantSetup(rcService);
 }
 Avant::Avant(int txPin, int rxPin) {
    rcService = RCTransmitService(txPin, rxPin);
    rc = AvantRC(rcService);
+   setup = AvantSetup(rcService);
 }
 
-AvantSetup Avant::avantSetup() {return setup;} //sets the analog pins that 
-AvantRC Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
+AvantSetup& Avant::avantSetup() {return setup;} //sets the analog pins that 
+AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
 
 void Avant::setCallbackFunction(void (*function)(float)) {
     callback = function;
@@ -61,7 +64,7 @@ void Avant::armDrone() {
     rcService.sendData(-100, 2, 2);
     rcService.sendData(-100, 2, 3);
     rcService.sendData(-100, 2, 4);
-	delay(500);
+    delay(500);
     rcService.sendData(0, 2, 1);
     rcService.sendData(-100, 2, 2);
     rcService.sendData(0, 2, 3);
@@ -69,7 +72,7 @@ void Avant::armDrone() {
 }
 
 void Avant::disarmDrone() {
-    rcService.sendData(-70, 2, 2);
+    armDrone();
 }
 
 void Avant::readData() {
@@ -92,7 +95,8 @@ RCTransmitService::RCTransmitService(int txPin , int rxPin) {
 
 RCTransmitService::RCTransmitService(int hwSerialCode) {
     if (hwSerialCode == 0) {
-        #if defined(UBRRH) || defined(UBRR0H)
+
+        #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
             Serial.begin(115200);
         #endif
         isHwSerial0Used = true;
@@ -128,11 +132,11 @@ RCTransmitService::RCTransmitService(int hwSerialCode) {
         isHwSerial3Used = true;
         isSwSerialUsed = false;
     }
-}        
+}
 
 int RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) {
     if (isHwSerial0Used) {
-        #if defined(UBRRH) || defined(UBRR0H)
+        #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
             Serial.write('$');
             Serial.write(2);
             Serial.write(byte(resourceID));
@@ -204,14 +208,6 @@ int AvantRC::getThrottle(){return 0;}
 int AvantRC::getRudder(){return 0;}
 int AvantRC::getFlightMode(){return 0;}
 
-void AvantRC::sendSticks(){
-    Serial.println(service.sendData(12,2,1));
-    Serial.println(service.sendData(13,2,2));
-    Serial.println(service.sendData(14,2,3));
-    Serial.println(service.sendData(15,2,4));
-    
-}
-
 int AvantRC::readSensorReading() {
     return 31415;
 }
@@ -220,15 +216,68 @@ int AvantRC::readSensorReading() {
 // AvantSetup Class Implementation
 // ***********************************************
 AvantSetup::AvantSetup(){};
+AvantSetup::AvantSetup(RCTransmitService rcService) {
+    service = rcService;
+}
 AvantSetup::~AvantSetup(){};
-void AvantSetup::setElevatorPin(uint8_t pin) {
+
+void AvantSetup::setElevatorPin(int pin) {
 	elevatorPin = pin;
 }
-uint8_t AvantSetup::getElevatorPin() {
+int AvantSetup::getElevatorPin(){
 	return elevatorPin;
 }
+void AvantSetup::setAilronPin(int pin) {
+	ailronPin = pin;
+}
+int AvantSetup::getAilronPin(){
+	return ailronPin;
+}
+void AvantSetup::setThrottlePin(int pin) {
+	throttlePin = pin;
+}
+int AvantSetup::getThrottlePin(){
+	return throttlePin;
+}
+void AvantSetup::setRudderPin(int pin) {
+	rudderPin = pin;
+}
+int AvantSetup::getRudderPin(){
+	return rudderPin;
+}
 
-
+void AvantSetup::sendSticks(){
+	int Elevator = analogRead(elevatorPin);
+	int Ailron = analogRead(ailronPin);
+	int Throttle = analogRead(throttlePin);
+	int Rudder = analogRead(rudderPin);
+	Elevator = map(Elevator, 777, 136, -100, 100);
+	Ailron = map(Ailron, 872, 124, -100, 100);
+	Throttle = map(Throttle, 780, 118 , -100, 100);
+	Rudder = map(Rudder, 867, 97, -100, 100);
+	/*
+	Serial.print("E=");
+	Serial.print(Elevator);
+	Serial.print(" A=");
+	Serial.print(Ailron);
+	Serial.print(" T=");
+	Serial.print(Throttle);
+	Serial.print(" R=");
+	Serial.println(Rudder);
+	*/
+    if (Elevator > 100) Elevator = 100;
+    if (Elevator < -100) Elevator = -100;
+    if (Ailron > 100) Ailron = 100;
+    if (Ailron < -100) Ailron = -100;        
+    if (Throttle > 100) Throttle = 100;
+    if (Throttle < -100) Throttle = -100;  
+    if (Rudder > 100) Rudder = 100;
+    if (Rudder < -100) Rudder = -100;    
+    service.sendData(Elevator, 2, 3);
+    service.sendData(Ailron, 2, 4);
+    service.sendData(Throttle, 2, 2);
+    service.sendData(Rudder, 2, 1);
+}
 
 
 

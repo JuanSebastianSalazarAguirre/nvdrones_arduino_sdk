@@ -6,19 +6,19 @@
 Avant myTransmitter(1);
 
 void setup() {
-  Serial.begin(115200);
-  myTransmitter.getAvantSetup().
+  delay(2000);
+  myTransmitter = Avant(1);
+  myTransmitter.avantSetup().setRudderPin(2);    
+  myTransmitter.avantSetup().setThrottlePin(3);    
+  myTransmitter.avantSetup().setElevatorPin(4);
+  myTransmitter.avantSetup().setAilronPin(5);
 }
 
 void loop() {
-  Serial.println("Arming ");
-  myTransmitter.armDrone();
-  delay(500);
-  myTransmitter.armDrone();  
-  Serial.println("Disarming ");
-  //myTransmitter.disarmDrone();
-  delay(5000);
+  delay(10);
+  myTransmitter.avantSetup().sendSticks();
 }
+
 
 
 
