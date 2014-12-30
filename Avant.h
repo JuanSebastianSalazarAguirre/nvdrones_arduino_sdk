@@ -103,6 +103,7 @@ class SoftwareSerial : public Stream
 
 //*****************************************
 //Avant Classes
+//*****************************************
 
 class RCTransmitService
 {
@@ -174,6 +175,15 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
         int getFlightMode();
         int readSensorReading();
 };
+
+class AvantGPIO {
+	private:
+		void pinMode(uint8_t pin, bool logicLevel);
+		void digitalWrite(uint8_t pin,uint8_t value);
+		void analogWrite(uint8_t pin, uint8_t value);
+		void digitalRead(uint8_t pin);
+};
+
 
 class Avant
 {

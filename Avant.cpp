@@ -283,26 +283,6 @@ void AvantSetup::sendSticks(){
 
 
 /*
-void Avant::beginSerial(uint8_t xbeeRX, uint8_t xbeeTX) {
-    //use the following if it is an UNO type board
-    #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
-        if(xbeeRX == 0 && xbeeTX == 1) {
-            Serial.begin(57600);
-        }
-        else {
-            ss(xbeeRX, xbeeRX);
-            ss.begin(57600);
-        }
-    #endif
-    
-    //use the following if the is a MEGA type board
-    #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
-    #endif
-    
-    //use the following if it is a micro type board
-    #if defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega16U4__)
-    #endif
-}
 
 void serialEvent() {
   char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
@@ -409,49 +389,6 @@ uint8_t AvantXbee::id(uint8_t id) {
       sendData(1, 13, 1);
     else
       sendData(1, 100, 1);
-}
-
-
-void Avant::sendData(int data, uint8_t resourceID, uint8_t actionID, bool softwareSerial) {
-
-//use the following if it is an UNO type board
-    #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
-        if(xbeeRX == 0 && xbeeTX == 1) {
-            Serial.begin(57600);
-        }
-        else {
-            ss(xbeeRX, xbeeRX);
-            ss.begin(57600);
-        }
-    #endif
-    
-    //use the following if the is a MEGA type board
-    #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
-    #endif
-    
-    //use the following if it is a micro type board
-    #if defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega16U4__)
-    #endif
-    
-    
-    if(softwareSerial == false){
-      Serial.write('$');
-      Serial.write(2);
-      Serial.write(resourceID);
-      Serial.write(actionID);
-      Serial.write(highByte(data));
-      Serial.write(lowByte(data));
-      Serial.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
-    }
-    else{
-        ss.write('$');
-        ss.write(2);
-        ss.write(resourceID);
-        ss.write(actionID);
-        ss.write(highByte(data));
-        ss.write(lowByte(data));
-        ss.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
-    }
 }
 
 */
