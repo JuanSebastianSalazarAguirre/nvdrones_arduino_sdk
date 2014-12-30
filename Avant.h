@@ -104,28 +104,28 @@ class SoftwareSerial : public Stream
 //*****************************************
 //Avant Classes
 //*****************************************
-
-class AvantSetup //stores which analogPins to get stick data from
-{                 //This is only used for the function sendSticks
+class AvantSetup 
+{
     private:
-        static uint8_t elevatorPin;
-        static uint8_t ailronPin;
-        static uint8_t throttlePin;
-        static uint8_t rudderPin;
-        static uint8_t flightModePin;
+		int elevatorPin;
+        int ailronPin;
+        int throttlePin;
+        int rudderPin;
+        int flightModePin;
+		RCTransmitService service;
     public:
         AvantSetup();
+		AvantSetup(RCTransmitService rcService);
         ~AvantSetup();
-        void setElevatorPin(uint8_t pin);
-        uint8_t getElevatorPin();
-        void setAilronPin(uint8_t pin);
-        uint8_t getAilronPin();
-        void setThrottlePin(uint8_t pin);
-        uint8_t getThrottlePin();
-        void setRudderPin(uint8_t pin);
-        uint8_t getRudderPin();
-		void setFlightModePin(uint8_t pin);
-        uint8_t getFlightModePin();
+		void setElevatorPin(int pin);
+		int getElevatorPin();
+		void setAilronPin(int pin);
+		int getAilronPin();
+		void setThrottlePin(int pin);
+		int getThrottlePin();
+		void setRudderPin(int pin);
+		int getRudderPin();
+		void sendSticks();
 };
 
 class AvantXbee  //handles configuring the Xbee
@@ -138,7 +138,7 @@ class AvantXbee  //handles configuring the Xbee
 };
 
 
-class RCTransmitService 
+class RCTransmitService
 {
 	friend class AvantResponseHandler;
     private:
@@ -154,7 +154,6 @@ class RCTransmitService
         RCTransmitService(int hwSerialCode);
         int sendData(int data, uint8_t resourceID, uint8_t actionID);
 };
-
 
 class AvantRC //handles sending values to the PWM/PPM port(s) 
 {
@@ -173,7 +172,6 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
         int getThrottle();
         int getRudder();
         int getFlightMode();
-        void sendSticks();
         int readSensorReading();
 };
 
@@ -214,7 +212,7 @@ class Avant
         Avant();
         Avant(int hardwareSerialCode);
         Avant(int txPin, int rxPin);
-        AvantSetup avantSetup();
+        AvantSetup& avantSetup();
         AvantRC avantRC();
 		AvantGPIO avantGPIO();
 		AvantResponseHandler avantResponseHandler();
