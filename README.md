@@ -1,4 +1,4 @@
-Avant_Arduino
+Avant SDK for Arduino
 =============
 
-Library framework for interacting with the Avant Protocol on Arduino based systems
+Welcom the the avant SDK project for interacting with the Avant Protocol on Arduino based systems.
