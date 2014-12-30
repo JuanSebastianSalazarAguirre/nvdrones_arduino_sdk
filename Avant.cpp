@@ -384,7 +384,7 @@ if(service.isHwSerial0Used) {
 	  }//End of Serial.readBytes for buffer
 	  else 
 		Serial.println("Packet Missing Header");
-	}//end of if Serial/available
+	}//end of if Serial available
   }//end of Serial.read
 }
 
@@ -463,7 +463,7 @@ if(service.isHwSerial0Used) {
 		  }//End of Serial.readBytes for buffer
 		  else 
 			Serial.println("Packet Missing Header");
-		}//end of if Serial/available
+		}//end of if Serial available
 	  }//end of Serial.read
 	}
 #endif
@@ -542,7 +542,7 @@ if(service.isHwSerial0Used) {
 		  }//End of Serial.readBytes for buffer
 		  else 
 			Serial.println("Packet Missing Header");
-		}//end of if Serial/available
+		}//end of if Serial available
 	  }//end of Serial.read
 	}
 #endif
@@ -621,7 +621,7 @@ if(service.isHwSerial0Used) {
 		  }//End of Serial.readBytes for buffer
 		  else 
 			Serial.println("Packet Missing Header");
-		}//end of if Serial/available
+		}//end of if Serial available
 	  }//end of Serial.read
 	}
 #endif
@@ -699,7 +699,7 @@ if(service.isSwSerialUsed) {
 	  }//End of Serial.readBytes for buffer
 	  else 
 		Serial.println("Packet Missing Header");
-	}//end of if Serial/available
+	}//end of if Serial available
   }//end of Serial.read
 }
 }
