@@ -104,6 +104,35 @@ class SoftwareSerial : public Stream
 //*****************************************
 //Avant Classes
 //*****************************************
+
+class RCTransmitService
+{
+	friend class AvantResponseHandler;
+    private:
+        bool isHwSerial0Used;
+        bool isHwSerial1Used;
+        bool isHwSerial2Used;
+        bool isHwSerial3Used;
+        bool isSwSerialUsed;
+        SoftwareSerial softwareSerial;
+    public:
+        RCTransmitService();
+        RCTransmitService(int txPin , int rxPin);
+        RCTransmitService(int hwSerialCode);
+        int sendData(int data, uint8_t resourceID, uint8_t actionID);
+};
+
+
+class AvantResponseHandler {
+	private:
+		RCTransmitService service;
+	public:
+		AvantResponseHandler();
+		AvantResponseHandler(RCTransmitService rcTservice);
+		void responseHandler();
+		
+};
+
 class AvantSetup 
 {
     private:
@@ -125,6 +154,10 @@ class AvantSetup
 		int getThrottlePin();
 		void setRudderPin(int pin);
 		int getRudderPin();
+		void setFlightModePin(int pin);
+		int getFlightModePin();
+
+
 		void sendSticks();
 };
 
@@ -138,22 +171,6 @@ class AvantXbee  //handles configuring the Xbee
 };
 
 
-class RCTransmitService
-{
-	friend class AvantResponseHandler;
-    private:
-        bool isHwSerial0Used;
-        bool isHwSerial1Used;
-        bool isHwSerial2Used;
-        bool isHwSerial3Used;
-        bool isSwSerialUsed;
-        SoftwareSerial softwareSerial;
-    public:
-        RCTransmitService();
-        RCTransmitService(int txPin , int rxPin);
-        RCTransmitService(int hwSerialCode);
-        int sendData(int data, uint8_t resourceID, uint8_t actionID);
-};
 
 class AvantRC //handles sending values to the PWM/PPM port(s) 
 {
@@ -187,15 +204,6 @@ class AvantGPIO {
 		void digitalRead(uint8_t pin);
 };
 
-class AvantResponseHandler {
-	private:
-		RCTransmitService service;
-	public:
-		AvantResponseHandler();
-		AvantResponseHandler(RCTransmitService rcTservice);
-		void responseHandler();
-		
-};
 
 
 class Avant
@@ -213,9 +221,9 @@ class Avant
         Avant(int hardwareSerialCode);
         Avant(int txPin, int rxPin);
         AvantSetup& avantSetup();
-        AvantRC avantRC();
-		AvantGPIO avantGPIO();
-		AvantResponseHandler avantResponseHandler();
+        AvantRC& avantRC();
+		AvantGPIO& avantGPIO();
+		AvantResponseHandler& avantResponseHandler();
         void armDrone();
         void disarmDrone();
         void setCallbackFunction(void (*function)(float));

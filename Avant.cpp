@@ -302,6 +302,7 @@ AvantGPIO::AvantGPIO(RCTransmitService rcTservice) {
 
 void AvantGPIO::digitalWrite(uint8_t pin, bool logicLevel) {
 	service.sendData(logicLevel, 6, pin);
+}
 
 void AvantGPIO::pinMode(uint8_t pin, bool logicLevel) {
 	service.sendData(logicLevel, 5, pin);
