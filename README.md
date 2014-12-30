@@ -41,8 +41,8 @@ void loop() {
   Serial.println("Disarming");
   myTransmitter.disarmDrone();
 }
-
 ```
+Now that you tested evrything it is time to get more serious. Visit our Arduino Example App which is a more in depth showcase of all the posibilites of this platform.  
 
 # Connect with us
 
