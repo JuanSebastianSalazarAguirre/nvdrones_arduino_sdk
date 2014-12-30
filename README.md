@@ -17,3 +17,9 @@ Before you start using our SDK, please take the time and create an account on ou
 - please open the Arduino IDE and onec open, 
 - select Sketch > Import Library > Add Library... and point to the dirrectory where you cloned this SDK. 
 - Once this os done, go back to Sketch > Import Library but this time select the actual library "Avant_Arduino".
+
+# Connect with us
+
+- [Facebook](http://facebook.com/NVdevelopers)
+- [Twitter](http://twitter.com/NVdevelopers)
+- [Instagram](http://instagram.com/NVdevelopers)
