@@ -108,7 +108,7 @@ class SoftwareSerial : public Stream
 class RCTransmitService
 {
 	/**
-	This class allow you to...
+	This class allows you to...
 	@pre Don't forget to first connect your Arduino to the Avant platform.
 	# Example
 	Below you can see how this class shiuld be used.
@@ -166,7 +166,7 @@ class AvantResponseHandler {
 class AvantSetup 
 {
 /**
-This class allow you to...
+This class allows you to...
 @pre Don't forget to first connect your Arduino to the Avant platform.
 # Example
 Below you can see how this class shiuld be used.
@@ -246,7 +246,7 @@ Below you can see how this class shiuld be used.
 class AvantXbee  //handles configuring the Xbee
 {
 /**
-This class allow you to...
+This class allows you to...
 @pre Don't forget to first connect your Arduino to the Avant platform.
 # Example
 Below you can see how this class shiuld be used.
@@ -276,7 +276,7 @@ Below you can see how this class shiuld be used.
 class AvantRC //handles sending values to the PWM/PPM port(s) 
 {
 /**
-This class allow you to...
+This class allows you to...
 @pre Don't forget to first connect your Arduino to the Avant platform.
 # Example
 Below you can see how this class shiuld be used.
@@ -357,7 +357,7 @@ Below you can see how this class shiuld be used.
 
 class AvantGPIO {
 /**
-This class allow you to...
+This class allows you to...
 @pre Don't forget to first connect your Arduino to the Avant platform.
 # Example
 Below you can see how this class shiuld be used.
@@ -377,6 +377,31 @@ Below you can see how this class shiuld be used.
 		void analogWrite(uint8_t pin, uint8_t value);
 		void digitalRead(uint8_t pin);
 };
+
+class AvantI2C {
+/**
+This class allows you to...
+@pre Don't forget to first connect your Arduino to the Avant platform.
+# Example
+Below you can see how this class shiuld be used.
+~~~{.ino}
+    println("This is where your write example code.")
+    println("Have a nice day.")
+    println("NVdrones Developer Relations")
+~~~
+*/
+	private:
+		RCTransmitService service;
+	public:
+		AvantI2C();
+		AvantI2C(RCTransmitService rcTservice);
+		void deviceID(uint8_t ID);
+		void beginTransmission(void);
+		void endTransmission(void);
+		void write(uint8_t data);
+		void read(void);
+		void wireRequest(uint8_t bytes);
+}
 
 
 

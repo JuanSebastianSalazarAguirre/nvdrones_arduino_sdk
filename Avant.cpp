@@ -62,6 +62,7 @@ AvantGPIO& Avant::avantGPIO() {return gpio;}
 AvantResponseHandler& Avant::avantResponseHandler(){return responseHandler;}
 AvantSetup& Avant::avantSetup() {return setup;} //sets the analog pins that 
 AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
+AvantI2C& Avant::avantI2C() {return i2c;}
 
 void Avant::setCallbackFunction(void (*function)(float)) {
     callback = function;
@@ -316,6 +317,36 @@ void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
 	service.sendData(value, 8, pin);
 }
 
+//**********************************
+//AvantI2C Class Implementation
+//**********************************
+AvantI2C::AvantI2C(){}
+
+AvantI2C::AvantI2C(RCTransmitService rcTservice){
+	service = rcTservice;
+}
+
+void AvantI2C::deviceID(uint8_t ID){
+	service.sendData(ID, 11, 7);
+}
+void AvantI2C::beginTransmission(void){
+	service.sendData(ID, 11, 8);
+}
+
+void AvantI2C::endTransmission(void){
+	service.sendData(ID, 11, )
+}
+
+void AvantI2C::write(uint8_t data){
+	
+}
+
+void AvantI2C::read(void){
+	
+}
+void AvantI2C::wireRequest(uint8_t bytes){
+	
+}
 
 /*    
 uint8_t AvantXbee::id(uint8_t id) {
