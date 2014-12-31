@@ -249,7 +249,7 @@ class AvantXbee  //handles configuring the Xbee
 This class allows you to...
 @pre Don't forget to first connect your Arduino to the Avant platform.
 # Example
-Below you can see how this class shiuld be used.
+Below you can see how this class should be used.
 ~~~{.ino}
     println("This is where your write example code.")
     println("Have a nice day.")
@@ -279,7 +279,7 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
 This class allows you to...
 @pre Don't forget to first connect your Arduino to the Avant platform.
 # Example
-Below you can see how this class shiuld be used.
+Below you can see how this class should be used.
 ~~~{.ino}
     println("This is where your write example code.")
     println("Have a nice day.")
@@ -423,6 +423,7 @@ Below you can see how this class shiuld be used.
         RCTransmitService rcService;
 		AvantGPIO gpio;
 		AvantResponseHandler responseHandler;
+		AvantI2C i2c;
         void (*callback)(float);
         
     public:

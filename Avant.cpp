@@ -41,7 +41,11 @@ Avant::Avant() {
     rc = AvantRC(rcService);
 	gpio = AvantGPIO(rcService);
 	responseHandler = AvantResponseHandler(rcService);
+<<<<<<< HEAD
     setup = AvantSetup(rcService);
+=======
+	
+>>>>>>> evarga
 }
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
@@ -58,10 +62,17 @@ Avant::Avant(int txPin, int rxPin) {
    setup = AvantSetup(rcService);
 }
 
+<<<<<<< HEAD
 AvantGPIO& Avant::avantGPIO() {return gpio;} 
 AvantResponseHandler& Avant::avantResponseHandler(){return responseHandler;}
 AvantSetup& Avant::avantSetup() {return setup;} //sets the analog pins that 
 AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
+=======
+AvantSetup& Avant::avantSetup() {return setup;} //sets the analog pins that 
+AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
+AvantGPIO& Avant::avantGPIO() {return gpio;} 
+AvantResponseHandler& Avant::avantResponseHandler() {return responseHandler;}
+>>>>>>> evarga
 AvantI2C& Avant::avantI2C() {return i2c;}
 
 void Avant::setCallbackFunction(void (*function)(float)) {
