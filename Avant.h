@@ -208,16 +208,18 @@ class Avant
         RCTransmitService rcService;
 		AvantGPIO gpio;
 		AvantResponseHandler responseHandler;
+		AvantI2C i2c;
         void (*callback)(float);
         
     public:
         Avant();
         Avant(int hardwareSerialCode);
         Avant(int txPin, int rxPin);
-        AvantSetup avantSetup();
-        AvantRC avantRC();
-		AvantGPIO avantGPIO();
-		AvantResponseHandler avantResponseHandler();
+        AvantSetup& avantSetup();
+        AvantRC& avantRC();
+		AvantGPIO& avantGPIO();
+		AvantResponseHandler& avantResponseHandler();
+		AvantI2C& avantI2C();
         void armDrone();
         void disarmDrone();
         void setCallbackFunction(void (*function)(float));
