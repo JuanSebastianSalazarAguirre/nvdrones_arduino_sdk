@@ -393,13 +393,41 @@ Below you can see how this class shiuld be used.
 	private:
 		RCTransmitService service;
 	public:
+		/**
+        Method description
+        */
 		AvantI2C();
+		/**
+        Method description
+        @param rcTservice Parameter description
+        */
 		AvantI2C(RCTransmitService rcTservice);
+		/**
+        Method description
+        @param ID Parameter description
+        */
 		void deviceID(uint8_t ID);
+		/**
+        Method description
+        */
 		void beginTransmission(void);
+		/**
+        Method description
+        */
 		void endTransmission(void);
+		/**
+        Method description
+        @param data Parameter description
+        */
 		void write(uint8_t data);
+		/**
+        Method description
+        */
 		void read(void);
+		/**
+        Method description
+        @param bytes Parameter description
+        */
 		void wireRequest(uint8_t bytes);
 }
 
@@ -410,7 +438,7 @@ class Avant {
 This class allow you to...
 @pre Don't forget to first connect your Arduino to the Avant platform.
 # Example
-Below you can see how this class shiuld be used.
+Below you can see how this class should be used.
 ~~~{.ino}
     println("This is where your write example code.")
     println("Have a nice day.")
@@ -457,6 +485,11 @@ Below you can see how this class shiuld be used.
         @returns Return description
         */
 		AvantGPIO& avantGPIO();
+		/**
+        Method description
+        @returns Return description
+        */
+		AvantI2C& avantI2C();
 		/**
         Method description
         @returns Return description
