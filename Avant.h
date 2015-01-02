@@ -256,6 +256,9 @@ Below you can see how this class should be used.
     println("NVdrones Developer Relations")
 ~~~
 */
+	private:
+		void (*callback)(float);
+		
     public:
 		/// Variable Description
         uint8_t rxPin;
@@ -369,6 +372,7 @@ Below you can see how this class shiuld be used.
 */
 	private:
 		RCTransmitService service;
+		void (*callback)(float);
 	public:
 		AvantGPIO();
 		AvantGPIO(RCTransmitService rcTservice);
@@ -392,6 +396,7 @@ Below you can see how this class shiuld be used.
 */
 	private:
 		RCTransmitService service;
+		void (*callback)(float);
 	public:
 		/**
         Method description
@@ -429,6 +434,11 @@ Below you can see how this class shiuld be used.
         @param bytes Parameter description
         */
 		void wireRequest(uint8_t bytes);
+		/**
+        Method description
+        @param function Parameter description
+        */
+		void readCallback(void (*function)(float));
 };
 
 
@@ -452,7 +462,6 @@ Below you can see how this class should be used.
 		AvantGPIO gpio;
 		AvantResponseHandler responseHandler;
 		AvantI2C i2c;
-        void (*callback)(float);
         
     public:
 		/**
@@ -503,13 +512,5 @@ Below you can see how this class should be used.
         Method description
         */
         void disarmDrone();
-		/**
-        Method description
-        */
-        void setCallbackFunction(void (*function)(float));
-		/**
-        Method description
-        */
-        void readData();
 };
 

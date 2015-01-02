@@ -67,9 +67,6 @@ AvantSetup& Avant::avantSetup() {return setup;} //sets the analog pins that
 AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
 AvantI2C& Avant::avantI2C() {return i2c;}
 
-void Avant::setCallbackFunction(void (*function)(float)) {
-    callback = function;
-}
         
 void Avant::armDrone() {
     rcService.sendData(-100, 2, 1);
@@ -87,9 +84,6 @@ void Avant::disarmDrone() {
     armDrone();
 }
 
-void Avant::readData() {
-    callback(3.14);
-}
 
 // ***********************************************
 // RCTransmitService Class Implementation
@@ -350,6 +344,11 @@ void AvantI2C::read(void){
 void AvantI2C::wireRequest(uint8_t bytes){
 	service.sendData(bytes, 11, 6);
 }
+
+void AvantI2C::readCallback(void (*function)(float)) {
+    callback = function;
+}
+
 
 /*    
 uint8_t AvantXbee::id(uint8_t id) {
