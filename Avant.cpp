@@ -333,22 +333,22 @@ void AvantI2C::deviceID(uint8_t ID){
 	service.sendData(ID, 11, 7);
 }
 void AvantI2C::beginTransmission(void){
-	service.sendData(ID, 11, 8);
+	service.sendData(0, 11, 8);
 }
 
 void AvantI2C::endTransmission(void){
-	service.sendData(ID, 11, )
+	service.sendData(0, 11, 4);
 }
 
 void AvantI2C::write(uint8_t data){
-	
+	service.sendData(data, 11, 3);
 }
 
 void AvantI2C::read(void){
-	
+	service.sendData(0, 11, 5);
 }
 void AvantI2C::wireRequest(uint8_t bytes){
-	
+	service.sendData(bytes, 11, 6);
 }
 
 /*    

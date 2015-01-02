@@ -429,7 +429,7 @@ Below you can see how this class shiuld be used.
         @param bytes Parameter description
         */
 		void wireRequest(uint8_t bytes);
-}
+};
 
 
 
