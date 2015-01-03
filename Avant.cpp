@@ -47,10 +47,11 @@ Avant::Avant() {
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
     rc = AvantRC(rcService);
+	callback = Callback();
 	gpio = AvantGPIO(rcService);
-	responseHandler = AvantResponseHandler(rcService);
+	responseHandler = AvantResponseHandler(rcService, callback);
     setup = AvantSetup(rcService);
-	i2c = AvantI2C(rcService);
+	i2c = AvantI2C(rcService, callback);
 }
 Avant::Avant(int txPin, int rxPin) {
    rcService = RCTransmitService(txPin, rxPin);
@@ -199,7 +200,7 @@ int RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) 
 // AvantRC Class Implementation
 // ***********************************************
 AvantRC::AvantRC() {};
-AvantRC::AvantRC(RCTransmitService rcTservice) {
+AvantRC::AvantRC(RCTransmitService& rcTservice) {
     service = rcTservice;
 }
 void AvantRC::setAilron(int value) {};
@@ -222,7 +223,7 @@ int AvantRC::readSensorReading() {
 // AvantSetup Class Implementation
 // ***********************************************
 AvantSetup::AvantSetup(){};
-AvantSetup::AvantSetup(RCTransmitService rcService) {
+AvantSetup::AvantSetup(RCTransmitService& rcService) {
     service = rcService;
 }
 AvantSetup::~AvantSetup(){};
@@ -294,7 +295,7 @@ void AvantSetup::sendSticks(){
 //AvantGPIO Class Implementation
 //************************************************
 AvantGPIO::AvantGPIO() {};
-AvantGPIO::AvantGPIO(RCTransmitService rcTservice) {
+AvantGPIO::AvantGPIO(RCTransmitService& rcTservice) {
     service = rcTservice;
 }
 
@@ -319,8 +320,13 @@ void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
 //**********************************
 AvantI2C::AvantI2C(){}
 
-AvantI2C::AvantI2C(RCTransmitService rcTservice){
+AvantI2C::AvantI2C(RCTransmitService& rcTservice){
 	service = rcTservice;
+}
+
+AvantI2C::AvantI2C(RCTransmitService& rcTservice, Callback& callback) {
+	service = rcTservice;
+	myCallback = callback;
 }
 
 void AvantI2C::deviceID(uint8_t ID){
@@ -346,7 +352,7 @@ void AvantI2C::wireRequest(uint8_t bytes){
 }
 
 void AvantI2C::readCallback(void (*function)(int)) {
-    Callback::i2cRead = function;
+    myCallback.i2cRead = function;
 }
 
 
@@ -371,9 +377,14 @@ uint8_t AvantXbee::id(uint8_t id) {
 //AvantResponseHandler Class Implementation
 //*******************************************
 AvantResponseHandler::AvantResponseHandler(){};
-AvantResponseHandler::AvantResponseHandler(RCTransmitService rcTservice) {
+AvantResponseHandler::AvantResponseHandler(RCTransmitService& rcTservice) {
     service = rcTservice;
 }
+AvantResponseHandler::AvantResponseHandler(RCTransmitService& rcTservice, Callback& callback) {
+    service = rcTservice;
+	myCallback = callback;
+}
+
 void AvantResponseHandler::responseHandler() {
 if(service.isHwSerial0Used) {
   char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
@@ -430,8 +441,8 @@ if(service.isHwSerial0Used) {
 			   case 11:
 				//I2C_Communication
 				{
-			    int test = 1;
-				(*Callback::i2cRead)(test);
+			        int test = 1;
+				    myCallback.i2cRead(test);
 				}
 				break;
 			   case 12:
@@ -512,7 +523,7 @@ if(service.isHwSerial0Used) {
 					break;
 				   case 11:
 					//I2C_Communication
-					Avant::i2cRead(data);
+					//Avant::i2cRead(data);
 					break;
 				   case 12:
 					//Uart_Communication
@@ -592,7 +603,7 @@ if(service.isHwSerial0Used) {
 					break;
 				   case 11:
 					//I2C_Communication
-					Avant::i2cRead(data);
+					//Avant::i2cRead(data);
 					break;
 				   case 12:
 					//Uart_Communication
@@ -672,7 +683,7 @@ if(service.isHwSerial0Used) {
 					break;
 				   case 11:
 					//I2C_Communication
-					Avant::i2cRead(data);
+					//Avant::i2cRead(data);
 					break;
 				   case 12:
 					//Uart_Communication
@@ -753,7 +764,7 @@ if(service.isSwSerialUsed) {
 				//I2C_Communication
 				{
 				int test = 1;
-				(*Callback::i2cRead)(test);
+				myCallback.i2cRead(test);
 				}
 				break;
 			   case 12:

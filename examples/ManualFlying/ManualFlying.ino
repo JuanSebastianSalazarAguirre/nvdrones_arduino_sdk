@@ -7,7 +7,7 @@ Avant myTransmitter(1);
 
 void setup() {
   Serial.begin(115200);
-  myTransmitter.getAvantSetup().
+  myTransmitter.avantSetup().
 }
 
 void loop() {
