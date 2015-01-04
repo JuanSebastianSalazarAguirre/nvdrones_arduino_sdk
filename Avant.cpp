@@ -39,10 +39,11 @@ http://arduiniana.org.
 Avant::Avant() {
     rcService = RCTransmitService(0);
     rc = AvantRC(rcService);
+	callback = Callback();
 	gpio = AvantGPIO(rcService);
 	responseHandler = AvantResponseHandler(rcService);
     setup = AvantSetup(rcService);
-	i2c = AvantI2C(rcService);
+	i2c = AvantI2C(rcService, &callback);
 }
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
@@ -51,15 +52,16 @@ Avant::Avant(int hardwareSerialCode) {
 	gpio = AvantGPIO(rcService);
 	responseHandler = AvantResponseHandler(rcService, callback);
     setup = AvantSetup(rcService);
-	i2c = AvantI2C(rcService, callback);
+	i2c = AvantI2C(rcService, &callback);
 }
 Avant::Avant(int txPin, int rxPin) {
    rcService = RCTransmitService(txPin, rxPin);
    rc = AvantRC(rcService);
+   callback = Callback();
    gpio = AvantGPIO(rcService);
    responseHandler = AvantResponseHandler(rcService);
    setup = AvantSetup(rcService);
-   i2c = AvantI2C(rcService);
+   i2c = AvantI2C(rcService, &callback);
 }
 
 AvantGPIO& Avant::avantGPIO() {return gpio;} 
@@ -324,7 +326,7 @@ AvantI2C::AvantI2C(RCTransmitService& rcTservice){
 	service = rcTservice;
 }
 
-AvantI2C::AvantI2C(RCTransmitService& rcTservice, Callback& callback) {
+AvantI2C::AvantI2C(RCTransmitService& rcTservice, Callback *callback) {
 	service = rcTservice;
 	myCallback = callback;
 }
@@ -351,8 +353,8 @@ void AvantI2C::wireRequest(uint8_t bytes){
 	service.sendData(bytes, 11, 6);
 }
 
-void AvantI2C::readCallback(void (*function)(int)) {
-    myCallback.i2cRead = function;
+void AvantI2C::readCallback(void (*function)(void)) {
+   (*myCallback).i2cRead = function;
 }
 
 
@@ -440,10 +442,6 @@ if(service.isHwSerial0Used) {
 				break;
 			   case 11:
 				//I2C_Communication
-				{
-			        int test = 1;
-				    myCallback.i2cRead(test);
-				}
 				break;
 			   case 12:
 				//Uart_Communication
@@ -762,10 +760,6 @@ if(service.isSwSerialUsed) {
 				break;
 			   case 11:
 				//I2C_Communication
-				{
-				int test = 1;
-				myCallback.i2cRead(test);
-				}
 				break;
 			   case 12:
 				//Uart_Communication

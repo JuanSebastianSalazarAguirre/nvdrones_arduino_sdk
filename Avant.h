@@ -106,7 +106,7 @@ class SoftwareSerial : public Stream
 //*****************************************
 class Callback {
 	public:
-		void (*i2cRead)(int); 
+		void (*i2cRead)(void); 
 		
 };
 
@@ -403,7 +403,7 @@ Below you can see how this class shiuld be used.
 */
 	private:
 		RCTransmitService service;
-		Callback myCallback;
+		Callback *myCallback;
 	public:
 		/**
         Method description
@@ -416,7 +416,7 @@ Below you can see how this class shiuld be used.
 		AvantI2C(RCTransmitService& rcTservice);
 		
 		
-		AvantI2C(RCTransmitService& rcTservice, Callback& callback);
+		AvantI2C(RCTransmitService& rcTservice, Callback *callback);
 		/**
         Method description
         @param ID Parameter description
@@ -448,7 +448,7 @@ Below you can see how this class shiuld be used.
         Method description
         @param function Parameter description
         */
-		void readCallback(void (*function)(int));
+		void readCallback(void (*function)(void));
 };
 
 
@@ -473,6 +473,7 @@ Below you can see how this class should be used.
 		AvantResponseHandler responseHandler;
 		AvantI2C i2c;
 		Callback callback;
+		int test;
     public:
 		/**
         Method description
@@ -522,5 +523,9 @@ Below you can see how this class should be used.
         Method description
         */
         void disarmDrone();
+
+		void callbackTest(void){
+			callback.i2cRead();
+		}
 };
 
