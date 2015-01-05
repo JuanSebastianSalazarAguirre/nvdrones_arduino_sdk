@@ -53,3 +53,7 @@ Since our mission is to simplify your life to empower you to create great soluti
 - [Twitter](http://twitter.com/NVdevelopers): ask small questions.
 - [Instagram](http://instagram.com/NVdevelopers): look what we do.
 - [E-Mail](developers@NVdrones.com): no big or small question will be unawsered.
+
+# Just so you know
+
+The SDK have a stripped down version of the Arduino [SoftwareSerial Library](http://arduino.cc/en/Reference/softwareSerial) so you don't have to link it every the time you wish to use this SDK.
