@@ -38,33 +38,33 @@ http://arduiniana.org.
 // ***********************************************
 Avant::Avant() {
     rcService = RCTransmitService(0);
-    rc = AvantRC(rcService, &callback);
+    rc = AvantRC(&rcService, &callback);
 	callback = Callback();
-	gpio = AvantGPIO(rcService, &callback);
-	responseHandler = AvantResponseHandler(rcService, &callback);
-    setup = AvantSetup(rcService);
-	i2c = AvantI2C(rcService, &callback);
-	xbee = AvantXbee(rcService, &callback);
+	gpio = AvantGPIO(&rcService, &callback);
+	responseHandler = AvantResponseHandler(&rcService, &callback);
+    setup = AvantSetup(&rcService);
+	i2c = AvantI2C(&rcService, &callback);
+	xbee = AvantXbee(&rcService, &callback);
 }
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
-    rc = AvantRC(rcService, &callback);
+    rc = AvantRC(&rcService, &callback);
 	callback = Callback();
-	gpio = AvantGPIO(rcService, &callback);
-	responseHandler = AvantResponseHandler(rcService, &callback);
-    setup = AvantSetup(rcService);
-	i2c = AvantI2C(rcService, &callback);
-	xbee = AvantXbee(rcService, &callback);
+	gpio = AvantGPIO(&rcService, &callback);
+	responseHandler = AvantResponseHandler(&rcService, &callback);
+    setup = AvantSetup(&rcService);
+	i2c = AvantI2C(&rcService, &callback);
+	xbee = AvantXbee(&rcService, &callback);
 }
 Avant::Avant(int txPin, int rxPin) {
    rcService = RCTransmitService(txPin, rxPin);
-   rc = AvantRC(rcService, &callback);
+   rc = AvantRC(&rcService, &callback);
    callback = Callback();
-   gpio = AvantGPIO(rcService, &callback);
-   responseHandler = AvantResponseHandler(rcService, &callback);
-   setup = AvantSetup(rcService);
-   i2c = AvantI2C(rcService, &callback);
-   xbee = AvantXbee(rcService, &callback);
+   gpio = AvantGPIO(&rcService, &callback);
+   responseHandler = AvantResponseHandler(&rcService, &callback);
+   setup = AvantSetup(&rcService);
+   i2c = AvantI2C(&rcService, &callback);
+   xbee = AvantXbee(&rcService, &callback);
 }
 
 AvantGPIO& Avant::avantGPIO() {return gpio;} 
@@ -206,7 +206,7 @@ int RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) 
 // AvantRC Class Implementation
 // ***********************************************
 AvantRC::AvantRC() {};
-AvantRC::AvantRC(RCTransmitService& rcTservice, Callback *callback) {
+AvantRC::AvantRC(RCTransmitService *rcTservice, Callback *callback) {
     service = rcTservice;
 	myCallback = callback;
 }
@@ -227,10 +227,9 @@ int AvantRC::getFlightMode(){return 0;}
 // AvantSetup Class Implementation
 // ***********************************************
 AvantSetup::AvantSetup(){};
-AvantSetup::AvantSetup(RCTransmitService& rcService) {
+AvantSetup::AvantSetup(RCTransmitService *rcService) {
     service = rcService;
 }
-AvantSetup::~AvantSetup(){};
 
 void AvantSetup::setElevatorPin(int pin) {
 	elevatorPin = pin;
@@ -272,16 +271,6 @@ void AvantSetup::sendSticks(){
 	Ailron = map(Ailron, 872, 124, -100, 100);
 	Throttle = map(Throttle, 780, 118 , -100, 100);
 	Rudder = map(Rudder, 867, 97, -100, 100);
-	/*
-	Serial.print("E=");
-	Serial.print(Elevator);
-	Serial.print(" A=");
-	Serial.print(Ailron);
-	Serial.print(" T=");
-	Serial.print(Throttle);
-	Serial.print(" R=");
-	Serial.println(Rudder);
-	*/
     if (Elevator > 100) Elevator = 100;
     if (Elevator < -100) Elevator = -100;
     if (Ailron > 100) Ailron = 100;
@@ -290,37 +279,35 @@ void AvantSetup::sendSticks(){
     if (Throttle < -100) Throttle = -100;  
     if (Rudder > 100) Rudder = 100;
     if (Rudder < -100) Rudder = -100;    
-    service.sendData(Elevator, 2, 3);
-    service.sendData(Ailron, 2, 4);
-    service.sendData(Throttle, 2, 2);
-    service.sendData(Rudder, 2, 1);
+    service->sendData(Elevator, 2, 3);
+    service->sendData(Ailron, 2, 4);
+    service->sendData(Throttle, 2, 2);
+    service->sendData(Rudder, 2, 1);
 }
 //************************************************
 //AvantGPIO Class Implementation
 //************************************************
 AvantGPIO::AvantGPIO() {};
-AvantGPIO::AvantGPIO(RCTransmitService& rcTservice) {
-    service = rcTservice;
-}
-AvantGPIO::AvantGPIO(RCTransmitService& rcTservice, Callback *callback) {
+
+AvantGPIO::AvantGPIO(RCTransmitService *rcTservice, Callback *callback) {
 	service = rcTservice;
 	myCallback = callback;
 }
 
 void AvantGPIO::digitalWrite(uint8_t pin, bool logicLevel) {
-	service.sendData(logicLevel, 6, pin);
+	service->sendData(logicLevel, 6, pin);
 }
 
 void AvantGPIO::pinMode(uint8_t pin, bool logicLevel) {
-	service.sendData(logicLevel, 5, pin);
+	service->sendData(logicLevel, 5, pin);
 }
 
 void AvantGPIO::digitalRead(uint8_t pin) {
-	service.sendData(0, 8, pin);
+	service->sendData(0, 8, pin);
 }
 
 void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
-	service.sendData(value, 8, pin);
+	service->sendData(value, 8, pin);
 }
 
 //**********************************
@@ -328,35 +315,31 @@ void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
 //**********************************
 AvantI2C::AvantI2C(){}
 
-AvantI2C::AvantI2C(RCTransmitService& rcTservice){
-	service = rcTservice;
-}
-
-AvantI2C::AvantI2C(RCTransmitService& rcTservice, Callback *callback) {
+AvantI2C::AvantI2C(RCTransmitService *rcTservice, Callback *callback) {
 	service = rcTservice;
 	myCallback = callback;
 }
 
 void AvantI2C::deviceID(uint8_t ID){
-	service.sendData(ID, 11, 7);
+	service->sendData(ID, 11, 7);
 }
 void AvantI2C::beginTransmission(void){
-	service.sendData(0, 11, 8);
+	service->sendData(0, 11, 8);
 }
 
 void AvantI2C::endTransmission(void){
-	service.sendData(0, 11, 4);
+	service->sendData(0, 11, 4);
 }
 
 void AvantI2C::write(uint8_t data){
-	service.sendData(data, 11, 3);
+	service->sendData(data, 11, 3);
 }
 
 void AvantI2C::read(void){
-	service.sendData(0, 11, 5);
+	service->sendData(0, 11, 5);
 }
 void AvantI2C::wireRequest(uint8_t bytes){
-	service.sendData(bytes, 11, 6);
+	service->sendData(bytes, 11, 6);
 }
 
 void AvantI2C::readCallback(void (*function)(byte)) {
@@ -369,7 +352,7 @@ void AvantI2C::readCallback(void (*function)(byte)) {
 //********************************************
 AvantXbee::AvantXbee(){}
 
-AvantXbee::AvantXbee(RCTransmitService& rcTservice, Callback *callback) {
+AvantXbee::AvantXbee(RCTransmitService *rcTservice, Callback *callback) {
 	service = rcTservice;
 	myCallback = callback;
 }
@@ -395,18 +378,14 @@ void AvantXbee::id(uint8_t id) {
 //AvantResponseHandler Class Implementation
 //*******************************************
 AvantResponseHandler::AvantResponseHandler(){};
-AvantResponseHandler::AvantResponseHandler(RCTransmitService& rcTservice) {
-    service = rcTservice;
-}
-AvantResponseHandler::AvantResponseHandler(RCTransmitService& rcTservice, Callback *callback) {
+
+AvantResponseHandler::AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback) {
     service = rcTservice;
 	myCallback = callback;
 }
 
-
-
 void AvantResponseHandler::responseHandler() {
-if(service.isHwSerial0Used) {
+if(service->isHwSerial0Used) {
   char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
   int length = 0;
   int resourceID = 0;
@@ -485,7 +464,7 @@ if(service.isHwSerial0Used) {
 }
 
 #if defined(UBRR1H)
-	if(service.isHwSerial1Used) {
+	if(service->isHwSerial1Used) {
 	  char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
 	  int length = 0;
 	  int resourceID = 0;
@@ -565,7 +544,7 @@ if(service.isHwSerial0Used) {
 	}
 #endif
 #if defined(UBRR2H)
-	if(service.isHwSerial2Used) {
+	if(service->isHwSerial2Used) {
 	  char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
 	  int length = 0;
 	  int resourceID = 0;
@@ -645,7 +624,7 @@ if(service.isHwSerial0Used) {
 	}
 #endif
 #if defined(UBRR3H)
-	if(service.isHwSerial3Used) {
+	if(service->isHwSerial3Used) {
 	  char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
 	  int length = 0;
 	  int resourceID = 0;
@@ -724,15 +703,15 @@ if(service.isHwSerial0Used) {
 	  }//end of Serial.read
 	}
 #endif
-if(service.isSwSerialUsed) {
+if(service->isSwSerialUsed) {
   char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
   int length = 0;
   int resourceID = 0;
   int actionID = 0;
   int datasum = 0;
-  while (service.softwareSerial.available() > 0) { 
-	if (service.softwareSerial.read() == '$'){  //this is the start of a Data Packet
-	  if (service.softwareSerial.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
+  while (service->softwareSerial.available() > 0) { 
+	if (service->softwareSerial.read() == '$'){  //this is the start of a Data Packet
+	  if (service->softwareSerial.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
 		length = byte(buffer[0]); //get the length of the data
 		resourceID = byte(buffer[1]); //get the resourceID
 		actionID = byte(buffer[2]); //get the actionID

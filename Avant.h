@@ -160,12 +160,11 @@ class RCTransmitService
 
 class AvantResponseHandler {
 	private:
-		RCTransmitService service;
+		RCTransmitService *service;
 		Callback *myCallback;
 	public:
 		AvantResponseHandler();
-		AvantResponseHandler(RCTransmitService& rcTservice);
-		AvantResponseHandler(RCTransmitService& rcTservice, Callback *callback);
+		AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback);
 		void responseHandler();
 		void callbackTest(byte test){
 			myCallback->i2cRead(test);
@@ -192,14 +191,13 @@ Below you can see how this class shiuld be used.
         int throttlePin;
         int rudderPin;
         int flightModePin;
-		RCTransmitService service;
+		RCTransmitService *service;
     public:
 		/**
         Description of the method
         */
         AvantSetup();
-		AvantSetup(RCTransmitService& rcService);
-        ~AvantSetup();
+		AvantSetup(RCTransmitService *rcService);
 		/**
         Description of the method
         @param pin Parameter description
@@ -267,11 +265,11 @@ Below you can see how this class should be used.
 ~~~
 */
 	private:
-		RCTransmitService service;
+		RCTransmitService *service;
 		Callback *myCallback;
     public:
 		AvantXbee();
-		AvantXbee(RCTransmitService& rcTservice, Callback *callback);
+		AvantXbee(RCTransmitService *rcTservice, Callback *callback);
         int baud;
 		/**
         Description of the method
@@ -297,7 +295,7 @@ Below you can see how this class should be used.
 ~~~
 */
     private:
-        RCTransmitService service;
+        RCTransmitService *service;
 		Callback *myCallback;
     public:
 		/**
@@ -308,7 +306,7 @@ Below you can see how this class should be used.
         Method description
         @param rcTservice Parameter description
         */
-        AvantRC(RCTransmitService& rcTservice, Callback *callback);
+        AvantRC(RCTransmitService *rcTservice, Callback *callback);
 		/**
         Method description
         @param value Parameter description
@@ -379,12 +377,11 @@ Below you can see how this class shiuld be used.
 ~~~
 */
 	private:
-		RCTransmitService service;
+		RCTransmitService *service;
 		Callback *myCallback;
 	public:
 		AvantGPIO();
-		AvantGPIO(RCTransmitService& rcTservice);
-		AvantGPIO(RCTransmitService& rcTservice, Callback *callback);
+		AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
 		void pinMode(uint8_t pin, bool logicLevel);
 		void digitalWrite(uint8_t pin,bool logicLevel);
 		void analogWrite(uint8_t pin, uint8_t value);
@@ -404,7 +401,7 @@ Below you can see how this class shiuld be used.
 ~~~
 */
 	private:
-		RCTransmitService service;
+		RCTransmitService *service;
 		Callback *myCallback;
 	public:
 		/**
@@ -415,10 +412,7 @@ Below you can see how this class shiuld be used.
         Method description
         @param rcTservice Parameter description
         */
-		AvantI2C(RCTransmitService& rcTservice);
-		
-		
-		AvantI2C(RCTransmitService& rcTservice, Callback *callback);
+		AvantI2C(RCTransmitService *rcTservice, Callback *callback);
 		/**
         Method description
         @param ID Parameter description
