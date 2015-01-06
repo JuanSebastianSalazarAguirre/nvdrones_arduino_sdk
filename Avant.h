@@ -267,21 +267,18 @@ Below you can see how this class should be used.
 ~~~
 */
 	private:
-		void (*callback)(float);
-		
+		RCTransmitService service;
+		Callback *myCallback;
     public:
-		/// Variable Description
-        uint8_t rxPin;
-		/// Variable Description
-        uint8_t txPin;
-		/// Variable Description
+		AvantXbee();
+		AvantXbee(RCTransmitService& rcTservice, Callback *callback);
         int baud;
 		/**
-        Description od the method
+        Description of the method
         @param id Parameter description
         @returns Return description
         */
-        uint8_t id(uint8_t id);
+        void id(uint8_t id);
 };
 
 
@@ -301,6 +298,7 @@ Below you can see how this class should be used.
 */
     private:
         RCTransmitService service;
+		Callback *myCallback;
     public:
 		/**
         Method description
@@ -310,7 +308,7 @@ Below you can see how this class should be used.
         Method description
         @param rcTservice Parameter description
         */
-        AvantRC(RCTransmitService& rcTservice);
+        AvantRC(RCTransmitService& rcTservice, Callback *callback);
 		/**
         Method description
         @param value Parameter description
@@ -472,12 +470,13 @@ Below you can see how this class should be used.
     private:
         AvantSetup setup;
         AvantRC rc;
+		AvantXbee xbee;
         RCTransmitService rcService;
 		AvantGPIO gpio;
 		AvantResponseHandler responseHandler;
 		AvantI2C i2c;
 		Callback callback;
-		int test;
+		
     public:
 		/**
         Method description
@@ -518,7 +517,13 @@ Below you can see how this class should be used.
         Method description
         @returns Return description
         */
+		AvantXbee& avantXbee();
+		/**
+        Method description
+        @returns Return description
+        */
 		AvantResponseHandler& avantResponseHandler();
+		
 		/**
         Method description
         */

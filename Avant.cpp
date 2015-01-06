@@ -38,30 +38,33 @@ http://arduiniana.org.
 // ***********************************************
 Avant::Avant() {
     rcService = RCTransmitService(0);
-    rc = AvantRC(rcService);
+    rc = AvantRC(rcService, &callback);
 	callback = Callback();
 	gpio = AvantGPIO(rcService, &callback);
 	responseHandler = AvantResponseHandler(rcService, &callback);
     setup = AvantSetup(rcService);
 	i2c = AvantI2C(rcService, &callback);
+	xbee = AvantXbee(rcService, &callback);
 }
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
-    rc = AvantRC(rcService);
+    rc = AvantRC(rcService, &callback);
 	callback = Callback();
-	gpio = AvantGPIO(rcService);
+	gpio = AvantGPIO(rcService, &callback);
 	responseHandler = AvantResponseHandler(rcService, &callback);
     setup = AvantSetup(rcService);
 	i2c = AvantI2C(rcService, &callback);
+	xbee = AvantXbee(rcService, &callback);
 }
 Avant::Avant(int txPin, int rxPin) {
    rcService = RCTransmitService(txPin, rxPin);
-   rc = AvantRC(rcService);
+   rc = AvantRC(rcService, &callback);
    callback = Callback();
-   gpio = AvantGPIO(rcService);
+   gpio = AvantGPIO(rcService, &callback);
    responseHandler = AvantResponseHandler(rcService, &callback);
    setup = AvantSetup(rcService);
    i2c = AvantI2C(rcService, &callback);
+   xbee = AvantXbee(rcService, &callback);
 }
 
 AvantGPIO& Avant::avantGPIO() {return gpio;} 
@@ -69,6 +72,7 @@ AvantResponseHandler& Avant::avantResponseHandler(){return responseHandler;}
 AvantSetup& Avant::avantSetup() {return setup;} //sets the analog pins that 
 AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
 AvantI2C& Avant::avantI2C() {return i2c;}
+AvantXbee& Avant::avantXbee() {return xbee;}
 
         
 void Avant::armDrone() {
@@ -202,8 +206,9 @@ int RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) 
 // AvantRC Class Implementation
 // ***********************************************
 AvantRC::AvantRC() {};
-AvantRC::AvantRC(RCTransmitService& rcTservice) {
+AvantRC::AvantRC(RCTransmitService& rcTservice, Callback *callback) {
     service = rcTservice;
+	myCallback = callback;
 }
 void AvantRC::setAilron(int value) {};
 void AvantRC::setElevator(int value){};
@@ -359,8 +364,18 @@ void AvantI2C::readCallback(void (*function)(byte)) {
 }
 
 
-/*    
-uint8_t AvantXbee::id(uint8_t id) {
+//********************************************
+//AvantXbee Class Implementation
+//********************************************
+AvantXbee::AvantXbee(){}
+
+AvantXbee::AvantXbee(RCTransmitService& rcTservice, Callback *callback) {
+	service = rcTservice;
+	myCallback = callback;
+}
+   
+void AvantXbee::id(uint8_t id) {
+	/*
     delay(1200);
     Serial.print("ATID");
     Serial.write(id);
@@ -371,9 +386,9 @@ uint8_t AvantXbee::id(uint8_t id) {
     if (acknowledge[0] == 'O' && acknowledge[1] == 'K')
       sendData(1, 13, 1);
     else
-      sendData(1, 100, 1);
+      sendData(1, 100, 1);*/
 }
-*/
+
 
 
 //*******************************************
