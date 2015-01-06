@@ -106,7 +106,7 @@ class SoftwareSerial : public Stream
 //*****************************************
 class Callback {
 	public:
-		void (*i2cRead)(void); 
+		void (*i2cRead)(byte); 
 		
 };
 
@@ -161,12 +161,15 @@ class RCTransmitService
 class AvantResponseHandler {
 	private:
 		RCTransmitService service;
-		Callback myCallback;
+		Callback *myCallback;
 	public:
 		AvantResponseHandler();
 		AvantResponseHandler(RCTransmitService& rcTservice);
-		AvantResponseHandler(RCTransmitService& rcTservice, Callback& callback);
+		AvantResponseHandler(RCTransmitService& rcTservice, Callback *callback);
 		void responseHandler();
+		void callbackTest(byte test){
+			myCallback->i2cRead(test);
+		}
 		
 };
 
@@ -379,10 +382,11 @@ Below you can see how this class shiuld be used.
 */
 	private:
 		RCTransmitService service;
-		void (*callback)(float);
+		Callback *myCallback;
 	public:
 		AvantGPIO();
 		AvantGPIO(RCTransmitService& rcTservice);
+		AvantGPIO(RCTransmitService& rcTservice, Callback *callback);
 		void pinMode(uint8_t pin, bool logicLevel);
 		void digitalWrite(uint8_t pin,bool logicLevel);
 		void analogWrite(uint8_t pin, uint8_t value);
@@ -448,7 +452,7 @@ Below you can see how this class shiuld be used.
         Method description
         @param function Parameter description
         */
-		void readCallback(void (*function)(void));
+		void readCallback(void (*function)(byte));
 };
 
 
@@ -524,8 +528,5 @@ Below you can see how this class should be used.
         */
         void disarmDrone();
 
-		void callbackTest(void){
-			callback.i2cRead();
-		}
 };
 

@@ -40,8 +40,8 @@ Avant::Avant() {
     rcService = RCTransmitService(0);
     rc = AvantRC(rcService);
 	callback = Callback();
-	gpio = AvantGPIO(rcService);
-	responseHandler = AvantResponseHandler(rcService);
+	gpio = AvantGPIO(rcService, &callback);
+	responseHandler = AvantResponseHandler(rcService, &callback);
     setup = AvantSetup(rcService);
 	i2c = AvantI2C(rcService, &callback);
 }
@@ -50,7 +50,7 @@ Avant::Avant(int hardwareSerialCode) {
     rc = AvantRC(rcService);
 	callback = Callback();
 	gpio = AvantGPIO(rcService);
-	responseHandler = AvantResponseHandler(rcService, callback);
+	responseHandler = AvantResponseHandler(rcService, &callback);
     setup = AvantSetup(rcService);
 	i2c = AvantI2C(rcService, &callback);
 }
@@ -59,7 +59,7 @@ Avant::Avant(int txPin, int rxPin) {
    rc = AvantRC(rcService);
    callback = Callback();
    gpio = AvantGPIO(rcService);
-   responseHandler = AvantResponseHandler(rcService);
+   responseHandler = AvantResponseHandler(rcService, &callback);
    setup = AvantSetup(rcService);
    i2c = AvantI2C(rcService, &callback);
 }
@@ -217,9 +217,6 @@ int AvantRC::getThrottle(){return 0;}
 int AvantRC::getRudder(){return 0;}
 int AvantRC::getFlightMode(){return 0;}
 
-int AvantRC::readSensorReading() {
-    return 31415;
-}
 
 // ***********************************************
 // AvantSetup Class Implementation
@@ -300,6 +297,10 @@ AvantGPIO::AvantGPIO() {};
 AvantGPIO::AvantGPIO(RCTransmitService& rcTservice) {
     service = rcTservice;
 }
+AvantGPIO::AvantGPIO(RCTransmitService& rcTservice, Callback *callback) {
+	service = rcTservice;
+	myCallback = callback;
+}
 
 void AvantGPIO::digitalWrite(uint8_t pin, bool logicLevel) {
 	service.sendData(logicLevel, 6, pin);
@@ -353,7 +354,7 @@ void AvantI2C::wireRequest(uint8_t bytes){
 	service.sendData(bytes, 11, 6);
 }
 
-void AvantI2C::readCallback(void (*function)(void)) {
+void AvantI2C::readCallback(void (*function)(byte)) {
    (*myCallback).i2cRead = function;
 }
 
@@ -382,10 +383,12 @@ AvantResponseHandler::AvantResponseHandler(){};
 AvantResponseHandler::AvantResponseHandler(RCTransmitService& rcTservice) {
     service = rcTservice;
 }
-AvantResponseHandler::AvantResponseHandler(RCTransmitService& rcTservice, Callback& callback) {
+AvantResponseHandler::AvantResponseHandler(RCTransmitService& rcTservice, Callback *callback) {
     service = rcTservice;
 	myCallback = callback;
 }
+
+
 
 void AvantResponseHandler::responseHandler() {
 if(service.isHwSerial0Used) {
