@@ -107,6 +107,7 @@ class SoftwareSerial : public Stream
 class Callback {
 	public:
 		void (*i2cRead)(byte); 
+		void (*digitalRead)(byte);
 		
 };
 
@@ -154,7 +155,10 @@ class RCTransmitService
         @param actionID Parameter description
         @returns Return description
         */
-        int sendData(int data, uint8_t resourceID, uint8_t actionID);
+        void sendData(int data, uint8_t resourceID, uint8_t actionID);
+		void print(String data);
+		void write(byte data);
+		
 };
 
 
@@ -279,7 +283,28 @@ Below you can see how this class should be used.
         void id(uint8_t id);
 };
 
-
+class AvantPose
+{
+	private:
+		RCTransmitService *service;
+		Callback *myCallback;
+	public:
+		AvantPose();
+		AvantPose(RCTransmitService *rcTservice, Callback *callback);
+		void getGPSData();
+		void getLongitude();
+		void getLatitude();
+		void getAltitude();
+		void getSatillites();
+		void getSpeed();
+		void getOrientation();
+		void longitudeCallback();
+		void latitudeCallback();
+		void altitudeCallback();
+		void satillitesCallback();
+		void speedCallback();
+		void orientation();
+};
 
 class AvantRC //handles sending values to the PWM/PPM port(s) 
 {
@@ -297,6 +322,7 @@ Below you can see how this class should be used.
     private:
         RCTransmitService *service;
 		Callback *myCallback;
+		
     public:
 		/**
         Method description
@@ -357,11 +383,6 @@ Below you can see how this class should be used.
         @returns Return description
         */
         int getFlightMode();
-		/**
-        Method description
-        @returns Return description
-        */
-        int readSensorReading();
 };
 
 class AvantGPIO {
@@ -386,6 +407,7 @@ Below you can see how this class shiuld be used.
 		void digitalWrite(uint8_t pin,bool logicLevel);
 		void analogWrite(uint8_t pin, uint8_t value);
 		void digitalRead(uint8_t pin);
+		void digitalReadCallback(void (*function)(byte));
 };
 
 class AvantI2C {
@@ -470,7 +492,7 @@ Below you can see how this class should be used.
 		AvantResponseHandler responseHandler;
 		AvantI2C i2c;
 		Callback callback;
-		
+		AvantPose pose;
     public:
 		/**
         Method description
@@ -512,6 +534,11 @@ Below you can see how this class should be used.
         @returns Return description
         */
 		AvantXbee& avantXbee();
+		/**
+        Method description
+        @returns Return description
+        */
+		AvantPose& avantPose();
 		/**
         Method description
         @returns Return description

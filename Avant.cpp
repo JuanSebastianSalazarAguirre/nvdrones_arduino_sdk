@@ -45,6 +45,7 @@ Avant::Avant() {
     setup = AvantSetup(&rcService);
 	i2c = AvantI2C(&rcService, &callback);
 	xbee = AvantXbee(&rcService, &callback);
+	pose = AvantPose(&rcService, &callback);
 }
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
@@ -55,6 +56,7 @@ Avant::Avant(int hardwareSerialCode) {
     setup = AvantSetup(&rcService);
 	i2c = AvantI2C(&rcService, &callback);
 	xbee = AvantXbee(&rcService, &callback);
+	pose = AvantPose(&rcService, &callback);
 }
 Avant::Avant(int txPin, int rxPin) {
    rcService = RCTransmitService(txPin, rxPin);
@@ -65,6 +67,7 @@ Avant::Avant(int txPin, int rxPin) {
    setup = AvantSetup(&rcService);
    i2c = AvantI2C(&rcService, &callback);
    xbee = AvantXbee(&rcService, &callback);
+   pose = AvantPose(&rcService, &callback);
 }
 
 AvantGPIO& Avant::avantGPIO() {return gpio;} 
@@ -73,6 +76,7 @@ AvantSetup& Avant::avantSetup() {return setup;} //sets the analog pins that
 AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
 AvantI2C& Avant::avantI2C() {return i2c;}
 AvantXbee& Avant::avantXbee() {return xbee;}
+AvantPose& Avant::avantPose() {return pose;}
 
         
 void Avant::armDrone() {
@@ -147,7 +151,7 @@ RCTransmitService::RCTransmitService(int hwSerialCode) {
     }
 }
 
-int RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) {
+void RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) {
     if (isHwSerial0Used) {
         #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
             Serial.write('$');
@@ -199,9 +203,55 @@ int RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) 
         softwareSerial.write(lowByte(data));
         softwareSerial.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
     }
-    return data;
 }
 
+void RCTransmitService::print(String data) {
+    if (isHwSerial0Used) {
+        #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+            Serial.print(data);
+        #endif
+    } else if (isHwSerial1Used) {
+        #if defined(UBRR1H)
+            Serial1.print(data);
+        #endif
+    }
+    else if (isHwSerial2Used) {
+        #if defined(UBRR2H)
+            Serial2.print(data);
+        #endif
+    } else if (isHwSerial3Used) {
+        #if defined(UBRR3H)
+            Serial3.print(data);
+        #endif
+    } 
+    else if (isSwSerialUsed) {
+        softwareSerial.print(data);
+    }
+}
+
+void RCTransmitService::write(byte data) {
+    if (isHwSerial0Used) {
+        #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+            Serial.write(data);
+        #endif
+    } else if (isHwSerial1Used) {
+        #if defined(UBRR1H)
+            Serial1.write(data);
+        #endif
+    }
+    else if (isHwSerial2Used) {
+        #if defined(UBRR2H)
+            Serial2.write(data);
+        #endif
+    } else if (isHwSerial3Used) {
+        #if defined(UBRR3H)
+            Serial3.write(data);
+        #endif
+    } 
+    else if (isSwSerialUsed) {
+        softwareSerial.write(data);
+    }
+}
 // ***********************************************
 // AvantRC Class Implementation
 // ***********************************************
@@ -210,11 +260,21 @@ AvantRC::AvantRC(RCTransmitService *rcTservice, Callback *callback) {
     service = rcTservice;
 	myCallback = callback;
 }
-void AvantRC::setAilron(int value) {};
-void AvantRC::setElevator(int value){};
-void AvantRC::setThrottle(int value) {};
-void AvantRC::setRudder(int value) {};
-void AvantRC::setFlightMode(int value) {};
+void AvantRC::setAilron(int value){
+	service->sendData(value, 2, 4);
+};
+void AvantRC::setElevator(int value){
+	service->sendData(value, 2, 3);
+};
+void AvantRC::setThrottle(int value){
+	service->sendData(value, 2, 2);
+};
+void AvantRC::setRudder(int value){
+	service->sendData(value, 2, 1);
+}; 
+void AvantRC::setFlightMode(int value){
+	service->sendData(value, 2, 5);
+};
 
 int AvantRC::getAilron(){return 0;};
 int AvantRC::getElevator(){return 0;}
@@ -310,6 +370,10 @@ void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
 	service->sendData(value, 8, pin);
 }
 
+void AvantGPIO::digitalReadCallback(void (*function)(byte)) {
+   (*myCallback).digitalRead = function;
+}
+
 //**********************************
 //AvantI2C Class Implementation
 //**********************************
@@ -358,20 +422,28 @@ AvantXbee::AvantXbee(RCTransmitService *rcTservice, Callback *callback) {
 }
    
 void AvantXbee::id(uint8_t id) {
-	/*
+	char acknowledge[2];
     delay(1200);
-    Serial.print("ATID");
-    Serial.write(id);
-    Serial.write(15);
-    char acknowledge[1];
+    service->print("ATID");
+    service->write(id);
+    service->write(15);
     Serial.readBytes(&acknowledge[0], 2);
     Serial.print("ATCN");
     if (acknowledge[0] == 'O' && acknowledge[1] == 'K')
-      sendData(1, 13, 1);
+      service->sendData(1, 13, 1);
     else
-      sendData(1, 100, 1);*/
+      service->sendData(1, 100, 1);
 }
 
+//********************************************
+//AvantPose Class Implementation
+//********************************************
+AvantPose::AvantPose(){}
+
+AvantPose::AvantPose(RCTransmitService *rcTservice, Callback *callback) {
+	service = rcTservice;
+	myCallback = callback;
+}
 
 
 //*******************************************
