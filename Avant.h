@@ -108,6 +108,12 @@ class Callback {
 	public:
 		void (*i2cRead)(byte); 
 		void (*digitalRead)(byte);
+		void (*longitude)(float);
+		void (*latitude)(float);
+		void (*altitude)(float);
+		void (*speed)(float);
+		void (*satallite)(byte);
+		void (*orientation)(float);
 		
 };
 
@@ -295,15 +301,15 @@ class AvantPose
 		void getLongitude();
 		void getLatitude();
 		void getAltitude();
-		void getSatillites();
+		void getSatellites();
 		void getSpeed();
 		void getOrientation();
-		void longitudeCallback();
-		void latitudeCallback();
-		void altitudeCallback();
-		void satillitesCallback();
-		void speedCallback();
-		void orientation();
+		void longitudeCallback(void (*function)(float));
+		void latitudeCallback(void (*function)(float));
+		void altitudeCallback(void (*function)(float));
+		void satelliteCallback(void (*function)(byte));
+		void speedCallback(void (*function)(float));
+		void orientationCallback(void (*function)(float));
 };
 
 class AvantRC //handles sending values to the PWM/PPM port(s) 

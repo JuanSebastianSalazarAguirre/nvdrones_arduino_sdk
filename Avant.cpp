@@ -445,6 +445,57 @@ AvantPose::AvantPose(RCTransmitService *rcTservice, Callback *callback) {
 	myCallback = callback;
 }
 
+void AvantPose::getGPSData(void) {
+	service->sendData(0, 9, 1);
+}
+
+void AvantPose::getLatitude(void) {
+	service->sendData(0, 9, 2);
+}
+
+void AvantPose::getLongitude(void) {
+	service->sendData(0, 9, 3);
+}
+
+void AvantPose::getAltitude(void ) {
+	service->sendData(0, 9, 4);
+}
+
+void AvantPose::getSatellites(void) {
+	service->sendData(0, 9, 5);
+}
+
+void AvantPose::getSpeed(void) {
+	service->sendData(0, 9, 6);
+}
+
+void AvantPose::getOrientation(void){
+	service->sendData(0, 9, 7);
+}
+
+void AvantPose::longitudeCallback(void (*function)(float)) {
+	(*myCallback).longitude = function;
+}
+
+void AvantPose::latitudeCallback(void (*function)(float)) {
+	(*myCallback).latitude = function;
+}
+
+void AvantPose::altitudeCallback(void (*function)(float)) {
+	(*myCallback).altitude = function;
+}
+
+void AvantPose::speedCallback(void (*function)(float)) {
+	(*myCallback).speed = function;
+}
+
+void AvantPose::satelliteCallback(void (*function)(byte)) {
+	(*myCallback).satallite = function;
+}
+
+void AvantPose::orientationCallback(void (*function)(float)) {
+	(*myCallback).orientation = function;
+}
 
 //*******************************************
 //AvantResponseHandler Class Implementation
