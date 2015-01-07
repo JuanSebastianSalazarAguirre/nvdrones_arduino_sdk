@@ -107,18 +107,7 @@ class SoftwareSerial : public Stream
 
 class RCTransmitService
 {
-	/**
-	This class allows you to...
-	@pre Don't forget to first connect your Arduino to the Avant platform.
-	# Example
-	Below you can see how this class shiuld be used.
-	~~~{.ino}
-		println("This is where your write example code.")
-		println("Have a nice day.")
-		println("NVdrones Developer Relations")
-	~~~
-	*/
-	friend class AvantResponseHandler;
+    friend class AvantResponseHandler;
     private:
         bool isHwSerial0Used;
         bool isHwSerial1Used;
@@ -127,390 +116,126 @@ class RCTransmitService
         bool isSwSerialUsed;
         SoftwareSerial softwareSerial;
     public:
-	    /**
-        Method description
-        */
         RCTransmitService();
-		/**
-        Method description
-        @param txPin Parameter description
-        @param rxPin Parameter description
-        */
         RCTransmitService(int txPin , int rxPin);
-		/**
-        Method description
-        @param hwSerialCode Parameter description
-        */
         RCTransmitService(int hwSerialCode);
-		/**
-        Method description
-        @param data Parameter description
-        @param resourceID Parameter description
-        @param actionID Parameter description
-        @returns Return description
-        */
         int sendData(int data, uint8_t resourceID, uint8_t actionID);
 };
 
 
 class AvantResponseHandler {
-	private:
-		RCTransmitService service;
-	public:
-		AvantResponseHandler();
-		AvantResponseHandler(RCTransmitService rcTservice);
-		void responseHandler();
-		
+    private:
+        RCTransmitService service;
+    public:
+        AvantResponseHandler();
+        AvantResponseHandler(RCTransmitService rcTservice);
+        void responseHandler();
+        
 };
 
 class AvantSetup 
 {
-/**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class shiuld be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
-*/
     private:
-		int elevatorPin;
+        int elevatorPin;
         int ailronPin;
         int throttlePin;
         int rudderPin;
         int flightModePin;
-		RCTransmitService service;
+        RCTransmitService service;
     public:
-		/**
-        Description of the method
-        */
         AvantSetup();
-		AvantSetup(RCTransmitService rcService);
+        AvantSetup(RCTransmitService rcService);
         ~AvantSetup();
-		/**
-        Description of the method
-        @param pin Parameter description
-        */
-		void setElevatorPin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
-        */
-		int getElevatorPin();
-		/**
-        Description of the method
-        @param pin Parameter description
-        */
-		void setAilronPin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
-        */
-		int getAilronPin();
-		/**
-        Description of the method
-        @param pin Parameter description
-        */
-		void setThrottlePin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
-        */
-		int getThrottlePin();
-		/**
-        Description of the method
-        @param pin Parameter description
-        */
-		void setRudderPin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
-        */
-		int getRudderPin();
-		/**
-        Description of the method
-        @param pin Parameter description
-        */
-		void setFlightModePin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
-        */
-		int getFlightModePin();
-		void sendSticks();
+        void setElevatorPin(int pin);
+        int getElevatorPin();
+        void setAilronPin(int pin);
+        int getAilronPin();
+        void setThrottlePin(int pin);
+        int getThrottlePin();
+        void setRudderPin(int pin);
+        int getRudderPin();
+        void setFlightModePin(int pin);
+        int getFlightModePin();
+
+
+        void sendSticks();
 };
 
 class AvantXbee  //handles configuring the Xbee
 {
-/**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class should be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
-*/
-	private:
-		void (*callback)(float);
-		
     public:
-		/// Variable Description
         uint8_t rxPin;
-		/// Variable Description
         uint8_t txPin;
-		/// Variable Description
         int baud;
-		/**
-        Description od the method
-        @param id Parameter description
-        @returns Return description
-        */
         uint8_t id(uint8_t id);
 };
 
-
-
 class AvantRC //handles sending values to the PWM/PPM port(s) 
 {
-/**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class should be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
-*/
     private:
         RCTransmitService service;
+        int ailron;
+        int elevator;
+        int throttle;
+        int rudder;
+        int flightMode;
     public:
-		/**
-        Method description
-        */
         AvantRC();
-		/**
-        Method description
-        @param rcTservice Parameter description
-        */
         AvantRC(RCTransmitService rcTservice);
-		/**
-        Method description
-        @param value Parameter description
-        */
         void setAilron(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
         void setElevator(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
         void setThrottle(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
         void setRudder(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
         void setFlightMode(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
         int getAilron();
-		/**
-        Method description
-        @returns Return description
-        */
         int getElevator();
-		/**
-        Method description
-        @returns Return description
-        */
         int getThrottle();
-		/**
-        Method description
-        @returns Return description
-        */
         int getRudder();
-		/**
-        Method description
-        @returns Return description
-        */
         int getFlightMode();
-		/**
-        Method description
-        @returns Return description
-        */
         int readSensorReading();
 };
 
 class AvantGPIO {
-/**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class shiuld be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
-*/
-	private:
-		RCTransmitService service;
-		void (*callback)(float);
-	public:
-		AvantGPIO();
-		AvantGPIO(RCTransmitService rcTservice);
-		void pinMode(uint8_t pin, bool logicLevel);
-		void digitalWrite(uint8_t pin,bool logicLevel);
-		void analogWrite(uint8_t pin, uint8_t value);
-		void digitalRead(uint8_t pin);
-};
-
-class AvantI2C {
-/**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class shiuld be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
-*/
-	private:
-		RCTransmitService service;
-		void (*callback)(float);
-	public:
-		/**
-        Method description
-        */
-		AvantI2C();
-		/**
-        Method description
-        @param rcTservice Parameter description
-        */
-		AvantI2C(RCTransmitService rcTservice);
-		/**
-        Method description
-        @param ID Parameter description
-        */
-		void deviceID(uint8_t ID);
-		/**
-        Method description
-        */
-		void beginTransmission(void);
-		/**
-        Method description
-        */
-		void endTransmission(void);
-		/**
-        Method description
-        @param data Parameter description
-        */
-		void write(uint8_t data);
-		/**
-        Method description
-        */
-		void read(void);
-		/**
-        Method description
-        @param bytes Parameter description
-        */
-		void wireRequest(uint8_t bytes);
-		/**
-        Method description
-        @param function Parameter description
-        */
-		void readCallback(void (*function)(float));
+    private:
+        RCTransmitService service;
+    public:
+        AvantGPIO();
+        AvantGPIO(RCTransmitService rcTservice);
+        void pinMode(uint8_t pin, bool logicLevel);
+        void digitalWrite(uint8_t pin,bool logicLevel);
+        void analogWrite(uint8_t pin, uint8_t value);
+        void digitalRead(uint8_t pin);
 };
 
 
 
-class Avant {
-/**
-This class allow you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class should be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
-*/
+class Avant
+{
     private:
         AvantSetup setup;
         AvantRC rc;
         RCTransmitService rcService;
-		AvantGPIO gpio;
-		AvantResponseHandler responseHandler;
-		AvantI2C i2c;
+        AvantGPIO gpio;
+        AvantResponseHandler responseHandler;
+        void (*callback)(float);
         
     public:
-		/**
-        Method description
-        */
         Avant();
-		/**
-        Method description
-        @param hardwareSerialCode Parameter description
-        */
         Avant(int hardwareSerialCode);
-		/**
-        Method description
-        @param txPin Parameter description
-        @param rxPin Parameter description
-        */
         Avant(int txPin, int rxPin);
-		/**
-        Method description
-        @returns Return description
-        */
         AvantSetup& avantSetup();
-		/**
-        Method description
-        @returns Return description
-        */
         AvantRC& avantRC();
-		/**
-        Method description
-        @returns Return description
-        */
-		AvantGPIO& avantGPIO();
-		/**
-        Method description
-        @returns Return description
-        */
-		AvantI2C& avantI2C();
-		/**
-        Method description
-        @returns Return description
-        */
-		AvantResponseHandler& avantResponseHandler();
-		/**
-        Method description
-        */
+        AvantGPIO& avantGPIO();
+        AvantResponseHandler& avantResponseHandler();
         void armDrone();
-		/**
-        Method description
-        */
         void disarmDrone();
+        void setCallbackFunction(void (*function)(float));
+        void readData();
 };
 
+
+float readFloat() {
+    float data;
+    Serial.readBytes((char*)&data, sizeof(data));
+    return data;
+}
