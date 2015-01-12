@@ -114,6 +114,7 @@ class Callback {
 		void (*speed)(float);
 		void (*satallite)(byte);
 		void (*orientation)(float);
+		void (*transfer)(byte);
 		
 };
 
@@ -164,6 +165,7 @@ class RCTransmitService
         void sendData(int data, uint8_t resourceID, uint8_t actionID);
 		void print(String data);
 		void write(byte data);
+		void readBytes(char *buffer, int bytesToRead);
 		
 };
 
@@ -475,6 +477,19 @@ Below you can see how this class shiuld be used.
 		void readCallback(void (*function)(byte));
 };
 
+class AvantSPI {
+	private:
+		RCTransmitService *service;
+		Callback *myCallback;
+	public:
+		AvantSPI();
+		AvantSPI(RCTransmitService *rcTservice, Callback *callback);
+		void transfer(byte data);
+		void setBitOrder(byte data);
+		void setClockDivider(byte data);
+		void setDataMode(byte data);
+		void transferCallback(void (*function)(byte));
+};
 
 
 class Avant {
@@ -499,6 +514,7 @@ Below you can see how this class should be used.
 		AvantI2C i2c;
 		Callback callback;
 		AvantPose pose;
+		AvantSPI spi;
     public:
 		/**
         Method description
@@ -550,7 +566,11 @@ Below you can see how this class should be used.
         @returns Return description
         */
 		AvantResponseHandler& avantResponseHandler();
-		
+		/**
+        Method description
+        @returns Return description
+        */
+		AvantSPI& avantSPI();
 		/**
         Method description
         */

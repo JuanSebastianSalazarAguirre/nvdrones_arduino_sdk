@@ -1,37 +1,24 @@
 #include <Avant.h>
 
-Avant myTrans(11,12);
-
-void receiveDataFromID1(float data) {
-  Serial.print("Data received as ");
-  Serial.println(data);
-}
+Avant myTrans(0); //create an instance of Avant
+                  //0 means Serial, 1 is Serial1, 2 is Serial2, 3 is Serial3
+                  //If the Xbee is connected to software serial ports
+                  //Specify the RX, TX port like myTrans(rx, tx)
 
 
 void setup() {
-  /*myTrans.getSetup().setElevatorPin(1);
-  myTrans.getSetup().setElevatorPin(1);
-  myTrans.getSetup().setElevatorPin(1);
-
-  myTrans.I2C().setDeviceId(ID1);
-  
-  //myTrans.I2C().getDevice(ID1).setCallbackFunction(receiveDataFromID1);  
-*/
-  
-  //Serial.println(myTrans.getSetup().getElevatorPin());
-  
-  myTrans.setCallbackFunction(receiveDataFromID1);
+  myTrans.avantSetup().setElevatorPin(1);  //Samples Elevator Pin from Analog Pin 1
+  myTrans.avantSetup().setAilronPin(2);   //Samples Ailron Pin from Analog Pin 2
+  myTrans.avantSetup().setRudderPin(3);    //Samples Rudder Pin from Analog Pin 3
+  myTrans.avantSetup().setThrottlePin(4);  //Samples Throttle Pin from Analog Pin 4
 }
 
 
 
 void loop() {
-  
-  //Serial.println(myTrans.getSetup().getElevatorPin());
-  myTrans.getAvantRC().sendSticks();  
-  //myTrans.I2C().getDevice(ID1).read();  //in Hz  
-  myTrans.readData();
-  delay(5000);
+  myTrans.avantSetup().sendSticks();  //This will sample all of the Stick Values
+                                     //and send it to the drone
+  delay(10);
 }
 
 

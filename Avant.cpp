@@ -46,7 +46,9 @@ Avant::Avant() {
 	i2c = AvantI2C(&rcService, &callback);
 	xbee = AvantXbee(&rcService, &callback);
 	pose = AvantPose(&rcService, &callback);
+	spi = AvantSPI(&rcService, &callback);
 }
+
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
     rc = AvantRC(&rcService, &callback);
@@ -57,6 +59,7 @@ Avant::Avant(int hardwareSerialCode) {
 	i2c = AvantI2C(&rcService, &callback);
 	xbee = AvantXbee(&rcService, &callback);
 	pose = AvantPose(&rcService, &callback);
+	spi = AvantSPI(&rcService, &callback);
 }
 Avant::Avant(int txPin, int rxPin) {
    rcService = RCTransmitService(txPin, rxPin);
@@ -68,6 +71,7 @@ Avant::Avant(int txPin, int rxPin) {
    i2c = AvantI2C(&rcService, &callback);
    xbee = AvantXbee(&rcService, &callback);
    pose = AvantPose(&rcService, &callback);
+   spi = AvantSPI(&rcService, &callback);
 }
 
 AvantGPIO& Avant::avantGPIO() {return gpio;} 
@@ -77,6 +81,7 @@ AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to th
 AvantI2C& Avant::avantI2C() {return i2c;}
 AvantXbee& Avant::avantXbee() {return xbee;}
 AvantPose& Avant::avantPose() {return pose;}
+AvantSPI& Avant::avantSPI() {return spi;}
 
         
 void Avant::armDrone() {
@@ -252,6 +257,30 @@ void RCTransmitService::write(byte data) {
         softwareSerial.write(data);
     }
 }
+
+void RCTransmitService::readBytes(char *buffer, int bytesToRead) {
+    if (isHwSerial0Used) {
+        #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+            Serial.readBytes(buffer, bytesToRead);
+        #endif
+    } else if (isHwSerial1Used) {
+        #if defined(UBRR1H)
+            Serial1.readBytes(buffer, bytesToRead);
+        #endif
+    }
+    else if (isHwSerial2Used) {
+        #if defined(UBRR2H)
+            Serial2.readBytes(buffer, bytesToRead);
+        #endif
+    } else if (isHwSerial3Used) {
+        #if defined(UBRR3H)
+            Serial3.readBytes(buffer, bytesToRead);
+        #endif
+    } 
+    else if (isSwSerialUsed) {
+        softwareSerial.readBytes(buffer, bytesToRead);
+    }
+}
 // ***********************************************
 // AvantRC Class Implementation
 // ***********************************************
@@ -423,16 +452,14 @@ AvantXbee::AvantXbee(RCTransmitService *rcTservice, Callback *callback) {
    
 void AvantXbee::id(uint8_t id) {
 	char acknowledge[2];
+	service->print("+++");
     delay(1200);
     service->print("ATID");
-    service->write(id);
+    //service->write(id);
     service->write(15);
-    Serial.readBytes(&acknowledge[0], 2);
-    Serial.print("ATCN");
-    if (acknowledge[0] == 'O' && acknowledge[1] == 'K')
-      service->sendData(1, 13, 1);
-    else
-      service->sendData(1, 100, 1);
+    service->readBytes(&acknowledge[0], 2);
+    service->print("ATCN");
+    Serial.println(acknowledge);
 }
 
 //********************************************
@@ -497,6 +524,35 @@ void AvantPose::orientationCallback(void (*function)(float)) {
 	(*myCallback).orientation = function;
 }
 
+
+//*******************************************
+//AvantSPI Class Implementation
+//*******************************************
+AvantSPI::AvantSPI(){}
+AvantSPI::AvantSPI(RCTransmitService *rcTservice, Callback *callback) {
+    service = rcTservice;
+	myCallback = callback;
+}
+
+void AvantSPI::transfer(uint8_t data){
+	service->sendData(data, 10, 1);
+}
+
+void AvantSPI::setBitOrder(uint8_t data){
+	service->sendData(data, 10, 2);
+}
+
+void AvantSPI::setClockDivider(uint8_t data){
+	service->sendData(data, 10, 3);
+}
+
+void AvantSPI::setDataMode(uint8_t data){
+	service->sendData(data, 10, 4);
+}
+
+void AvantSPI::transferCallback(void (*function)(byte)) {
+	(*myCallback).transfer = function;
+}
 //*******************************************
 //AvantResponseHandler Class Implementation
 //*******************************************
