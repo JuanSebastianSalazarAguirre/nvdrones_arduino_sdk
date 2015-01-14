@@ -38,50 +38,50 @@ http://arduiniana.org.
 // ***********************************************
 Avant::Avant() {
     rcService = RCTransmitService(0);
-    rc = AvantRC(&rcService, &callback);
+    avantRC = AvantRC(&rcService, &callback);
 	callback = Callback();
-	gpio = AvantGPIO(&rcService, &callback);
+	avantGPIO = AvantGPIO(&rcService, &callback);
 	responseHandler = AvantResponseHandler(&rcService, &callback);
-    setup = AvantSetup(&rcService);
-	i2c = AvantI2C(&rcService, &callback);
-	xbee = AvantXbee(&rcService, &callback);
-	pose = AvantPose(&rcService, &callback);
-	spi = AvantSPI(&rcService, &callback);
+    avantTransmitter = AvantTransmitter(&rcService);
+	avantI2C = AvantI2C(&rcService, &callback);
+	avantXbee = AvantXbee(&rcService, &callback);
+	avantPose = AvantPose(&rcService, &callback);
+	avantSPI = AvantSPI(&rcService, &callback);
 }
 
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
-    rc = AvantRC(&rcService, &callback);
+    avantRC = AvantRC(&rcService, &callback);
 	callback = Callback();
-	gpio = AvantGPIO(&rcService, &callback);
+	avantGPIO = AvantGPIO(&rcService, &callback);
 	responseHandler = AvantResponseHandler(&rcService, &callback);
-    setup = AvantSetup(&rcService);
-	i2c = AvantI2C(&rcService, &callback);
-	xbee = AvantXbee(&rcService, &callback);
-	pose = AvantPose(&rcService, &callback);
-	spi = AvantSPI(&rcService, &callback);
+    avantTransmitter = AvantTransmitter(&rcService);
+	avantI2C = AvantI2C(&rcService, &callback);
+	avantXbee = AvantXbee(&rcService, &callback);
+	avantPose = AvantPose(&rcService, &callback);
+	avantSPI = AvantSPI(&rcService, &callback);
 }
 Avant::Avant(int txPin, int rxPin) {
    rcService = RCTransmitService(txPin, rxPin);
-   rc = AvantRC(&rcService, &callback);
+   avantRC = AvantRC(&rcService, &callback);
    callback = Callback();
-   gpio = AvantGPIO(&rcService, &callback);
+   avantGPIO = AvantGPIO(&rcService, &callback);
    responseHandler = AvantResponseHandler(&rcService, &callback);
-   setup = AvantSetup(&rcService);
-   i2c = AvantI2C(&rcService, &callback);
-   xbee = AvantXbee(&rcService, &callback);
-   pose = AvantPose(&rcService, &callback);
-   spi = AvantSPI(&rcService, &callback);
+   avantTransmitter = AvantTransmitter(&rcService);
+   avantI2C = AvantI2C(&rcService, &callback);
+   avantXbee = AvantXbee(&rcService, &callback);
+   avantPose = AvantPose(&rcService, &callback);
+   avantSPI = AvantSPI(&rcService, &callback);
 }
 
-AvantGPIO& Avant::avantGPIO() {return gpio;} 
+AvantGPIO& Avant::GPIO() {return avantGPIO;} 
 AvantResponseHandler& Avant::avantResponseHandler(){return responseHandler;}
-AvantSetup& Avant::avantSetup() {return setup;} //sets the analog pins that 
-AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
-AvantI2C& Avant::avantI2C() {return i2c;}
-AvantXbee& Avant::avantXbee() {return xbee;}
-AvantPose& Avant::avantPose() {return pose;}
-AvantSPI& Avant::avantSPI() {return spi;}
+AvantTransmitter& Avant::transmitter() {return avantTransmitter;} //sets the analog pins that 
+AvantRC& Avant::RC() {return avantRC;} //functionality for sending RC data to the drone
+AvantI2C& Avant::I2C() {return avantI2C;}
+AvantXbee& Avant::xbee() {return avantXbee;}
+AvantPose& Avant::pose() {return avantPose;}
+AvantSPI& Avant::SPI() {return avantSPI;}
 
         
 void Avant::armDrone() {
@@ -289,7 +289,7 @@ AvantRC::AvantRC(RCTransmitService *rcTservice, Callback *callback) {
     service = rcTservice;
 	myCallback = callback;
 }
-void AvantRC::setAilron(int value){
+void AvantRC::setAileron(int value){
 	service->sendData(value, 2, 4);
 };
 void AvantRC::setElevator(int value){
@@ -305,7 +305,7 @@ void AvantRC::setFlightMode(int value){
 	service->sendData(value, 2, 5);
 };
 
-int AvantRC::getAilron(){return 0;};
+int AvantRC::getAileron(){return 0;};
 int AvantRC::getElevator(){return 0;}
 int AvantRC::getThrottle(){return 0;}
 int AvantRC::getRudder(){return 0;}
@@ -313,63 +313,63 @@ int AvantRC::getFlightMode(){return 0;}
 
 
 // ***********************************************
-// AvantSetup Class Implementation
+// AvantTransmitter Class Implementation
 // ***********************************************
-AvantSetup::AvantSetup(){};
-AvantSetup::AvantSetup(RCTransmitService *rcService) {
+AvantTransmitter::AvantTransmitter(){};
+AvantTransmitter::AvantTransmitter(RCTransmitService *rcService) {
     service = rcService;
 }
 
-void AvantSetup::setElevatorPin(int pin) {
+void AvantTransmitter::setElevatorPin(int pin) {
 	elevatorPin = pin;
 }
-int AvantSetup::getElevatorPin(){
+int AvantTransmitter::getElevatorPin(){
 	return elevatorPin;
 }
-void AvantSetup::setAilronPin(int pin) {
-	ailronPin = pin;
+void AvantTransmitter::setAileronPin(int pin) {
+	AileronPin = pin;
 }
-int AvantSetup::getAilronPin(){
-	return ailronPin;
+int AvantTransmitter::getAileronPin(){
+	return AileronPin;
 }
-void AvantSetup::setThrottlePin(int pin) {
+void AvantTransmitter::setThrottlePin(int pin) {
 	throttlePin = pin;
 }
-int AvantSetup::getThrottlePin(){
+int AvantTransmitter::getThrottlePin(){
 	return throttlePin;
 }
-void AvantSetup::setRudderPin(int pin) {
+void AvantTransmitter::setRudderPin(int pin) {
 	rudderPin = pin;
 }
-int AvantSetup::getRudderPin(){
+int AvantTransmitter::getRudderPin(){
 	return rudderPin;
 }
-void AvantSetup::setFlightModePin(int pin) {
+void AvantTransmitter::setFlightModePin(int pin) {
 	flightModePin = pin;
 }
-int AvantSetup::getFlightModePin() {
+int AvantTransmitter::getFlightModePin() {
 	return flightModePin;
 }
 
-void AvantSetup::sendSticks(){
+void AvantTransmitter::sendSticks(){
 	int Elevator = analogRead(elevatorPin);
-	int Ailron = analogRead(ailronPin);
+	int Aileron = analogRead(AileronPin);
 	int Throttle = analogRead(throttlePin);
 	int Rudder = analogRead(rudderPin);
 	Elevator = map(Elevator, 777, 136, -100, 100);
-	Ailron = map(Ailron, 872, 124, -100, 100);
+	Aileron = map(Aileron, 872, 124, -100, 100);
 	Throttle = map(Throttle, 780, 118 , -100, 100);
 	Rudder = map(Rudder, 867, 97, -100, 100);
     if (Elevator > 100) Elevator = 100;
     if (Elevator < -100) Elevator = -100;
-    if (Ailron > 100) Ailron = 100;
-    if (Ailron < -100) Ailron = -100;        
+    if (Aileron > 100) Aileron = 100;
+    if (Aileron < -100) Aileron = -100;        
     if (Throttle > 100) Throttle = 100;
     if (Throttle < -100) Throttle = -100;  
     if (Rudder > 100) Rudder = 100;
     if (Rudder < -100) Rudder = -100;    
     service->sendData(Elevator, 2, 3);
-    service->sendData(Ailron, 2, 4);
+    service->sendData(Aileron, 2, 4);
     service->sendData(Throttle, 2, 2);
     service->sendData(Rudder, 2, 1);
 }

@@ -184,7 +184,7 @@ class AvantResponseHandler {
 		
 };
 
-class AvantSetup 
+class AvantTransmitter 
 {
 /**
 This class allows you to...
@@ -199,7 +199,7 @@ Below you can see how this class shiuld be used.
 */
     private:
 		int elevatorPin;
-        int ailronPin;
+        int AileronPin;
         int throttlePin;
         int rudderPin;
         int flightModePin;
@@ -208,8 +208,8 @@ Below you can see how this class shiuld be used.
 		/**
         Description of the method
         */
-        AvantSetup();
-		AvantSetup(RCTransmitService *rcService);
+        AvantTransmitter();
+		AvantTransmitter(RCTransmitService *rcService);
 		/**
         Description of the method
         @param pin Parameter description
@@ -224,12 +224,12 @@ Below you can see how this class shiuld be used.
         Description of the method
         @param pin Parameter description
         */
-		void setAilronPin(int pin);
+		void setAileronPin(int pin);
 		/**
         Method descriptionDescription of the method
         @returns Return description
         */
-		int getAilronPin();
+		int getAileronPin();
 		/**
         Description of the method
         @param pin Parameter description
@@ -260,6 +260,7 @@ Below you can see how this class shiuld be used.
         @returns Return description
         */
 		int getFlightModePin();
+		
 		void sendSticks();
 };
 
@@ -345,7 +346,7 @@ Below you can see how this class should be used.
         Method description
         @param value Parameter description
         */
-        void setAilron(int value);
+        void setAileron(int value);
 		/**
         Method description
         @param value Parameter description
@@ -370,7 +371,7 @@ Below you can see how this class should be used.
         Method description
         @param value Parameter description
         */
-        int getAilron();
+        int getAileron();
 		/**
         Method description
         @returns Return description
@@ -505,16 +506,16 @@ Below you can see how this class should be used.
 ~~~
 */
     private:
-        AvantSetup setup;
-        AvantRC rc;
-		AvantXbee xbee;
+        AvantTransmitter avantTransmitter;
+        AvantRC avantRC;
+		AvantXbee avantXbee;
         RCTransmitService rcService;
-		AvantGPIO gpio;
+		AvantGPIO avantGPIO;
 		AvantResponseHandler responseHandler;
-		AvantI2C i2c;
+		AvantI2C avantI2C;
 		Callback callback;
-		AvantPose pose;
-		AvantSPI spi;
+		AvantPose avantPose;
+		AvantSPI avantSPI;
     public:
 		/**
         Method description
@@ -535,32 +536,32 @@ Below you can see how this class should be used.
         Method description
         @returns Return description
         */
-        AvantSetup& avantSetup();
+        AvantTransmitter& transmitter();
 		/**
         Method description
         @returns Return description
         */
-        AvantRC& avantRC();
+        AvantRC& RC();
 		/**
         Method description
         @returns Return description
         */
-		AvantGPIO& avantGPIO();
+		AvantGPIO& GPIO();
 		/**
         Method description
         @returns Return description
         */
-		AvantI2C& avantI2C();
+		AvantI2C& I2C();
 		/**
         Method description
         @returns Return description
         */
-		AvantXbee& avantXbee();
+		AvantXbee& xbee();
 		/**
         Method description
         @returns Return description
         */
-		AvantPose& avantPose();
+		AvantPose& pose();
 		/**
         Method description
         @returns Return description
@@ -570,7 +571,7 @@ Below you can see how this class should be used.
         Method description
         @returns Return description
         */
-		AvantSPI& avantSPI();
+		AvantSPI& SPI();
 		/**
         Method description
         */
