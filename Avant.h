@@ -115,6 +115,11 @@ class Callback {
 		void (*satallite)(byte);
 		void (*orientation)(float);
 		void (*transfer)(byte);
+		void (*flightMode)(byte);
+		void (*elevator)(byte);
+		void (*aileron)(byte);
+		void (*throttle)(byte);
+		void (*rudder)(byte);
 		
 };
 
@@ -371,27 +376,37 @@ Below you can see how this class should be used.
         Method description
         @param value Parameter description
         */
-        int getAileron();
+        void getAileron();
 		/**
         Method description
         @returns Return description
         */
-        int getElevator();
+        void getElevator();
 		/**
         Method description
         @returns Return description
         */
-        int getThrottle();
+        void getThrottle();
 		/**
         Method description
         @returns Return description
         */
-        int getRudder();
+        void getRudder();
 		/**
         Method description
         @returns Return description
         */
-        int getFlightMode();
+        void getFlightMode();
+		
+		void aileronCallback(void (*function)(byte));
+		
+		void flightModeCallback(void (*function)(byte));
+		
+		void throttleCallback(void (*function)(byte));
+		
+		void rudderCallback(void (*function)(byte));
+		
+		void elevatorCallback(void (*function)(byte));
 };
 
 class AvantGPIO {
@@ -576,10 +591,5 @@ Below you can see how this class should be used.
         Method description
         */
         void armDrone();
-		/**
-        Method description
-        */
-        void disarmDrone();
-
 };
 

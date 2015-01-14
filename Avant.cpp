@@ -96,9 +96,6 @@ void Avant::armDrone() {
     rcService.sendData(0, 2, 4);
 }
 
-void Avant::disarmDrone() {
-    armDrone();
-}
 
 
 // ***********************************************
@@ -305,11 +302,41 @@ void AvantRC::setFlightMode(int value){
 	service->sendData(value, 2, 5);
 };
 
-int AvantRC::getAileron(){return 0;};
-int AvantRC::getElevator(){return 0;}
-int AvantRC::getThrottle(){return 0;}
-int AvantRC::getRudder(){return 0;}
-int AvantRC::getFlightMode(){return 0;}
+void AvantRC::getAileron(){
+	service->sendData(0, 2, 9);
+}
+void AvantRC::getElevator(){
+	service->sendData(0, 2, 8);
+}
+void AvantRC::getThrottle(){
+	service->sendData(0, 2, 7);
+}
+void AvantRC::getRudder(){
+	service->sendData(0, 2, 6);
+}
+void AvantRC::getFlightMode(){
+	service->sendData(0, 2, 10);
+}
+
+void AvantRC::flightModeCallback(void (*function)(byte)) {
+   (*myCallback).flightMode = function;
+}
+
+void AvantRC::elevatorCallback(void (*function)(byte)) {
+   (*myCallback).elevator= function;
+}
+
+void AvantRC::aileronCallback(void (*function)(byte)) {
+   (*myCallback).aileron = function;
+}
+
+void AvantRC::rudderCallback(void (*function)(byte)) {
+   (*myCallback).rudder = function;
+}
+
+void AvantRC::throttleCallback(void (*function)(byte)) {
+   (*myCallback).throttle = function;
+}
 
 
 // ***********************************************
