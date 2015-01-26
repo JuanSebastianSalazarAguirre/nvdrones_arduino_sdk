@@ -338,6 +338,10 @@ void AvantRC::throttleCallback(void (*function)(byte)) {
    (*myCallback).throttle = function;
 }
 
+void AvantRC::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron){
+	long data = (long(rudder+100))+ (long(throttle+100) << 8) + (long(elevator+100) << 16) + (long(aileron+100) << 24);
+}
+
 
 // ***********************************************
 // AvantTransmitter Class Implementation

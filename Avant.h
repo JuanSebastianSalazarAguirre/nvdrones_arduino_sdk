@@ -407,6 +407,8 @@ Below you can see how this class should be used.
 		void rudderCallback(void (*function)(byte));
 		
 		void elevatorCallback(void (*function)(byte));
+		
+		void sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron);
 };
 
 class AvantGPIO {
