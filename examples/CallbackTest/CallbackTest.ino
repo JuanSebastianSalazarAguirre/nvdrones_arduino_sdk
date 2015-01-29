@@ -1,23 +1,24 @@
+#include <Avant.h>
 
-int addFunction(int a, int b) {
-    return (a+b); 
-}
+Avant myTrans(0); //create an instance of Avant
+                  //0 means Serial, 1 is Serial1, 2 is Serial2, 3 is Serial3
+                  //If the Xbee is connected to software serial ports
+                  //Specify the RX, TX port like myTrans(rx, tx)
 
-int subtractFunction(int a, int b) {
-    return (a-b); 
-}
-
-int executeFunction(int arg1, int arg2, int (*function)(int,int)) {
-    return function(arg1,arg2);
-}
 
 void setup() {
-    Serial.begin(57600);
-
+  myTrans.avantI2C().readCallback(testing);
 }
 
 void loop() {
-      Serial.println(executeFunction(1,2, addFunction));
-      Serial.println(executeFunction(2,2, subtractFunction));
-      delay(500);
+ //do some stuff here
+ delay(100);
+
+}
+
+
+//This is an Example Callback function that the user can pass to avantI2C.readCallback()
+//and it will be executed whenever a response containing I2C data is received
+void testing(byte test ){ 
+  Serial.print(test);
 }

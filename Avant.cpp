@@ -38,54 +38,65 @@ http://arduiniana.org.
 // ***********************************************
 Avant::Avant() {
     rcService = RCTransmitService(0);
-    rc = AvantRC(rcService);
-    gpio = AvantGPIO(rcService);
-    responseHandler = AvantResponseHandler(rcService);
-    setup = AvantSetup(rcService);
+    avantRC = AvantRC(&rcService, &callback);
+	callback = Callback();
+	avantGPIO = AvantGPIO(&rcService, &callback);
+	responseHandler = AvantResponseHandler(&rcService, &callback);
+    avantTransmitter = AvantTransmitter(&rcService);
+	avantI2C = AvantI2C(&rcService, &callback);
+	avantXbee = AvantXbee(&rcService, &callback);
+	avantPose = AvantPose(&rcService, &callback);
+	avantSPI = AvantSPI(&rcService, &callback);
 }
+
 Avant::Avant(int hardwareSerialCode) {
     rcService = RCTransmitService(hardwareSerialCode);
-    rc = AvantRC(rcService);
-    gpio = AvantGPIO(rcService);
-    responseHandler = AvantResponseHandler(rcService);
-    setup = AvantSetup(rcService);
+    avantRC = AvantRC(&rcService, &callback);
+	callback = Callback();
+	avantGPIO = AvantGPIO(&rcService, &callback);
+	responseHandler = AvantResponseHandler(&rcService, &callback);
+    avantTransmitter = AvantTransmitter(&rcService);
+	avantI2C = AvantI2C(&rcService, &callback);
+	avantXbee = AvantXbee(&rcService, &callback);
+	avantPose = AvantPose(&rcService, &callback);
+	avantSPI = AvantSPI(&rcService, &callback);
 }
 Avant::Avant(int txPin, int rxPin) {
    rcService = RCTransmitService(txPin, rxPin);
-   rc = AvantRC(rcService);
-   gpio = AvantGPIO(rcService);
-   responseHandler = AvantResponseHandler(rcService);
-   setup = AvantSetup(rcService);
+   avantRC = AvantRC(&rcService, &callback);
+   callback = Callback();
+   avantGPIO = AvantGPIO(&rcService, &callback);
+   responseHandler = AvantResponseHandler(&rcService, &callback);
+   avantTransmitter = AvantTransmitter(&rcService);
+   avantI2C = AvantI2C(&rcService, &callback);
+   avantXbee = AvantXbee(&rcService, &callback);
+   avantPose = AvantPose(&rcService, &callback);
+   avantSPI = AvantSPI(&rcService, &callback);
 }
 
-AvantGPIO& Avant::avantGPIO() {return gpio;} 
+AvantGPIO& Avant::GPIO() {return avantGPIO;} 
 AvantResponseHandler& Avant::avantResponseHandler(){return responseHandler;}
-AvantSetup& Avant::avantSetup() {return setup;} //sets the analog pins that 
-AvantRC& Avant::avantRC() {return rc;} //functionality for sending RC data to the drone
+AvantTransmitter& Avant::transmitter() {return avantTransmitter;} //sets the analog pins that 
+AvantRC& Avant::RC() {return avantRC;} //functionality for sending RC data to the drone
+AvantI2C& Avant::I2C() {return avantI2C;}
+AvantXbee& Avant::xbee() {return avantXbee;}
+AvantPose& Avant::pose() {return avantPose;}
+AvantSPI& Avant::SPI() {return avantSPI;}
 
-void Avant::setCallbackFunction(void (*function)(float)) {
-    callback = function;
-}
         
 void Avant::armDrone() {
-    avantRC().setRudder(-100);
-    avantRC().setThrottle(-100);
-    avantRC().setElevator(-100);
-    avantRC().setAilron(-100);
+    rcService.sendData(-100, 2, 1);
+    rcService.sendData(-100, 2, 2);
+    rcService.sendData(-100, 2, 3);
+    rcService.sendData(-100, 2, 4);
     delay(500);
-    avantRC().setRudder(0);
-    avantRC().setThrottle(-100);
-    avantRC().setElevator(0);
-    avantRC().setAilron(0);
+    rcService.sendData(0, 2, 1);
+    rcService.sendData(-100, 2, 2);
+    rcService.sendData(0, 2, 3);
+    rcService.sendData(0, 2, 4);
 }
 
-void Avant::disarmDrone() {
-    armDrone();
-}
 
-void Avant::readData() {
-    callback(3.14);
-}
 
 // ***********************************************
 // RCTransmitService Class Implementation
@@ -141,7 +152,7 @@ RCTransmitService::RCTransmitService(int hwSerialCode) {
     }
 }
 
-int RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) {
+void RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) {
     if (isHwSerial0Used) {
         #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
             Serial.write('$');
@@ -193,167 +204,400 @@ int RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) 
         softwareSerial.write(lowByte(data));
         softwareSerial.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
     }
-    return data;
 }
 
+void RCTransmitService::print(String data) {
+    if (isHwSerial0Used) {
+        #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+            Serial.print(data);
+        #endif
+    } else if (isHwSerial1Used) {
+        #if defined(UBRR1H)
+            Serial1.print(data);
+        #endif
+    }
+    else if (isHwSerial2Used) {
+        #if defined(UBRR2H)
+            Serial2.print(data);
+        #endif
+    } else if (isHwSerial3Used) {
+        #if defined(UBRR3H)
+            Serial3.print(data);
+        #endif
+    } 
+    else if (isSwSerialUsed) {
+        softwareSerial.print(data);
+    }
+}
+
+void RCTransmitService::write(byte data) {
+    if (isHwSerial0Used) {
+        #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+            Serial.write(data);
+        #endif
+    } else if (isHwSerial1Used) {
+        #if defined(UBRR1H)
+            Serial1.write(data);
+        #endif
+    }
+    else if (isHwSerial2Used) {
+        #if defined(UBRR2H)
+            Serial2.write(data);
+        #endif
+    } else if (isHwSerial3Used) {
+        #if defined(UBRR3H)
+            Serial3.write(data);
+        #endif
+    } 
+    else if (isSwSerialUsed) {
+        softwareSerial.write(data);
+    }
+}
+
+void RCTransmitService::readBytes(char *buffer, int bytesToRead) {
+    if (isHwSerial0Used) {
+        #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+            Serial.readBytes(buffer, bytesToRead);
+        #endif
+    } else if (isHwSerial1Used) {
+        #if defined(UBRR1H)
+            Serial1.readBytes(buffer, bytesToRead);
+        #endif
+    }
+    else if (isHwSerial2Used) {
+        #if defined(UBRR2H)
+            Serial2.readBytes(buffer, bytesToRead);
+        #endif
+    } else if (isHwSerial3Used) {
+        #if defined(UBRR3H)
+            Serial3.readBytes(buffer, bytesToRead);
+        #endif
+    } 
+    else if (isSwSerialUsed) {
+        softwareSerial.readBytes(buffer, bytesToRead);
+    }
+}
 // ***********************************************
 // AvantRC Class Implementation
 // ***********************************************
 AvantRC::AvantRC() {};
-AvantRC::AvantRC(RCTransmitService rcTservice) {
+AvantRC::AvantRC(RCTransmitService *rcTservice, Callback *callback) {
     service = rcTservice;
+	myCallback = callback;
 }
-void AvantRC::setAilron(int value) {
-    ailron = value;
-    if (ailron > 100) ailron = 100;
-    if (ailron < -100) ailron = -100;
-    service.sendData(ailron, 2, 4);
+
+void AvantRC::setAileron(int value){
+	service->sendData(value, 2, 4);
 };
 void AvantRC::setElevator(int value){
-    elevator = value;
-    if (elevator > 100) elevator = 100;
-    if (elevator < -100) elevator = -100;
-    service.sendData(elevator, 2, 3);
+	service->sendData(value, 2, 3);
 };
-void AvantRC::setThrottle(int value) {
-    throttle = value;
-    if (throttle > 100) throttle = 100;
-    if (throttle < -100) throttle = -100;
-    service.sendData(throttle, 2, 2);
+void AvantRC::setThrottle(int value){
+	service->sendData(value, 2, 2);
 };
-void AvantRC::setRudder(int value) {
-    rudder = value;
-    if (rudder > 100) rudder = 100;
-    if (rudder < -100) rudder = -100;
-    service.sendData(rudder, 2, 1);
-};
-void AvantRC::setFlightMode(int value) {
-    flightMode = value;
+void AvantRC::setRudder(int value){
+	service->sendData(value, 2, 1);
+}; 
+void AvantRC::setFlightMode(int value){
+	service->sendData(value, 2, 5);
 };
 
-int AvantRC::getAilron(){return ailron;};
-int AvantRC::getElevator(){return elevator;}
-int AvantRC::getThrottle(){return throttle;}
-int AvantRC::getRudder(){return rudder;}
-int AvantRC::getFlightMode(){return flightMode;}
-
-int AvantRC::readSensorReading() {
-    return 31415;
+void AvantRC::getAileron(){
+	service->sendData(0, 2, 9);
+}
+void AvantRC::getElevator(){
+	service->sendData(0, 2, 8);
+}
+void AvantRC::getThrottle(){
+	service->sendData(0, 2, 7);
+}
+void AvantRC::getRudder(){
+	service->sendData(0, 2, 6);
+}
+void AvantRC::getFlightMode(){
+	service->sendData(0, 2, 10);
 }
 
+void AvantRC::flightModeCallback(void (*function)(byte)) {
+   (*myCallback).flightMode = function;
+}
+
+void AvantRC::elevatorCallback(void (*function)(byte)) {
+   (*myCallback).elevator= function;
+}
+
+void AvantRC::aileronCallback(void (*function)(byte)) {
+   (*myCallback).aileron = function;
+}
+
+void AvantRC::rudderCallback(void (*function)(byte)) {
+   (*myCallback).rudder = function;
+}
+
+void AvantRC::throttleCallback(void (*function)(byte)) {
+   (*myCallback).throttle = function;
+}
+
+void AvantRC::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron){
+	long data = (long(rudder+100))+ (long(throttle+100) << 8) + (long(elevator+100) << 16) + (long(aileron+100) << 24);
+}
+
+
 // ***********************************************
-// AvantSetup Class Implementation
+// AvantTransmitter Class Implementation
 // ***********************************************
-AvantSetup::AvantSetup(){};
-AvantSetup::AvantSetup(RCTransmitService rcService) {
+AvantTransmitter::AvantTransmitter(){};
+AvantTransmitter::AvantTransmitter(RCTransmitService *rcService) {
     service = rcService;
 }
-AvantSetup::~AvantSetup(){};
 
-void AvantSetup::setElevatorPin(int pin) {
-    elevatorPin = pin;
+void AvantTransmitter::setElevatorPin(int pin) {
+	elevatorPin = pin;
 }
-int AvantSetup::getElevatorPin(){
-    return elevatorPin;
+int AvantTransmitter::getElevatorPin(){
+	return elevatorPin;
 }
-void AvantSetup::setAilronPin(int pin) {
-    ailronPin = pin;
+void AvantTransmitter::setAileronPin(int pin) {
+	AileronPin = pin;
 }
-int AvantSetup::getAilronPin(){
-    return ailronPin;
+int AvantTransmitter::getAileronPin(){
+	return AileronPin;
 }
-void AvantSetup::setThrottlePin(int pin) {
-    throttlePin = pin;
+void AvantTransmitter::setThrottlePin(int pin) {
+	throttlePin = pin;
 }
-int AvantSetup::getThrottlePin(){
-    return throttlePin;
+int AvantTransmitter::getThrottlePin(){
+	return throttlePin;
 }
-void AvantSetup::setRudderPin(int pin) {
-    rudderPin = pin;
+void AvantTransmitter::setRudderPin(int pin) {
+	rudderPin = pin;
 }
-int AvantSetup::getRudderPin(){
-    return rudderPin;
+int AvantTransmitter::getRudderPin(){
+	return rudderPin;
 }
-void AvantSetup::setFlightModePin(int pin) {
-    flightModePin = pin;
+void AvantTransmitter::setFlightModePin(int pin) {
+	flightModePin = pin;
 }
-int AvantSetup::getFlightModePin() {
-    return flightModePin;
+int AvantTransmitter::getFlightModePin() {
+	return flightModePin;
 }
 
-void AvantSetup::sendSticks(){
-    int Elevator = analogRead(elevatorPin);
-    int Ailron = analogRead(ailronPin);
-    int Throttle = analogRead(throttlePin);
-    int Rudder = analogRead(rudderPin);
-    Elevator = map(Elevator, 777, 136, -100, 100);
-    Ailron = map(Ailron, 872, 124, -100, 100);
-    Throttle = map(Throttle, 780, 118 , -100, 100);
-    Rudder = map(Rudder, 867, 97, -100, 100);
+void AvantTransmitter::sendSticks(){
+	int Elevator = analogRead(elevatorPin);
+	int Aileron = analogRead(AileronPin);
+	int Throttle = analogRead(throttlePin);
+	int Rudder = analogRead(rudderPin);
+	Elevator = map(Elevator, 777, 136, -100, 100);
+	Aileron = map(Aileron, 872, 124, -100, 100);
+	Throttle = map(Throttle, 780, 118 , -100, 100);
+	Rudder = map(Rudder, 867, 97, -100, 100);
     if (Elevator > 100) Elevator = 100;
     if (Elevator < -100) Elevator = -100;
-    if (Ailron > 100) Ailron = 100;
-    if (Ailron < -100) Ailron = -100;        
+    if (Aileron > 100) Aileron = 100;
+    if (Aileron < -100) Aileron = -100;        
     if (Throttle > 100) Throttle = 100;
     if (Throttle < -100) Throttle = -100;  
     if (Rudder > 100) Rudder = 100;
     if (Rudder < -100) Rudder = -100;    
-    service.sendData(Elevator, 2, 3);
-    service.sendData(Ailron, 2, 4);
-    service.sendData(Throttle, 2, 2);
-    service.sendData(Rudder, 2, 1);
+
+    service->sendData(Elevator, 2, 3);
+    service->sendData(Aileron, 2, 4);
+    service->sendData(Throttle, 2, 2);
+    service->sendData(Rudder, 2, 1);
+
 }
 //************************************************
 //AvantGPIO Class Implementation
 //************************************************
 AvantGPIO::AvantGPIO() {};
-AvantGPIO::AvantGPIO(RCTransmitService rcTservice) {
-    service = rcTservice;
+
+AvantGPIO::AvantGPIO(RCTransmitService *rcTservice, Callback *callback) {
+	service = rcTservice;
+	myCallback = callback;
 }
 
 void AvantGPIO::digitalWrite(uint8_t pin, bool logicLevel) {
-    service.sendData(logicLevel, 6, pin);
+	service->sendData(logicLevel, 6, pin);
 }
 
 void AvantGPIO::pinMode(uint8_t pin, bool logicLevel) {
-    service.sendData(logicLevel, 5, pin);
+	service->sendData(logicLevel, 5, pin);
 }
 
 void AvantGPIO::digitalRead(uint8_t pin) {
-    service.sendData(0, 8, pin);
+	service->sendData(0, 8, pin);
 }
 
 void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
-    service.sendData(value, 8, pin);
+	service->sendData(value, 8, pin);
+}
+
+void AvantGPIO::digitalReadCallback(void (*function)(byte)) {
+   (*myCallback).digitalRead = function;
+}
+
+//**********************************
+//AvantI2C Class Implementation
+//**********************************
+AvantI2C::AvantI2C(){}
+
+AvantI2C::AvantI2C(RCTransmitService *rcTservice, Callback *callback) {
+	service = rcTservice;
+	myCallback = callback;
+}
+
+void AvantI2C::deviceID(uint8_t ID){
+	service->sendData(ID, 11, 7);
+}
+void AvantI2C::beginTransmission(void){
+	service->sendData(0, 11, 8);
+}
+
+void AvantI2C::endTransmission(void){
+	service->sendData(0, 11, 4);
+}
+
+void AvantI2C::write(uint8_t data){
+	service->sendData(data, 11, 3);
+}
+
+void AvantI2C::read(void){
+	service->sendData(0, 11, 5);
+}
+void AvantI2C::wireRequest(uint8_t bytes){
+	service->sendData(bytes, 11, 6);
+}
+
+void AvantI2C::readCallback(void (*function)(byte)) {
+   (*myCallback).i2cRead = function;
 }
 
 
-/*    
-uint8_t AvantXbee::id(uint8_t id) {
+//********************************************
+//AvantXbee Class Implementation
+//********************************************
+AvantXbee::AvantXbee(){}
+
+AvantXbee::AvantXbee(RCTransmitService *rcTservice, Callback *callback) {
+	service = rcTservice;
+	myCallback = callback;
+}
+   
+void AvantXbee::id(uint8_t id) {
+	char acknowledge[2];
+	service->print("+++");
     delay(1200);
-    Serial.print("ATID");
-    Serial.write(id);
-    Serial.write(15);
-    char acknowledge[1];
-    Serial.readBytes(&acknowledge[0], 2);
-    Serial.print("ATCN");
-    if (acknowledge[0] == 'O' && acknowledge[1] == 'K')
-      sendData(1, 13, 1);
-    else
-      sendData(1, 100, 1);
+    service->print("ATID");
+    //service->write(id);
+    service->write(15);
+    service->readBytes(&acknowledge[0], 2);
+    service->print("ATCN");
+    Serial.println(acknowledge);
 }
-*/
+
+//********************************************
+//AvantPose Class Implementation
+//********************************************
+AvantPose::AvantPose(){}
+
+AvantPose::AvantPose(RCTransmitService *rcTservice, Callback *callback) {
+	service = rcTservice;
+	myCallback = callback;
+}
+
+void AvantPose::getGPSData(void) {
+	service->sendData(0, 9, 1);
+}
+
+void AvantPose::getLatitude(void) {
+	service->sendData(0, 9, 2);
+}
+
+void AvantPose::getLongitude(void) {
+	service->sendData(0, 9, 3);
+}
+
+void AvantPose::getAltitude(void ) {
+	service->sendData(0, 9, 4);
+}
+
+void AvantPose::getSatellites(void) {
+	service->sendData(0, 9, 5);
+}
+
+void AvantPose::getSpeed(void) {
+	service->sendData(0, 9, 6);
+}
+
+void AvantPose::getOrientation(void){
+	service->sendData(0, 9, 7);
+}
+
+void AvantPose::longitudeCallback(void (*function)(float)) {
+	(*myCallback).longitude = function;
+}
+
+void AvantPose::latitudeCallback(void (*function)(float)) {
+	(*myCallback).latitude = function;
+}
+
+void AvantPose::altitudeCallback(void (*function)(float)) {
+	(*myCallback).altitude = function;
+}
+
+void AvantPose::speedCallback(void (*function)(float)) {
+	(*myCallback).speed = function;
+}
+
+void AvantPose::satelliteCallback(void (*function)(byte)) {
+	(*myCallback).satallite = function;
+}
+
+void AvantPose::orientationCallback(void (*function)(float)) {
+	(*myCallback).orientation = function;
+}
 
 
+//*******************************************
+//AvantSPI Class Implementation
+//*******************************************
+AvantSPI::AvantSPI(){}
+AvantSPI::AvantSPI(RCTransmitService *rcTservice, Callback *callback) {
+    service = rcTservice;
+	myCallback = callback;
+}
+
+void AvantSPI::transfer(uint8_t data){
+	service->sendData(data, 10, 1);
+}
+
+void AvantSPI::setBitOrder(uint8_t data){
+	service->sendData(data, 10, 2);
+}
+
+void AvantSPI::setClockDivider(uint8_t data){
+	service->sendData(data, 10, 3);
+}
+
+void AvantSPI::setDataMode(uint8_t data){
+	service->sendData(data, 10, 4);
+}
+
+void AvantSPI::transferCallback(void (*function)(byte)) {
+	(*myCallback).transfer = function;
+}
 //*******************************************
 //AvantResponseHandler Class Implementation
 //*******************************************
 AvantResponseHandler::AvantResponseHandler(){};
-AvantResponseHandler::AvantResponseHandler(RCTransmitService rcTservice) {
+
+AvantResponseHandler::AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback) {
     service = rcTservice;
+	myCallback = callback;
 }
+
 void AvantResponseHandler::responseHandler() {
-if(service.isHwSerial0Used) {
+if(service->isHwSerial0Used) {
   char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
   int length = 0;
   int resourceID = 0;
@@ -432,317 +676,320 @@ if(service.isHwSerial0Used) {
 }
 
 #if defined(UBRR1H)
-    if(service.isHwSerial1Used) {
-      char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
-      int length = 0;
-      int resourceID = 0;
-      int actionID = 0;
-      int datasum = 0;
-      while (Serial1.available() > 0) { 
-        if (Serial1.read() == '$'){  //this is the start of a Data Packet
-          if (Serial1.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
-            length = byte(buffer[0]); //get the length of the data
-            resourceID = byte(buffer[1]); //get the resourceID
-            actionID = byte(buffer[2]); //get the actionID
-            char data[length+1]; // create a buffer to store the data and checksum info 
-            if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
-              for(int i=0;i<length;i++){
-                datasum = datasum+byte(data[i]);
-              }
-              
-              if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
-                ///////route the data to the appropriate place here
-                switch(resourceID) {
-                  case 1:
-                    //Flight_Setup
-                    Serial.println("got Flight Setup");
-                    break;
-                  case 2:
-                    //Manual_Controls
-                    break;
-                  case 3:
-                    //Mission_Planner
-                    break;
-                  case 4:
-                    //Battery_Status
-                    break;
-                   case 5:
-                    //Pin_Mode
-                    break;
-                   case 6:
-                    //Digital_Write
-                    break;
-                   case 7:
-                    //Analog_Write
-                    break;
-                   case 8:
-                    //Digital_Read
-                    break;
-                   case 9:
-                    //Pose_Data
-                    break;
-                   case 10:
-                    //SPI_Communication
-                    break;
-                   case 11:
-                    //I2C_Communication
-                    break;
-                   case 12:
-                    //Uart_Communication
-                    break;
-                   case 13:
-                    //Transmission_And_Security
-                    break;
-                   case 14:
-                    //Scripting
-                    break;
-                }//end of data packet router
-              }//end of checksum
-              else
-                Serial.println("checksum failed");
-            }//end of Serial.readBytes for data and checksum
-            else
-              Serial.println("Data Wrong Size");
-          }//End of Serial.readBytes for buffer
-          else 
-            Serial.println("Packet Missing Header");
-        }//end of if Serial available
-      }//end of Serial.read
-    }
+	if(service->isHwSerial1Used) {
+	  char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
+	  int length = 0;
+	  int resourceID = 0;
+	  int actionID = 0;
+	  int datasum = 0;
+	  while (Serial1.available() > 0) { 
+		if (Serial1.read() == '$'){  //this is the start of a Data Packet
+		  if (Serial1.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
+			length = byte(buffer[0]); //get the length of the data
+			resourceID = byte(buffer[1]); //get the resourceID
+			actionID = byte(buffer[2]); //get the actionID
+			char data[length+1]; // create a buffer to store the data and checksum info 
+			if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+			  for(int i=0;i<length;i++){
+				datasum = datasum+byte(data[i]);
+			  }
+			  
+			  if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
+				///////route the data to the appropriate place here
+				switch(resourceID) {
+				  case 1:
+					//Flight_Setup
+					Serial.println("got Flight Setup");
+					break;
+				  case 2:
+					//Manual_Controls
+					break;
+				  case 3:
+					//Mission_Planner
+					break;
+				  case 4:
+					//Battery_Status
+					break;
+				   case 5:
+					//Pin_Mode
+					break;
+				   case 6:
+					//Digital_Write
+					break;
+				   case 7:
+					//Analog_Write
+					break;
+				   case 8:
+					//Digital_Read
+					break;
+				   case 9:
+					//Pose_Data
+					break;
+				   case 10:
+					//SPI_Communication
+					break;
+				   case 11:
+					//I2C_Communication
+					//Avant::i2cRead(data);
+					break;
+				   case 12:
+					//Uart_Communication
+					break;
+				   case 13:
+					//Transmission_And_Security
+					break;
+				   case 14:
+					//Scripting
+					break;
+				}//end of data packet router
+			  }//end of checksum
+			  else
+				Serial.println("checksum failed");
+			}//end of Serial.readBytes for data and checksum
+			else
+			  Serial.println("Data Wrong Size");
+		  }//End of Serial.readBytes for buffer
+		  else 
+			Serial.println("Packet Missing Header");
+		}//end of if Serial available
+	  }//end of Serial.read
+	}
 #endif
 #if defined(UBRR2H)
-    if(service.isHwSerial2Used) {
-      char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
-      int length = 0;
-      int resourceID = 0;
-      int actionID = 0;
-      int datasum = 0;
-      while (Serial2.available() > 0) { 
-        if (Serial2.read() == '$'){  //this is the start of a Data Packet
-          if (Serial2.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
-            length = byte(buffer[0]); //get the length of the data
-            resourceID = byte(buffer[1]); //get the resourceID
-            actionID = byte(buffer[2]); //get the actionID
-            char data[length+1]; // create a buffer to store the data and checksum info 
-            if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
-              for(int i=0;i<length;i++){
-                datasum = datasum+byte(data[i]);
-              }
-              
-              if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
-                ///////route the data to the appropriate place here
-                switch(resourceID) {
-                  case 1:
-                    //Flight_Setup
-                    Serial.println("got Flight Setup");
-                    break;
-                  case 2:
-                    //Manual_Controls
-                    break;
-                  case 3:
-                    //Mission_Planner
-                    break;
-                  case 4:
-                    //Battery_Status
-                    break;
-                   case 5:
-                    //Pin_Mode
-                    break;
-                   case 6:
-                    //Digital_Write
-                    break;
-                   case 7:
-                    //Analog_Write
-                    break;
-                   case 8:
-                    //Digital_Read
-                    break;
-                   case 9:
-                    //Pose_Data
-                    break;
-                   case 10:
-                    //SPI_Communication
-                    break;
-                   case 11:
-                    //I2C_Communication
-                    break;
-                   case 12:
-                    //Uart_Communication
-                    break;
-                   case 13:
-                    //Transmission_And_Security
-                    break;
-                   case 14:
-                    //Scripting
-                    break;
-                }//end of data packet router
-              }//end of checksum
-              else
-                Serial.println("checksum failed");
-            }//end of Serial.readBytes for data and checksum
-            else
-              Serial.println("Data Wrong Size");
-          }//End of Serial.readBytes for buffer
-          else 
-            Serial.println("Packet Missing Header");
-        }//end of if Serial available
-      }//end of Serial.read
-    }
+	if(service->isHwSerial2Used) {
+	  char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
+	  int length = 0;
+	  int resourceID = 0;
+	  int actionID = 0;
+	  int datasum = 0;
+	  while (Serial2.available() > 0) { 
+		if (Serial2.read() == '$'){  //this is the start of a Data Packet
+		  if (Serial2.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
+			length = byte(buffer[0]); //get the length of the data
+			resourceID = byte(buffer[1]); //get the resourceID
+			actionID = byte(buffer[2]); //get the actionID
+			char data[length+1]; // create a buffer to store the data and checksum info 
+			if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+			  for(int i=0;i<length;i++){
+				datasum = datasum+byte(data[i]);
+			  }
+			  
+			  if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
+				///////route the data to the appropriate place here
+				switch(resourceID) {
+				  case 1:
+					//Flight_Setup
+					Serial.println("got Flight Setup");
+					break;
+				  case 2:
+					//Manual_Controls
+					break;
+				  case 3:
+					//Mission_Planner
+					break;
+				  case 4:
+					//Battery_Status
+					break;
+				   case 5:
+					//Pin_Mode
+					break;
+				   case 6:
+					//Digital_Write
+					break;
+				   case 7:
+					//Analog_Write
+					break;
+				   case 8:
+					//Digital_Read
+					break;
+				   case 9:
+					//Pose_Data
+					break;
+				   case 10:
+					//SPI_Communication
+					break;
+				   case 11:
+					//I2C_Communication
+					//Avant::i2cRead(data);
+					break;
+				   case 12:
+					//Uart_Communication
+					break;
+				   case 13:
+					//Transmission_And_Security
+					break;
+				   case 14:
+					//Scripting
+					break;
+				}//end of data packet router
+			  }//end of checksum
+			  else
+				Serial.println("checksum failed");
+			}//end of Serial.readBytes for data and checksum
+			else
+			  Serial.println("Data Wrong Size");
+		  }//End of Serial.readBytes for buffer
+		  else 
+			Serial.println("Packet Missing Header");
+		}//end of if Serial available
+	  }//end of Serial.read
+	}
 #endif
 #if defined(UBRR3H)
-    if(service.isHwSerial3Used) {
-      char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
-      int length = 0;
-      int resourceID = 0;
-      int actionID = 0;
-      int datasum = 0;
-      while (Serial3.available() > 0) { 
-        if (Serial3.read() == '$'){  //this is the start of a Data Packet
-          if (Serial3.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
-            length = byte(buffer[0]); //get the length of the data
-            resourceID = byte(buffer[1]); //get the resourceID
-            actionID = byte(buffer[2]); //get the actionID
-            char data[length+1]; // create a buffer to store the data and checksum info 
-            if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
-              for(int i=0;i<length;i++){
-                datasum = datasum+byte(data[i]);
-              }
-              
-              if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
-                ///////route the data to the appropriate place here
-                switch(resourceID) {
-                  case 1:
-                    //Flight_Setup
-                    Serial.println("got Flight Setup");
-                    break;
-                  case 2:
-                    //Manual_Controls
-                    break;
-                  case 3:
-                    //Mission_Planner
-                    break;
-                  case 4:
-                    //Battery_Status
-                    break;
-                   case 5:
-                    //Pin_Mode
-                    break;
-                   case 6:
-                    //Digital_Write
-                    break;
-                   case 7:
-                    //Analog_Write
-                    break;
-                   case 8:
-                    //Digital_Read
-                    break;
-                   case 9:
-                    //Pose_Data
-                    break;
-                   case 10:
-                    //SPI_Communication
-                    break;
-                   case 11:
-                    //I2C_Communication
-                    break;
-                   case 12:
-                    //Uart_Communication
-                    break;
-                   case 13:
-                    //Transmission_And_Security
-                    break;
-                   case 14:
-                    //Scripting
-                    break;
-                }//end of data packet router
-              }//end of checksum
-              else
-                Serial.println("checksum failed");
-            }//end of Serial.readBytes for data and checksum
-            else
-              Serial.println("Data Wrong Size");
-          }//End of Serial.readBytes for buffer
-          else 
-            Serial.println("Packet Missing Header");
-        }//end of if Serial available
-      }//end of Serial.read
-    }
+	if(service->isHwSerial3Used) {
+	  char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
+	  int length = 0;
+	  int resourceID = 0;
+	  int actionID = 0;
+	  int datasum = 0;
+	  while (Serial3.available() > 0) { 
+		if (Serial3.read() == '$'){  //this is the start of a Data Packet
+		  if (Serial3.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
+			length = byte(buffer[0]); //get the length of the data
+			resourceID = byte(buffer[1]); //get the resourceID
+			actionID = byte(buffer[2]); //get the actionID
+			char data[length+1]; // create a buffer to store the data and checksum info 
+			if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+			  for(int i=0;i<length;i++){
+				datasum = datasum+byte(data[i]);
+			  }
+			  
+			  if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
+				///////route the data to the appropriate place here
+				switch(resourceID) {
+				  case 1:
+					//Flight_Setup
+					Serial.println("got Flight Setup");
+					break;
+				  case 2:
+					//Manual_Controls
+					break;
+				  case 3:
+					//Mission_Planner
+					break;
+				  case 4:
+					//Battery_Status
+					break;
+				   case 5:
+					//Pin_Mode
+					break;
+				   case 6:
+					//Digital_Write
+					break;
+				   case 7:
+					//Analog_Write
+					break;
+				   case 8:
+					//Digital_Read
+					break;
+				   case 9:
+					//Pose_Data
+					break;
+				   case 10:
+					//SPI_Communication
+					break;
+				   case 11:
+					//I2C_Communication
+					//Avant::i2cRead(data);
+					break;
+				   case 12:
+					//Uart_Communication
+					break;
+				   case 13:
+					//Transmission_And_Security
+					break;
+				   case 14:
+					//Scripting
+					break;
+				}//end of data packet router
+			  }//end of checksum
+			  else
+				Serial.println("checksum failed");
+			}//end of Serial.readBytes for data and checksum
+			else
+			  Serial.println("Data Wrong Size");
+		  }//End of Serial.readBytes for buffer
+		  else 
+			Serial.println("Packet Missing Header");
+		}//end of if Serial available
+	  }//end of Serial.read
+	}
 #endif
-if(service.isSwSerialUsed) {
+if(service->isSwSerialUsed) {
   char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
   int length = 0;
   int resourceID = 0;
   int actionID = 0;
   int datasum = 0;
-  while (service.softwareSerial.available() > 0) { 
-    if (service.softwareSerial.read() == '$'){  //this is the start of a Data Packet
-      if (service.softwareSerial.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
-        length = byte(buffer[0]); //get the length of the data
-        resourceID = byte(buffer[1]); //get the resourceID
-        actionID = byte(buffer[2]); //get the actionID
-        char data[length+1]; // create a buffer to store the data and checksum info 
-        if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
-          for(int i=0;i<length;i++){
-            datasum = datasum+byte(data[i]);
-          }
-          
-          if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
-            ///////route the data to the appropriate place here
-            switch(resourceID) {
-              case 1:
-                //Flight_Setup
-                Serial.println("got Flight Setup");
-                break;
-              case 2:
-                //Manual_Controls
-                break;
-              case 3:
-                //Mission_Planner
-                break;
-              case 4:
-                //Battery_Status
-                break;
-               case 5:
-                //Pin_Mode
-                break;
-               case 6:
-                //Digital_Write
-                break;
-               case 7:
-                //Analog_Write
-                break;
-               case 8:
-                //Digital_Read
-                break;
-               case 9:
-                //Pose_Data
-                break;
-               case 10:
-                //SPI_Communication
-                break;
-               case 11:
-                //I2C_Communication
-                break;
-               case 12:
-                //Uart_Communication
-                break;
-               case 13:
-                //Transmission_And_Security
-                break;
-               case 14:
-                //Scripting
-                break;
-            }//end of data packet router
-          }//end of checksum
-          else
-            Serial.println("checksum failed");
-        }//end of Serial.readBytes for data and checksum
-        else
-          Serial.println("Data Wrong Size");
-      }//End of Serial.readBytes for buffer
-      else 
-        Serial.println("Packet Missing Header");
-    }//end of if Serial available
+  while (service->softwareSerial.available() > 0) { 
+	if (service->softwareSerial.read() == '$'){  //this is the start of a Data Packet
+	  if (service->softwareSerial.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
+		length = byte(buffer[0]); //get the length of the data
+		resourceID = byte(buffer[1]); //get the resourceID
+		actionID = byte(buffer[2]); //get the actionID
+		char data[length+1]; // create a buffer to store the data and checksum info 
+		if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+		  for(int i=0;i<length;i++){
+			datasum = datasum+byte(data[i]);
+		  }
+		  
+		  if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
+			///////route the data to the appropriate place here
+			switch(resourceID) {
+			  case 1:
+				//Flight_Setup
+				Serial.println("got Flight Setup");
+				break;
+			  case 2:
+				//Manual_Controls
+				break;
+			  case 3:
+				//Mission_Planner
+				break;
+			  case 4:
+				//Battery_Status
+				break;
+			   case 5:
+				//Pin_Mode
+				break;
+			   case 6:
+				//Digital_Write
+				break;
+			   case 7:
+				//Analog_Write
+				break;
+			   case 8:
+				//Digital_Read
+				break;
+			   case 9:
+				//Pose_Data
+				break;
+			   case 10:
+				//SPI_Communication
+				break;
+			   case 11:
+				//I2C_Communication
+				break;
+			   case 12:
+				//Uart_Communication
+				break;
+			   case 13:
+				//Transmission_And_Security
+				break;
+			   case 14:
+				//Scripting
+				break;
+			}//end of data packet router
+		  }//end of checksum
+		  else
+			Serial.println("checksum failed");
+		}//end of Serial.readBytes for data and checksum
+		else
+		  Serial.println("Data Wrong Size");
+	  }//End of Serial.readBytes for buffer
+	  else 
+		Serial.println("Packet Missing Header");
+	}//end of if Serial available
   }//end of Serial.read
 }
 }
