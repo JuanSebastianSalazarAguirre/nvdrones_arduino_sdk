@@ -33,7 +33,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 //********************************************
 //SoftwareSerial Code
+//*****************************************
+//\cond
 class SoftwareSerial : public Stream
+//\endcond
 {
     private:
         // per object data
@@ -104,7 +107,10 @@ class SoftwareSerial : public Stream
 //*****************************************
 //Avant Classes
 //*****************************************
-class Callback {
+//\cond
+class Callback 
+//\endcond
+{
 	public:
 		void (*i2cRead)(byte); 
 		void (*digitalRead)(byte);
@@ -124,18 +130,10 @@ class Callback {
 };
 
 class RCTransmitService
+/**
+This class allows you to...
+*/
 {
-	/**
-	This class allows you to...
-	@pre Don't forget to first connect your Arduino to the Avant platform.
-	# Example
-	Below you can see how this class shiuld be used.
-	~~~{.ino}
-		println("This is where your write example code.")
-		println("Have a nice day.")
-		println("NVdrones Developer Relations")
-	~~~
-	*/
 	friend class AvantResponseHandler;
     private:
         bool isHwSerial0Used;
@@ -145,37 +143,40 @@ class RCTransmitService
         bool isSwSerialUsed;
         SoftwareSerial softwareSerial;
     public:
-	    /**
-        Method description
-        */
         RCTransmitService();
-		/**
-        Method description
-        @param txPin Parameter description
-        @param rxPin Parameter description
-        */
         RCTransmitService(int txPin , int rxPin);
-		/**
-        Method description
-        @param hwSerialCode Parameter description
-        */
         RCTransmitService(int hwSerialCode);
+
 		/**
         Method description
+
         @param data Parameter description
         @param resourceID Parameter description
         @param actionID Parameter description
-        @returns Return description
         */
         void sendData(int data, uint8_t resourceID, uint8_t actionID);
+
+        /**
+        Method description
+        */
 		void print(String data);
+        
+        /**
+        Method description
+        */
 		void write(byte data);
+
+        /**
+        Method description
+        */
 		void readBytes(char *buffer, int bytesToRead);
 		
 };
 
-
-class AvantResponseHandler {
+//\cond
+class AvantResponseHandler
+//\endcond
+{
 	private:
 		RCTransmitService *service;
 		Callback *myCallback;
@@ -190,18 +191,20 @@ class AvantResponseHandler {
 };
 
 class AvantTransmitter 
-{
 /**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class shiuld be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
+ This class allows you to do initial setup of the hardware after you connected it to the drone. 
+ You will have to tell the NVextender waht pinn is connected to waht drone controller. 
+ Based on the naming convention from the methods in this class you should be able 
+ to esly udnerstand what type of information the hardware needs.
+
+ # Example
+
+ @htmlonly
+    <script src="https://gist.github.com/davidgatti/cf3331742d53f5f80609.js"></script>
+ @endhtmlonly
+
 */
+{
     private:
 		int elevatorPin;
         int AileronPin;
@@ -210,94 +213,122 @@ Below you can see how this class shiuld be used.
         int flightModePin;
 		RCTransmitService *service;
     public:
-		/**
-        Description of the method
-        */
         AvantTransmitter();
 		AvantTransmitter(RCTransmitService *rcService);
-		/**
-        Description of the method
-        @param pin Parameter description
+		
+        /**
+        Setting the hardwer pin so the system knows what type of data to expect.
+
+        @param pin Hardware pin number.
         */
 		void setElevatorPin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
+		
+        /**
+        Retrive the hardware pin number
+         
+        @returns Returns the pin value
         */
 		int getElevatorPin();
-		/**
-        Description of the method
-        @param pin Parameter description
+		
+        /**
+        Setting the hardwer pin so the system knows what type of data to expect.
+         
+        @param pin number of the hardwer pin you connected it to.
         */
 		void setAileronPin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
+		
+        /**
+        Retrive the hardware pin number
+         
+        @returns Returns the pin value
         */
 		int getAileronPin();
-		/**
-        Description of the method
-        @param pin Parameter description
+		
+        /**
+        Setting the hardwer pin so the system knows what type of data to expect.
+         
+        @param pin number of the hardwer pin you connected it to.
         */
 		void setThrottlePin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
+		
+        /**
+        Retrive the hardware pin number
+     
+        @returns Returns the pin value
         */
 		int getThrottlePin();
-		/**
-        Description of the method
-        @param pin Parameter description
+		
+        /**
+        Setting the hardwer pin so the system knows what type of data to expect.
+     
+        @param pin number of the hardwer pin you connected it to.
         */
 		void setRudderPin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
+		
+        /**
+        Retrive the hardware pin number
+     
+        @returns Returns the pin value
         */
 		int getRudderPin();
-		/**
-        Description of the method
-        @param pin Parameter description
+		
+        /**
+        Setting the hardwer pin so the system knows what type of data to expect.
+     
+        @param pin number of the hardwer pin you connected it to.
         */
 		void setFlightModePin(int pin);
-		/**
-        Method descriptionDescription of the method
-        @returns Return description
+		
+        /**
+        Retrive the hardware pin number
+     
+        @returns Returns the pin value
         */
 		int getFlightModePin();
 		
+        /**
+        Retrive the hardware pin number
+        */
 		void sendSticks();
 };
 
-class AvantXbee  //handles configuring the Xbee
-{
+class AvantXbee
 /**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class should be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
+
+ This class configure the Xbee connected to both the drone and the arduino board. 
+ With this calls you can pair both Xbee in code instead of the hardware button.
+ This aproache gives you much more flexibility if you are in noisy enviroment 
+ and need to cheng frequencies etc. Alos allwos you to recconnect in code to a drone
+ if the paring betwen the two Xbee get lost.
+
 */
+ {
 	private:
 		RCTransmitService *service;
 		Callback *myCallback;
     public:
 		AvantXbee();
 		AvantXbee(RCTransmitService *rcTservice, Callback *callback);
+
+        /// modulation rate in symbols per second, default is 115200
         int baud;
-		/**
-        Description of the method
-        @param id Parameter description
-        @returns Return description
+		
+        /**
+        Sets the PanID of the Xbee connected to the arduino to (int id). It accepts values between 0 and 0xFF.
+        
+        @param id int
+        @returns -1 if there was an error with setting the PanID and 1 if it was successful.
         */
         void id(uint8_t id);
 };
 
 class AvantPose
+/**
+ 
+ The pose class allow you to gather from one place all the data related to position. 
+ In this case we are takign about GPS location and compass orientation.
+ 
+ */
 {
 	private:
 		RCTransmitService *service;
@@ -305,222 +336,474 @@ class AvantPose
 	public:
 		AvantPose();
 		AvantPose(RCTransmitService *rcTservice, Callback *callback);
+
+        /**
+         
+        Get GPS data
+         
+        */
 		void getGPSData();
-		void getLongitude();
-		void getLatitude();
-		void getAltitude();
-		void getSatellites();
-		void getSpeed();
-		void getOrientation();
-		void longitudeCallback(void (*function)(float));
-		void latitudeCallback(void (*function)(float));
-		void altitudeCallback(void (*function)(float));
-		void satelliteCallback(void (*function)(byte));
-		void speedCallback(void (*function)(float));
-		void orientationCallback(void (*function)(float));
+		
+        /**
+         
+         Call back method that needs to be implemented to recive the actual data from: longitudeCallback()
+         
+         */
+        void getLongitude();
+		
+        /**
+         
+         Call back method that needs to be implemented to recive the actual data from: altitudeCallback()
+         
+         */
+        void getLatitude();
+		
+        /**
+         
+         Call back method that needs to be implemented to recive the actual data from: altitudeCallback()
+         
+         */
+        void getAltitude();
+		
+        /**
+         
+         Call back method that needs to be implemented to recive the actual data from: satelliteCallback().
+         
+         The more satelites you have the higher precinon yuo will get, thus if you want to be sure you are
+         gettign a precise mesuremnt, you shiuld wait untill youget more then 4 satelites. Sicne 4 is the 
+         bair minimum to get a 3D fix
+         
+         */
+        void getSatellites();
+		
+        /**
+         
+         Get drone speed based on GPS data
+         
+         */
+        void getSpeed();
+		
+        /**
+         
+         Call back method that needs to be implemented to recive the actual data from: speedCallback()
+         
+         */
+        void getOrientation();
+		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
+        void longitudeCallback(void (*function)(float));
+		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
+        void latitudeCallback(void (*function)(float));
+		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
+        void altitudeCallback(void (*function)(float));
+		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
+        void satelliteCallback(void (*function)(byte));
+		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
+        void speedCallback(void (*function)(float));
+		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
+        void orientationCallback(void (*function)(float));
 };
 
 class AvantRC //handles sending values to the PWM/PPM port(s) 
-{
 /**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class should be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
+ 
+ This class allows you to controll your drone: set the throttle, rudder, elevator, and aileron channels on the drone.
+ Essentially controlling up down left right ect.
+ 
 */
+{
     private:
         RCTransmitService *service;
 		Callback *myCallback;
     public:
-		/**
-        Method description
-        */
         AvantRC();
-		/**
-        Method description
-        @param rcTservice Parameter description
-        */
         AvantRC(RCTransmitService *rcTservice, Callback *callback);
-		/**
-        Method description
-        @param value Parameter description
+		
+        /**
+         Basically the roll movnent that the drone have to do. The expected range is betwen -10 and 10.
+        
+         @param value roll value
         */
         void setAileron(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
+		
+        /**
+         
+         The pitch of the drone or in other words, how high you want you drone to go up. The expected range is betwen 0 and 1000
+         
+         @param value elevation value
+        
+         */
         void setElevator(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
+		
+        /**
+        
+         This vuale will make your adrenalien rise up, isnce it is the speed of your drone. The expected values are from 0 to 100.
+         The accelration is based on the technical specification fo your drone
+        
+         @param value speed value
+         
+         */
         void setThrottle(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
+		
+        /**
+         
+         The yaw parameter allows you to set the dirrection at whithc it is pointing, allowing you to turn. The expected range is betwne 0 and 360.
+         The yaw is based on the technical specification fo your drone
+        
+         @param value yaw value
+         
+         */
         void setRudder(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
+		
+        /**
+         
+         This method allow to set the flight mode of the drone ...
+        
+         @param value flight mode value
+         
+         */
         void setFlightMode(int value);
-		/**
-        Method description
-        @param value Parameter description
-        */
+		
+        /**
+         
+         Get the exact roll position of the drone
+        
+         @returns int value
+         
+         */
         void getAileron();
-		/**
-        Method description
-        @returns Return description
-        */
+		
+        /**
+
+         Get the elevation position of the drone
+        
+         @returns int value
+        
+         */
         void getElevator();
-		/**
-        Method description
-        @returns Return description
-        */
+		
+        /**
+         
+         Get the speed value of the drone
+        
+         @returns int value
+        
+         */
         void getThrottle();
-		/**
-        Method description
-        @returns Return description
-        */
+		
+        /**
+        
+         Get the dirrection of the drone
+        
+         @returns int value
+        
+         */
         void getRudder();
-		/**
-        Method description
-        @returns Return description
-        */
+		
+        /**
+        
+         Get the flight mode
+        
+         @returns int value
+        
+         */
         void getFlightMode();
 		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
 		void aileronCallback(void (*function)(byte));
 		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
 		void flightModeCallback(void (*function)(byte));
 		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
 		void throttleCallback(void (*function)(byte));
 		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
 		void rudderCallback(void (*function)(byte));
 		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
 		void elevatorCallback(void (*function)(byte));
 		
+        /**
+         
+         Execute funtion in a thread to not freez the drone.
+         
+         */
 		void sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron);
 };
 
-class AvantGPIO {
+class AvantGPIO
 /**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class shiuld be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
+
+ This class controls all functionality related to the general purpose IO pins on the drone, 
+ includes turning pins high/low, setting PWM values, reading if pins are high/low ect.
+ 
+ Basically all the extra hardware that you connected to the 10 pins on the NVextenderd can be 
+ accessed and controlled using this Class.
+ 
 */
+{
 	private:
 		RCTransmitService *service;
 		Callback *myCallback;
 	public:
 		AvantGPIO();
 		AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
+
+        /**
+     
+         Set the pin mode in whihc the pin should operate.
+     
+         @param pin value expected 0 to 10
+         @param logicLevel expected 0 or 1
+     
+         */
 		void pinMode(uint8_t pin, bool logicLevel);
+
+        /**
+     
+         Send to the digital binary data
+     
+         @param pin value expected 0 to 10
+         @param logicLevel expected 0 or 1
+     
+         */
 		void digitalWrite(uint8_t pin,bool logicLevel);
+
+        /**
+     
+         Send analog data to the selected pin
+     
+         @param pin value expected 0 to 10
+         @param value expected somethins
+     
+         */
 		void analogWrite(uint8_t pin, uint8_t value);
+
+        /**
+     
+         Read data form selected pin in binary.
+     
+         @param pin number to listent to.
+     
+         */
 		void digitalRead(uint8_t pin);
+
+        /**
+     
+         This method allows you to set a listner for new data and call a metod that you set to be 
+         called from your code once there is data to be returned. This way your code won't freez 
+         the done while waiting for data to come back grom the NVextender
+     
+         @param function name in you code to be called
+     
+         */
 		void digitalReadCallback(void (*function)(byte));
 };
 
-class AvantI2C {
+class AvantI2C
 /**
-This class allows you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class shiuld be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
-*/
+
+ This class allow you to gain acess to the I2C serial bus, allowing you to communicate with
+ sensors and actuators that you connected to the NVextender using the exposed PINs.
+ 
+ # Example
+
+ @htmlonly
+    <script src="https://gist.github.com/davidgatti/790c8fdcd27385b12043.js"></script>
+ @endhtmlonly
+ 
+ */
+{
 	private:
 		RCTransmitService *service;
 		Callback *myCallback;
 	public:
-		/**
-        Method description
-        */
 		AvantI2C();
-		/**
-        Method description
-        @param rcTservice Parameter description
-        */
 		AvantI2C(RCTransmitService *rcTservice, Callback *callback);
+
 		/**
-        Method description
-        @param ID Parameter description
-        */
+         
+         Since the I2C allows for many devices to communicate over the same channe. 
+         Each device distinqueshi itselfe with a Device ID. This ID can be sed by the 
+         factory and should be described in the documentation, or you should be able 
+         to set the ID manually to avoid conflicts
+        
+         @param ID range from 0 to 255
+        
+         */
 		void deviceID(uint8_t ID);
-		/**
-        Method description
-        */
+		
+        /**
+    
+         Some sensors ned a nudge before they will start transmittign data, and this 
+         method allows you to inform the sensor to start trasmitig.
+        
+         */
 		void beginTransmission(void);
-		/**
-        Method description
-        */
+		
+        /**
+    
+         Similalry to beginTransmission(), once you don't need recivign data fro ma 
+         selcted snsor anymore. Use this method to stop the data sampling
+         
+         */
 		void endTransmission(void);
-		/**
-        Method description
-        @param data Parameter description
-        */
+		
+        /**
+         
+         This methd allows you to send commands to the actuator connected to your 
+         drone. For example, you can tell your motor how many revolution per minute should do.
+        
+         @param data range betwen 0 and 10000
+        
+         */
 		void write(uint8_t data);
-		/**
-        Method description
-        */
+		
+        /**
+        
+         This method will tell the NVextender to sample data only once. A good example would 
+         be to read from time to time the temeprature, sinic this is not a peach of 
+         information that changes quickly over time.
+         
+         The data will be reutnru to a colback method taht you specified with readCallback()
+        
+         */
 		void read(void);
-		/**
-        Method description
-        @param bytes Parameter description
-        */
+		
+        /**
+    
+         Method description
+        
+         @param bytes Parameter description
+        
+         */
 		void wireRequest(uint8_t bytes);
-		/**
-        Method description
-        @param function Parameter description
-        */
+		
+        /**
+         
+         This method let you set which method to call back for the data that you request from the NVextender
+        
+         @param function name of the method
+    
+         */
 		void readCallback(void (*function)(byte));
 };
 
-class AvantSPI {
+class AvantSPI 
+/**
+
+This class allow you to gain acess to the SPI serial bus, allowing you to communicate with
+sensors and actuators that you connected to the NVextender using the exposed PINs.
+ 
+To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus
+ 
+*/
+{
 	private:
 		RCTransmitService *service;
 		Callback *myCallback;
 	public:
 		AvantSPI();
 		AvantSPI(RCTransmitService *rcTservice, Callback *callback);
+
+        /**
+
+        Read data form selected pin in binary.
+
+        @param data pin number to listent to.
+
+        */
 		void transfer(byte data);
+
+        /**
+
+        Read data form selected pin in binary.
+
+        @param data pin number to listent to.
+
+        */
 		void setBitOrder(byte data);
+
+        /**
+
+        Read data form selected pin in binary.
+
+        @param data pin number to listent to.
+
+        */
 		void setClockDivider(byte data);
+
+        /**
+
+        Read data form selected pin in binary.
+
+        @param data pin number to listent to.
+
+        */
 		void setDataMode(byte data);
+
+        /**
+         
+         Read data form selected pin in binary.
+         
+         */
 		void transferCallback(void (*function)(byte));
 };
 
-
-class Avant {
-/**
-This class allow you to...
-@pre Don't forget to first connect your Arduino to the Avant platform.
-# Example
-Below you can see how this class should be used.
-~~~{.ino}
-    println("This is where your write example code.")
-    println("Have a nice day.")
-    println("NVdrones Developer Relations")
-~~~
-*/
+//\cond
+class Avant 
+//\endcond
+{
     private:
         AvantTransmitter avantTransmitter;
         AvantRC avantRC;
@@ -533,67 +816,19 @@ Below you can see how this class should be used.
 		AvantPose avantPose;
 		AvantSPI avantSPI;
     public:
-		/**
-        Method description
-        */
         Avant();
-		/**
-        Method description
-        @param hardwareSerialCode Parameter description
-        */
         Avant(int hardwareSerialCode);
-		/**
-        Method description
-        @param txPin Parameter description
-        @param rxPin Parameter description
-        */
         Avant(int txPin, int rxPin);
-		/**
-        Method description
-        @returns Return description
-        */
         AvantTransmitter& transmitter();
-		/**
-        Method description
-        @returns Return description
-        */
         AvantRC& RC();
-		/**
-        Method description
-        @returns Return description
-        */
 		AvantGPIO& GPIO();
-		/**
-        Method description
-        @returns Return description
-        */
 		AvantI2C& I2C();
-		/**
-        Method description
-        @returns Return description
-        */
 		AvantXbee& xbee();
-		/**
-        Method description
-        @returns Return description
-        */
 		AvantPose& pose();
-		/**
-        Method description
-        @returns Return description
-        */
 		AvantResponseHandler& avantResponseHandler();
-		/**
-        Method description
-        @returns Return description
-        */
 		AvantSPI& SPI();
-		/**
-        Method description
-        */
         void armDrone();
 };
-
 
 float readFloat() {
     float data;
