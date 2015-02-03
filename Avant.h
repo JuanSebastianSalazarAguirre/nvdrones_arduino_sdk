@@ -144,7 +144,20 @@ This class allows you to...
         SoftwareSerial softwareSerial;
     public:
         RCTransmitService();
+
+        /**
+        TODO
+
+        @param txPin
+        @param rxPin
+        */
         RCTransmitService(int txPin , int rxPin);
+
+        /**
+        TODO
+
+        @param hwSerialCode
+        */
         RCTransmitService(int hwSerialCode);
 
 		/**
@@ -214,6 +227,12 @@ class AvantTransmitter
 		RCTransmitService *service;
     public:
         AvantTransmitter();
+
+        /**
+        TODO
+
+        @param rcService
+        */
 		AvantTransmitter(RCTransmitService *rcService);
 		
         /**
@@ -308,6 +327,13 @@ class AvantXbee
 		Callback *myCallback;
     public:
 		AvantXbee();
+
+        /**
+        TODO
+
+        @param rcTservice
+        @param callback
+        */
 		AvantXbee(RCTransmitService *rcTservice, Callback *callback);
 
         /// modulation rate in symbols per second, default is 115200
@@ -335,6 +361,13 @@ class AvantPose
 		Callback *myCallback;
 	public:
 		AvantPose();
+
+        /**
+        TODO
+
+        @param rcTservice
+        @param callback
+        */
 		AvantPose(RCTransmitService *rcTservice, Callback *callback);
 
         /**
@@ -446,6 +479,13 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
 		Callback *myCallback;
     public:
         AvantRC();
+
+        /**
+        TODO
+
+        @param rcTservice
+        @param callback
+        */
         AvantRC(RCTransmitService *rcTservice, Callback *callback);
 		
         /**
@@ -597,6 +637,13 @@ class AvantGPIO
 		Callback *myCallback;
 	public:
 		AvantGPIO();
+
+        /**
+        TODO
+
+        @param rcTservice
+        @param callback
+        */
 		AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
 
         /**
@@ -669,6 +716,13 @@ class AvantI2C
 		Callback *myCallback;
 	public:
 		AvantI2C();
+
+        /**
+        TODO
+
+        @param rcTservice
+        @param callback
+        */
 		AvantI2C(RCTransmitService *rcTservice, Callback *callback);
 
 		/**
@@ -754,6 +808,13 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
 		Callback *myCallback;
 	public:
 		AvantSPI();
+
+        /**
+        TODO
+
+        @param rcTservice
+        @param callback
+        */
 		AvantSPI(RCTransmitService *rcTservice, Callback *callback);
 
         /**
