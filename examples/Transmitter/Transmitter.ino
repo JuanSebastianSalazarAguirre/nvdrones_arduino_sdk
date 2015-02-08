@@ -7,20 +7,16 @@ Avant myTrans(0); //create an instance of Avant
 
 
 void setup() {
-  myTrans.avantSetup().setElevatorPin(1);  //Samples Elevator Pin from Analog Pin 1
-  myTrans.avantSetup().setAilronPin(2);   //Samples Ailron Pin from Analog Pin 2
-  myTrans.avantSetup().setRudderPin(3);    //Samples Rudder Pin from Analog Pin 3
-  myTrans.avantSetup().setThrottlePin(4);  //Samples Throttle Pin from Analog Pin 4
+  myTrans.transmitter().setElevatorPin(1);  //Samples Elevator Pin from Analog Pin 1
+  myTrans.transmitter().setAileronPin(2);   //Samples Ailron Pin from Analog Pin 2
+  myTrans.transmitter().setRudderPin(3);    //Samples Rudder Pin from Analog Pin 3
+  myTrans.transmitter().setThrottlePin(4);  //Samples Throttle Pin from Analog Pin 4
 }
 
 
 
 void loop() {
-  myTrans.avantSetup().sendSticks();  //This will sample all of the Stick Values
+  myTrans.transmitter().sendSticks();  //This will sample all of the Stick Values
                                      //and send it to the drone
   delay(10);
 }
-
-
-
-
