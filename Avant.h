@@ -425,7 +425,7 @@ class AvantPose
 		
         /**
          
-         Execute funtion in a thread to not freez the drone.
+         Retursn current longitude posioitn of the veicle. With 6 point presition.
          
          */
         void longitudeCallback(void (*function)(float));
