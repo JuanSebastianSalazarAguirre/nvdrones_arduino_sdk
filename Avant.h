@@ -891,8 +891,4 @@ class Avant
         void armDrone();
 };
 
-float readFloat() {
-    float data;
-    Serial.readBytes((char*)&data, sizeof(data));
-    return data;
-}
+
