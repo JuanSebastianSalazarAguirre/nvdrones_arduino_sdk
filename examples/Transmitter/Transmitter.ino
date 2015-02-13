@@ -7,10 +7,10 @@ Avant myTrans(0); //create an instance of Avant
 
 
 void setup() {
-  myTrans.transmitter().setElevatorPin(1);  //Samples Elevator Pin from Analog Pin 1
-  myTrans.transmitter().setAileronPin(2);   //Samples Ailron Pin from Analog Pin 2
-  myTrans.transmitter().setRudderPin(3);    //Samples Rudder Pin from Analog Pin 3
-  myTrans.transmitter().setThrottlePin(4);  //Samples Throttle Pin from Analog Pin 4
+  myTrans.transmitter().setElevatorPin(1);  //Samples Elevator Pin from digital Pin 1
+  myTrans.transmitter().setAileronPin(2);   //Samples Ailron Pin from digital Pin 2
+  myTrans.transmitter().setRudderPin(3);    //Samples Rudder Pin from digital Pin 3
+  myTrans.transmitter().setThrottlePin(4);  //Samples Throttle Pin from digital Pin 4
 }
 
 
