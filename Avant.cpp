@@ -387,10 +387,10 @@ void AvantTransmitter::sendSticks(){
 	int Aileron = analogRead(AileronPin);
 	int Throttle = analogRead(throttlePin);
 	int Rudder = analogRead(rudderPin);
-	Elevator = map(Elevator, 777, 136, -100, 100);
-	Aileron = map(Aileron, 872, 124, -100, 100);
-	Throttle = map(Throttle, 780, 118 , -100, 100);
-	Rudder = map(Rudder, 867, 97, -100, 100);
+	Elevator = map(Elevator, elevatorMax, elevatorMin, -100, 100);
+	Aileron = map(Aileron, aileronMax, aileronMin, -100, 100);
+	Throttle = map(Throttle, throttleMax, throttleMin, -100, 100);
+	Rudder = map(Rudder, rudderMax, rudderMin, -100, 100);
     if (Elevator > 100) Elevator = 100;
     if (Elevator < -100) Elevator = -100;
     if (Aileron > 100) Aileron = 100;

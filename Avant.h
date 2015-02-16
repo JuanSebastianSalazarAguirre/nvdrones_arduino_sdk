@@ -206,9 +206,9 @@ class AvantResponseHandler
 class AvantTransmitter 
 /**
  This class allows you to do initial setup of the hardware after you connected it to the drone. 
- You will have to tell the NVextender waht pinn is connected to waht drone controller. 
+ You will have to tell the NVextender what pin is connected to what drone controller. 
  Based on the naming convention from the methods in this class you should be able 
- to esly udnerstand what type of information the hardware needs.
+ to easily understand what type of information the hardware needs.
 
  # Example
 
@@ -224,89 +224,94 @@ class AvantTransmitter
         int throttlePin;
         int rudderPin;
         int flightModePin;
+		
+		int elevatorMax = 777;
+		int elevatorMin = 136;
+		int aileronMax = 872;
+		int aileronMin = 124;
+		int throttleMax = 780;
+		int throttleMin = 118;
+		int rudderMax = 867;
+		int rudderMin = 97;
+		
 		RCTransmitService *service;
     public:
         AvantTransmitter();
-
-        /**
-        TODO
-
-        @param rcService
-        */
 		AvantTransmitter(RCTransmitService *rcService);
 		
         /**
-        Setting the hardwer pin so the system knows what type of data to expect.
+        Sets the analogue pin that the Elevator potentiometer is connected to.
 
         @param pin Hardware pin number.
         */
 		void setElevatorPin(int pin);
 		
         /**
-        Retrive the hardware pin number
+        Returns the analogue pin that the Aileron potentiometer is connected to.
          
         @returns Returns the pin value
         */
 		int getElevatorPin();
 		
         /**
-        Setting the hardwer pin so the system knows what type of data to expect.
+        Sets the analogue pin that the Aileron potentiometer is connected to.
          
-        @param pin number of the hardwer pin you connected it to.
+        @param pin number of the hardware pin you connected it to.
         */
 		void setAileronPin(int pin);
 		
         /**
-        Retrive the hardware pin number
+        Returns the analogue pin that the Aileron potentiometer is connected to.
          
         @returns Returns the pin value
         */
 		int getAileronPin();
 		
         /**
-        Setting the hardwer pin so the system knows what type of data to expect.
+        Sets the analogue pin that the Throttle potentiometer is connected to.
          
-        @param pin number of the hardwer pin you connected it to.
+        @param pin number of the hardware pin you connected it to.
         */
 		void setThrottlePin(int pin);
 		
         /**
-        Retrive the hardware pin number
+        Returns the analogue pin that the Elevator potentiometer is connected to.
      
         @returns Returns the pin value
         */
 		int getThrottlePin();
 		
         /**
-        Setting the hardwer pin so the system knows what type of data to expect.
+        Sets the analogue pin that the Rudder potentiometer is connected to.
      
-        @param pin number of the hardwer pin you connected it to.
+        @param pin number of the hardware pin you connected it to.
         */
 		void setRudderPin(int pin);
 		
         /**
-        Retrive the hardware pin number
+        Returns the analogue pin that the Rudder potentiometer is connected to.
      
         @returns Returns the pin value
         */
 		int getRudderPin();
 		
         /**
-        Setting the hardwer pin so the system knows what type of data to expect.
+        Sets the analogue pin that the Flight Mode potentiometer is connected to.
      
         @param pin number of the hardwer pin you connected it to.
         */
 		void setFlightModePin(int pin);
 		
         /**
-        Retrive the hardware pin number
+        Returns the analogue pin that the Flight Mode potentiometer is connected to.
      
         @returns Returns the pin value
         */
 		int getFlightModePin();
 		
         /**
-        Retrive the hardware pin number
+        Reads all of the analogue values, maps the value to between -100 and 100, and sends the 
+		values using the sendRTEA function.
         */
 		void sendSticks();
 };
@@ -316,9 +321,9 @@ class AvantXbee
 
  This class configure the Xbee connected to both the drone and the arduino board. 
  With this calls you can pair both Xbee in code instead of the hardware button.
- This aproache gives you much more flexibility if you are in noisy enviroment 
- and need to cheng frequencies etc. Alos allwos you to recconnect in code to a drone
- if the paring betwen the two Xbee get lost.
+ This approach gives you much more flexibility if you are in noisy environment 
+ and need to change frequencies etc. Also allows you to reconnect in code to a drone
+ if the paring between the two Xbee get lost.
 
 */
  {
@@ -327,13 +332,6 @@ class AvantXbee
 		Callback *myCallback;
     public:
 		AvantXbee();
-
-        /**
-        TODO
-
-        @param rcTservice
-        @param callback
-        */
 		AvantXbee(RCTransmitService *rcTservice, Callback *callback);
 
         /// modulation rate in symbols per second, default is 115200
@@ -352,7 +350,7 @@ class AvantPose
 /**
  
  The pose class allow you to gather from one place all the data related to position. 
- In this case we are takign about GPS location and compass orientation.
+ In this case we are talking about GPS location and compass orientation.
  
  */
 {
@@ -361,106 +359,104 @@ class AvantPose
 		Callback *myCallback;
 	public:
 		AvantPose();
-
-        /**
-        TODO
-
-        @param rcTservice
-        @param callback
-        */
 		AvantPose(RCTransmitService *rcTservice, Callback *callback);
 
         /**
          
-        Get GPS data
+        This sends only one message to request all of the POSE data. 
+		The Extender will reply with 6 messages containing Long, Lat, number of Sat, Speed, Orientation, and Altitude
          
         */
 		void getGPSData();
 		
         /**
          
-         Call back method that needs to be implemented to recive the actual data from: longitudeCallback()
+        Sends a request to the Extender asking for it to reply with the vehicles current Longitude
+		The response gets handled through the callback function longitudeCallbackCallback().
          
          */
         void getLongitude();
 		
         /**
          
-         Call back method that needs to be implemented to recive the actual data from: altitudeCallback()
+        Sends a request to the Extender asking for it to reply with the vehicles current Latitude.
+		The response gets handled through the callback function latitudeCallback().
          
          */
         void getLatitude();
 		
         /**
          
-         Call back method that needs to be implemented to recive the actual data from: altitudeCallback()
+        Sends a request to the Extender asking for it to reply with the vehicles current Altitude.
+		The response gets handled through the callback function altitudeCallback().
          
          */
         void getAltitude();
 		
         /**
          
-         Call back method that needs to be implemented to recive the actual data from: satelliteCallback().
-         
-         The more satelites you have the higher precinon yuo will get, thus if you want to be sure you are
-         gettign a precise mesuremnt, you shiuld wait untill youget more then 4 satelites. Sicne 4 is the 
-         bair minimum to get a 3D fix
+        Sends a request to the Extender asking for it to reply with the current number of satellites the vehicles
+		GPS is locked onto.
+		The response gets handled through the callback function satelliteCallback().
+         The more satellites you have the higher the accuracy is.  There needs to be a minimum of 4 satellites to get a lock.  
          
          */
         void getSatellites();
 		
         /**
          
-         Get drone speed based on GPS data
+        Sends a request to the Extender asking for it to reply with the vehicles current Land Speed given by the GPS.
+		The response gets handled through the callback function speedCallback().
          
          */
         void getSpeed();
 		
         /**
          
-         Call back method that needs to be implemented to recive the actual data from: speedCallback()
+        Sends a request to the Extender asking for it to reply with the vehicles current Orientation given by the Compass.
+		The response gets handled through the callback function orientationCallback().
          
          */
         void getOrientation();
 		
         /**
          
-         Retursn current longitude posioitn of the veicle. With 6 point presition.
+        Callback function which passes longitude information to the function that it is passed.
          
          */
         void longitudeCallback(void (*function)(float));
 		
         /**
          
-         Execute funtion in a thread to not freez the drone.
+        Callback function which passes latitude information to the function that it is passed.
          
          */
         void latitudeCallback(void (*function)(float));
 		
         /**
          
-         Execute funtion in a thread to not freez the drone.
+        Callback function which passes altitude information to the function that it is passed.
          
          */
         void altitudeCallback(void (*function)(float));
 		
         /**
          
-         Execute funtion in a thread to not freez the drone.
+        Callback function which passes number of locked satellites to the function that it is passed.
          
          */
         void satelliteCallback(void (*function)(byte));
 		
         /**
          
-         Execute funtion in a thread to not freez the drone.
+        Callback function which passes speed information to the function that it is passed.
          
          */
         void speedCallback(void (*function)(float));
 		
         /**
          
-         Execute funtion in a thread to not freez the drone.
+        Callback function which passes orientation information to the function that it is passed
          
          */
         void orientationCallback(void (*function)(float));
@@ -469,7 +465,7 @@ class AvantPose
 class AvantRC //handles sending values to the PWM/PPM port(s) 
 /**
  
- This class allows you to controll your drone: set the throttle, rudder, elevator, and aileron channels on the drone.
+ This class allows you to control your drone: set the throttle, rudder, elevator, and aileron channels on the drone.
  Essentially controlling up down left right ect.
  
 */
@@ -479,101 +475,84 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
 		Callback *myCallback;
     public:
         AvantRC();
-
-        /**
-        TODO
-
-        @param rcTservice
-        @param callback
-        */
         AvantRC(RCTransmitService *rcTservice, Callback *callback);
 		
         /**
-         Basically the roll movnent that the drone have to do. The expected range is betwen -10 and 10.
-        
-         @param value roll value
+		
+        Sends a request to the extender to set the Aileron channel to a specific channel between -100 and 100.  
+		
+		@param value The value to set the Aileron channel to
+
         */
         void setAileron(int value);
 		
         /**
          
-         The pitch of the drone or in other words, how high you want you drone to go up. The expected range is betwen 0 and 1000
-         
-         @param value elevation value
+        Sends a request to the extender to set the Extender channel to a specific channel between -100 and 100.  
+		
+		@param value The value to set the Extender channel to
         
          */
         void setElevator(int value);
 		
         /**
         
-         This vuale will make your adrenalien rise up, isnce it is the speed of your drone. The expected values are from 0 to 100.
-         The accelration is based on the technical specification fo your drone
-        
-         @param value speed value
+        Sends a request to the extender to set the Throttle channel to a specific channel between -100 and 100.  
+		
+		@param value The value to set the Throttle channel to
          
          */
         void setThrottle(int value);
 		
         /**
          
-         The yaw parameter allows you to set the dirrection at whithc it is pointing, allowing you to turn. The expected range is betwne 0 and 360.
-         The yaw is based on the technical specification fo your drone
-        
-         @param value yaw value
+        Sends a request to the extender to set the Rudder channel to a specific channel between -100 and 100.  
+		
+		@param value The value to set the Rudder channel to
          
          */
         void setRudder(int value);
 		
         /**
          
-         This method allow to set the flight mode of the drone ...
-        
-         @param value flight mode value
+        Sends a request to the extender to set the Flight Mode channel to a specific channel between -100 and 100.  
+		
+		@param value The value to set the Flight Mode channel to
          
          */
         void setFlightMode(int value);
 		
         /**
          
-         Get the exact roll position of the drone
-        
-         @returns int value
+        Sends a request to the extender to reply with message containing the current Aileron value.  
          
          */
         void getAileron();
 		
         /**
 
-         Get the elevation position of the drone
-        
-         @returns int value
+		Sends a request to the extender to reply with message containing the current Elevator value. 
         
          */
         void getElevator();
 		
         /**
          
-         Get the speed value of the drone
-        
-         @returns int value
+        Sends a request to the extender to reply with message containing the current Throttle value. 
         
          */
         void getThrottle();
 		
         /**
         
-         Get the dirrection of the drone
-        
-         @returns int value
+        Sends a request to the extender to reply with message containing the current Rudder value. 
         
          */
         void getRudder();
 		
         /**
         
-         Get the flight mode
-        
-         @returns int value
+        Sends a request to the extender to reply with message containing the current Flight Mode value. 
         
          */
         void getFlightMode();
@@ -637,18 +616,12 @@ class AvantGPIO
 		Callback *myCallback;
 	public:
 		AvantGPIO();
-
-        /**
-        TODO
-
-        @param rcTservice
-        @param callback
-        */
 		AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
 
         /**
      
-         Set the pin mode in whihc the pin should operate.
+		Configures the specified pin on the App Extender to behave either as an input or an output.
+		
      
          @param pin value expected 0 to 10
          @param logicLevel expected 0 or 1
@@ -658,7 +631,7 @@ class AvantGPIO
 
         /**
      
-         Send to the digital binary data
+        Write a HIGH or LOW value to a digital pin on the App Extender.
      
          @param pin value expected 0 to 10
          @param logicLevel expected 0 or 1
@@ -668,28 +641,27 @@ class AvantGPIO
 
         /**
      
-         Send analog data to the selected pin
+        Writes an analog value (PWM wave) to the specified pin on the App Extender. 
      
-         @param pin value expected 0 to 10
-         @param value expected somethins
+         @param pin sets pins 1-10 on the App Extender to the PWM value specified by value
+         @param value sets the PWM values duty cycle ranging from 0 and 255 
      
          */
 		void analogWrite(uint8_t pin, uint8_t value);
 
         /**
      
-         Read data form selected pin in binary.
+        Sends a request to the App Extender to reply with the logical state of the specified pin.  
      
-         @param pin number to listent to.
+         @param pin Selects which GPIO pin on the App Extender it should return.
      
          */
 		void digitalRead(uint8_t pin);
 
         /**
      
-         This method allows you to set a listner for new data and call a metod that you set to be 
-         called from your code once there is data to be returned. This way your code won't freez 
-         the done while waiting for data to come back grom the NVextender
+        This callback function is executed everytime it gets GPIO information.  It passes
+		this information to the function specified in the argument.
      
          @param function name in you code to be called
      
@@ -700,8 +672,8 @@ class AvantGPIO
 class AvantI2C
 /**
 
- This class allow you to gain acess to the I2C serial bus, allowing you to communicate with
- sensors and actuators that you connected to the NVextender using the exposed PINs.
+ This class allow you to gain access to the I2C serial bus, allowing you to communicate with
+ sensors and actuators that you connected to the NVextender.
  
  # Example
 
@@ -716,21 +688,13 @@ class AvantI2C
 		Callback *myCallback;
 	public:
 		AvantI2C();
-
-        /**
-        TODO
-
-        @param rcTservice
-        @param callback
-        */
 		AvantI2C(RCTransmitService *rcTservice, Callback *callback);
 
 		/**
          
-         Since the I2C allows for many devices to communicate over the same channe. 
-         Each device distinqueshi itselfe with a Device ID. This ID can be sed by the 
-         factory and should be described in the documentation, or you should be able 
-         to set the ID manually to avoid conflicts
+        This sets the address of the device that the App Extender sends data too.
+		This address will be continuously used by beginTransmission, write, read, and wireRequest
+		until it is reset to a different value.  
         
          @param ID range from 0 to 255
         
@@ -739,53 +703,54 @@ class AvantI2C
 		
         /**
     
-         Some sensors ned a nudge before they will start transmittign data, and this 
-         method allows you to inform the sensor to start trasmitig.
+        Begin a transmission to the I2C slave device with the address specified by deviceID(ID)
+		Subsequently, queue bytes for transmission with the write() function and transmit them
+		by calling endTransmission().
         
          */
 		void beginTransmission(void);
 		
         /**
     
-         Similalry to beginTransmission(), once you don't need recivign data fro ma 
-         selcted snsor anymore. Use this method to stop the data sampling
+        Ends a transmission to a slave device that was begun by beginTransmission() and transmits
+		the bytes that were queued by write().
          
          */
 		void endTransmission(void);
 		
         /**
          
-         This methd allows you to send commands to the actuator connected to your 
-         drone. For example, you can tell your motor how many revolution per minute should do.
+        Queues bytes for transmission from the App Extender to a slave device, in between calls to 
+		beginTransmission() and endTransmission().  
         
-         @param data range betwen 0 and 10000
+         @param data Adds one byte of information to the queue
         
          */
 		void write(uint8_t data);
 		
         /**
         
-         This method will tell the NVextender to sample data only once. A good example would 
-         be to read from time to time the temeprature, sinic this is not a peach of 
-         information that changes quickly over time.
+        Sends a request to the App Extender to read one byte of information from the I2C buffer and return 
+		the information to the arduino.  The relpies are handled by the readCallback() function.  
          
-         The data will be reutnru to a colback method taht you specified with readCallback()
         
          */
 		void read(void);
 		
         /**
     
-         Method description
+        Sends a request to the App Extender to read multiple bytes of information from the I2C buffer and return 
+		the information to the arduino. The relpies are handled by the readCallback() function.  
         
-         @param bytes Parameter description
+         @param bytes Sets the number of bytes to read from the I2C buffer
         
          */
 		void wireRequest(uint8_t bytes);
 		
         /**
          
-         This method let you set which method to call back for the data that you request from the NVextender
+        This callback function is executed everytime it gets I2C information.  It passes
+		this information to the function specified in the argument.
         
          @param function name of the method
     
@@ -808,54 +773,50 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
 		Callback *myCallback;
 	public:
 		AvantSPI();
-
-        /**
-        TODO
-
-        @param rcTservice
-        @param callback
-        */
 		AvantSPI(RCTransmitService *rcTservice, Callback *callback);
 
         /**
 
-        Read data form selected pin in binary.
+        Transfers one byte of information from the App Extender over the SPI bus.
 
-        @param data pin number to listent to.
+        @param data the information to pass to the slave device.
 
         */
 		void transfer(byte data);
 
         /**
+		
+		Sets the order of the bits shifter out of the SPI bus, either LSBFIRST or MSBFIRST
 
-        Read data form selected pin in binary.
-
-        @param data pin number to listent to.
+        @param data Specifies either LSBFIRST or MSBFIRST
 
         */
 		void setBitOrder(byte data);
 
         /**
 
-        Read data form selected pin in binary.
+        Sets the SPI clock divider relative to the system clock.  Available dividers include 2, 4, 8, 16, 32, 64, and 128.
+		The default setting is 4.
 
-        @param data pin number to listent to.
+        @param data Determines which divider to use
 
         */
 		void setClockDivider(byte data);
 
         /**
 
-        Read data form selected pin in binary.
+        Sets the SPI data mode: that is, clock polarity and phase.  There are 4 possible modes 0-3.  
+		
 
-        @param data pin number to listent to.
+        @param data Sets the SPI mode.
 
         */
 		void setDataMode(byte data);
 
         /**
          
-         Read data form selected pin in binary.
+        This callback function is executed everytime it gets SPI information.  It passes
+		this information to the function specified in the argument.
          
          */
 		void transferCallback(void (*function)(byte));
