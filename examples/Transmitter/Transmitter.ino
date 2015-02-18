@@ -1,3 +1,10 @@
+/*This example demonstrates how to use the transmitter class to 
+create an arduino based RC transmitter.  Simply attach potentiometer 
+based transmitter sticks into the analogPins of the arduino, and 
+connect an Xbee to either an available hardware Serial Port or a 
+Software Serial Port.  
+*/
+
 #include <Avant.h>
 
 Avant myTrans(0); //create an instance of Avant

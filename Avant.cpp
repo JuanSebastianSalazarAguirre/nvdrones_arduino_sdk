@@ -301,7 +301,6 @@ void AvantRC::setRudder(int value){
 void AvantRC::setFlightMode(int value){
 	service->sendData(value, 2, 5);
 };
-
 void AvantRC::getAileron(){
 	service->sendData(0, 2, 9);
 }
@@ -349,6 +348,14 @@ void AvantRC::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8
 AvantTransmitter::AvantTransmitter(){};
 AvantTransmitter::AvantTransmitter(RCTransmitService *rcService) {
     service = rcService;
+	elevatorMax = 777;
+	elevatorMin = 136;
+	aileronMax = 872;
+	aileronMin = 124;
+	throttleMax = 780;
+	throttleMin = 118;
+	rudderMax = 867;
+	rudderMin = 97;
 }
 
 void AvantTransmitter::setElevatorPin(int pin) {
@@ -404,7 +411,23 @@ void AvantTransmitter::sendSticks(){
     service->sendData(Aileron, 2, 4);
     service->sendData(Throttle, 2, 2);
     service->sendData(Rudder, 2, 1);
+}
 
+void AvantTransmitter::throttleEndpoints(uint8_t min, uint8_t max) {
+	throttleMax = max;
+	throttleMin = min;
+}
+void AvantTransmitter::rudderEndpoints(uint8_t min, uint8_t max) {
+	rudderMax = max;
+	rudderMin = min;
+}
+void AvantTransmitter::aileronEndpoints(uint8_t min, uint8_t max) {
+	aileronMax = max;
+	aileronMin = min;
+}
+void AvantTransmitter::elevatorEndpoints(uint8_t min, uint8_t max) {
+	elevatorMax = max;
+	elevatorMin = min;
 }
 //************************************************
 //AvantGPIO Class Implementation

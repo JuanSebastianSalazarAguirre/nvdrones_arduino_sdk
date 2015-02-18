@@ -225,14 +225,14 @@ class AvantTransmitter
         int rudderPin;
         int flightModePin;
 		
-		int elevatorMax = 777;
-		int elevatorMin = 136;
-		int aileronMax = 872;
-		int aileronMin = 124;
-		int throttleMax = 780;
-		int throttleMin = 118;
-		int rudderMax = 867;
-		int rudderMin = 97;
+		int elevatorMax;
+		int elevatorMin;
+		int aileronMax;
+		int aileronMin;
+		int throttleMax;
+		int throttleMin;
+		int rudderMax;
+		int rudderMin;
 		
 		RCTransmitService *service;
     public:
@@ -305,7 +305,7 @@ class AvantTransmitter
         /**
         Returns the analogue pin that the Flight Mode potentiometer is connected to.
      
-        @returns Returns the pin value
+        @return Returns the pin value
         */
 		int getFlightModePin();
 		
@@ -314,6 +314,38 @@ class AvantTransmitter
 		values using the sendRTEA function.
         */
 		void sendSticks();
+		
+		/**
+        Sets the values that sendSticks() uses for mapping.  
+     
+        @param min The analogue value that the arduino reads when the stick position is all the way down.
+		@param max The analogue value that the arduino reads when the stick position is all the way up. 
+        */
+		void throttleEndpoints(uint8_t min, uint8_t max);
+		
+		/**
+        Sets the values that sendSticks() uses for mapping.  
+     
+        @param min The analogue value that the arduino reads when the stick position is all the way down.
+		@param max The analogue value that the arduino reads when the stick position is all the way up. 
+        */
+		void rudderEndpoints(uint8_t min, uint8_t max);
+		
+		/**
+        Sets the values that sendSticks() uses for mapping.  
+     
+        @param min The analogue value that the arduino reads when the stick position is all the way down.
+		@param max The analogue value that the arduino reads when the stick position is all the way up. 
+        */
+		void aileronEndpoints(uint8_t min, uint8_t max);
+		
+		/**
+        Sets the values that sendSticks() uses for mapping.  
+     
+        @param min The analogue value that the arduino reads when the stick position is all the way down.
+		@param max The analogue value that the arduino reads when the stick position is all the way up. 
+        */
+		void elevatorEndpoints(uint8_t min, uint8_t max);
 };
 
 class AvantXbee
