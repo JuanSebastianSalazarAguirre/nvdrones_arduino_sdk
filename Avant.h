@@ -204,8 +204,8 @@ class AvantTransmitter
 		RCTransmitService *service;
         //\endcond
     public:
-        AvantTransmitter();
         //\cond
+        AvantTransmitter();
 		AvantTransmitter(RCTransmitService *rcService);
         //\endcond
 		
@@ -335,8 +335,8 @@ class AvantXbee
 		Callback *myCallback;
         //\endcond
     public:
-		AvantXbee();
-        //\cond
+		//\cond
+        AvantXbee();
 		AvantXbee(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
@@ -366,8 +366,8 @@ class AvantPose
 		Callback *myCallback;
         //\endcond
 	public:
-		AvantPose();
         //\cond
+		AvantPose();
 		AvantPose(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
@@ -486,8 +486,8 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
 		Callback *myCallback;
         //\endcond
     public:
-        AvantRC();
         //\cond
+        AvantRC();
         AvantRC(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 		
@@ -631,8 +631,8 @@ class AvantGPIO
 		Callback *myCallback;
         //\endcond
 	public:
-		AvantGPIO();
         //\cond
+		AvantGPIO();
 		AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
@@ -707,8 +707,8 @@ class AvantI2C
 		Callback *myCallback;
         //\endcond
 	public:
-		AvantI2C();
         //\cond
+		AvantI2C();
 		AvantI2C(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
@@ -796,8 +796,8 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
 		Callback *myCallback;
         //\endcond
 	public:
-		AvantSPI();
         //\cond
+		AvantSPI();
 		AvantSPI(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
