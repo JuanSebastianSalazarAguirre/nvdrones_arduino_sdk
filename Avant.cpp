@@ -1024,7 +1024,13 @@ if(service->isSwSerialUsed) {
 //
 // Lookup table
 //
+<<<<<<< HEAD
 typedef struct _DELAY_TABLE
+=======
+//\cond
+typedef struct _DELAY_TABLE
+//\endcond
+>>>>>>> b42b75977fb95e906348853c8f463fb972739c7c
 {
   long baud;
   unsigned short rx_delay_centering;

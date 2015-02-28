@@ -128,11 +128,12 @@ class Callback
 		void (*rudder)(byte);
 		
 };
+	
 
+//\cond
 class RCTransmitService
-/**
-This class allows you to...
-*/
+//\endcond
+
 {
 	friend class AvantResponseHandler;
     private:
@@ -183,7 +184,6 @@ This class allows you to...
         Method description
         */
 		void readBytes(char *buffer, int bytesToRead);
-		
 };
 
 //\cond
@@ -234,11 +234,14 @@ class AvantTransmitter
 		int rudderMax;
 		int rudderMin;
 		
+        //\cond
 		RCTransmitService *service;
+        //\endcond
     public:
         AvantTransmitter();
+        //\cond
 		AvantTransmitter(RCTransmitService *rcService);
-		
+        //\endcond
         /**
         Sets the analogue pin that the Elevator potentiometer is connected to.
 
@@ -360,11 +363,15 @@ class AvantXbee
 */
  {
 	private:
+        //\cond
 		RCTransmitService *service;
 		Callback *myCallback;
+        //\endcond
     public:
 		AvantXbee();
+        //\cond
 		AvantXbee(RCTransmitService *rcTservice, Callback *callback);
+        //\endcond
 
         /// modulation rate in symbols per second, default is 115200
         int baud;
@@ -387,11 +394,15 @@ class AvantPose
  */
 {
 	private:
+        //\cond
 		RCTransmitService *service;
 		Callback *myCallback;
+        //\endcond
 	public:
 		AvantPose();
+        //\cond
 		AvantPose(RCTransmitService *rcTservice, Callback *callback);
+        //\endcond
 
         /**
          
@@ -503,11 +514,15 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
 */
 {
     private:
+        //\cond
         RCTransmitService *service;
 		Callback *myCallback;
+        //\endcond
     public:
         AvantRC();
+        //\cond
         AvantRC(RCTransmitService *rcTservice, Callback *callback);
+        //\endcond
 		
         /**
 		
@@ -644,11 +659,16 @@ class AvantGPIO
 */
 {
 	private:
+        //\cond
 		RCTransmitService *service;
 		Callback *myCallback;
+        //\endcond
 	public:
 		AvantGPIO();
+        //\cond
 		AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
+        //\endcond
+
 
         /**
      
@@ -716,11 +736,15 @@ class AvantI2C
  */
 {
 	private:
+        //\cond
 		RCTransmitService *service;
 		Callback *myCallback;
+        //\endcond
 	public:
 		AvantI2C();
+        //\cond
 		AvantI2C(RCTransmitService *rcTservice, Callback *callback);
+        //\endcond
 
 		/**
          
@@ -801,11 +825,15 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
 */
 {
 	private:
+        //\cond
 		RCTransmitService *service;
 		Callback *myCallback;
+        //\endcond
 	public:
 		AvantSPI();
+        //\cond
 		AvantSPI(RCTransmitService *rcTservice, Callback *callback);
+        //\endcond
 
         /**
 
