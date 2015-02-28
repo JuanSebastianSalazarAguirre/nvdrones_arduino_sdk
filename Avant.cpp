@@ -105,6 +105,7 @@ RCTransmitService::RCTransmitService() {}
 
 RCTransmitService::RCTransmitService(int txPin , int rxPin) {
     softwareSerial = SoftwareSerial(txPin, rxPin);
+	softwareSerial.begin(57600);
     isHwSerial0Used = false;
     isHwSerial1Used = false;
     isHwSerial2Used = false;
@@ -115,7 +116,7 @@ RCTransmitService::RCTransmitService(int txPin , int rxPin) {
 RCTransmitService::RCTransmitService(int hwSerialCode) {
     if (hwSerialCode == 0) {
         #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
-            Serial.begin(115200);
+            Serial.begin(57600);
         #endif
         isHwSerial0Used = true;
         isHwSerial1Used = false;
@@ -124,7 +125,7 @@ RCTransmitService::RCTransmitService(int hwSerialCode) {
         isSwSerialUsed = false;
     } else if (hwSerialCode == 1) {
         #if defined(UBRR1H)
-            Serial1.begin(115200);
+            Serial1.begin(57600);
         #endif
         isHwSerial0Used = false;
         isHwSerial1Used = true;
@@ -133,7 +134,7 @@ RCTransmitService::RCTransmitService(int hwSerialCode) {
         isSwSerialUsed = false;
     } else if (hwSerialCode == 2) {
         #if defined(UBRR2H)
-            Serial2.begin(115200);
+            Serial2.begin(57600);
         #endif
         isHwSerial0Used = false;
         isHwSerial1Used = false;
@@ -142,7 +143,7 @@ RCTransmitService::RCTransmitService(int hwSerialCode) {
         isSwSerialUsed = false;
     }  else if (hwSerialCode == 3) {
         #if defined(UBRR3H)
-            Serial3.begin(115200);
+            Serial3.begin(57600);
         #endif
         isHwSerial0Used = false;
         isHwSerial1Used = false;
