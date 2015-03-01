@@ -107,7 +107,6 @@ class SoftwareSerial : public Stream
 //*****************************************
 //Avant Classes
 //*****************************************
-
 //\cond
 class Callback 
 //\endcond
@@ -126,12 +125,15 @@ class Callback
 		void (*elevator)(byte);
 		void (*aileron)(byte);
 		void (*throttle)(byte);
-		void (*rudder)(byte);		
+		void (*rudder)(byte);
+		
 };
+	
 
 //\cond
 class RCTransmitService
 //\endcond
+
 {
 	friend class AvantResponseHandler;
     private:
@@ -143,12 +145,44 @@ class RCTransmitService
         SoftwareSerial softwareSerial;
     public:
         RCTransmitService();
+
+        /**
+        TODO
+
+        @param txPin
+        @param rxPin
+        */
         RCTransmitService(int txPin , int rxPin);
+
+        /**
+        TODO
+
+        @param hwSerialCode
+        */
         RCTransmitService(int hwSerialCode);
 
+		/**
+        Method description
+
+        @param data Parameter description
+        @param resourceID Parameter description
+        @param actionID Parameter description
+        */
         void sendData(int data, uint8_t resourceID, uint8_t actionID);
+
+        /**
+        Method description
+        */
 		void print(String data);
+        
+        /**
+        Method description
+        */
 		void write(byte data);
+
+        /**
+        Method description
+        */
 		void readBytes(char *buffer, int bytesToRead);
 };
 
@@ -159,6 +193,7 @@ class AvantResponseHandler
 	private:
 		RCTransmitService *service;
 		Callback *myCallback;
+		float dataToFloat(char data[]);
 	public:
 		AvantResponseHandler();
 		AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback);
@@ -208,7 +243,6 @@ class AvantTransmitter
         //\cond
 		AvantTransmitter(RCTransmitService *rcService);
         //\endcond
-		
         /**
         Sets the analogue pin that the Elevator potentiometer is connected to.
 
@@ -635,6 +669,7 @@ class AvantGPIO
         //\cond
 		AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
+
 
         /**
      
