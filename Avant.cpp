@@ -620,6 +620,18 @@ AvantResponseHandler::AvantResponseHandler(RCTransmitService *rcTservice, Callba
 	myCallback = callback;
 }
 
+float AvantResponseHandler::dataToFloat(char data[]) {
+  union u_tag {
+   byte b[4];
+   float data_float;
+  } u;
+  u.b[0] = byte(data[0]);
+  u.b[1] = byte(data[1]);
+  u.b[2] = byte(data[2]);
+  u.b[3] = byte(data[3]);
+  return u.data_float;
+}
+
 void AvantResponseHandler::responseHandler() {
 if(service->isHwSerial0Used) {
   char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
@@ -669,6 +681,8 @@ if(service->isHwSerial0Used) {
                 break;
                case 9:
                 //Pose_Data
+				if(actionID == 2)
+					(*myCallback).longitude(dataToFloat(data));
                 break;
                case 10:
                 //SPI_Communication
@@ -708,12 +722,13 @@ if(service->isHwSerial0Used) {
 	  int datasum = 0;
 	  while (Serial1.available() > 0) { 
 		if (Serial1.read() == '$'){  //this is the start of a Data Packet
+		  Serial.print("got data");
 		  if (Serial1.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
 			length = byte(buffer[0]); //get the length of the data
 			resourceID = byte(buffer[1]); //get the resourceID
 			actionID = byte(buffer[2]); //get the actionID
 			char data[length+1]; // create a buffer to store the data and checksum info 
-			if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+			if(Serial1.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
 			  for(int i=0;i<length;i++){
 				datasum = datasum+byte(data[i]);
 			  }
@@ -748,6 +763,10 @@ if(service->isHwSerial0Used) {
 					break;
 				   case 9:
 					//Pose_Data
+					if(actionID == 2){
+						(*myCallback).longitude(dataToFloat(data));
+						Serial.println("hi");
+						}
 					break;
 				   case 10:
 					//SPI_Communication
@@ -793,7 +812,7 @@ if(service->isHwSerial0Used) {
 			resourceID = byte(buffer[1]); //get the resourceID
 			actionID = byte(buffer[2]); //get the actionID
 			char data[length+1]; // create a buffer to store the data and checksum info 
-			if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+			if(Serial2.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
 			  for(int i=0;i<length;i++){
 				datasum = datasum+byte(data[i]);
 			  }
@@ -828,6 +847,8 @@ if(service->isHwSerial0Used) {
 					break;
 				   case 9:
 					//Pose_Data
+					if(actionID == 2)
+						(*myCallback).longitude(dataToFloat(data));
 					break;
 				   case 10:
 					//SPI_Communication
@@ -873,7 +894,7 @@ if(service->isHwSerial0Used) {
 			resourceID = byte(buffer[1]); //get the resourceID
 			actionID = byte(buffer[2]); //get the actionID
 			char data[length+1]; // create a buffer to store the data and checksum info 
-			if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+			if(Serial3.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
 			  for(int i=0;i<length;i++){
 				datasum = datasum+byte(data[i]);
 			  }
@@ -908,6 +929,8 @@ if(service->isHwSerial0Used) {
 					break;
 				   case 9:
 					//Pose_Data
+					if(actionID == 2)
+						(*myCallback).longitude(dataToFloat(data));
 					break;
 				   case 10:
 					//SPI_Communication
@@ -952,7 +975,7 @@ if(service->isSwSerialUsed) {
 		resourceID = byte(buffer[1]); //get the resourceID
 		actionID = byte(buffer[2]); //get the actionID
 		char data[length+1]; // create a buffer to store the data and checksum info 
-		if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+		if(service->softwareSerial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
 		  for(int i=0;i<length;i++){
 			datasum = datasum+byte(data[i]);
 		  }
@@ -987,6 +1010,8 @@ if(service->isSwSerialUsed) {
 				break;
 			   case 9:
 				//Pose_Data
+				if(actionID == 2)
+					(*myCallback).longitude(dataToFloat(data));
 				break;
 			   case 10:
 				//SPI_Communication
@@ -1024,13 +1049,9 @@ if(service->isSwSerialUsed) {
 //
 // Lookup table
 //
-<<<<<<< HEAD
-typedef struct _DELAY_TABLE
-=======
 //\cond
 typedef struct _DELAY_TABLE
 //\endcond
->>>>>>> b42b75977fb95e906348853c8f463fb972739c7c
 {
   long baud;
   unsigned short rx_delay_centering;

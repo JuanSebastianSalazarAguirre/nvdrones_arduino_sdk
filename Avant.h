@@ -193,6 +193,7 @@ class AvantResponseHandler
 	private:
 		RCTransmitService *service;
 		Callback *myCallback;
+		float dataToFloat(char data[]);
 	public:
 		AvantResponseHandler();
 		AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback);
