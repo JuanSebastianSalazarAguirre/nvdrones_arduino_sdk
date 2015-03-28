@@ -83,7 +83,10 @@ AvantXbee& Avant::xbee() {return avantXbee;}
 AvantPose& Avant::pose() {return avantPose;}
 AvantSPI& Avant::SPI() {return avantSPI;}
 
-        
+void Avant::initialize() {
+    rcService.softwareSerial.begin(57600);
+}
+
 void Avant::armDrone() {
     rcService.sendData(-100, 2, 1);
     rcService.sendData(-100, 2, 2);
@@ -456,8 +459,69 @@ void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
 	service->sendData(value, 8, pin);
 }
 
-void AvantGPIO::digitalReadCallback(void (*function)(byte)) {
-   (*myCallback).digitalRead = function;
+void AvantGPIO::pulseIn(uint8_t pin) {
+	service->sendData(0, 16, pin);
+}
+
+void AvantGPIO::analogRead(uint8_t pin) {
+	service->sendData(0, 17, pin);
+}
+
+void AvantGPIO::digitalReadCallback(void (*function)(byte), int pin) {
+	if(pin == 1)
+		(*myCallback).digitalRead1 = function;
+	else if(pin == 2)
+		(*myCallback).digitalRead2 = function;
+	else if(pin == 3)
+		(*myCallback).digitalRead3 = function;
+	else if(pin == 4)
+		(*myCallback).digitalRead4 = function;
+	else if(pin == 5)
+		(*myCallback).digitalRead5 = function;
+	else if(pin == 6)
+		(*myCallback).digitalRead6 = function;
+	else if(pin == 7)
+		(*myCallback).digitalRead7 = function;
+	else if(pin == 8)
+		(*myCallback).digitalRead8 = function;
+	else if(pin == 9)
+		(*myCallback).digitalRead9 = function;
+	else if(pin == 10)
+		(*myCallback).digitalRead10 = function;
+}
+
+void AvantGPIO::pulseInCallback(void (*function)(byte), uint8_t pin) {
+	if(pin == 1)
+		(*myCallback).pulseIn1 = function;
+	if(pin == 2)
+		(*myCallback).pulseIn2 = function;
+	if(pin == 3)
+		(*myCallback).pulseIn3 = function;
+	if(pin == 4)
+		(*myCallback).pulseIn4 = function;
+	if(pin == 5)
+		(*myCallback).pulseIn5 = function;
+	if(pin == 6)
+		(*myCallback).pulseIn6 = function;
+	if(pin == 7)
+		(*myCallback).pulseIn7 = function;
+	if(pin == 8)
+		(*myCallback).pulseIn8 = function;
+	if(pin == 9)
+		(*myCallback).pulseIn9 = function;
+	if(pin == 10)
+		(*myCallback).pulseIn10 = function;
+}
+
+void AvantGPIO::analogReadCallback(void (*function)(byte), uint8_t pin) {
+	if(pin == 1)
+		(*myCallback).analogRead1 = function;
+	if(pin == 2)
+		(*myCallback).analogRead2 = function;
+	if(pin == 3)
+		(*myCallback).analogRead3 = function;
+	if(pin == 4)
+		(*myCallback).analogRead4 = function;
 }
 
 //**********************************
@@ -574,7 +638,7 @@ void AvantPose::speedCallback(void (*function)(float)) {
 }
 
 void AvantPose::satelliteCallback(void (*function)(byte)) {
-	(*myCallback).satallite = function;
+	(*myCallback).satellite = function;
 }
 
 void AvantPose::orientationCallback(void (*function)(float)) {
@@ -620,7 +684,7 @@ AvantResponseHandler::AvantResponseHandler(RCTransmitService *rcTservice, Callba
 	myCallback = callback;
 }
 
-float AvantResponseHandler::dataToFloat(char data[]) {
+float AvantResponseHandler::dataToFloat(byte data[]) {
   union u_tag {
    byte b[4];
    float data_float;
@@ -632,6 +696,10 @@ float AvantResponseHandler::dataToFloat(char data[]) {
   return u.data_float;
 }
 
+byte AvantResponseHandler::dataToByte(byte data[]) {
+	return data[0];
+}
+
 void AvantResponseHandler::responseHandler() {
 if(service->isHwSerial0Used) {
   char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
@@ -639,14 +707,34 @@ if(service->isHwSerial0Used) {
   int resourceID = 0;
   int actionID = 0;
   int datasum = 0;
+  byte i = 0;
   while (Serial.available() > 0) { 
     if (Serial.read() == '$'){  //this is the start of a Data Packet
-      if (Serial.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
-        length = byte(buffer[0]); //get the length of the data
-        resourceID = byte(buffer[1]); //get the resourceID
-        actionID = byte(buffer[2]); //get the actionID
-        char data[length+1]; // create a buffer to store the data and checksum info 
-        if(Serial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+      while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+				int s = Serial.read();
+				if (length == -1 && s != -1){
+					length = s;    			//set the length
+				}
+				else if (resourceID == -1 && s != -1) {
+					resourceID = s; 			//set the resourceID
+				}
+				else if (actionID == -1 && s != -1) {
+					actionID = s; 				//set the actionID
+				}
+				i++;
+			}
+			byte data[length+1]; // create a buffer to store the data and checksum info 
+			i = 0;		//reset the i to zero to begin a new iteration process
+			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+				if(i == length+1) {								//if all desired bytes have been read then break
+					break;
+				}
+				int s = Serial.read();
+				if(s != -1) {
+					data[i] = byte(s);
+					i++;
+				}
+			}
           for(int i=0;i<length;i++){
             datasum = datasum+byte(data[i]);
           }
@@ -678,11 +766,41 @@ if(service->isHwSerial0Used) {
                 break;
                case 8:
                 //Digital_Read
+				if(actionID == 1)
+					(*myCallback).digitalRead1(data[0]);
+				if(actionID == 2)
+					(*myCallback).digitalRead2(data[0]);
+				if(actionID == 3)
+					(*myCallback).digitalRead3(data[0]);
+				if(actionID == 4)
+					(*myCallback).digitalRead4(data[0]);
+				if(actionID == 5)
+					(*myCallback).digitalRead5(data[0]);
+				if(actionID == 6)
+					(*myCallback).digitalRead6(data[0]);
+				if(actionID == 7)
+					(*myCallback).digitalRead7(data[0]);
+				if(actionID == 8)
+					(*myCallback).digitalRead8(data[0]);
+				if(actionID == 9)
+					(*myCallback).digitalRead9(data[0]);
+				if(actionID == 10)
+					(*myCallback).digitalRead10(data[0]);
                 break;
                case 9:
                 //Pose_Data
 				if(actionID == 2)
 					(*myCallback).longitude(dataToFloat(data));
+				if(actionID == 3)
+					(*myCallback).latitude(dataToFloat(data));
+				if(actionID == 4)
+					(*myCallback).altitude(dataToFloat(data));
+				if(actionID == 5)
+					(*myCallback).satellite(data[0]);
+				if(actionID == 6)
+					(*myCallback).speed(dataToFloat(data));
+				if(actionID == 7)
+					(*myCallback).orientation(dataToFloat(data));
                 break;
                case 10:
                 //SPI_Communication
@@ -699,41 +817,87 @@ if(service->isHwSerial0Used) {
                case 14:
                 //Scripting
                 break;
+			   case 15:
+			     //SimpleAP
+			   case 16:
+				 if(actionID == 1)
+					(*myCallback).pulseIn1(data[0]);
+				 if(actionID == 2)
+					(*myCallback).pulseIn2(data[0]);
+				 if(actionID == 3)
+					(*myCallback).pulseIn3(data[0]);
+				 if(actionID == 4)
+					(*myCallback).pulseIn4(data[0]);
+				 if(actionID == 5)
+					(*myCallback).pulseIn5(data[0]);
+				 if(actionID == 6)
+					(*myCallback).pulseIn6(data[0]);
+				 if(actionID == 7)
+					(*myCallback).pulseIn7(data[0]);
+				 if(actionID == 8)
+					(*myCallback).pulseIn8(data[0]);
+				 if(actionID == 9)
+					(*myCallback).pulseIn9(data[0]);
+				 if(actionID == 10)
+					(*myCallback).pulseIn10(data[0]);
+				 break;
+			   case 17:
+				 if(actionID == 1)
+					(*myCallback).analogRead1(data[0]);
+				 if(actionID == 2)
+					(*myCallback).analogRead2(data[0]);
+				 if(actionID == 3)
+					(*myCallback).analogRead3(data[0]);
+				 if(actionID == 4)
+					(*myCallback).analogRead4(data[0]);
+				 break;
             }//end of data packet router
           }//end of checksum
           else
             Serial.println("checksum failed");
-        }//end of Serial.readBytes for data and checksum
-        else
-          Serial.println("Data Wrong Size");
-      }//End of Serial.readBytes for buffer
-      else 
-        Serial.println("Packet Missing Header");
     }//end of if Serial available
   }//end of Serial.read
 }
 
 #if defined(UBRR1H)
 	if(service->isHwSerial1Used) {
-	  char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
-	  int length = 0;
-	  int resourceID = 0;
-	  int actionID = 0;
+	  int length = -1;
+	  int resourceID = -1;
+	  int actionID = -1;
 	  int datasum = 0;
-	  while (Serial1.available() > 0) { 
+	  byte i = 0;
+	  if (Serial1.available() > 0) { 
 		if (Serial1.read() == '$'){  //this is the start of a Data Packet
-		  Serial.print("got data");
-		  if (Serial1.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
-			length = byte(buffer[0]); //get the length of the data
-			resourceID = byte(buffer[1]); //get the resourceID
-			actionID = byte(buffer[2]); //get the actionID
-			char data[length+1]; // create a buffer to store the data and checksum info 
-			if(Serial1.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
-			  for(int i=0;i<length;i++){
-				datasum = datasum+byte(data[i]);
-			  }
-			  
-			  if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
+			while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+				int s = Serial1.read();
+				if (length == -1 && s != -1){
+					length = s;    			//set the length
+				}
+				else if (resourceID == -1 && s != -1) {
+					resourceID = s; 			//set the resourceID
+				}
+				else if (actionID == -1 && s != -1) {
+					actionID = s; 				//set the actionID
+				}
+				i++;
+			}
+			byte data[length+1]; // create a buffer to store the data and checksum info 
+			i = 0;		//reset the i to zero to begin a new iteration process
+			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+				if(i == length+1) {								//if all desired bytes have been read then break
+					break;
+				}
+				int s = Serial1.read();
+				if(s != -1) {
+					data[i] = byte(s);
+					i++;
+				}
+			}
+			for(int i=0;i<length;i++){
+				datasum = datasum+data[i];
+			}
+			//Serial.println(byte(length+resourceID+actionID+datasum)%256);
+			  if(data[length]== byte((length+resourceID+actionID+datasum)%256)){  //check the checksum
 				///////route the data to the appropriate place here
 				switch(resourceID) {
 				  case 1:
@@ -760,13 +924,41 @@ if(service->isHwSerial0Used) {
 					break;
 				   case 8:
 					//Digital_Read
+					if(actionID == 1)
+						(*myCallback).digitalRead1(dataToByte(data));
+					if(actionID == 2)
+						(*myCallback).digitalRead2(dataToByte(data));
+					if(actionID == 3)
+						(*myCallback).digitalRead3(dataToByte(data));
+					if(actionID == 4)
+						(*myCallback).digitalRead4(dataToByte(data));
+					if(actionID == 5)
+						(*myCallback).digitalRead5(dataToByte(data));
+					if(actionID == 6)
+						(*myCallback).digitalRead6(dataToByte(data));
+					if(actionID == 7)
+						(*myCallback).digitalRead7(data[0]);
+					if(actionID == 8)
+						(*myCallback).digitalRead8(data[0]);
+					if(actionID == 9)
+						(*myCallback).digitalRead9(data[0]);
+					if(actionID == 10)
+						(*myCallback).digitalRead10(data[0]);
 					break;
 				   case 9:
 					//Pose_Data
-					if(actionID == 2){
+					if(actionID == 2)
 						(*myCallback).longitude(dataToFloat(data));
-						Serial.println("hi");
-						}
+					if(actionID == 3)
+						(*myCallback).latitude(dataToFloat(data));
+					if(actionID == 4)
+						(*myCallback).altitude(dataToFloat(data));
+					if(actionID == 5)
+						(*myCallback).satellite(data[0]);
+					if(actionID == 6)
+						(*myCallback).speed(dataToFloat(data));
+					if(actionID == 7)
+						(*myCallback).orientation(dataToFloat(data));
 					break;
 				   case 10:
 					//SPI_Communication
@@ -784,16 +976,42 @@ if(service->isHwSerial0Used) {
 				   case 14:
 					//Scripting
 					break;
+				   case 15:
+					//SimpleAP
+				   case 16:
+				     if(actionID == 1)
+						(*myCallback).pulseIn1(data[0]);
+					 if(actionID == 2)
+						(*myCallback).pulseIn2(data[0]);
+					 if(actionID == 3)
+						(*myCallback).pulseIn3(data[0]);
+					 if(actionID == 4)
+						(*myCallback).pulseIn4(data[0]);
+					 if(actionID == 5)
+						(*myCallback).pulseIn5(data[0]);
+					 if(actionID == 6)
+						(*myCallback).pulseIn6(data[0]);
+					 if(actionID == 7)
+						(*myCallback).pulseIn7(data[0]);
+					 if(actionID == 8)
+						(*myCallback).pulseIn8(data[0]);
+					 if(actionID == 9)
+						(*myCallback).pulseIn9(data[0]);
+					 if(actionID == 10)
+						(*myCallback).pulseIn10(data[0]);
+					 break;
+				   case 17:
+					 if(actionID == 1)
+						(*myCallback).analogRead1(data[0]);
+					 if(actionID == 2)
+						(*myCallback).analogRead2(data[0]);
+					 if(actionID == 3)
+						(*myCallback).analogRead3(data[0]);
+					 if(actionID == 4)
+						(*myCallback).analogRead4(data[0]);
+					 break;
 				}//end of data packet router
 			  }//end of checksum
-			  else
-				Serial.println("checksum failed");
-			}//end of Serial.readBytes for data and checksum
-			else
-			  Serial.println("Data Wrong Size");
-		  }//End of Serial.readBytes for buffer
-		  else 
-			Serial.println("Packet Missing Header");
 		}//end of if Serial available
 	  }//end of Serial.read
 	}
@@ -805,18 +1023,37 @@ if(service->isHwSerial0Used) {
 	  int resourceID = 0;
 	  int actionID = 0;
 	  int datasum = 0;
+	  byte i = 0;
 	  while (Serial2.available() > 0) { 
 		if (Serial2.read() == '$'){  //this is the start of a Data Packet
-		  if (Serial2.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
-			length = byte(buffer[0]); //get the length of the data
-			resourceID = byte(buffer[1]); //get the resourceID
-			actionID = byte(buffer[2]); //get the actionID
-			char data[length+1]; // create a buffer to store the data and checksum info 
-			if(Serial2.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+		  while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+				int s = Serial2.read();
+				if (length == -1 && s != -1){
+					length = s;    			//set the length
+				}
+				else if (resourceID == -1 && s != -1) {
+					resourceID = s; 			//set the resourceID
+				}
+				else if (actionID == -1 && s != -1) {
+					actionID = s; 				//set the actionID
+				}
+				i++;
+			}
+			byte data[length+1]; // create a buffer to store the data and checksum info 
+			i = 0;		//reset the i to zero to begin a new iteration process
+			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+				if(i == length+1) {								//if all desired bytes have been read then break
+					break;
+				}
+				int s = Serial2.read();
+				if(s != -1) {
+					data[i] = byte(s);
+					i++;
+				}
+			}
 			  for(int i=0;i<length;i++){
 				datasum = datasum+byte(data[i]);
 			  }
-			  
 			  if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
 				///////route the data to the appropriate place here
 				switch(resourceID) {
@@ -844,11 +1081,41 @@ if(service->isHwSerial0Used) {
 					break;
 				   case 8:
 					//Digital_Read
+					if(actionID == 1)
+						(*myCallback).digitalRead1(data[0]);
+					if(actionID == 2)
+						(*myCallback).digitalRead2(data[0]);
+					if(actionID == 3)
+						(*myCallback).digitalRead3(data[0]);
+					if(actionID == 4)
+						(*myCallback).digitalRead4(data[0]);
+					if(actionID == 5)
+						(*myCallback).digitalRead5(data[0]);
+					if(actionID == 6)
+						(*myCallback).digitalRead6(data[0]);
+					if(actionID == 7)
+						(*myCallback).digitalRead7(data[0]);
+					if(actionID == 8)
+						(*myCallback).digitalRead8(data[0]);
+					if(actionID == 9)
+						(*myCallback).digitalRead9(data[0]);
+					if(actionID == 10)
+						(*myCallback).digitalRead10(data[0]);
 					break;
 				   case 9:
 					//Pose_Data
 					if(actionID == 2)
 						(*myCallback).longitude(dataToFloat(data));
+					if(actionID == 3)
+						(*myCallback).latitude(dataToFloat(data));
+					if(actionID == 4)
+						(*myCallback).altitude(dataToFloat(data));
+					if(actionID == 5)
+						(*myCallback).satellite(data[0]);
+					if(actionID == 6)
+						(*myCallback).speed(dataToFloat(data));
+					if(actionID == 7)
+						(*myCallback).orientation(dataToFloat(data));
 					break;
 				   case 10:
 					//SPI_Communication
@@ -866,16 +1133,44 @@ if(service->isHwSerial0Used) {
 				   case 14:
 					//Scripting
 					break;
+				   case 15:
+					//SimpleAP
+				   case 16:
+					 if(actionID == 1)
+						(*myCallback).pulseIn1(data[0]);
+					 if(actionID == 2)
+						(*myCallback).pulseIn2(data[0]);
+					 if(actionID == 3)
+						(*myCallback).pulseIn3(data[0]);
+					 if(actionID == 4)
+						(*myCallback).pulseIn4(data[0]);
+					 if(actionID == 5)
+						(*myCallback).pulseIn5(data[0]);
+					 if(actionID == 6)
+						(*myCallback).pulseIn6(data[0]);
+					 if(actionID == 7)
+						(*myCallback).pulseIn7(data[0]);
+					 if(actionID == 8)
+						(*myCallback).pulseIn8(data[0]);
+					 if(actionID == 9)
+						(*myCallback).pulseIn9(data[0]);
+					 if(actionID == 10)
+						(*myCallback).pulseIn10(data[0]);
+					 break;
+				   case 17:
+					 if(actionID == 1)
+						(*myCallback).analogRead1(data[0]);
+					 if(actionID == 2)
+						(*myCallback).analogRead2(data[0]);
+					 if(actionID == 3)
+						(*myCallback).analogRead3(data[0]);
+					 if(actionID == 4)
+						(*myCallback).analogRead4(data[0]);
+					 break;
 				}//end of data packet router
 			  }//end of checksum
 			  else
 				Serial.println("checksum failed");
-			}//end of Serial.readBytes for data and checksum
-			else
-			  Serial.println("Data Wrong Size");
-		  }//End of Serial.readBytes for buffer
-		  else 
-			Serial.println("Packet Missing Header");
 		}//end of if Serial available
 	  }//end of Serial.read
 	}
@@ -887,14 +1182,34 @@ if(service->isHwSerial0Used) {
 	  int resourceID = 0;
 	  int actionID = 0;
 	  int datasum = 0;
+	  byte i = 0;
 	  while (Serial3.available() > 0) { 
 		if (Serial3.read() == '$'){  //this is the start of a Data Packet
-		  if (Serial3.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
-			length = byte(buffer[0]); //get the length of the data
-			resourceID = byte(buffer[1]); //get the resourceID
-			actionID = byte(buffer[2]); //get the actionID
-			char data[length+1]; // create a buffer to store the data and checksum info 
-			if(Serial3.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+		  while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+				int s = Serial3.read();
+				if (length == -1 && s != -1){
+					length = s;    			//set the length
+				}
+				else if (resourceID == -1 && s != -1) {
+					resourceID = s; 			//set the resourceID
+				}
+				else if (actionID == -1 && s != -1) {
+					actionID = s; 				//set the actionID
+				}
+				i++;
+			}
+			byte data[length+1]; // create a buffer to store the data and checksum info 
+			i = 0;		//reset the i to zero to begin a new iteration process
+			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+				if(i == length+1) {								//if all desired bytes have been read then break
+					break;
+				}
+				int s = Serial3.read();
+				if(s != -1) {
+					data[i] = byte(s);
+					i++;
+				}
+			}
 			  for(int i=0;i<length;i++){
 				datasum = datasum+byte(data[i]);
 			  }
@@ -920,6 +1235,26 @@ if(service->isHwSerial0Used) {
 					break;
 				   case 6:
 					//Digital_Write
+					if(actionID == 1)
+						(*myCallback).digitalRead1(data[0]);
+					if(actionID == 2)
+						(*myCallback).digitalRead2(data[0]);
+					if(actionID == 3)
+						(*myCallback).digitalRead3(data[0]);
+					if(actionID == 4)
+						(*myCallback).digitalRead4(data[0]);
+					if(actionID == 5)
+						(*myCallback).digitalRead5(data[0]);
+					if(actionID == 6)
+						(*myCallback).digitalRead6(data[0]);
+					if(actionID == 7)
+						(*myCallback).digitalRead7(data[0]);
+					if(actionID == 8)
+						(*myCallback).digitalRead8(data[0]);
+					if(actionID == 9)
+						(*myCallback).digitalRead9(data[0]);
+					if(actionID == 10)
+						(*myCallback).digitalRead10(data[0]);
 					break;
 				   case 7:
 					//Analog_Write
@@ -931,6 +1266,16 @@ if(service->isHwSerial0Used) {
 					//Pose_Data
 					if(actionID == 2)
 						(*myCallback).longitude(dataToFloat(data));
+					if(actionID == 3)
+						(*myCallback).latitude(dataToFloat(data));
+					if(actionID == 4)
+						(*myCallback).altitude(dataToFloat(data));
+					if(actionID == 5)
+						(*myCallback).satellite(data[0]);
+					if(actionID == 6)
+						(*myCallback).speed(dataToFloat(data));
+					if(actionID == 7)
+						(*myCallback).orientation(dataToFloat(data));
 					break;
 				   case 10:
 					//SPI_Communication
@@ -948,16 +1293,44 @@ if(service->isHwSerial0Used) {
 				   case 14:
 					//Scripting
 					break;
+				   case 15:
+					//SimpleAP
+				   case 16:
+					 if(actionID == 1)
+						(*myCallback).pulseIn1(data[0]);
+					 if(actionID == 2)
+						(*myCallback).pulseIn2(data[0]);
+					 if(actionID == 3)
+						(*myCallback).pulseIn3(data[0]);
+					 if(actionID == 4)
+						(*myCallback).pulseIn4(data[0]);
+					 if(actionID == 5)
+						(*myCallback).pulseIn5(data[0]);
+					 if(actionID == 6)
+						(*myCallback).pulseIn6(data[0]);
+					 if(actionID == 7)
+						(*myCallback).pulseIn7(data[0]);
+					 if(actionID == 8)
+						(*myCallback).pulseIn8(data[0]);
+					 if(actionID == 9)
+						(*myCallback).pulseIn9(data[0]);
+					 if(actionID == 10)
+						(*myCallback).pulseIn10(data[0]);
+					 break;
+				 case 17:
+					 if(actionID == 1)
+						(*myCallback).analogRead1(data[0]);
+					 if(actionID == 2)
+						(*myCallback).analogRead2(data[0]);
+					 if(actionID == 3)
+						(*myCallback).analogRead3(data[0]);
+					 if(actionID == 4)
+						(*myCallback).analogRead4(data[0]);
+					 break;
 				}//end of data packet router
 			  }//end of checksum
 			  else
 				Serial.println("checksum failed");
-			}//end of Serial.readBytes for data and checksum
-			else
-			  Serial.println("Data Wrong Size");
-		  }//End of Serial.readBytes for buffer
-		  else 
-			Serial.println("Packet Missing Header");
 		}//end of if Serial available
 	  }//end of Serial.read
 	}
@@ -968,14 +1341,35 @@ if(service->isSwSerialUsed) {
   int resourceID = 0;
   int actionID = 0;
   int datasum = 0;
+  byte i = 0;
   while (service->softwareSerial.available() > 0) { 
+    Serial.println("Here");
 	if (service->softwareSerial.read() == '$'){  //this is the start of a Data Packet
-	  if (service->softwareSerial.readBytes(&buffer[0], 3) == 3){ //read the next three bytes of the stream and store them into buffer[]
-		length = byte(buffer[0]); //get the length of the data
-		resourceID = byte(buffer[1]); //get the resourceID
-		actionID = byte(buffer[2]); //get the actionID
-		char data[length+1]; // create a buffer to store the data and checksum info 
-		if(service->softwareSerial.readBytes(&data[0], length+1) == length+1) { //get the data and checksum from Serial Stream and store into buffer
+	  while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+				int s = service->softwareSerial.read();
+				if (length == -1 && s != -1){
+					length = s;    			//set the length
+				}
+				else if (resourceID == -1 && s != -1) {
+					resourceID = s; 			//set the resourceID
+				}
+				else if (actionID == -1 && s != -1) {
+					actionID = s; 				//set the actionID
+				}
+				i++;
+			}
+			byte data[length+1]; // create a buffer to store the data and checksum info 
+			i = 0;		//reset the i to zero to begin a new iteration process
+			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+				if(i == length+1) {								//if all desired bytes have been read then break
+					break;
+				}
+				int s = service->softwareSerial.read();
+				if(s != -1) {
+					data[i] = byte(s);
+					i++;
+				}
+			}
 		  for(int i=0;i<length;i++){
 			datasum = datasum+byte(data[i]);
 		  }
@@ -1001,6 +1395,26 @@ if(service->isSwSerialUsed) {
 				break;
 			   case 6:
 				//Digital_Write
+				if(actionID == 1)
+					(*myCallback).digitalRead1(data[0]);
+				if(actionID == 2)
+					(*myCallback).digitalRead2(data[0]);
+				if(actionID == 3)
+					(*myCallback).digitalRead3(data[0]);
+				if(actionID == 4)
+					(*myCallback).digitalRead4(data[0]);
+				if(actionID == 5)
+					(*myCallback).digitalRead5(data[0]);
+				if(actionID == 6)
+					(*myCallback).digitalRead6(data[0]);
+				if(actionID == 7)
+					(*myCallback).digitalRead7(data[0]);
+				if(actionID == 8)
+					(*myCallback).digitalRead8(data[0]);
+				if(actionID == 9)
+					(*myCallback).digitalRead9(data[0]);
+				if(actionID == 10)
+					(*myCallback).digitalRead10(data[0]);
 				break;
 			   case 7:
 				//Analog_Write
@@ -1012,6 +1426,16 @@ if(service->isSwSerialUsed) {
 				//Pose_Data
 				if(actionID == 2)
 					(*myCallback).longitude(dataToFloat(data));
+				if(actionID == 3)
+					(*myCallback).latitude(dataToFloat(data));
+				if(actionID == 4)
+					(*myCallback).altitude(dataToFloat(data));
+				if(actionID == 5)
+					(*myCallback).satellite(data[0]);
+				if(actionID == 6)
+					(*myCallback).speed(dataToFloat(data));
+				if(actionID == 7)
+					(*myCallback).orientation(dataToFloat(data));
 				break;
 			   case 10:
 				//SPI_Communication
@@ -1028,16 +1452,44 @@ if(service->isSwSerialUsed) {
 			   case 14:
 				//Scripting
 				break;
+			   case 15:
+			     //SimpleAP
+			   case 16:
+				 if(actionID == 1)
+					(*myCallback).pulseIn1(data[0]);
+				 if(actionID == 2)
+					(*myCallback).pulseIn2(data[0]);
+				 if(actionID == 3)
+					(*myCallback).pulseIn3(data[0]);
+				 if(actionID == 4)
+					(*myCallback).pulseIn4(data[0]);
+				 if(actionID == 5)
+					(*myCallback).pulseIn5(data[0]);
+				 if(actionID == 6)
+					(*myCallback).pulseIn6(data[0]);
+				 if(actionID == 7)
+					(*myCallback).pulseIn7(data[0]);
+				 if(actionID == 8)
+					(*myCallback).pulseIn8(data[0]);
+				 if(actionID == 9)
+					(*myCallback).pulseIn9(data[0]);
+				 if(actionID == 10)
+					(*myCallback).pulseIn10(data[0]);
+				 break;
+			   case 17:
+				 if(actionID == 1)
+					(*myCallback).analogRead1(data[0]);
+				 if(actionID == 2)
+					(*myCallback).analogRead2(data[0]);
+				 if(actionID == 3)
+					(*myCallback).analogRead3(data[0]);
+				 if(actionID == 4)
+					(*myCallback).analogRead4(data[0]);
+				 break;
 			}//end of data packet router
 		  }//end of checksum
 		  else
 			Serial.println("checksum failed");
-		}//end of Serial.readBytes for data and checksum
-		else
-		  Serial.println("Data Wrong Size");
-	  }//End of Serial.readBytes for buffer
-	  else 
-		Serial.println("Packet Missing Header");
 	}//end of if Serial available
   }//end of Serial.read
 }

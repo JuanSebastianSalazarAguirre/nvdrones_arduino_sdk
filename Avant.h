@@ -112,20 +112,52 @@ class Callback
 //\endcond
 {
 	public:
+		//SPI Callbacks
+		void (*transfer)(byte);
+		//I2C Callbacks
 		void (*i2cRead)(byte); 
-		void (*digitalRead)(byte);
+		//GPS callbacks
 		void (*longitude)(float);
 		void (*latitude)(float);
 		void (*altitude)(float);
 		void (*speed)(float);
-		void (*satallite)(byte);
+		void (*satellite)(byte);
 		void (*orientation)(float);
-		void (*transfer)(byte);
+		//RC Callbacks
 		void (*flightMode)(byte);
 		void (*elevator)(byte);
 		void (*aileron)(byte);
 		void (*throttle)(byte);
 		void (*rudder)(byte);
+		//pulseIn Callbacks
+		void (*pulseIn1)(byte);
+		void (*pulseIn2)(byte);
+		void (*pulseIn3)(byte);
+		void (*pulseIn4)(byte);
+		void (*pulseIn5)(byte);
+		void (*pulseIn6)(byte);
+		void (*pulseIn7)(byte);
+		void (*pulseIn8)(byte);
+		void (*pulseIn9)(byte);
+		void (*pulseIn10)(byte);
+		//digital Read Callbacks
+		void (*digitalRead1)(byte);
+		void (*digitalRead2)(byte);
+		void (*digitalRead3)(byte);
+		void (*digitalRead4)(byte);
+		void (*digitalRead5)(byte);
+		void (*digitalRead6)(byte);
+		void (*digitalRead7)(byte);
+		void (*digitalRead8)(byte);
+		void (*digitalRead9)(byte);
+		void (*digitalRead10)(byte);
+		//analog Read Callbacks
+		void (*analogRead1)(byte);
+		void (*analogRead2)(byte);
+		void (*analogRead3)(byte);
+		void (*analogRead4)(byte);
+		//AP callbacks
+		//Xbee Callbacks
 		
 };
 	
@@ -142,8 +174,9 @@ class RCTransmitService
         bool isHwSerial2Used;
         bool isHwSerial3Used;
         bool isSwSerialUsed;
-        SoftwareSerial softwareSerial;
+
     public:
+	    SoftwareSerial softwareSerial;
         RCTransmitService();
 
         /**
@@ -193,7 +226,8 @@ class AvantResponseHandler
 	private:
 		RCTransmitService *service;
 		Callback *myCallback;
-		float dataToFloat(char data[]);
+		float dataToFloat(byte data[]);
+		byte dataToByte(byte data[]);
 	public:
 		AvantResponseHandler();
 		AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback);
@@ -239,8 +273,8 @@ class AvantTransmitter
 		RCTransmitService *service;
         //\endcond
     public:
-        //\cond
         AvantTransmitter();
+        //\cond
 		AvantTransmitter(RCTransmitService *rcService);
         //\endcond
         /**
@@ -369,8 +403,8 @@ class AvantXbee
 		Callback *myCallback;
         //\endcond
     public:
-		//\cond
-        AvantXbee();
+		AvantXbee();
+        //\cond
 		AvantXbee(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
@@ -400,8 +434,8 @@ class AvantPose
 		Callback *myCallback;
         //\endcond
 	public:
-        //\cond
 		AvantPose();
+        //\cond
 		AvantPose(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
@@ -520,8 +554,8 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
 		Callback *myCallback;
         //\endcond
     public:
-        //\cond
         AvantRC();
+        //\cond
         AvantRC(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 		
@@ -665,8 +699,8 @@ class AvantGPIO
 		Callback *myCallback;
         //\endcond
 	public:
-        //\cond
 		AvantGPIO();
+        //\cond
 		AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
@@ -701,6 +735,16 @@ class AvantGPIO
      
          */
 		void analogWrite(uint8_t pin, uint8_t value);
+		
+		/**
+     
+        Writes an a request to the Extender to check the duration of a pulse on the specified pin.
+     
+         @param pin sets pins 1-10 on the App Extender to the PWM value specified by value 
+     
+         */
+		void pulseIn(uint8_t pin);
+		
 
         /**
      
@@ -710,16 +754,45 @@ class AvantGPIO
      
          */
 		void digitalRead(uint8_t pin);
+		
+		/**
+     
+        Sends a request to the App Extender to reply with the analog value of the specified pin.  
+     
+         @param pin Selects which analog pin on the App Extender it should return.
+     
+         */
+		void analogRead(uint8_t pin);
 
         /**
      
-        This callback function is executed everytime it gets GPIO information.  It passes
+        This callback function is executed everytime it gets digitalRead information.  It passes
 		this information to the function specified in the argument.
      
          @param function name in you code to be called
      
          */
-		void digitalReadCallback(void (*function)(byte));
+		void digitalReadCallback(void (*function)(byte), int pin);
+		
+		/**
+		
+		This callback function is executed everytime it gets GPIO information.  It passes
+		this information to the function specified in the argument.
+     
+         @param function name in you code to be called
+     
+         */
+		void pulseInCallback(void (*function)(byte), uint8_t pin);
+		
+		/**
+     
+        This callback function is executed everytime it gets analogRead information.  It passes
+		this information to the function specified in the argument.
+     
+         @param function name in you code to be called
+     
+         */
+		void analogReadCallback(void (*function)(byte), uint8_t pin);
 };
 
 class AvantI2C
@@ -742,8 +815,8 @@ class AvantI2C
 		Callback *myCallback;
         //\endcond
 	public:
-        //\cond
 		AvantI2C();
+        //\cond
 		AvantI2C(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
@@ -831,8 +904,8 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
 		Callback *myCallback;
         //\endcond
 	public:
-        //\cond
 		AvantSPI();
+        //\cond
 		AvantSPI(RCTransmitService *rcTservice, Callback *callback);
         //\endcond
 
@@ -911,6 +984,7 @@ class Avant
 		AvantResponseHandler& avantResponseHandler();
 		AvantSPI& SPI();
         void armDrone();
+		void initialize();
 };
 
 
