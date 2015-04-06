@@ -130,16 +130,16 @@ class Callback
 		void (*throttle)(byte);
 		void (*rudder)(byte);
 		//pulseIn Callbacks
-		void (*pulseIn1)(byte);
-		void (*pulseIn2)(byte);
-		void (*pulseIn3)(byte);
-		void (*pulseIn4)(byte);
-		void (*pulseIn5)(byte);
-		void (*pulseIn6)(byte);
-		void (*pulseIn7)(byte);
-		void (*pulseIn8)(byte);
-		void (*pulseIn9)(byte);
-		void (*pulseIn10)(byte);
+		void (*pulseIn1)(long);
+		void (*pulseIn2)(long);
+		void (*pulseIn3)(long);
+		void (*pulseIn4)(long);
+		void (*pulseIn5)(long);
+		void (*pulseIn6)(long);
+		void (*pulseIn7)(long);
+		void (*pulseIn8)(long);
+		void (*pulseIn9)(long);
+		void (*pulseIn10)(long);
 		//digital Read Callbacks
 		void (*digitalRead1)(byte);
 		void (*digitalRead2)(byte);
@@ -227,7 +227,7 @@ class AvantResponseHandler
 		RCTransmitService *service;
 		Callback *myCallback;
 		float dataToFloat(byte data[]);
-		byte dataToByte(byte data[]);
+		long  dataToLong(byte data[]);
 	public:
 		AvantResponseHandler();
 		AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback);
@@ -782,7 +782,7 @@ class AvantGPIO
          @param function name in you code to be called
      
          */
-		void pulseInCallback(void (*function)(byte), uint8_t pin);
+		void pulseInCallback(void (*function)(long), uint8_t pin);
 		
 		/**
      

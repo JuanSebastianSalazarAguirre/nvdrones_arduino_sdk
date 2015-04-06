@@ -490,7 +490,7 @@ void AvantGPIO::digitalReadCallback(void (*function)(byte), int pin) {
 		(*myCallback).digitalRead10 = function;
 }
 
-void AvantGPIO::pulseInCallback(void (*function)(byte), uint8_t pin) {
+void AvantGPIO::pulseInCallback(void (*function)(long), uint8_t pin) {
 	if(pin == 1)
 		(*myCallback).pulseIn1 = function;
 	if(pin == 2)
@@ -696,8 +696,13 @@ float AvantResponseHandler::dataToFloat(byte data[]) {
   return u.data_float;
 }
 
-byte AvantResponseHandler::dataToByte(byte data[]) {
-	return data[0];
+long AvantResponseHandler::dataToLong(byte data[]) {
+ long data_long = 0;
+ data_long = byte(data[0]) << 8;
+ data_long = (data_long + byte(data[1])) << 8;
+ data_long = (data_long + byte(data[2])) << 8;
+ data_long = data_long + byte(data[3]); 
+ return data_long;
 }
 
 void AvantResponseHandler::responseHandler() {
@@ -710,7 +715,7 @@ if(service->isHwSerial0Used) {
   byte i = 0;
   while (Serial.available() > 0) { 
     if (Serial.read() == '$'){  //this is the start of a Data Packet
-      while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+      while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
 				int s = Serial.read();
 				if (length == -1 && s != -1){
 					length = s;    			//set the length
@@ -725,7 +730,7 @@ if(service->isHwSerial0Used) {
 			}
 			byte data[length+1]; // create a buffer to store the data and checksum info 
 			i = 0;		//reset the i to zero to begin a new iteration process
-			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+			for(int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
 				if(i == length+1) {								//if all desired bytes have been read then break
 					break;
 				}
@@ -821,25 +826,25 @@ if(service->isHwSerial0Used) {
 			     //SimpleAP
 			   case 16:
 				 if(actionID == 1)
-					(*myCallback).pulseIn1(data[0]);
+					(*myCallback).pulseIn1(dataToLong(data));
 				 if(actionID == 2)
-					(*myCallback).pulseIn2(data[0]);
+					(*myCallback).pulseIn2(dataToLong(data));
 				 if(actionID == 3)
-					(*myCallback).pulseIn3(data[0]);
+					(*myCallback).pulseIn3(dataToLong(data));
 				 if(actionID == 4)
-					(*myCallback).pulseIn4(data[0]);
+					(*myCallback).pulseIn4(dataToLong(data));
 				 if(actionID == 5)
-					(*myCallback).pulseIn5(data[0]);
+					(*myCallback).pulseIn5(dataToLong(data));
 				 if(actionID == 6)
-					(*myCallback).pulseIn6(data[0]);
+					(*myCallback).pulseIn6(dataToLong(data));
 				 if(actionID == 7)
-					(*myCallback).pulseIn7(data[0]);
+					(*myCallback).pulseIn7(dataToLong(data));
 				 if(actionID == 8)
-					(*myCallback).pulseIn8(data[0]);
+					(*myCallback).pulseIn8(dataToLong(data));
 				 if(actionID == 9)
-					(*myCallback).pulseIn9(data[0]);
+					(*myCallback).pulseIn9(dataToLong(data));
 				 if(actionID == 10)
-					(*myCallback).pulseIn10(data[0]);
+					(*myCallback).pulseIn10(dataToLong(data));
 				 break;
 			   case 17:
 				 if(actionID == 1)
@@ -868,7 +873,7 @@ if(service->isHwSerial0Used) {
 	  byte i = 0;
 	  if (Serial1.available() > 0) { 
 		if (Serial1.read() == '$'){  //this is the start of a Data Packet
-			while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+			while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
 				int s = Serial1.read();
 				if (length == -1 && s != -1){
 					length = s;    			//set the length
@@ -883,7 +888,7 @@ if(service->isHwSerial0Used) {
 			}
 			byte data[length+1]; // create a buffer to store the data and checksum info 
 			i = 0;		//reset the i to zero to begin a new iteration process
-			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+			for(int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
 				if(i == length+1) {								//if all desired bytes have been read then break
 					break;
 				}
@@ -896,7 +901,6 @@ if(service->isHwSerial0Used) {
 			for(int i=0;i<length;i++){
 				datasum = datasum+data[i];
 			}
-			//Serial.println(byte(length+resourceID+actionID+datasum)%256);
 			  if(data[length]== byte((length+resourceID+actionID+datasum)%256)){  //check the checksum
 				///////route the data to the appropriate place here
 				switch(resourceID) {
@@ -925,17 +929,17 @@ if(service->isHwSerial0Used) {
 				   case 8:
 					//Digital_Read
 					if(actionID == 1)
-						(*myCallback).digitalRead1(dataToByte(data));
+						(*myCallback).digitalRead1(data[0]);
 					if(actionID == 2)
-						(*myCallback).digitalRead2(dataToByte(data));
+						(*myCallback).digitalRead2(data[0]);
 					if(actionID == 3)
-						(*myCallback).digitalRead3(dataToByte(data));
+						(*myCallback).digitalRead3(data[0]);
 					if(actionID == 4)
-						(*myCallback).digitalRead4(dataToByte(data));
+						(*myCallback).digitalRead4(data[0]);
 					if(actionID == 5)
-						(*myCallback).digitalRead5(dataToByte(data));
+						(*myCallback).digitalRead5(data[0]);
 					if(actionID == 6)
-						(*myCallback).digitalRead6(dataToByte(data));
+						(*myCallback).digitalRead6(data[0]);
 					if(actionID == 7)
 						(*myCallback).digitalRead7(data[0]);
 					if(actionID == 8)
@@ -980,25 +984,25 @@ if(service->isHwSerial0Used) {
 					//SimpleAP
 				   case 16:
 				     if(actionID == 1)
-						(*myCallback).pulseIn1(data[0]);
+						(*myCallback).pulseIn1(dataToLong(data));
 					 if(actionID == 2)
-						(*myCallback).pulseIn2(data[0]);
+						(*myCallback).pulseIn2(dataToLong(data));
 					 if(actionID == 3)
-						(*myCallback).pulseIn3(data[0]);
+						(*myCallback).pulseIn3(dataToLong(data));
 					 if(actionID == 4)
-						(*myCallback).pulseIn4(data[0]);
+						(*myCallback).pulseIn4(dataToLong(data));
 					 if(actionID == 5)
-						(*myCallback).pulseIn5(data[0]);
+						(*myCallback).pulseIn5(dataToLong(data));
 					 if(actionID == 6)
-						(*myCallback).pulseIn6(data[0]);
+						(*myCallback).pulseIn6(dataToLong(data));
 					 if(actionID == 7)
-						(*myCallback).pulseIn7(data[0]);
+						(*myCallback).pulseIn7(dataToLong(data));
 					 if(actionID == 8)
-						(*myCallback).pulseIn8(data[0]);
+						(*myCallback).pulseIn8(dataToLong(data));
 					 if(actionID == 9)
-						(*myCallback).pulseIn9(data[0]);
+						(*myCallback).pulseIn9(dataToLong(data));
 					 if(actionID == 10)
-						(*myCallback).pulseIn10(data[0]);
+						(*myCallback).pulseIn10(dataToLong(data));
 					 break;
 				   case 17:
 					 if(actionID == 1)
@@ -1026,7 +1030,7 @@ if(service->isHwSerial0Used) {
 	  byte i = 0;
 	  while (Serial2.available() > 0) { 
 		if (Serial2.read() == '$'){  //this is the start of a Data Packet
-		  while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+		  while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
 				int s = Serial2.read();
 				if (length == -1 && s != -1){
 					length = s;    			//set the length
@@ -1041,7 +1045,7 @@ if(service->isHwSerial0Used) {
 			}
 			byte data[length+1]; // create a buffer to store the data and checksum info 
 			i = 0;		//reset the i to zero to begin a new iteration process
-			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+			for(int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
 				if(i == length+1) {								//if all desired bytes have been read then break
 					break;
 				}
@@ -1137,25 +1141,25 @@ if(service->isHwSerial0Used) {
 					//SimpleAP
 				   case 16:
 					 if(actionID == 1)
-						(*myCallback).pulseIn1(data[0]);
+						(*myCallback).pulseIn1(dataToLong(data));
 					 if(actionID == 2)
-						(*myCallback).pulseIn2(data[0]);
+						(*myCallback).pulseIn2(dataToLong(data));
 					 if(actionID == 3)
-						(*myCallback).pulseIn3(data[0]);
+						(*myCallback).pulseIn3(dataToLong(data));
 					 if(actionID == 4)
-						(*myCallback).pulseIn4(data[0]);
+						(*myCallback).pulseIn4(dataToLong(data));
 					 if(actionID == 5)
-						(*myCallback).pulseIn5(data[0]);
+						(*myCallback).pulseIn5(dataToLong(data));
 					 if(actionID == 6)
-						(*myCallback).pulseIn6(data[0]);
+						(*myCallback).pulseIn6(dataToLong(data));
 					 if(actionID == 7)
-						(*myCallback).pulseIn7(data[0]);
+						(*myCallback).pulseIn7(dataToLong(data));
 					 if(actionID == 8)
-						(*myCallback).pulseIn8(data[0]);
+						(*myCallback).pulseIn8(dataToLong(data));
 					 if(actionID == 9)
-						(*myCallback).pulseIn9(data[0]);
+						(*myCallback).pulseIn9(dataToLong(data));
 					 if(actionID == 10)
-						(*myCallback).pulseIn10(data[0]);
+						(*myCallback).pulseIn10(dataToLong(data));
 					 break;
 				   case 17:
 					 if(actionID == 1)
@@ -1185,7 +1189,7 @@ if(service->isHwSerial0Used) {
 	  byte i = 0;
 	  while (Serial3.available() > 0) { 
 		if (Serial3.read() == '$'){  //this is the start of a Data Packet
-		  while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+		  while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
 				int s = Serial3.read();
 				if (length == -1 && s != -1){
 					length = s;    			//set the length
@@ -1200,7 +1204,7 @@ if(service->isHwSerial0Used) {
 			}
 			byte data[length+1]; // create a buffer to store the data and checksum info 
 			i = 0;		//reset the i to zero to begin a new iteration process
-			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+			for(int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
 				if(i == length+1) {								//if all desired bytes have been read then break
 					break;
 				}
@@ -1297,25 +1301,25 @@ if(service->isHwSerial0Used) {
 					//SimpleAP
 				   case 16:
 					 if(actionID == 1)
-						(*myCallback).pulseIn1(data[0]);
+						(*myCallback).pulseIn1(dataToLong(data));
 					 if(actionID == 2)
-						(*myCallback).pulseIn2(data[0]);
+						(*myCallback).pulseIn2(dataToLong(data));
 					 if(actionID == 3)
-						(*myCallback).pulseIn3(data[0]);
+						(*myCallback).pulseIn3(dataToLong(data));
 					 if(actionID == 4)
-						(*myCallback).pulseIn4(data[0]);
+						(*myCallback).pulseIn4(dataToLong(data));
 					 if(actionID == 5)
-						(*myCallback).pulseIn5(data[0]);
+						(*myCallback).pulseIn5(dataToLong(data));
 					 if(actionID == 6)
-						(*myCallback).pulseIn6(data[0]);
+						(*myCallback).pulseIn6(dataToLong(data));
 					 if(actionID == 7)
-						(*myCallback).pulseIn7(data[0]);
+						(*myCallback).pulseIn7(dataToLong(data));
 					 if(actionID == 8)
-						(*myCallback).pulseIn8(data[0]);
+						(*myCallback).pulseIn8(dataToLong(data));
 					 if(actionID == 9)
-						(*myCallback).pulseIn9(data[0]);
+						(*myCallback).pulseIn9(dataToLong(data));
 					 if(actionID == 10)
-						(*myCallback).pulseIn10(data[0]);
+						(*myCallback).pulseIn10(dataToLong(data));
 					 break;
 				 case 17:
 					 if(actionID == 1)
@@ -1345,7 +1349,7 @@ if(service->isSwSerialUsed) {
   while (service->softwareSerial.available() > 0) { 
     Serial.println("Here");
 	if (service->softwareSerial.read() == '$'){  //this is the start of a Data Packet
-	  while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 150)) {
+	  while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
 				int s = service->softwareSerial.read();
 				if (length == -1 && s != -1){
 					length = s;    			//set the length
@@ -1360,7 +1364,7 @@ if(service->isSwSerialUsed) {
 			}
 			byte data[length+1]; // create a buffer to store the data and checksum info 
 			i = 0;		//reset the i to zero to begin a new iteration process
-			for(int iterate = 0; iterate < 50*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
+			for(int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
 				if(i == length+1) {								//if all desired bytes have been read then break
 					break;
 				}
@@ -1456,25 +1460,25 @@ if(service->isSwSerialUsed) {
 			     //SimpleAP
 			   case 16:
 				 if(actionID == 1)
-					(*myCallback).pulseIn1(data[0]);
+					(*myCallback).pulseIn1(dataToLong(data));
 				 if(actionID == 2)
-					(*myCallback).pulseIn2(data[0]);
+					(*myCallback).pulseIn2(dataToLong(data));
 				 if(actionID == 3)
-					(*myCallback).pulseIn3(data[0]);
+					(*myCallback).pulseIn3(dataToLong(data));
 				 if(actionID == 4)
-					(*myCallback).pulseIn4(data[0]);
+					(*myCallback).pulseIn4(dataToLong(data));
 				 if(actionID == 5)
-					(*myCallback).pulseIn5(data[0]);
+					(*myCallback).pulseIn5(dataToLong(data));
 				 if(actionID == 6)
-					(*myCallback).pulseIn6(data[0]);
+					(*myCallback).pulseIn6(dataToLong(data));
 				 if(actionID == 7)
-					(*myCallback).pulseIn7(data[0]);
+					(*myCallback).pulseIn7(dataToLong(data));
 				 if(actionID == 8)
-					(*myCallback).pulseIn8(data[0]);
+					(*myCallback).pulseIn8(dataToLong(data));
 				 if(actionID == 9)
-					(*myCallback).pulseIn9(data[0]);
+					(*myCallback).pulseIn9(dataToLong(data));
 				 if(actionID == 10)
-					(*myCallback).pulseIn10(data[0]);
+					(*myCallback).pulseIn10(dataToLong(data));
 				 break;
 			   case 17:
 				 if(actionID == 1)
