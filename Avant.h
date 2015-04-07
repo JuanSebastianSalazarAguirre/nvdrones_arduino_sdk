@@ -38,59 +38,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 class SoftwareSerial : public Stream
 //\endcond
 {
-    private:
-        // per object data
-        uint8_t _receivePin;
-        uint8_t _receiveBitMask;
-        volatile uint8_t *_receivePortRegister;
-        uint8_t _transmitBitMask;
-        volatile uint8_t *_transmitPortRegister;
+  private:
+    // per object data
+    uint8_t _receivePin;
+    uint8_t _receiveBitMask;
+    volatile uint8_t *_receivePortRegister;
+    uint8_t _transmitBitMask;
+    volatile uint8_t *_transmitPortRegister;
 
-        uint16_t _rx_delay_centering;
-        uint16_t _rx_delay_intrabit;
-        uint16_t _rx_delay_stopbit;
-        uint16_t _tx_delay;
+    uint16_t _rx_delay_centering;
+    uint16_t _rx_delay_intrabit;
+    uint16_t _rx_delay_stopbit;
+    uint16_t _tx_delay;
 
-        uint16_t _buffer_overflow:1;
-        uint16_t _inverse_logic:1;
+    uint16_t _buffer_overflow:1;
+    uint16_t _inverse_logic:1;
 
-        // static data
-        static char _receive_buffer[_SS_MAX_RX_BUFF]; 
-        static volatile uint8_t _receive_buffer_tail;
-        static volatile uint8_t _receive_buffer_head;
-        static SoftwareSerial *active_object;
+    // static data
+    static char _receive_buffer[_SS_MAX_RX_BUFF]; 
+    static volatile uint8_t _receive_buffer_tail;
+    static volatile uint8_t _receive_buffer_head;
+    static SoftwareSerial *active_object;
 
-        // private methods
-        void recv();
-        uint8_t rx_pin_read();
-        void tx_pin_write(uint8_t pin_state);
-        void setTX(uint8_t transmitPin);
-        void setRX(uint8_t receivePin);
+    // private methods
+    void recv();
+    uint8_t rx_pin_read();
+    void tx_pin_write(uint8_t pin_state);
+    void setTX(uint8_t transmitPin);
+    void setRX(uint8_t receivePin);
 
-        // private static method for timing
-        static inline void tunedDelay(uint16_t delay);
+    // private static method for timing
+    static inline void tunedDelay(uint16_t delay);
 
-    public:
-        // public methods
-        SoftwareSerial(){};
-        SoftwareSerial(uint8_t receivePin, uint8_t transmitPin, bool inverse_logic = false);
-        ~SoftwareSerial();
-        void begin(long speed);
-        bool listen();
-        void end();
-        bool isListening() { return this == active_object; }
-        bool overflow() { bool ret = _buffer_overflow; _buffer_overflow = false; return ret; }
-        int peek();
+  public:
+    // public methods
+    SoftwareSerial(){};
+    SoftwareSerial(uint8_t receivePin, uint8_t transmitPin, bool inverse_logic = false);
+    ~SoftwareSerial();
+    void begin(long speed);
+    bool listen();
+    void end();
+    bool isListening() { return this == active_object; }
+    bool overflow() { bool ret = _buffer_overflow; _buffer_overflow = false; return ret; }
+    int peek();
 
-        virtual size_t write(uint8_t byte);
-        virtual int read();
-        virtual int available();
-        virtual void flush();
+    virtual size_t write(uint8_t byte);
+    virtual int read();
+    virtual int available();
+    virtual void flush();
 
-        using Print::write;
+    using Print::write;
 
-        // public only for easy access by interrupt handlers
-        static inline void handle_interrupt();
+    // public only for easy access by interrupt handlers
+    static inline void handle_interrupt();
 };
 
 // Arduino 0012 workaround
@@ -111,72 +111,71 @@ class SoftwareSerial : public Stream
 class Callback 
 //\endcond
 {
-	public:
-		//SPI Callbacks
-		void (*transfer)(byte);
-		//I2C Callbacks
-		void (*i2cRead)(byte); 
-		//GPS callbacks
-		void (*longitude)(float);
-		void (*latitude)(float);
-		void (*altitude)(float);
-		void (*speed)(float);
-		void (*satellite)(byte);
-		void (*orientation)(float);
-		//RC Callbacks
-		void (*flightMode)(byte);
-		void (*elevator)(byte);
-		void (*aileron)(byte);
-		void (*throttle)(byte);
-		void (*rudder)(byte);
-		//pulseIn Callbacks
-		void (*pulseIn1)(long);
-		void (*pulseIn2)(long);
-		void (*pulseIn3)(long);
-		void (*pulseIn4)(long);
-		void (*pulseIn5)(long);
-		void (*pulseIn6)(long);
-		void (*pulseIn7)(long);
-		void (*pulseIn8)(long);
-		void (*pulseIn9)(long);
-		void (*pulseIn10)(long);
-		//digital Read Callbacks
-		void (*digitalRead1)(byte);
-		void (*digitalRead2)(byte);
-		void (*digitalRead3)(byte);
-		void (*digitalRead4)(byte);
-		void (*digitalRead5)(byte);
-		void (*digitalRead6)(byte);
-		void (*digitalRead7)(byte);
-		void (*digitalRead8)(byte);
-		void (*digitalRead9)(byte);
-		void (*digitalRead10)(byte);
-		//analog Read Callbacks
-		void (*analogRead1)(byte);
-		void (*analogRead2)(byte);
-		void (*analogRead3)(byte);
-		void (*analogRead4)(byte);
-		//AP callbacks
-		//Xbee Callbacks
-		
+  public:
+    //SPI Callbacks
+    void (*transfer)(byte);
+    //I2C Callbacks
+    void (*i2cRead)(byte); 
+    //GPS callbacks
+    void (*longitude)(float);
+    void (*latitude)(float);
+    void (*altitude)(float);
+    void (*speed)(float);
+    void (*satellite)(byte);
+    void (*orientation)(float);
+    //RC Callbacks
+    void (*flightMode)(byte);
+    void (*elevator)(byte);
+    void (*aileron)(byte);
+    void (*throttle)(byte);
+    void (*rudder)(byte);
+    //pulseIn Callbacks
+    void (*pulseIn1)(long);
+    void (*pulseIn2)(long);
+    void (*pulseIn3)(long);
+    void (*pulseIn4)(long);
+    void (*pulseIn5)(long);
+    void (*pulseIn6)(long);
+    void (*pulseIn7)(long);
+    void (*pulseIn8)(long);
+    void (*pulseIn9)(long);
+    void (*pulseIn10)(long);
+    //digital Read Callbacks
+    void (*digitalRead1)(byte);
+    void (*digitalRead2)(byte);
+    void (*digitalRead3)(byte);
+    void (*digitalRead4)(byte);
+    void (*digitalRead5)(byte);
+    void (*digitalRead6)(byte);
+    void (*digitalRead7)(byte);
+    void (*digitalRead8)(byte);
+    void (*digitalRead9)(byte);
+    void (*digitalRead10)(byte);
+    //analog Read Callbacks
+    void (*analogRead1)(byte);
+    void (*analogRead2)(byte);
+    void (*analogRead3)(byte);
+    void (*analogRead4)(byte);
+    //AP callbacks
+    //Xbee Callbacks
+    
 };
-	
+  
 
 //\cond
 class RCTransmitService
 //\endcond
-
 {
-	friend class AvantResponseHandler;
+  friend class AvantResponseHandler;
     private:
-        bool isHwSerial0Used;
-        bool isHwSerial1Used;
-        bool isHwSerial2Used;
-        bool isHwSerial3Used;
-        bool isSwSerialUsed;
+      bool isHwSerial0Used;
+      bool isHwSerial1Used;
+      bool isHwSerial2Used;
+      bool isHwSerial3Used;
+      bool isSwSerialUsed;
 
     public:
-	    SoftwareSerial softwareSerial;
+      SoftwareSerial softwareSerial;
         RCTransmitService();
 
         /**
@@ -194,7 +193,7 @@ class RCTransmitService
         */
         RCTransmitService(int hwSerialCode);
 
-		/**
+        /**
         Method description
 
         @param data Parameter description
@@ -202,8 +201,8 @@ class RCTransmitService
         @param actionID Parameter description
         */
         void sendData(int data, uint8_t resourceID, uint8_t actionID);
-		
-		/**
+    
+        /**
         Method description
 
         @param data Parameter description
@@ -215,36 +214,35 @@ class RCTransmitService
         /**
         Method description
         */
-		void print(String data);
+        void print(String data);
         
         /**
         Method description
         */
-		void write(byte data);
+        void write(byte data);
 
         /**
         Method description
         */
-		void readBytes(char *buffer, int bytesToRead);
+        void readBytes(char *buffer, int bytesToRead);
 };
 
 //\cond
 class AvantResponseHandler
 //\endcond
 {
-	private:
-		RCTransmitService *service;
-		Callback *myCallback;
-		float dataToFloat(byte data[]);
-		long  dataToLong(byte data[]);
-	public:
-		AvantResponseHandler();
-		AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback);
-		void responseHandler();
-		void callbackTest(byte test){
-			myCallback->i2cRead(test);
-		}
-		
+  private:
+    RCTransmitService *service;
+    Callback *myCallback;
+    float dataToFloat(byte data[]);
+    long  dataToLong(byte data[]);
+  public:
+    AvantResponseHandler();
+    AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback);
+    void responseHandler();
+    void callbackTest(byte test){
+      myCallback->i2cRead(test);
+    }   
 };
 
 class AvantTransmitter 
@@ -262,137 +260,138 @@ class AvantTransmitter
 
 */
 {
-    private:
-		int elevatorPin;
-        int AileronPin;
-        int throttlePin;
-        int rudderPin;
-        int flightModePin;
-		
-		int elevatorMax;
-		int elevatorMin;
-		int aileronMax;
-		int aileronMin;
-		int throttleMax;
-		int throttleMin;
-		int rudderMax;
-		int rudderMin;
-		
-        //\cond
-		RCTransmitService *service;
-        //\endcond
-    public:
-        AvantTransmitter();
-        //\cond
-		AvantTransmitter(RCTransmitService *rcService);
-        //\endcond
-        /**
-        Sets the analogue pin that the Elevator potentiometer is connected to.
+  private:
+    int elevatorPin;
+    int AileronPin;
+    int throttlePin;
+    int rudderPin;
+    int flightModePin;
+    
+    int elevatorMax;
+    int elevatorMin;
+    int aileronMax;
+    int aileronMin;
+    int throttleMax;
+    int throttleMin;
+    int rudderMax;
+    int rudderMin;
+    
+    //\cond
+    RCTransmitService *service;
+    //\endcond
+  public:
+    AvantTransmitter();
+    //\cond
+    AvantTransmitter(RCTransmitService *rcService);
+    //\endcond
 
-        @param pin Hardware pin number.
-        */
-		void setElevatorPin(int pin);
-		
-        /**
-        Returns the analogue pin that the Aileron potentiometer is connected to.
-         
-        @returns Returns the pin value
-        */
-		int getElevatorPin();
-		
-        /**
-        Sets the analogue pin that the Aileron potentiometer is connected to.
-         
-        @param pin number of the hardware pin you connected it to.
-        */
-		void setAileronPin(int pin);
-		
-        /**
-        Returns the analogue pin that the Aileron potentiometer is connected to.
-         
-        @returns Returns the pin value
-        */
-		int getAileronPin();
-		
-        /**
-        Sets the analogue pin that the Throttle potentiometer is connected to.
-         
-        @param pin number of the hardware pin you connected it to.
-        */
-		void setThrottlePin(int pin);
-		
-        /**
-        Returns the analogue pin that the Elevator potentiometer is connected to.
+    /**
+    Sets the analogue pin that the Elevator potentiometer is connected to.
+
+    @param pin Hardware pin number.
+    */
+    void setElevatorPin(int pin);
+  
+    /**
+    Returns the analogue pin that the Aileron potentiometer is connected to.
      
-        @returns Returns the pin value
-        */
-		int getThrottlePin();
-		
-        /**
-        Sets the analogue pin that the Rudder potentiometer is connected to.
+    @returns Returns the pin value
+    */
+    int getElevatorPin();
+  
+    /**
+    Sets the analogue pin that the Aileron potentiometer is connected to.
      
-        @param pin number of the hardware pin you connected it to.
-        */
-		void setRudderPin(int pin);
-		
-        /**
-        Returns the analogue pin that the Rudder potentiometer is connected to.
+    @param pin number of the hardware pin you connected it to.
+    */
+    void setAileronPin(int pin);
+  
+    /**
+    Returns the analogue pin that the Aileron potentiometer is connected to.
      
-        @returns Returns the pin value
-        */
-		int getRudderPin();
-		
-        /**
-        Sets the analogue pin that the Flight Mode potentiometer is connected to.
+    @returns Returns the pin value
+    */
+    int getAileronPin();
+  
+    /**
+    Sets the analogue pin that the Throttle potentiometer is connected to.
      
-        @param pin number of the hardwer pin you connected it to.
-        */
-		void setFlightModePin(int pin);
-		
-        /**
-        Returns the analogue pin that the Flight Mode potentiometer is connected to.
-     
-        @return Returns the pin value
-        */
-		int getFlightModePin();
-		
-        /**
-        Reads all of the analogue values, maps the value to between -100 and 100, and sends the 
-		values using the sendRTEA function.
-        */
-		void sendSticks();
-		
-		/**
-        Sets the values that sendSticks() uses for mapping.  
-     
-        @param min The analogue value that the arduino reads when the stick position is all the way down.
-		@param max The analogue value that the arduino reads when the stick position is all the way up. 
-        */
-		void throttleEndpoints(uint8_t min, uint8_t max);
-		
-		/**
-        Sets the values that sendSticks() uses for mapping.  
-     
-        @param min The analogue value that the arduino reads when the stick position is all the way down.
-		@param max The analogue value that the arduino reads when the stick position is all the way up. 
-        */
-		void rudderEndpoints(uint8_t min, uint8_t max);
-		
-		/**
-        Sets the values that sendSticks() uses for mapping.  
-     
-        @param min The analogue value that the arduino reads when the stick position is all the way down.
-		@param max The analogue value that the arduino reads when the stick position is all the way up. 
-        */
-		void aileronEndpoints(uint8_t min, uint8_t max);
-		
-		/**
-        Sets the values that sendSticks() uses for mapping.  
-     
-        @param min The analogue value that the arduino reads when the stick position is all the way down.
-		@param max The analogue value that the arduino reads when the stick position is all the way up. 
-        */
-		void elevatorEndpoints(uint8_t min, uint8_t max);
+    @param pin number of the hardware pin you connected it to.
+    */
+    void setThrottlePin(int pin);
+  
+    /**
+    Returns the analogue pin that the Elevator potentiometer is connected to.
+ 
+    @returns Returns the pin value
+    */
+    int getThrottlePin();
+  
+    /**
+    Sets the analogue pin that the Rudder potentiometer is connected to.
+ 
+    @param pin number of the hardware pin you connected it to.
+    */
+    void setRudderPin(int pin);
+  
+    /**
+    Returns the analogue pin that the Rudder potentiometer is connected to.
+ 
+    @returns Returns the pin value
+    */
+    int getRudderPin();
+  
+    /**
+    Sets the analogue pin that the Flight Mode potentiometer is connected to.
+ 
+    @param pin number of the hardwer pin you connected it to.
+    */
+    void setFlightModePin(int pin);
+  
+    /**
+    Returns the analogue pin that the Flight Mode potentiometer is connected to.
+ 
+    @return Returns the pin value
+    */
+    int getFlightModePin();
+  
+    /**
+    Reads all of the analogue values, maps the value to between -100 and 100, and sends the 
+    values using the sendRTEA function.
+    */
+    void sendSticks();
+  
+    /**
+    Sets the values that sendSticks() uses for mapping.  
+   
+    @param min The analogue value that the arduino reads when the stick position is all the way down.
+    @param max The analogue value that the arduino reads when the stick position is all the way up. 
+    */
+    void throttleEndpoints(uint8_t min, uint8_t max);
+  
+    /**
+    Sets the values that sendSticks() uses for mapping.  
+   
+    @param min The analogue value that the arduino reads when the stick position is all the way down.
+    @param max The analogue value that the arduino reads when the stick position is all the way up. 
+    */
+    void rudderEndpoints(uint8_t min, uint8_t max);
+  
+    /**
+    Sets the values that sendSticks() uses for mapping.  
+   
+    @param min The analogue value that the arduino reads when the stick position is all the way down.
+    @param max The analogue value that the arduino reads when the stick position is all the way up. 
+    */
+    void aileronEndpoints(uint8_t min, uint8_t max);
+  
+    /**
+    Sets the values that sendSticks() uses for mapping.  
+   
+    @param min The analogue value that the arduino reads when the stick position is all the way down.
+    @param max The analogue value that the arduino reads when the stick position is all the way up. 
+    */
+    void elevatorEndpoints(uint8_t min, uint8_t max);
 };
 
 class AvantXbee
@@ -406,27 +405,27 @@ class AvantXbee
 
 */
  {
-	private:
-        //\cond
-		RCTransmitService *service;
-		Callback *myCallback;
-        //\endcond
-    public:
-		AvantXbee();
-        //\cond
-		AvantXbee(RCTransmitService *rcTservice, Callback *callback);
-        //\endcond
+  private:
+    //\cond
+    RCTransmitService *service;
+    Callback *myCallback;
+    //\endcond
+  public:
+    AvantXbee();
+    //\cond
+    AvantXbee(RCTransmitService *rcTservice, Callback *callback);
+    //\endcond
 
-        /// modulation rate in symbols per second, default is 115200
-        int baud;
-		
-        /**
-        Sets the PanID of the Xbee connected to the arduino to (int id). It accepts values between 0 and 0xFF.
-        
-        @param id int
-        @returns -1 if there was an error with setting the PanID and 1 if it was successful.
-        */
-        void id(uint8_t id);
+    /// modulation rate in symbols per second, default is 115200
+    int baud;
+    
+    /**
+    Sets the PanID of the Xbee connected to the arduino to (int id). It accepts values between 0 and 0xFF.
+    
+    @param id int
+    @returns -1 if there was an error with setting the PanID and 1 if it was successful.
+    */
+    void id(uint8_t id);
 };
 
 class AvantPose
@@ -437,116 +436,116 @@ class AvantPose
  
  */
 {
-	private:
+  private:
         //\cond
-		RCTransmitService *service;
-		Callback *myCallback;
+    RCTransmitService *service;
+    Callback *myCallback;
         //\endcond
-	public:
-		AvantPose();
-        //\cond
-		AvantPose(RCTransmitService *rcTservice, Callback *callback);
-        //\endcond
+  public:
+    AvantPose();
+    //\cond
+    AvantPose(RCTransmitService *rcTservice, Callback *callback);
+    //\endcond
 
-        /**
+    /**
          
-        This sends only one message to request all of the POSE data. 
-		The Extender will reply with 6 messages containing Long, Lat, number of Sat, Speed, Orientation, and Altitude
+    This sends only one message to request all of the POSE data. 
+    The Extender will reply with 6 messages containing Long, Lat, number of Sat, Speed, Orientation, and Altitude
          
-        */
-		void getGPSData();
-		
-        /**
+    */
+    void getGPSData();
+    
+    /**
          
-        Sends a request to the Extender asking for it to reply with the vehicles current Longitude
-		The response gets handled through the callback function longitudeCallbackCallback().
+    Sends a request to the Extender asking for it to reply with the vehicles current Longitude
+    The response gets handled through the callback function longitudeCallbackCallback().
          
-         */
-        void getLongitude();
-		
-        /**
+    */
+    void getLongitude();
+    
+    /**
          
-        Sends a request to the Extender asking for it to reply with the vehicles current Latitude.
-		The response gets handled through the callback function latitudeCallback().
+    Sends a request to the Extender asking for it to reply with the vehicles current Latitude.
+    The response gets handled through the callback function latitudeCallback().
          
-         */
-        void getLatitude();
-		
-        /**
+    */
+    void getLatitude();
+    
+    /**
          
-        Sends a request to the Extender asking for it to reply with the vehicles current Altitude.
-		The response gets handled through the callback function altitudeCallback().
+    Sends a request to the Extender asking for it to reply with the vehicles current Altitude.
+    The response gets handled through the callback function altitudeCallback().
          
-         */
-        void getAltitude();
-		
-        /**
+    */
+    void getAltitude();
+    
+    /**
          
-        Sends a request to the Extender asking for it to reply with the current number of satellites the vehicles
-		GPS is locked onto.
-		The response gets handled through the callback function satelliteCallback().
-         The more satellites you have the higher the accuracy is.  There needs to be a minimum of 4 satellites to get a lock.  
+    Sends a request to the Extender asking for it to reply with the current number of satellites the vehicles
+    GPS is locked onto.
+    The response gets handled through the callback function satelliteCallback().
+    The more satellites you have the higher the accuracy is.  There needs to be a minimum of 4 satellites to get a lock.  
          
-         */
-        void getSatellites();
-		
-        /**
+    */
+    void getSatellites();
+    
+    /**
          
-        Sends a request to the Extender asking for it to reply with the vehicles current Land Speed given by the GPS.
-		The response gets handled through the callback function speedCallback().
+    Sends a request to the Extender asking for it to reply with the vehicles current Land Speed given by the GPS.
+    The response gets handled through the callback function speedCallback().
          
-         */
-        void getSpeed();
-		
-        /**
+    */
+    void getSpeed();
+    
+    /**
          
-        Sends a request to the Extender asking for it to reply with the vehicles current Orientation given by the Compass.
-		The response gets handled through the callback function orientationCallback().
+    Sends a request to the Extender asking for it to reply with the vehicles current Orientation given by the Compass.
+    The response gets handled through the callback function orientationCallback().
          
-         */
-        void getOrientation();
-		
-        /**
+    */
+    void getOrientation();
+    
+    /**
          
-        Callback function which passes longitude information to the function that it is passed.
+    Callback function which passes longitude information to the function that it is passed.
          
-         */
-        void longitudeCallback(void (*function)(float));
-		
-        /**
+    */
+    void longitudeCallback(void (*function)(float));
+    
+    /**
          
-        Callback function which passes latitude information to the function that it is passed.
+    Callback function which passes latitude information to the function that it is passed.
          
-         */
-        void latitudeCallback(void (*function)(float));
-		
-        /**
+    */
+    void latitudeCallback(void (*function)(float));
+    
+    /**
          
-        Callback function which passes altitude information to the function that it is passed.
+    Callback function which passes altitude information to the function that it is passed.
          
-         */
-        void altitudeCallback(void (*function)(float));
-		
-        /**
+    */
+    void altitudeCallback(void (*function)(float));
+    
+    /**
          
-        Callback function which passes number of locked satellites to the function that it is passed.
+    Callback function which passes number of locked satellites to the function that it is passed.
          
-         */
-        void satelliteCallback(void (*function)(byte));
-		
-        /**
+    */
+    void satelliteCallback(void (*function)(byte));
+    
+    /**
          
-        Callback function which passes speed information to the function that it is passed.
+    Callback function which passes speed information to the function that it is passed.
          
-         */
-        void speedCallback(void (*function)(float));
-		
-        /**
+    */
+    void speedCallback(void (*function)(float));
+    
+    /**
          
-        Callback function which passes orientation information to the function that it is passed
+    Callback function which passes orientation information to the function that it is passed
          
-         */
-        void orientationCallback(void (*function)(float));
+    */
+    void orientationCallback(void (*function)(float));
 };
 
 class AvantRC //handles sending values to the PWM/PPM port(s) 
@@ -557,138 +556,138 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
  
 */
 {
-    private:
-        //\cond
-        RCTransmitService *service;
-		Callback *myCallback;
-        //\endcond
-    public:
-        AvantRC();
-        //\cond
-        AvantRC(RCTransmitService *rcTservice, Callback *callback);
-        //\endcond
-		
-        /**
-		
-        Sends a request to the extender to set the Aileron channel to a specific channel between -100 and 100.  
-		
-		@param value The value to set the Aileron channel to
+  private:
+    //\cond
+    RCTransmitService *service;
+    Callback *myCallback;
+    //\endcond
+  public:
+    AvantRC();
+    //\cond
+    AvantRC(RCTransmitService *rcTservice, Callback *callback);
+    //\endcond
+    
+    /**
+    
+    Sends a request to the extender to set the Aileron channel to a specific channel between -100 and 100.  
+    
+    @param value The value to set the Aileron channel to
 
-        */
-        void setAileron(int value);
-		
-        /**
+    */
+    void setAileron(int value);
+    
+    /**
          
-        Sends a request to the extender to set the Extender channel to a specific channel between -100 and 100.  
-		
-		@param value The value to set the Extender channel to
+    Sends a request to the extender to set the Extender channel to a specific channel between -100 and 100.  
+    
+    @param value The value to set the Extender channel to
         
-         */
-        void setElevator(int value);
-		
-        /**
+    */
+    void setElevator(int value);
+    
+    /**
         
-        Sends a request to the extender to set the Throttle channel to a specific channel between -100 and 100.  
-		
-		@param value The value to set the Throttle channel to
+    Sends a request to the extender to set the Throttle channel to a specific channel between -100 and 100.  
+    
+    @param value The value to set the Throttle channel to
          
-         */
-        void setThrottle(int value);
-		
-        /**
+    */
+    void setThrottle(int value);
+    
+    /**
          
-        Sends a request to the extender to set the Rudder channel to a specific channel between -100 and 100.  
-		
-		@param value The value to set the Rudder channel to
+    Sends a request to the extender to set the Rudder channel to a specific channel between -100 and 100.  
+    
+    @param value The value to set the Rudder channel to
          
-         */
-        void setRudder(int value);
-		
-        /**
+    */
+    void setRudder(int value);
+    
+    /**
          
-        Sends a request to the extender to set the Flight Mode channel to a specific channel between -100 and 100.  
-		
-		@param value The value to set the Flight Mode channel to
+    Sends a request to the extender to set the Flight Mode channel to a specific channel between -100 and 100.  
+    
+    @param value The value to set the Flight Mode channel to
          
-         */
-        void setFlightMode(int value);
-		
-        /**
+    */
+    void setFlightMode(int value);
+    
+    /**
          
-        Sends a request to the extender to reply with message containing the current Aileron value.  
+    Sends a request to the extender to reply with message containing the current Aileron value.  
          
-         */
-        void getAileron();
-		
-        /**
+    */
+    void getAileron();
+    
+    /**
 
-		Sends a request to the extender to reply with message containing the current Elevator value. 
+    Sends a request to the extender to reply with message containing the current Elevator value. 
         
-         */
-        void getElevator();
-		
-        /**
+    */
+    void getElevator();
+    
+    /**
          
-        Sends a request to the extender to reply with message containing the current Throttle value. 
+    Sends a request to the extender to reply with message containing the current Throttle value. 
         
-         */
-        void getThrottle();
-		
-        /**
+    */
+    void getThrottle();
+    
+    /**
         
-        Sends a request to the extender to reply with message containing the current Rudder value. 
+    Sends a request to the extender to reply with message containing the current Rudder value. 
         
-         */
-        void getRudder();
-		
-        /**
+    */
+    void getRudder();
+    
+    /**
         
-        Sends a request to the extender to reply with message containing the current Flight Mode value. 
+    Sends a request to the extender to reply with message containing the current Flight Mode value. 
         
-         */
-        void getFlightMode();
-		
-        /**
+    */
+    void getFlightMode();
+    
+    /**
          
-         Execute funtion in a thread to not freez the drone.
+    Execute funtion in a thread to not freez the drone.
          
-         */
-		void aileronCallback(void (*function)(byte));
-		
-        /**
+    */
+    void aileronCallback(void (*function)(byte));
+    
+    /**
+
+    Execute funtion in a thread to not freez the drone.
          
-         Execute funtion in a thread to not freez the drone.
+    */
+    void flightModeCallback(void (*function)(byte));
+    
+    /**
          
-         */
-		void flightModeCallback(void (*function)(byte));
-		
-        /**
+    Execute funtion in a thread to not freez the drone.
          
-         Execute funtion in a thread to not freez the drone.
+    */
+    void throttleCallback(void (*function)(byte));
+    
+    /**
          
-         */
-		void throttleCallback(void (*function)(byte));
-		
-        /**
+    Execute funtion in a thread to not freez the drone.
          
-         Execute funtion in a thread to not freez the drone.
-         
-         */
-		void rudderCallback(void (*function)(byte));
-		
-        /**
-         
-         Execute funtion in a thread to not freez the drone.
-         
-         */
-		void elevatorCallback(void (*function)(byte));
-		
-        /**
-         
-         Execute funtion in a thread to not freez the drone.
-         
-         */
-		void sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron);
+    */
+    void rudderCallback(void (*function)(byte));
+    
+    /**
+     
+    Execute funtion in a thread to not freez the drone.
+     
+    */
+    void elevatorCallback(void (*function)(byte));
+    
+    /**
+     
+    Execute funtion in a thread to not freez the drone.
+     
+    */
+    void sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron);
 };
 
 class AvantGPIO
@@ -702,109 +701,109 @@ class AvantGPIO
  
 */
 {
-	private:
-        //\cond
-		RCTransmitService *service;
-		Callback *myCallback;
-        //\endcond
-	public:
-		AvantGPIO();
-        //\cond
-		AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
-        //\endcond
+  private:
+    //\cond
+    RCTransmitService *service;
+    Callback *myCallback;
+    //\endcond
+  public:
+    AvantGPIO();
+    //\cond
+    AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
+    //\endcond
 
 
-        /**
+    /**
      
-		Configures the specified pin on the App Extender to behave either as an input or an output.
-		
+    Configures the specified pin on the App Extender to behave either as an input or an output.
+    
      
-         @param pin value expected 0 to 10
-         @param logicLevel expected 0 or 1
+    @param pin value expected 0 to 10
+    @param logicLevel expected 0 or 1
      
-         */
-		void pinMode(uint8_t pin, int logicLevel);
+    */
+    void pinMode(uint8_t pin, int logicLevel);
 
-        /**
-     
-        Write a HIGH or LOW value to a digital pin on the App Extender.
-     
-         @param pin value expected 0 to 10
-         @param logicLevel expected 0 or 1
-     
-         */
-		void digitalWrite(uint8_t pin,bool logicLevel);
+    /**
+ 
+    Write a HIGH or LOW value to a digital pin on the App Extender.
+ 
+    @param pin value expected 0 to 10
+    @param logicLevel expected 0 or 1
+ 
+    */
+    void digitalWrite(uint8_t pin,bool logicLevel);
 
-        /**
+    /**
+ 
+    Writes an analog value (PWM wave) to the specified pin on the App Extender. 
+ 
+    @param pin sets pins 1-10 on the App Extender to the PWM value specified by value
+    @param value sets the PWM values duty cycle ranging from 0 and 255 
+ 
+    */
+    void analogWrite(uint8_t pin, uint8_t value);
+    
+    /**
      
-        Writes an analog value (PWM wave) to the specified pin on the App Extender. 
-     
-         @param pin sets pins 1-10 on the App Extender to the PWM value specified by value
-         @param value sets the PWM values duty cycle ranging from 0 and 255 
-     
-         */
-		void analogWrite(uint8_t pin, uint8_t value);
-		
-		/**
-     
-        Writes an a request to the Extender to check the duration of a pulse on the specified pin.
-     
-         @param pin sets pins 1-10 on the App Extender to the PWM value specified by value 
-     
-         */
-		void pulseIn(uint8_t pin);
-		
+    Writes an a request to the Extender to check the duration of a pulse on the specified pin.
+ 
+    @param pin sets pins 1-10 on the App Extender to the PWM value specified by value 
+ 
+    */
+    void pulseIn(uint8_t pin);
+    
 
-        /**
+    /**
+ 
+    Sends a request to the App Extender to reply with the logical state of the specified pin.  
+ 
+    @param pin Selects which GPIO pin on the App Extender it should return.
+ 
+    */
+    void digitalRead(uint8_t pin);
+    
+    /**
      
-        Sends a request to the App Extender to reply with the logical state of the specified pin.  
-     
-         @param pin Selects which GPIO pin on the App Extender it should return.
-     
-         */
-		void digitalRead(uint8_t pin);
-		
-		/**
-     
-        Sends a request to the App Extender to reply with the analog value of the specified pin.  
-     
-         @param pin Selects which analog pin on the App Extender it should return.
-     
-         */
-		void analogRead(uint8_t pin);
+    Sends a request to the App Extender to reply with the analog value of the specified pin.  
+ 
+    @param pin Selects which analog pin on the App Extender it should return.
+ 
+    */
+    void analogRead(uint8_t pin);
 
-        /**
+    /**
+ 
+    This callback function is executed everytime it gets digitalRead information.  It passes
+    this information to the function specified in the argument.
+ 
+    @param function function name of the function to pass received information to
+    @param pin the desired pin to sample logic level information from 
+ 
+    */
+    void digitalReadCallback(void (*function)(byte), int pin);
+    
+    /**
+    
+    This callback function is executed every time it gets pulseIn information.  It passes
+    this information to the function specified in the argument.
      
-        This callback function is executed everytime it gets digitalRead information.  It passes
-		this information to the function specified in the argument.
+    @param function name of the function to pass received information to
+    @param pin the desired pin to sample pulseIn information from 
      
-         @param function function name of the function to pass received information to
-		 @param pin the desired pin to sample logic level information from 
+    */
+    void pulseInCallback(void (*function)(long), uint8_t pin);
+    
+    /**
      
-         */
-		void digitalReadCallback(void (*function)(byte), int pin);
-		
-		/**
-		
-		This callback function is executed every time it gets pulseIn information.  It passes
-		this information to the function specified in the argument.
+    This callback function is executed every time it gets analogRead information.  It passes
+    this information to the function specified in the argument.
      
-         @param function name of the function to pass received information to
-		 @param pin the desired pin to sample pulseIn information from 
+    @param function function name of the function to pass received information to
+    @param pin the desired pin to sample analog information from 
      
-         */
-		void pulseInCallback(void (*function)(long), uint8_t pin);
-		
-		/**
-     
-        This callback function is executed every time it gets analogRead information.  It passes
-		this information to the function specified in the argument.
-     
-         @param function function name of the function to pass received information to
-		 @param pin the desired pin to sample analog information from 
-     
-         */
-		void analogReadCallback(void (*function)(byte), uint8_t pin);
+    */
+    void analogReadCallback(void (*function)(byte), uint8_t pin);
 };
 
 class AvantI2C
@@ -821,83 +820,82 @@ class AvantI2C
  
  */
 {
-	private:
-        //\cond
-		RCTransmitService *service;
-		Callback *myCallback;
-        //\endcond
-	public:
-		AvantI2C();
-        //\cond
-		AvantI2C(RCTransmitService *rcTservice, Callback *callback);
-        //\endcond
+  private:
+    //\cond
+    RCTransmitService *service;
+    Callback *myCallback;
+    //\endcond
+  public:
+    AvantI2C();
+    //\cond
+    AvantI2C(RCTransmitService *rcTservice, Callback *callback);
+    //\endcond
 
-		/**
+    /**
          
-        This sets the address of the device that the App Extender sends data too.
-		This address will be continuously used by beginTransmission, write, read, and wireRequest
-		until it is reset to a different value.  
+    This sets the address of the device that the App Extender sends data too.
+    This address will be continuously used by beginTransmission, write, read, and wireRequest
+    until it is reset to a different value.  
         
-         @param ID range from 0 to 255
+    @param ID range from 0 to 255
         
-         */
-		void deviceID(uint8_t ID);
-		
-        /**
+    */
+    void deviceID(uint8_t ID);
     
-        Begin a transmission to the I2C slave device with the address specified by deviceID(ID)
-		Subsequently, queue bytes for transmission with the write() function and transmit them
-		by calling endTransmission().
-        
-         */
-		void beginTransmission(void);
-		
-        /**
+    /**
     
-        Ends a transmission to a slave device that was begun by beginTransmission() and transmits
-		the bytes that were queued by write().
-         
-         */
-		void endTransmission(void);
-		
-        /**
-         
-        Queues bytes for transmission from the App Extender to a slave device, in between calls to 
-		beginTransmission() and endTransmission().  
+    Begin a transmission to the I2C slave device with the address specified by deviceID(ID)
+    Subsequently, queue bytes for transmission with the write() function and transmit them
+    by calling endTransmission().
         
-         @param data Adds one byte of information to the queue
-        
-         */
-		void write(uint8_t data);
-		
-        /**
-        
-        Sends a request to the App Extender to read one byte of information from the I2C buffer and return 
-		the information to the arduino.  The relpies are handled by the readCallback() function.  
-         
-        
-         */
-		void read(void);
-		
-        /**
+    */
+    void beginTransmission(void);
     
-        Sends a request to the App Extender to read multiple bytes of information from the I2C buffer and return 
-		the information to the arduino. The relpies are handled by the readCallback() function.  
-        
-         @param bytes Sets the number of bytes to read from the I2C buffer
-        
-         */
-		void wireRequest(uint8_t bytes);
-		
-        /**
-         
-        This callback function is executed everytime it gets I2C information.  It passes
-		this information to the function specified in the argument.
-        
-         @param function name of the method
+    /**
     
-         */
-		void readCallback(void (*function)(byte));
+    Ends a transmission to a slave device that was begun by beginTransmission() and transmits
+    the bytes that were queued by write().
+         
+    */
+    void endTransmission(void);
+    
+    /**
+         
+    Queues bytes for transmission from the App Extender to a slave device, in between calls to 
+    beginTransmission() and endTransmission().  
+        
+    @param data Adds one byte of information to the queue
+        
+    */
+    void write(uint8_t data);
+    
+    /**
+
+    Sends a request to the App Extender to read one byte of information from the I2C buffer and return 
+    the information to the arduino.  The relpies are handled by the readCallback() function.  
+       
+    */
+    void read(void);
+    
+    /**
+    
+    Sends a request to the App Extender to read multiple bytes of information from the I2C buffer and return 
+    the information to the arduino. The relpies are handled by the readCallback() function.  
+        
+    @param bytes Sets the number of bytes to read from the I2C buffer
+        
+    */
+    void wireRequest(uint8_t bytes);
+    
+    /**
+         
+    This callback function is executed everytime it gets I2C information.  It passes
+    this information to the function specified in the argument.
+        
+    @param function name of the method
+    
+    */
+    void readCallback(void (*function)(byte));
 };
 
 class AvantSPI 
@@ -910,62 +908,61 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
  
 */
 {
-	private:
-        //\cond
-		RCTransmitService *service;
-		Callback *myCallback;
-        //\endcond
-	public:
-		AvantSPI();
-        //\cond
-		AvantSPI(RCTransmitService *rcTservice, Callback *callback);
-        //\endcond
+  private:
+    //\cond
+    RCTransmitService *service;
+    Callback *myCallback;
+    //\endcond
+  public:
+    AvantSPI();
+    //\cond
+    AvantSPI(RCTransmitService *rcTservice, Callback *callback);
+    //\endcond
 
-        /**
+    /**
 
-        Transfers one byte of information from the App Extender over the SPI bus.
+    Transfers one byte of information from the App Extender over the SPI bus.
 
-        @param data the information to pass to the slave device.
+    @param data the information to pass to the slave device.
 
-        */
-		void transfer(byte data);
+    */
+    void transfer(byte data);
 
-        /**
-		
-		Sets the order of the bits shifter out of the SPI bus, either LSBFIRST or MSBFIRST
+    /**
+    
+    Sets the order of the bits shifter out of the SPI bus, either LSBFIRST or MSBFIRST
 
-        @param data Specifies either LSBFIRST or MSBFIRST
+    @param data Specifies either LSBFIRST or MSBFIRST
 
-        */
-		void setBitOrder(byte data);
+    */
+    void setBitOrder(byte data);
 
-        /**
+    /**
 
-        Sets the SPI clock divider relative to the system clock.  Available dividers include 2, 4, 8, 16, 32, 64, and 128.
-		The default setting is 4.
+    Sets the SPI clock divider relative to the system clock.  Available dividers include 2, 4, 8, 16, 32, 64, and 128.
+    The default setting is 4.
 
-        @param data Determines which divider to use
+    @param data Determines which divider to use
 
-        */
-		void setClockDivider(byte data);
+    */
+    void setClockDivider(byte data);
 
-        /**
+    /**
 
-        Sets the SPI data mode: that is, clock polarity and phase.  There are 4 possible modes 0-3.  
-		
+    Sets the SPI data mode: that is, clock polarity and phase.  There are 4 possible modes 0-3.  
+    
+    @param data Sets the SPI mode.
 
-        @param data Sets the SPI mode.
+    */
+    void setDataMode(byte data);
 
-        */
-		void setDataMode(byte data);
-
-        /**
+    /**
          
-        This callback function is executed everytime it gets SPI information.  It passes
-		this information to the function specified in the argument.
+    This callback function is executed everytime it gets SPI information.  It passes
+    this information to the function specified in the argument.
          
-         */
-		void transferCallback(void (*function)(byte));
+    */
+    void transferCallback(void (*function)(byte));
 };
 
 //\cond
@@ -973,30 +970,28 @@ class Avant
 //\endcond
 {
     private:
-        AvantTransmitter avantTransmitter;
-        AvantRC avantRC;
-		AvantXbee avantXbee;
-        RCTransmitService rcService;
-		AvantGPIO avantGPIO;
-		AvantResponseHandler responseHandler;
-		AvantI2C avantI2C;
-		Callback callback;
-		AvantPose avantPose;
-		AvantSPI avantSPI;
+      AvantTransmitter avantTransmitter;
+      AvantRC avantRC;
+      AvantXbee avantXbee;
+      RCTransmitService rcService;
+      AvantGPIO avantGPIO;
+      AvantResponseHandler responseHandler;
+      AvantI2C avantI2C;
+      Callback callback;
+      AvantPose avantPose;
+      AvantSPI avantSPI;
     public:
-        Avant();
-        Avant(int hardwareSerialCode);
-        Avant(int txPin, int rxPin);
-        AvantTransmitter& transmitter();
-        AvantRC& RC();
-		AvantGPIO& GPIO();
-		AvantI2C& I2C();
-		AvantXbee& xbee();
-		AvantPose& pose();
-		AvantResponseHandler& avantResponseHandler();
-		AvantSPI& SPI();
-        void armDrone();
-		void initialize();
+      Avant();
+      Avant(int hardwareSerialCode);
+      Avant(int txPin, int rxPin);
+      AvantTransmitter& transmitter();
+      AvantRC& RC();
+      AvantGPIO& GPIO();
+      AvantI2C& I2C();
+      AvantXbee& xbee();
+      AvantPose& pose();
+      AvantResponseHandler& avantResponseHandler();
+      AvantSPI& SPI();
+      void armDrone();
+      void initialize();
 };
-
-
