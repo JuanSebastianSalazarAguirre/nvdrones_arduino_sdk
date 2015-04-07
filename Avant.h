@@ -202,6 +202,15 @@ class RCTransmitService
         @param actionID Parameter description
         */
         void sendData(int data, uint8_t resourceID, uint8_t actionID);
+		
+		/**
+        Method description
+
+        @param data Parameter description
+        @param resourceID Parameter description
+        @param actionID Parameter description
+        */
+        void sendData(uint8_t data, uint8_t resourceID, uint8_t actionID);
 
         /**
         Method description
@@ -714,7 +723,7 @@ class AvantGPIO
          @param logicLevel expected 0 or 1
      
          */
-		void pinMode(uint8_t pin, bool logicLevel);
+		void pinMode(uint8_t pin, int logicLevel);
 
         /**
      

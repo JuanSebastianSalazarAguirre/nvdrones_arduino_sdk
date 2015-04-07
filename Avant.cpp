@@ -88,15 +88,15 @@ void Avant::initialize() {
 }
 
 void Avant::armDrone() {
-    rcService.sendData(-100, 2, 1);
-    rcService.sendData(-100, 2, 2);
-    rcService.sendData(-100, 2, 3);
-    rcService.sendData(-100, 2, 4);
+    rcService.sendData((int)-100, 2, 1);
+    rcService.sendData((int)-100, 2, 2);
+    rcService.sendData((int)-100, 2, 3);
+    rcService.sendData((int)-100, 2, 4);
     delay(500);
-    rcService.sendData(0, 2, 1);
-    rcService.sendData(-100, 2, 2);
-    rcService.sendData(0, 2, 3);
-    rcService.sendData(0, 2, 4);
+    rcService.sendData((int)0, 2, 1);
+    rcService.sendData((int)-100, 2, 2);
+    rcService.sendData((int)0, 2, 3);
+    rcService.sendData((int)0, 2, 4);
 }
 
 
@@ -207,6 +207,55 @@ void RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID)
         softwareSerial.write(highByte(data));
         softwareSerial.write(lowByte(data));
         softwareSerial.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+    }
+}
+
+void RCTransmitService::sendData(uint8_t data, uint8_t resourceID, uint8_t actionID) {
+    if (isHwSerial0Used) {
+        #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+            Serial.write('$');
+            Serial.write(1);
+            Serial.write(byte(resourceID));
+            Serial.write(byte(actionID));
+            Serial.write(data);
+            Serial.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
+        #endif
+    } else if (isHwSerial1Used) {
+        #if defined(UBRR1H)
+            Serial1.write('$');
+            Serial1.write(1);
+            Serial1.write(byte(resourceID));
+            Serial1.write(byte(actionID));
+            Serial1.write(data);
+            Serial1.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
+        #endif
+    }
+    else if (isHwSerial2Used) {
+        #if defined(UBRR2H)
+            Serial2.write('$');
+            Serial2.write(1);
+            Serial2.write(byte(resourceID));
+            Serial2.write(byte(actionID));
+            Serial2.write(data);
+            Serial2.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
+        #endif
+    } else if (isHwSerial3Used) {
+        #if defined(UBRR3H)
+            Serial3.write('$');
+            Serial3.write(1);
+            Serial3.write(byte(resourceID));
+            Serial3.write(byte(actionID));
+            Serial3.write(data);
+            Serial3.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
+        #endif
+    } 
+    else if (isSwSerialUsed) {
+        softwareSerial.write('$');
+        softwareSerial.write(1);
+        softwareSerial.write(byte(resourceID));
+        softwareSerial.write(byte(actionID));
+        softwareSerial.write(data);
+        softwareSerial.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
     }
 }
 
@@ -447,7 +496,7 @@ void AvantGPIO::digitalWrite(uint8_t pin, bool logicLevel) {
 	service->sendData(logicLevel, 6, pin);
 }
 
-void AvantGPIO::pinMode(uint8_t pin, bool logicLevel) {
+void AvantGPIO::pinMode(uint8_t pin, int logicLevel) {
 	service->sendData(logicLevel, 5, pin);
 }
 
@@ -456,7 +505,7 @@ void AvantGPIO::digitalRead(uint8_t pin) {
 }
 
 void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
-	service->sendData(value, 8, pin);
+	service->sendData(value, 7, pin);
 }
 
 void AvantGPIO::pulseIn(uint8_t pin) {
@@ -698,10 +747,10 @@ float AvantResponseHandler::dataToFloat(byte data[]) {
 
 long AvantResponseHandler::dataToLong(byte data[]) {
  long data_long = 0;
- data_long = byte(data[0]) << 8;
- data_long = (data_long + byte(data[1])) << 8;
- data_long = (data_long + byte(data[2])) << 8;
- data_long = data_long + byte(data[3]); 
+ data_long = data[3] << 8;
+ data_long = (data_long + data[2]) << 8;
+ data_long = (data_long + data[1]) << 8;
+ data_long = data_long + data[0]; 
  return data_long;
 }
 
@@ -745,7 +794,7 @@ if(service->isHwSerial0Used) {
           }
           
           if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
-            ///////route the data to the appropriate place here
+            //route the data to the appropriate place here
             switch(resourceID) {
               case 1:
                 //Flight_Setup
@@ -901,8 +950,9 @@ if(service->isHwSerial0Used) {
 			for(int i=0;i<length;i++){
 				datasum = datasum+data[i];
 			}
-			  if(data[length]== byte((length+resourceID+actionID+datasum)%256)){  //check the checksum
-				///////route the data to the appropriate place here
+			if(data[length]== byte((length+resourceID+actionID+datasum)%256)){  //check the checksum
+				
+				//route the data to the appropriate place here
 				switch(resourceID) {
 				  case 1:
 					//Flight_Setup
