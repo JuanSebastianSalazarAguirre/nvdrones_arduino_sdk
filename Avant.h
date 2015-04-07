@@ -176,55 +176,55 @@ class RCTransmitService
 
     public:
       SoftwareSerial softwareSerial;
-        RCTransmitService();
+      RCTransmitService();
 
-        /**
-        TODO
+      /**
+      TODO
 
-        @param txPin
-        @param rxPin
-        */
-        RCTransmitService(int txPin , int rxPin);
+      @param txPin
+      @param rxPin
+      */
+      RCTransmitService(int txPin , int rxPin);
 
-        /**
-        TODO
+      /**
+      TODO
 
-        @param hwSerialCode
-        */
-        RCTransmitService(int hwSerialCode);
+      @param hwSerialCode
+      */
+      RCTransmitService(int hwSerialCode);
 
-        /**
-        Method description
+      /**
+      Method description
 
-        @param data Parameter description
-        @param resourceID Parameter description
-        @param actionID Parameter description
-        */
-        void sendData(int data, uint8_t resourceID, uint8_t actionID);
-    
-        /**
-        Method description
+      @param data Parameter description
+      @param resourceID Parameter description
+      @param actionID Parameter description
+      */
+      void sendData(int data, uint8_t resourceID, uint8_t actionID);
+  
+      /**
+      Method description
 
-        @param data Parameter description
-        @param resourceID Parameter description
-        @param actionID Parameter description
-        */
-        void sendData(uint8_t data, uint8_t resourceID, uint8_t actionID);
+      @param data Parameter description
+      @param resourceID Parameter description
+      @param actionID Parameter description
+      */
+      void sendData(uint8_t data, uint8_t resourceID, uint8_t actionID);
 
-        /**
-        Method description
-        */
-        void print(String data);
-        
-        /**
-        Method description
-        */
-        void write(byte data);
+      /**
+      Method description
+      */
+      void print(String data);
+      
+      /**
+      Method description
+      */
+      void write(byte data);
 
-        /**
-        Method description
-        */
-        void readBytes(char *buffer, int bytesToRead);
+      /**
+      Method description
+      */
+      void readBytes(char *buffer, int bytesToRead);
 };
 
 //\cond
@@ -241,7 +241,7 @@ class AvantResponseHandler
     AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback);
     void responseHandler();
     void callbackTest(byte test){
-      myCallback->i2cRead(test);
+    myCallback->i2cRead(test);
     }   
 };
 
@@ -280,8 +280,9 @@ class AvantTransmitter
     RCTransmitService *service;
     //\endcond
   public:
-    AvantTransmitter();
     //\cond
+    AvantTransmitter();
+    
     AvantTransmitter(RCTransmitService *rcService);
     //\endcond
 
@@ -294,8 +295,6 @@ class AvantTransmitter
   
     /**
     Returns the analogue pin that the Aileron potentiometer is connected to.
-     
-    @returns Returns the pin value
     */
     int getElevatorPin();
   
@@ -309,7 +308,6 @@ class AvantTransmitter
     /**
     Returns the analogue pin that the Aileron potentiometer is connected to.
      
-    @returns Returns the pin value
     */
     int getAileronPin();
   
@@ -322,8 +320,7 @@ class AvantTransmitter
   
     /**
     Returns the analogue pin that the Elevator potentiometer is connected to.
- 
-    @returns Returns the pin value
+
     */
     int getThrottlePin();
   
@@ -336,22 +333,20 @@ class AvantTransmitter
   
     /**
     Returns the analogue pin that the Rudder potentiometer is connected to.
- 
-    @returns Returns the pin value
+
     */
     int getRudderPin();
   
     /**
     Sets the analogue pin that the Flight Mode potentiometer is connected to.
  
-    @param pin number of the hardwer pin you connected it to.
+    @param pin number of the hardware pin you connected it to.
     */
     void setFlightModePin(int pin);
   
     /**
     Returns the analogue pin that the Flight Mode potentiometer is connected to.
- 
-    @return Returns the pin value
+
     */
     int getFlightModePin();
   
@@ -411,8 +406,9 @@ class AvantXbee
     Callback *myCallback;
     //\endcond
   public:
-    AvantXbee();
     //\cond
+    AvantXbee();
+    
     AvantXbee(RCTransmitService *rcTservice, Callback *callback);
     //\endcond
 
@@ -437,13 +433,14 @@ class AvantPose
  */
 {
   private:
-        //\cond
+     //\cond
     RCTransmitService *service;
     Callback *myCallback;
-        //\endcond
+    //\endcond
   public:
-    AvantPose();
     //\cond
+    AvantPose();
+    
     AvantPose(RCTransmitService *rcTservice, Callback *callback);
     //\endcond
 
@@ -562,8 +559,9 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
     Callback *myCallback;
     //\endcond
   public:
-    AvantRC();
     //\cond
+    AvantRC();
+    
     AvantRC(RCTransmitService *rcTservice, Callback *callback);
     //\endcond
     
@@ -707,8 +705,9 @@ class AvantGPIO
     Callback *myCallback;
     //\endcond
   public:
-    AvantGPIO();
     //\cond
+    AvantGPIO();
+    
     AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
     //\endcond
 
@@ -826,8 +825,9 @@ class AvantI2C
     Callback *myCallback;
     //\endcond
   public:
-    AvantI2C();
     //\cond
+    AvantI2C();
+    
     AvantI2C(RCTransmitService *rcTservice, Callback *callback);
     //\endcond
 
@@ -914,8 +914,9 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
     Callback *myCallback;
     //\endcond
   public:
-    AvantSPI();
     //\cond
+    AvantSPI();
+    
     AvantSPI(RCTransmitService *rcTservice, Callback *callback);
     //\endcond
 
