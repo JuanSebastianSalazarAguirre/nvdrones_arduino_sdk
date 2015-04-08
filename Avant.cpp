@@ -569,12 +569,12 @@ void AvantGPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
 }
 
 void AvantGPIO::detachServo(uint8_t servoNumber) {
-  uint8_t actionID = ((servoNumber - 1) * 3) + 2;
+  uint8_t actionID = ((servoNumber - 1) * 3) + 3;
   service->sendData(0, 18, actionID);
 }
 
 void AvantGPIO::writeServo(uint8_t servoNumber, uint8_t data) {
-  uint8_t actionID = ((servoNumber - 1) * 3) + 3;
+  uint8_t actionID = ((servoNumber - 1) * 3) + 2;
   service->sendData(data, 18, actionID);
 }
 
