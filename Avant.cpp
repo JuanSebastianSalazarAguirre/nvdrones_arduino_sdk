@@ -563,6 +563,21 @@ void AvantGPIO::analogReadCallback(void (*function)(byte), uint8_t pin) {
     (*myCallback).analogRead4 = function;
 }
 
+void AvantGPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
+  uint8_t actionID = ((servoNumber - 1) * 3) + 1;
+  service->sendData(pin, 18, actionID);
+}
+
+void AvantGPIO::detachServo(uint8_t servoNumber) {
+  uint8_t actionID = ((servoNumber - 1) * 3) + 2;
+  service->sendData(0, 18, actionID);
+}
+
+void AvantGPIO::writeServo(uint8_t servoNumber, uint8_t data) {
+  uint8_t actionID = ((servoNumber - 1) * 3) + 3;
+  service->sendData(data, 18, actionID);
+}
+
 //**********************************
 //AvantI2C Class Implementation
 //**********************************

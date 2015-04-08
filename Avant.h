@@ -803,6 +803,35 @@ class AvantGPIO
      
     */
     void analogReadCallback(void (*function)(byte), uint8_t pin);
+
+    /**
+
+    Associates a servo with a pin.
+
+    @param servoNumber which of the three servos to attach. Values should be 1-3.
+    @param pin the desired pin to associate with the servo.
+
+    */
+    void attachServo(uint8_t servoNumber, uint8_t pin);
+
+    /**
+
+    Clear a previously set assocation between the given servo and pin.
+
+    @param servoNumber the desired servo to detach. Values should be 1-3.
+
+    */
+    void detachServo(uint8_t servoNumber);
+
+    /**
+
+    Write data to a servo. This servo should already be attached via the `attachServo` method.
+
+    @param servoNumber the servo to send data too. Values should be 1-3.
+    @param data the data to send to the servo.
+
+    */
+    void writeServo(uint8_t servoNumber, uint8_t data);
 };
 
 class AvantI2C
