@@ -1495,7 +1495,7 @@ void AvantResponseHandler::responseHandler() {
               break;
             case 15:
               //SimpleAP
-              break
+              break;
             case 16:
               if(actionID == 1)
                 (*myCallback).pulseIn1(dataToLong(data));
