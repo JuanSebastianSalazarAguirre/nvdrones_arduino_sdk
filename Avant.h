@@ -189,6 +189,7 @@ class RCTransmitService
       bool isHwSerial2Used;
       bool isHwSerial3Used;
       bool isSwSerialUsed;
+      void serialWrite(uint8_t data);
 
     public:
       SoftwareSerial softwareSerial;
@@ -209,23 +210,14 @@ class RCTransmitService
       */
       RCTransmitService(int hwSerialCode);
 
-      /**
-      Method description
 
-      @param data Parameter description
-      @param resourceID Parameter description
-      @param actionID Parameter description
-      */
       void sendData(int data, uint8_t resourceID, uint8_t actionID);
   
-      /**
-      Method description
 
-      @param data Parameter description
-      @param resourceID Parameter description
-      @param actionID Parameter description
-      */
       void sendData(uint8_t data, uint8_t resourceID, uint8_t actionID);
+      
+
+      void sendData(float data, uint8_t resourceID, uint8_t actionID);
 
       /**
       Method description
@@ -1088,7 +1080,7 @@ class Avant
       AvantPose& pose();
       AvantResponseHandler& avantResponseHandler();
       AvantSPI& SPI();
-      AvantAutoPilot AutoPilot();
+      AvantAutoPilot& AutoPilot();
       void armDrone();
       void initialize();
 };

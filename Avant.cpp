@@ -160,7 +160,7 @@ RCTransmitService::RCTransmitService(int hwSerialCode) {
   }
 }
 
-void serialWrite(uint8_t data) {
+void RCTransmitService::serialWrite(uint8_t data) {
   if (isHwSerial0Used) {
     #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
       Serial.write(data);
@@ -204,7 +204,7 @@ void RCTransmitService::sendData(int16_t data, uint8_t resourceID, uint8_t actio
 }
 
 void RCTransmitService::sendData(float data, uint8_t resourceID, uint8_t actionID) {
-  union u tag {
+  union u_tag {
     uint8_t b[4];
     float dataFloat;
   } u;
