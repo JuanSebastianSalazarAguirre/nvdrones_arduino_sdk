@@ -47,6 +47,7 @@ Avant::Avant() {
   avantXbee = AvantXbee(&rcService, &callback);
   avantPose = AvantPose(&rcService, &callback);
   avantSPI = AvantSPI(&rcService, &callback);
+  avantAutoPilot = AvantAutoPilot(&rcService, &callback);
 }
 
 Avant::Avant(int hardwareSerialCode) {
@@ -60,6 +61,7 @@ Avant::Avant(int hardwareSerialCode) {
   avantXbee = AvantXbee(&rcService, &callback);
   avantPose = AvantPose(&rcService, &callback);
   avantSPI = AvantSPI(&rcService, &callback);
+  avantAutoPilot = AvantAutoPilot(&rcService, &callback);
 }
 Avant::Avant(int txPin, int rxPin) {
   rcService = RCTransmitService(txPin, rxPin);
@@ -72,6 +74,7 @@ Avant::Avant(int txPin, int rxPin) {
   avantXbee = AvantXbee(&rcService, &callback);
   avantPose = AvantPose(&rcService, &callback);
   avantSPI = AvantSPI(&rcService, &callback);
+  avantAutoPilot = AvantAutoPilot(&rcService, &callback);
 }
 
 AvantGPIO& Avant::GPIO() {return avantGPIO;} 
@@ -82,6 +85,7 @@ AvantI2C& Avant::I2C() {return avantI2C;}
 AvantXbee& Avant::xbee() {return avantXbee;}
 AvantPose& Avant::pose() {return avantPose;}
 AvantSPI& Avant::SPI() {return avantSPI;}
+AvantAutoPilot& Avant::AutoPilot() {return avantAutoPilot;}
 
 void Avant::initialize() {
   rcService.softwareSerial.begin(57600);
@@ -156,103 +160,65 @@ RCTransmitService::RCTransmitService(int hwSerialCode) {
   }
 }
 
-void RCTransmitService::sendData(int data, uint8_t resourceID, uint8_t actionID) {
+void serialWrite(uint8_t data) {
   if (isHwSerial0Used) {
     #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
-      Serial.write('$');
-      Serial.write(2);
-      Serial.write(byte(resourceID));
-      Serial.write(byte(actionID));
-      Serial.write(highByte(data));
-      Serial.write(lowByte(data));
-      Serial.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+      Serial.write(data);
     #endif
   } else if (isHwSerial1Used) {
     #if defined(UBRR1H)
-      Serial1.write('$');
-      Serial1.write(2);
-      Serial1.write(byte(resourceID));
-      Serial1.write(byte(actionID));
-      Serial1.write(highByte(data));
-      Serial1.write(lowByte(data));
-      Serial1.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+      Serial1.write(data);
     #endif
   } else if (isHwSerial2Used) {
     #if defined(UBRR2H)
-      Serial2.write('$');
-      Serial2.write(2);
-      Serial2.write(byte(resourceID));
-      Serial2.write(byte(actionID));
-      Serial2.write(highByte(data));
-      Serial2.write(lowByte(data));
-      Serial2.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+      Serial2.write(data);
     #endif
   } else if (isHwSerial3Used) {
     #if defined(UBRR3H)
-      Serial3.write('$');
-      Serial3.write(2);
-      Serial3.write(byte(resourceID));
-      Serial3.write(byte(actionID));
-      Serial3.write(highByte(data));
-      Serial3.write(lowByte(data));
-      Serial3.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+      Serial3.write(data);
     #endif
   } else if (isSwSerialUsed) {
-    softwareSerial.write('$');
-    softwareSerial.write(2);
-    softwareSerial.write(byte(resourceID));
-    softwareSerial.write(byte(actionID));
-    softwareSerial.write(highByte(data));
-    softwareSerial.write(lowByte(data));
-    softwareSerial.write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+    softwareSerial.write(data);
+  } else {
+    Serial.println("Error: incorrectly configured serial settings.");
   }
 }
 
 void RCTransmitService::sendData(uint8_t data, uint8_t resourceID, uint8_t actionID) {
-  if (isHwSerial0Used) {
-    #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
-      Serial.write('$');
-      Serial.write(1);
-      Serial.write(byte(resourceID));
-      Serial.write(byte(actionID));
-      Serial.write(data);
-      Serial.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
-    #endif
-  } else if (isHwSerial1Used) {
-    #if defined(UBRR1H)
-      Serial1.write('$');
-      Serial1.write(1);
-      Serial1.write(byte(resourceID));
-      Serial1.write(byte(actionID));
-      Serial1.write(data);
-      Serial1.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
-    #endif
-  } else if (isHwSerial2Used) {
-    #if defined(UBRR2H)
-      Serial2.write('$');
-      Serial2.write(1);
-      Serial2.write(byte(resourceID));
-      Serial2.write(byte(actionID));
-      Serial2.write(data);
-      Serial2.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
-    #endif
-  } else if (isHwSerial3Used) {
-    #if defined(UBRR3H)
-      Serial3.write('$');
-      Serial3.write(1);
-      Serial3.write(byte(resourceID));
-      Serial3.write(byte(actionID));
-      Serial3.write(data);
-      Serial3.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
-    #endif
-  } else if (isSwSerialUsed) {
-    softwareSerial.write('$');
-    softwareSerial.write(1);
-    softwareSerial.write(byte(resourceID));
-    softwareSerial.write(byte(actionID));
-    softwareSerial.write(data);
-    softwareSerial.write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
-  }
+  serialWrite('$');
+  serialWrite(1);
+  serialWrite(byte(resourceID));
+  serialWrite(byte(actionID));
+  serialWrite(data);
+  serialWrite((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
+}
+
+void RCTransmitService::sendData(int16_t data, uint8_t resourceID, uint8_t actionID) {
+  serialWrite('$');
+  serialWrite(2);
+  serialWrite(byte(resourceID));
+  serialWrite(byte(actionID));
+  serialWrite(highByte(data));
+  serialWrite(lowByte(data));
+  serialWrite((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+}
+
+void RCTransmitService::sendData(float data, uint8_t resourceID, uint8_t actionID) {
+  union u tag {
+    uint8_t b[4];
+    float dataFloat;
+  } u;
+  u.dataFloat = data;
+
+  serialWrite('$');
+  serialWrite(4);
+  serialWrite(byte(resourceID));
+  serialWrite(byte(actionID));
+  serialWrite(u.b[0]);
+  serialWrite(u.b[1]);
+  serialWrite(u.b[2]);
+  serialWrite(u.b[3]);
+  serialWrite((4+resourceID+actionID+u.b[0]+u.b[1]+u.b[2]+u.b[3])%256);
 }
 
 void RCTransmitService::print(String data) {
@@ -729,6 +695,182 @@ void AvantSPI::transferCallback(void (*function)(byte)) {
   (*myCallback).transfer = function;
 }
 
+//*******************************************
+//AvantAutoPilot Class Implementation
+//*******************************************
+AvantAutoPilot::AvantAutoPilot(){}
+AvantAutoPilot::AvantAutoPilot(RCTransmitService *rcTservice, Callback *callback) {
+  service = rcTservice;
+  myCallback = callback;
+}
+
+void AvantAutoPilot::gpsExecute() {
+  service->sendData(0, 3, 1);
+}
+
+void AvantAutoPilot::compassExecute() {
+  service->sendData(0, 3, 2);
+}
+
+void AvantAutoPilot::setYawError(float error) {
+  service->sendData(error, 3, 3);
+}
+
+void AvantAutoPilot::setThrottleError(float error) {
+  service->sendData(error, 3, 4);
+}
+
+void AvantAutoPilot::setElevatorError(float error) {
+  service->sendData(error, 3, 5);
+}
+
+void AvantAutoPilot::setAileronError(float error) {
+  service->sendData(error, 3, 6);
+}
+
+void AvantAutoPilot::setWaypointLatitude(float latitude) {
+  service->sendData(latitude, 15, 1);
+}
+
+void AvantAutoPilot::setWaypointLongitude(float longitude) {
+  service->sendData(longitude, 15, 2);
+}
+
+void AvantAutoPilot::setWaypointAltitude(float altitude) {
+  service->sendData(altitude, 15, 3);
+}
+
+void AvantAutoPilot::setWaypointOrientation(float orientation) {
+  service->sendData(orientation, 15, 4);
+}
+
+void AvantAutoPilot::setYawKP(float kp) {
+  service->sendData(kp, 15, 5);
+}
+
+void AvantAutoPilot::setYawKD(float kd) {
+  service->sendData(kd, 15, 6);
+}
+
+void AvantAutoPilot::setYawKI(float ki) {
+  service->sendData(ki, 15, 7);
+}
+
+void AvantAutoPilot::setThrottleKP(float kp) {
+  service->sendData(kp, 15, 8);
+}
+
+void AvantAutoPilot::setThrottleKD(float kd) {
+  service->sendData(kd, 15, 9);
+}
+
+void AvantAutoPilot::setThrottleKI(float ki) {
+  service->sendData(ki, 15, 10);
+}
+
+void AvantAutoPilot::setElevatorKP(float kp) {
+  service->sendData(kp, 15, 11);
+}
+
+void AvantAutoPilot::setElevatorKD(float kd) {
+  service->sendData(kd, 15, 12);
+}
+
+void AvantAutoPilot::setElevatorKI(float ki) {
+  service->sendData(ki, 15, 13);
+}
+
+void AvantAutoPilot::setAileronKP(float kp) {
+  service->sendData(kp, 15, 14);
+}
+
+void AvantAutoPilot::setAileronKD(float kd) {
+  service->sendData(kd, 15, 15);
+}
+
+void AvantAutoPilot::setAileronKI(float ki) {
+  service->sendData(ki, 15, 16);
+}
+
+void AvantAutoPilot::getWaypointLatitude(void (*function)(float)) {
+  (*myCallback).getWaypointLatitude = function;
+  service->sendData(0, 15, 22);
+}
+
+void AvantAutoPilot::getWaypointLongitude(void (*function)(float)) {
+  (*myCallback).getWaypointLongitude = function;
+  service->sendData(0, 15, 23);
+}
+
+void AvantAutoPilot::getWaypointAltitude(void (*function)(float)) {
+  (*myCallback).getWaypointAltitude = function;
+  service->sendData(0, 15, 24);
+}
+
+void AvantAutoPilot::getWaypointOrientation(void (*function)(float)) {
+  (*myCallback).getWaypointOrientation = function;
+  service->sendData(0, 15, 25);
+}
+
+void AvantAutoPilot::getYawKP(void (*function)(float)) {
+  (*myCallback).getYawKP = function;
+  service->sendData(0, 15, 26);
+}
+
+void AvantAutoPilot::getYawKD(void (*function)(float)) {
+  (*myCallback).getYawKD = function;
+  service->sendData(0, 15, 27);
+}
+
+void AvantAutoPilot::getYawKI(void (*function)(float)) {
+  (*myCallback).getYawKI = function;
+  service->sendData(0, 15, 28);
+}
+
+void AvantAutoPilot::getThrottleKP(void (*function)(float)) {
+  (*myCallback).getThrottleKP = function;
+  service->sendData(0, 15, 29);
+}
+
+void AvantAutoPilot::getThrottleKD(void (*function)(float)) {
+  (*myCallback).getThrottleKD = function;
+  service->sendData(0, 15, 30);
+}
+
+void AvantAutoPilot::getThrottleKI(void (*function)(float)) {
+  (*myCallback).getThrottleKI = function;
+  service->sendData(0, 15, 31);
+}
+
+void AvantAutoPilot::getElevatorKP(void (*function)(float)) {
+  (*myCallback).getElevatorKP = function;
+  service->sendData(0, 15, 32);
+}
+
+void AvantAutoPilot::getElevatorKD(void (*function)(float)) {
+  (*myCallback).getElevatorKD = function;
+  service->sendData(0, 15, 33);
+}
+
+void AvantAutoPilot::getElevatorKI(void (*function)(float)) {
+  (*myCallback).getElevatorKI = function;
+  service->sendData(0, 15, 34);
+}
+
+void AvantAutoPilot::getAileronKP(void (*function)(float)) {
+  (*myCallback).getAileronKP = function;
+  service->sendData(0, 15, 35);
+}
+
+void AvantAutoPilot::getAileronKD(void (*function)(float)) {
+  (*myCallback).getAileronKD = function;
+  service->sendData(0, 15, 36);
+}
+
+void AvantAutoPilot::getAileronKI(void (*function)(float)) {
+  (*myCallback).getAileronKI = function;
+  service->sendData(0, 15, 37);
+}
 
 //*******************************************
 //AvantResponseHandler Class Implementation

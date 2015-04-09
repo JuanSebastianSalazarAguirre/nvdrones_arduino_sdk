@@ -156,8 +156,24 @@ class Callback
     void (*analogRead2)(byte);
     void (*analogRead3)(byte);
     void (*analogRead4)(byte);
-    //AP callbacks
     //Xbee Callbacks
+    //AutoPilot Callbacks
+    void (*getWaypointLatitude)(float);
+    void (*getWaypointLongitude)(float);
+    void (*getWaypointAltitude)(float);
+    void (*getWaypointOrientation)(float);
+    void (*getElevatorKP)(float);
+    void (*getElevatorKD)(float);
+    void (*getElevatorKI)(float);
+    void (*getThrottleKP)(float);
+    void (*getThrottleKD)(float);
+    void (*getThrottleKI)(float);
+    void (*getAileronKP)(float);
+    void (*getAileronKD)(float);
+    void (*getAileronKI)(float);
+    void (*getYawKP)(float);
+    void (*getYawKD)(float);
+    void (*getYawKI)(float);
     
 };
   
@@ -731,7 +747,7 @@ class AvantGPIO
     @param logicLevel expected 0 or 1
  
     */
-    void digitalWrite(uint8_t pin,bool logicLevel);
+    void digitalWrite(uint8_t pin, bool logicLevel);
 
     /**
  
@@ -995,6 +1011,55 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
     void transferCallback(void (*function)(byte));
 };
 
+class AvantAutoPilot
+{
+private:
+    RCTransmitService *service;
+    Callback *myCallback;
+
+public:
+    AvantAutoPilot();
+    AvantAutoPilot(RCTransmitService *rcTservice, Callback *callback);
+    void gpsExecute();
+    void compassExecute();
+    void setYawError(float error);
+    void setThrottleError(float error);
+    void setElevatorError(float error);
+    void setAileronError(float error);
+    void setWaypointLatitude(float latitude);
+    void setWaypointLongitude(float longitude);
+    void setWaypointAltitude(float altitude);
+    void setWaypointOrientation(float orientation);
+    void setYawKP(float kp);
+    void setYawKD(float kd);
+    void setYawKI(float ki);
+    void setThrottleKP(float kp);
+    void setThrottleKD(float kd);
+    void setThrottleKI(float ki);
+    void setElevatorKP(float kp);
+    void setElevatorKD(float kd);
+    void setElevatorKI(float ki);
+    void setAileronKP(float kp);
+    void setAileronKD(float kd);
+    void setAileronKI(float ki);
+    void getWaypointLatitude(void (*function)(float));
+    void getWaypointLongitude(void (*function)(float));
+    void getWaypointAltitude(void (*function)(float));
+    void getWaypointOrientation(void (*function)(float));
+    void getYawKP(void (*function)(float));
+    void getYawKD(void (*function)(float));
+    void getYawKI(void (*function)(float));
+    void getThrottleKP(void (*function)(float));
+    void getThrottleKD(void (*function)(float));
+    void getThrottleKI(void (*function)(float));
+    void getElevatorKP(void (*function)(float));
+    void getElevatorKD(void (*function)(float));
+    void getElevatorKI(void (*function)(float));
+    void getAileronKP(void (*function)(float));
+    void getAileronKD(void (*function)(float));
+    void getAileronKI(void (*function)(float));
+};
+
 //\cond
 class Avant 
 //\endcond
@@ -1010,6 +1075,7 @@ class Avant
       Callback callback;
       AvantPose avantPose;
       AvantSPI avantSPI;
+      AvantAutoPilot avantAutoPilot;
     public:
       Avant();
       Avant(int hardwareSerialCode);
@@ -1022,6 +1088,7 @@ class Avant
       AvantPose& pose();
       AvantResponseHandler& avantResponseHandler();
       AvantSPI& SPI();
+      AvantAutoPilot AutoPilot();
       void armDrone();
       void initialize();
 };
