@@ -895,10 +895,10 @@ float AvantResponseHandler::dataToFloat(byte data[]) {
 
 long AvantResponseHandler::dataToLong(byte data[]) {
   long data_long = 0;
-  data_long = data[3] << 8;
-  data_long = (data_long + data[2]) << 8;
+  data_long = data[0] << 8;
   data_long = (data_long + data[1]) << 8;
-  data_long = data_long + data[0]; 
+  data_long = (data_long + data[2) << 8;
+  data_long = data_long + data[3]; 
   return data_long;
 }
 
