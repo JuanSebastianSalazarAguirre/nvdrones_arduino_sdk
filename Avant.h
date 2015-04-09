@@ -189,7 +189,6 @@ class RCTransmitService
       bool isHwSerial2Used;
       bool isHwSerial3Used;
       bool isSwSerialUsed;
-      void serialWrite(uint8_t data);
 
     public:
       SoftwareSerial softwareSerial;
