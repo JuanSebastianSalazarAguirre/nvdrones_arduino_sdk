@@ -233,8 +233,7 @@ class SerialIO
     bool serialAvailable();
 
 
-    void sendPacket(int data, uint8_t resourceID, uint8_t actionID);
-
+    void sendPacket(int16_t data, uint8_t resourceID, uint8_t actionID);
 
     void sendPacket(uint8_t data, uint8_t resourceID, uint8_t actionID);
 

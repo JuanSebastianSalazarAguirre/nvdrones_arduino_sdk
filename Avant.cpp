@@ -254,7 +254,7 @@ void SerialIO::sendPacket(int8_t data, uint8_t resourceID, uint8_t actionID) {
   write((1+resourceID+actionID+(uint8_t)data)%256);
 }
 
-void SerialIO::sendPacket(int data, uint8_t resourceID, uint8_t actionID) {
+void SerialIO::sendPacket(int16_t data, uint8_t resourceID, uint8_t actionID) {
   write('$');
   write(2);
   write(byte(resourceID));
@@ -360,19 +360,19 @@ void AvantRC::setFlightMode(int8_t value){
   service->sendPacket(value, 2, 5);
 };
 void AvantRC::getAileron(){
-  service->sendPacket(0, 2, 9);
+  service->sendPacket((int16_t)0, 2, 9);
 }
 void AvantRC::getElevator(){
-  service->sendPacket(0, 2, 8);
+  service->sendPacket((int16_t)0, 2, 8);
 }
 void AvantRC::getThrottle(){
-  service->sendPacket(0, 2, 7);
+  service->sendPacket((int16_t)0, 2, 7);
 }
 void AvantRC::getRudder(){
-  service->sendPacket(0, 2, 6);
+  service->sendPacket((int16_t)0, 2, 6);
 }
 void AvantRC::getFlightMode(){
-  service->sendPacket(0, 2, 10);
+  service->sendPacket((int16_t)0, 2, 10);
 }
 
 void AvantRC::flightModeCallback(void (*function)(byte)) {
@@ -465,10 +465,10 @@ void AvantTransmitter::sendSticks(){
   if (Rudder > 100) Rudder = 100;
   if (Rudder < -100) Rudder = -100;    
 
-  service->sendPacket(Elevator, 2, 3);
-  service->sendPacket(Aileron, 2, 4);
-  service->sendPacket(Throttle, 2, 2);
-  service->sendPacket(Rudder, 2, 1);
+  service->sendPacket((int16_t)Elevator, 2, 3);
+  service->sendPacket((int16_t)Aileron, 2, 4);
+  service->sendPacket((int16_t)Throttle, 2, 2);
+  service->sendPacket((int16_t)Rudder, 2, 1);
 }
 
 void AvantTransmitter::throttleEndpoints(uint8_t min, uint8_t max) {
@@ -498,15 +498,15 @@ AvantGPIO::AvantGPIO(SerialIO *rcTservice, Callback *callback) {
 }
 
 void AvantGPIO::digitalWrite(uint8_t pin, bool logicLevel) {
-  service->sendPacket(logicLevel, 6, pin);
+  service->sendPacket((uint8_t)logicLevel, 6, pin);
 }
 
 void AvantGPIO::pinMode(uint8_t pin, int logicLevel) {
-  service->sendPacket(logicLevel, 5, pin);
+  service->sendPacket((int16_t)logicLevel, 5, pin);
 }
 
 void AvantGPIO::digitalRead(uint8_t pin) {
-  service->sendPacket(0, 8, pin);
+  service->sendPacket((int16_t)0, 8, pin);
 }
 
 void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
@@ -514,11 +514,11 @@ void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
 }
 
 void AvantGPIO::pulseIn(uint8_t pin) {
-  service->sendPacket(0, 16, pin);
+  service->sendPacket((int16_t)0, 16, pin);
 }
 
 void AvantGPIO::analogRead(uint8_t pin) {
-  service->sendPacket(0, 17, pin);
+  service->sendPacket((int16_t)0, 17, pin);
 }
 
 void AvantGPIO::digitalReadCallback(void (*function)(byte), int pin) {
@@ -585,7 +585,7 @@ void AvantGPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
 
 void AvantGPIO::detachServo(uint8_t servoNumber) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 3;
-  service->sendPacket(0, 18, actionID);
+  service->sendPacket((int16_t)0, 18, actionID);
 }
 
 void AvantGPIO::writeServo(uint8_t servoNumber, uint8_t data) {
@@ -607,19 +607,19 @@ void AvantI2C::deviceID(uint8_t ID){
   service->sendPacket(ID, 11, 7);
 }
 void AvantI2C::beginTransmission(void){
-  service->sendPacket(0, 11, 8);
+  service->sendPacket((int16_t)0, 11, 8);
 }
 
 void AvantI2C::endTransmission(void){
-  service->sendPacket(0, 11, 4);
+  service->sendPacket((int16_t)0, 11, 4);
 }
 
 void AvantI2C::write(uint8_t data){
-  service->sendPacket(data, 11, 3);
+  service->sendPacket((uint8_t)data, 11, 3);
 }
 
 void AvantI2C::read(void){
-  service->sendPacket(0, 11, 5);
+  service->sendPacket((int16_t)0, 11, 5);
 }
 void AvantI2C::wireRequest(uint8_t bytes){
   service->sendPacket(bytes, 11, 6);
@@ -663,31 +663,31 @@ AvantPose::AvantPose(SerialIO *rcTservice, Callback *callback) {
 }
 
 void AvantPose::getGPSData(void) {
-  service->sendPacket(0, 9, 1);
+  service->sendPacket((int16_t)0, 9, 1);
 }
 
 void AvantPose::getLatitude(void) {
-  service->sendPacket(0, 9, 2);
+  service->sendPacket((int16_t)0, 9, 2);
 }
 
 void AvantPose::getLongitude(void) {
-  service->sendPacket(0, 9, 3);
+  service->sendPacket((int16_t)0, 9, 3);
 }
 
 void AvantPose::getAltitude(void ) {
-  service->sendPacket(0, 9, 4);
+  service->sendPacket((int16_t)0, 9, 4);
 }
 
 void AvantPose::getSatellites(void) {
-  service->sendPacket(0, 9, 5);
+  service->sendPacket((int16_t)0, 9, 5);
 }
 
 void AvantPose::getSpeed(void) {
-  service->sendPacket(0, 9, 6);
+  service->sendPacket((int16_t)0, 9, 6);
 }
 
 void AvantPose::getOrientation(void){
-  service->sendPacket(0, 9, 7);
+  service->sendPacket((int16_t)0, 9, 7);
 }
 
 void AvantPose::longitudeCallback(void (*function)(float)) {
@@ -754,11 +754,11 @@ AvantAutoPilot::AvantAutoPilot(SerialIO *rcTservice, Callback *callback) {
 }
 
 void AvantAutoPilot::gpsExecute() {
-  service->sendPacket(0, 3, 1);
+  service->sendPacket((int16_t)0, 3, 1);
 }
 
 void AvantAutoPilot::compassExecute() {
-  service->sendPacket(0, 3, 2);
+  service->sendPacket((int16_t)0, 3, 2);
 }
 
 void AvantAutoPilot::setYawError(float error) {
@@ -843,82 +843,82 @@ void AvantAutoPilot::setAileronKI(float ki) {
 
 void AvantAutoPilot::getWaypointLatitude(void (*function)(float)) {
   (*myCallback).getWaypointLatitude = function;
-  service->sendPacket(0, 15, 22);
+  service->sendPacket((int16_t)0, 15, 22);
 }
 
 void AvantAutoPilot::getWaypointLongitude(void (*function)(float)) {
   (*myCallback).getWaypointLongitude = function;
-  service->sendPacket(0, 15, 23);
+  service->sendPacket((int16_t)0, 15, 23);
 }
 
 void AvantAutoPilot::getWaypointAltitude(void (*function)(float)) {
   (*myCallback).getWaypointAltitude = function;
-  service->sendPacket(0, 15, 24);
+  service->sendPacket((int16_t)0, 15, 24);
 }
 
 void AvantAutoPilot::getWaypointOrientation(void (*function)(float)) {
   (*myCallback).getWaypointOrientation = function;
-  service->sendPacket(0, 15, 25);
+  service->sendPacket((int16_t)0, 15, 25);
 }
 
 void AvantAutoPilot::getYawKP(void (*function)(float)) {
   (*myCallback).getYawKP = function;
-  service->sendPacket(0, 15, 26);
+  service->sendPacket((int16_t)0, 15, 26);
 }
 
 void AvantAutoPilot::getYawKD(void (*function)(float)) {
   (*myCallback).getYawKD = function;
-  service->sendPacket(0, 15, 27);
+  service->sendPacket((int16_t)0, 15, 27);
 }
 
 void AvantAutoPilot::getYawKI(void (*function)(float)) {
   (*myCallback).getYawKI = function;
-  service->sendPacket(0, 15, 28);
+  service->sendPacket((int16_t)0, 15, 28);
 }
 
 void AvantAutoPilot::getThrottleKP(void (*function)(float)) {
   (*myCallback).getThrottleKP = function;
-  service->sendPacket(0, 15, 29);
+  service->sendPacket((int16_t)0, 15, 29);
 }
 
 void AvantAutoPilot::getThrottleKD(void (*function)(float)) {
   (*myCallback).getThrottleKD = function;
-  service->sendPacket(0, 15, 30);
+  service->sendPacket((int16_t)0, 15, 30);
 }
 
 void AvantAutoPilot::getThrottleKI(void (*function)(float)) {
   (*myCallback).getThrottleKI = function;
-  service->sendPacket(0, 15, 31);
+  service->sendPacket((int16_t)0, 15, 31);
 }
 
 void AvantAutoPilot::getElevatorKP(void (*function)(float)) {
   (*myCallback).getElevatorKP = function;
-  service->sendPacket(0, 15, 32);
+  service->sendPacket((int16_t)0, 15, 32);
 }
 
 void AvantAutoPilot::getElevatorKD(void (*function)(float)) {
   (*myCallback).getElevatorKD = function;
-  service->sendPacket(0, 15, 33);
+  service->sendPacket((int16_t)0, 15, 33);
 }
 
 void AvantAutoPilot::getElevatorKI(void (*function)(float)) {
   (*myCallback).getElevatorKI = function;
-  service->sendPacket(0, 15, 34);
+  service->sendPacket((int16_t)0, 15, 34);
 }
 
 void AvantAutoPilot::getAileronKP(void (*function)(float)) {
   (*myCallback).getAileronKP = function;
-  service->sendPacket(0, 15, 35);
+  service->sendPacket((int16_t)0, 15, 35);
 }
 
 void AvantAutoPilot::getAileronKD(void (*function)(float)) {
   (*myCallback).getAileronKD = function;
-  service->sendPacket(0, 15, 36);
+  service->sendPacket((int16_t)0, 15, 36);
 }
 
 void AvantAutoPilot::getAileronKI(void (*function)(float)) {
   (*myCallback).getAileronKI = function;
-  service->sendPacket(0, 15, 37);
+  service->sendPacket((int16_t)0, 15, 37);
 }
 
 //*******************************************

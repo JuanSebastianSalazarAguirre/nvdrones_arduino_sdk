@@ -7,12 +7,13 @@ Avant myTrans(serialPort1); //create an instance of Avant
 
 void setup() {
   Serial.begin(57600);
-}
-
-void loop() {
   delay(3000);             //turn the drone on and off every 5 seconds
   Serial.println("Arming");
   myTrans.armDrone();     //This will turn the drone on and off
+}
+
+void loop() {
+
 }
 
 
