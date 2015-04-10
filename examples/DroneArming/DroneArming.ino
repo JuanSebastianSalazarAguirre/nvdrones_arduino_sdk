@@ -11,7 +11,7 @@ void setup() {
 
 void loop() {
   delay(3000);             //turn the drone on and off every 5 seconds
-  Serial.println("New Arming");
+  Serial.println("Arming");
   myTrans.armDrone();     //This will turn the drone on and off
 }
 

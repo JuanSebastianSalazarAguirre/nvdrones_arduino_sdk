@@ -238,6 +238,7 @@ class SerialIO
 
     void sendPacket(uint8_t data, uint8_t resourceID, uint8_t actionID);
 
+    void sendPacket(int8_t data, uint8_t resourceID, uint8_t actionID);
 
     void sendPacket(float data, uint8_t resourceID, uint8_t actionID);
 
