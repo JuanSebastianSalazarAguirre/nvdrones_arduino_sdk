@@ -31,6 +31,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif
 
+// TODO: Description
+enum SerialPort {
+  serialPort0,
+  serialPort1,
+  serialPort2,
+  serialPort3,
+  swSerialPort
+};
+
 //********************************************
 //SoftwareSerial Code
 //*****************************************
@@ -177,62 +186,72 @@ class Callback
     
 };
   
-
 //\cond
-class RCTransmitService
+class SerialIO
 //\endcond
 {
   friend class AvantResponseHandler;
-    private:
-      bool isHwSerial0Used;
-      bool isHwSerial1Used;
-      bool isHwSerial2Used;
-      bool isHwSerial3Used;
-      bool isSwSerialUsed;
-      void serialWrite(uint8_t data);
-
-    public:
-      SoftwareSerial softwareSerial;
-      RCTransmitService();
-
-      /**
-      TODO
-
-      @param txPin
-      @param rxPin
-      */
-      RCTransmitService(int txPin , int rxPin);
-
-      /**
-      TODO
-
-      @param hwSerialCode
-      */
-      RCTransmitService(int hwSerialCode);
+  private:
+    SerialPort selectedSerialPort;
 
 
-      void sendData(int data, uint8_t resourceID, uint8_t actionID);
-  
+  public:
+    //TODO: change it to initialize function 
+    SoftwareSerial softwareSerial;
+    SerialIO();
 
-      void sendData(uint8_t data, uint8_t resourceID, uint8_t actionID);
-      
+    /**
+    TODO
 
-      void sendData(float data, uint8_t resourceID, uint8_t actionID);
+    @param txPin
+    @param rxPin
+    */
+    SerialIO(int txPin , int rxPin);
 
-      /**
-      Method description
-      */
-      void print(String data);
-      
-      /**
-      Method description
-      */
-      void write(byte data);
+    /**
+    TODO
 
-      /**
-      Method description
-      */
-      void readBytes(char *buffer, int bytesToRead);
+    @param hwSerialCode
+    */
+    SerialIO(int hwSerialCode);
+
+    /**
+    TODO
+
+    @param data
+    */
+    void write(uint8_t data);
+    
+    /**
+    Method description
+    */
+    uint8_t serialRead();
+    
+    /**
+    Method description
+    */
+    bool serialAvailable();
+
+
+    void sendPacket(int data, uint8_t resourceID, uint8_t actionID);
+
+
+    void sendPacket(uint8_t data, uint8_t resourceID, uint8_t actionID);
+
+
+    void sendPacket(float data, uint8_t resourceID, uint8_t actionID);
+
+    //TODO: REMOVE // DEBUG
+    /**
+    Method description
+    */
+    void print(String data);
+
+    //TODO: Only Xbee class  uses it "REMOVE"
+    /**
+    Method description
+    */
+    void readBytes(char *buffer, int bytesToRead);
 };
 
 //\cond
@@ -240,13 +259,13 @@ class AvantResponseHandler
 //\endcond
 {
   private:
-    RCTransmitService *service;
+    SerialIO *service;
     Callback *myCallback;
     float dataToFloat(byte data[]);
     long  dataToLong(byte data[]);
   public:
     AvantResponseHandler();
-    AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback);
+    AvantResponseHandler(SerialIO *rcTservice, Callback *callback);
     void responseHandler();
     void callbackTest(byte test){
     myCallback->i2cRead(test);
@@ -285,13 +304,13 @@ class AvantTransmitter
     int rudderMin;
     
     //\cond
-    RCTransmitService *service;
+    SerialIO *service;
     //\endcond
   public:
     //\cond
     AvantTransmitter();
     
-    AvantTransmitter(RCTransmitService *rcService);
+    AvantTransmitter(SerialIO *serialIO);
     //\endcond
 
     /**
@@ -410,14 +429,14 @@ class AvantXbee
  {
   private:
     //\cond
-    RCTransmitService *service;
+    SerialIO *service;
     Callback *myCallback;
     //\endcond
   public:
     //\cond
     AvantXbee();
     
-    AvantXbee(RCTransmitService *rcTservice, Callback *callback);
+    AvantXbee(SerialIO *rcTservice, Callback *callback);
     //\endcond
 
     /// modulation rate in symbols per second, default is 115200
@@ -442,14 +461,14 @@ class AvantPose
 {
   private:
      //\cond
-    RCTransmitService *service;
+    SerialIO *service;
     Callback *myCallback;
     //\endcond
   public:
     //\cond
     AvantPose();
     
-    AvantPose(RCTransmitService *rcTservice, Callback *callback);
+    AvantPose(SerialIO *rcTservice, Callback *callback);
     //\endcond
 
     /**
@@ -563,14 +582,14 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
 {
   private:
     //\cond
-    RCTransmitService *service;
+    SerialIO *service;
     Callback *myCallback;
     //\endcond
   public:
     //\cond
     AvantRC();
     
-    AvantRC(RCTransmitService *rcTservice, Callback *callback);
+    AvantRC(SerialIO *rcTservice, Callback *callback);
     //\endcond
     
     /**
@@ -709,14 +728,14 @@ class AvantGPIO
 {
   private:
     //\cond
-    RCTransmitService *service;
+    SerialIO *service;
     Callback *myCallback;
     //\endcond
   public:
     //\cond
     AvantGPIO();
     
-    AvantGPIO(RCTransmitService *rcTservice, Callback *callback);
+    AvantGPIO(SerialIO *rcTservice, Callback *callback);
     //\endcond
 
 
@@ -858,14 +877,14 @@ class AvantI2C
 {
   private:
     //\cond
-    RCTransmitService *service;
+    SerialIO *service;
     Callback *myCallback;
     //\endcond
   public:
     //\cond
     AvantI2C();
     
-    AvantI2C(RCTransmitService *rcTservice, Callback *callback);
+    AvantI2C(SerialIO *rcTservice, Callback *callback);
     //\endcond
 
     /**
@@ -947,14 +966,14 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
 {
   private:
     //\cond
-    RCTransmitService *service;
+    SerialIO *service;
     Callback *myCallback;
     //\endcond
   public:
     //\cond
     AvantSPI();
     
-    AvantSPI(RCTransmitService *rcTservice, Callback *callback);
+    AvantSPI(SerialIO *rcTservice, Callback *callback);
     //\endcond
 
     /**
@@ -1006,12 +1025,12 @@ To learn more about SPI, visit the followign line: http://en.wikipedia.org/wiki/
 class AvantAutoPilot
 {
 private:
-    RCTransmitService *service;
+    SerialIO *service;
     Callback *myCallback;
 
 public:
     AvantAutoPilot();
-    AvantAutoPilot(RCTransmitService *rcTservice, Callback *callback);
+    AvantAutoPilot(SerialIO *rcTservice, Callback *callback);
     void gpsExecute();
     void compassExecute();
     void setYawError(float error);
@@ -1060,7 +1079,7 @@ class Avant
       AvantTransmitter avantTransmitter;
       AvantRC avantRC;
       AvantXbee avantXbee;
-      RCTransmitService rcService;
+      SerialIO serialIO;
       AvantGPIO avantGPIO;
       AvantResponseHandler responseHandler;
       AvantI2C avantI2C;

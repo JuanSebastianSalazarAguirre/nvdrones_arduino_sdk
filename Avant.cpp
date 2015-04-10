@@ -37,44 +37,44 @@ http://arduiniana.org.
 // Avant Class Implementation
 // ***********************************************
 Avant::Avant() {
-  rcService = RCTransmitService(0);
-  avantRC = AvantRC(&rcService, &callback);
+  serialIO = SerialIO(0);
+  avantRC = AvantRC(&serialIO, &callback);
   callback = Callback();
-  avantGPIO = AvantGPIO(&rcService, &callback);
-  responseHandler = AvantResponseHandler(&rcService, &callback);
-  avantTransmitter = AvantTransmitter(&rcService);
-  avantI2C = AvantI2C(&rcService, &callback);
-  avantXbee = AvantXbee(&rcService, &callback);
-  avantPose = AvantPose(&rcService, &callback);
-  avantSPI = AvantSPI(&rcService, &callback);
-  avantAutoPilot = AvantAutoPilot(&rcService, &callback);
+  avantGPIO = AvantGPIO(&serialIO, &callback);
+  responseHandler = AvantResponseHandler(&serialIO, &callback);
+  avantTransmitter = AvantTransmitter(&serialIO);
+  avantI2C = AvantI2C(&serialIO, &callback);
+  avantXbee = AvantXbee(&serialIO, &callback);
+  avantPose = AvantPose(&serialIO, &callback);
+  avantSPI = AvantSPI(&serialIO, &callback);
+  avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
 }
 
 Avant::Avant(int hardwareSerialCode) {
-  rcService = RCTransmitService(hardwareSerialCode);
-  avantRC = AvantRC(&rcService, &callback);
+  serialIO = SerialIO(hardwareSerialCode);
+  avantRC = AvantRC(&serialIO, &callback);
   callback = Callback();
-  avantGPIO = AvantGPIO(&rcService, &callback);
-  responseHandler = AvantResponseHandler(&rcService, &callback);
-  avantTransmitter = AvantTransmitter(&rcService);
-  avantI2C = AvantI2C(&rcService, &callback);
-  avantXbee = AvantXbee(&rcService, &callback);
-  avantPose = AvantPose(&rcService, &callback);
-  avantSPI = AvantSPI(&rcService, &callback);
-  avantAutoPilot = AvantAutoPilot(&rcService, &callback);
+  avantGPIO = AvantGPIO(&serialIO, &callback);
+  responseHandler = AvantResponseHandler(&serialIO, &callback);
+  avantTransmitter = AvantTransmitter(&serialIO);
+  avantI2C = AvantI2C(&serialIO, &callback);
+  avantXbee = AvantXbee(&serialIO, &callback);
+  avantPose = AvantPose(&serialIO, &callback);
+  avantSPI = AvantSPI(&serialIO, &callback);
+  avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
 }
 Avant::Avant(int txPin, int rxPin) {
-  rcService = RCTransmitService(txPin, rxPin);
-  avantRC = AvantRC(&rcService, &callback);
+  serialIO = SerialIO(txPin, rxPin);
+  avantRC = AvantRC(&serialIO, &callback);
   callback = Callback();
-  avantGPIO = AvantGPIO(&rcService, &callback);
-  responseHandler = AvantResponseHandler(&rcService, &callback);
-  avantTransmitter = AvantTransmitter(&rcService);
-  avantI2C = AvantI2C(&rcService, &callback);
-  avantXbee = AvantXbee(&rcService, &callback);
-  avantPose = AvantPose(&rcService, &callback);
-  avantSPI = AvantSPI(&rcService, &callback);
-  avantAutoPilot = AvantAutoPilot(&rcService, &callback);
+  avantGPIO = AvantGPIO(&serialIO, &callback);
+  responseHandler = AvantResponseHandler(&serialIO, &callback);
+  avantTransmitter = AvantTransmitter(&serialIO);
+  avantI2C = AvantI2C(&serialIO, &callback);
+  avantXbee = AvantXbee(&serialIO, &callback);
+  avantPose = AvantPose(&serialIO, &callback);
+  avantSPI = AvantSPI(&serialIO, &callback);
+  avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
 }
 
 AvantGPIO& Avant::GPIO() {return avantGPIO;} 
@@ -88,184 +88,217 @@ AvantSPI& Avant::SPI() {return avantSPI;}
 AvantAutoPilot& Avant::AutoPilot() {return avantAutoPilot;}
 
 void Avant::initialize() {
-  rcService.softwareSerial.begin(57600);
+  serialIO.softwareSerial.begin(57600);
 }
 
 void Avant::armDrone() {
-  rcService.sendData((int)-100, 2, 1);
-  rcService.sendData((int)-100, 2, 2);
-  rcService.sendData((int)-100, 2, 3);
-  rcService.sendData((int)-100, 2, 4);
+  serialIO.sendPacket((int)-100, 2, 1);
+  serialIO.sendPacket((int)-100, 2, 2);
+  serialIO.sendPacket((int)-100, 2, 3);
+  serialIO.sendPacket((int)-100, 2, 4);
   delay(500);
-  rcService.sendData((int)0, 2, 1);
-  rcService.sendData((int)-100, 2, 2);
-  rcService.sendData((int)0, 2, 3);
-  rcService.sendData((int)0, 2, 4);
+  serialIO.sendPacket((int)0, 2, 1);
+  serialIO.sendPacket((int)-100, 2, 2);
+  serialIO.sendPacket((int)0, 2, 3);
+  serialIO.sendPacket((int)0, 2, 4);
 }
 
 
 
 // ***********************************************
-// RCTransmitService Class Implementation
+// SerialIO Class Implementation
 // ***********************************************
-RCTransmitService::RCTransmitService() {}
+SerialIO::SerialIO() {}
 
-RCTransmitService::RCTransmitService(int txPin , int rxPin) {
+SerialIO::SerialIO(int txPin , int rxPin) {
   softwareSerial = SoftwareSerial(txPin, rxPin);
   softwareSerial.begin(57600);
-  isHwSerial0Used = false;
-  isHwSerial1Used = false;
-  isHwSerial2Used = false;
-  isHwSerial3Used = false;
-  isSwSerialUsed = true;
+  selectedSerialPort = swSerialPort;
 }
 
-RCTransmitService::RCTransmitService(int hwSerialCode) {
+SerialIO::SerialIO(int hwSerialCode) {
   if (hwSerialCode == 0) {
     #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
       Serial.begin(57600);
     #endif
-    isHwSerial0Used = true;
-    isHwSerial1Used = false;
-    isHwSerial2Used = false;
-    isHwSerial3Used = false;
-    isSwSerialUsed = false;
+	selectedSerialPort = serialPort0;
   } else if (hwSerialCode == 1) {
     #if defined(UBRR1H)
       Serial1.begin(57600);
     #endif
-    isHwSerial0Used = false;
-    isHwSerial1Used = true;
-    isHwSerial2Used = false;
-    isHwSerial3Used = false;
-    isSwSerialUsed = false;
+	selectedSerialPort = serialPort1;
   } else if (hwSerialCode == 2) {
     #if defined(UBRR2H)
       Serial2.begin(57600);
     #endif
-    isHwSerial0Used = false;
-    isHwSerial1Used = false;
-    isHwSerial2Used = true;
-    isHwSerial3Used = false;
-    isSwSerialUsed = false;
+	selectedSerialPort = serialPort2;
   } else if (hwSerialCode == 3) {
     #if defined(UBRR3H)
       Serial3.begin(57600);
     #endif
-    isHwSerial0Used = false;
-    isHwSerial1Used = false;
-    isHwSerial2Used = false;
-    isHwSerial3Used = true;
-    isSwSerialUsed = false;
+	selectedSerialPort = serialPort3;
   }
 }
 
-void RCTransmitService::serialWrite(uint8_t data) {
-  if (isHwSerial0Used) {
-    #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
-      Serial.write(data);
-    #endif
-  } else if (isHwSerial1Used) {
-    #if defined(UBRR1H)
-      Serial1.write(data);
-    #endif
-  } else if (isHwSerial2Used) {
-    #if defined(UBRR2H)
-      Serial2.write(data);
-    #endif
-  } else if (isHwSerial3Used) {
-    #if defined(UBRR3H)
-      Serial3.write(data);
-    #endif
-  } else if (isSwSerialUsed) {
-    softwareSerial.write(data);
-  } else {
-    Serial.println("Error: incorrectly configured serial settings.");
+void SerialIO::write(uint8_t data) {
+  switch(selectedSerialPort) {
+    case serialPort0:
+      #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+        Serial.write(data);
+      #endif
+      break;
+    case serialPort1:
+      #if defined(UBRR1H)
+        Serial1.write(data);
+      #endif
+      break;
+    case serialPort2:
+      #if defined(UBRR2H)
+        Serial2.write(data);
+      #endif
+      break;
+    case serialPort3:
+      #if defined(UBRR3H)
+        Serial3.write(data);
+      #endif
+      break;
+    case swSerialPort:
+      softwareSerial.write(data);
+      break;
+    default:
+      Serial.println("Error: incorrectly configured serial settings.");
   }
 }
 
-void RCTransmitService::sendData(uint8_t data, uint8_t resourceID, uint8_t actionID) {
-  serialWrite('$');
-  serialWrite(1);
-  serialWrite(byte(resourceID));
-  serialWrite(byte(actionID));
-  serialWrite(data);
-  serialWrite((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
+uint8_t SerialIO::serialRead() {
+  switch(selectedSerialPort) {
+    case serialPort0:
+      #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+        return Serial.read();
+      #endif
+      break;
+    case serialPort1:
+      #if defined(UBRR1H)
+        return Serial1.read();
+      #endif
+      break;
+    case serialPort2:
+      #if defined(UBRR2H)
+        return Serial2.read();
+      #endif
+      break;
+    case serialPort3:
+      #if defined(UBRR3H)
+        return Serial3.read();
+      #endif
+      break;
+    case swSerialPort:
+      return softwareSerial.read();
+      break;
+    default:
+      Serial.println("Error: incorrectly configured serial settings.");
+  }
 }
 
-void RCTransmitService::sendData(int16_t data, uint8_t resourceID, uint8_t actionID) {
-  serialWrite('$');
-  serialWrite(2);
-  serialWrite(byte(resourceID));
-  serialWrite(byte(actionID));
-  serialWrite(highByte(data));
-  serialWrite(lowByte(data));
-  serialWrite((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+bool SerialIO::serialAvailable() {
+  switch(selectedSerialPort) {
+    case serialPort0:
+      #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+        return Serial.available();
+      #endif
+      break;
+    case serialPort1:
+      #if defined(UBRR1H)
+        return Serial1.available();
+      #endif
+      break;
+    case serialPort2:
+      #if defined(UBRR2H)
+        return Serial2.available();
+      #endif
+      break;
+    case serialPort3:
+      #if defined(UBRR3H)
+        return Serial3.available();
+      #endif
+      break;
+    case swSerialPort:
+      return softwareSerial.available();
+      break;
+    default:
+      Serial.println("Error: incorrectly configured serial settings.");
+  }
 }
 
-void RCTransmitService::sendData(float data, uint8_t resourceID, uint8_t actionID) {
+void SerialIO::sendPacket(uint8_t data, uint8_t resourceID, uint8_t actionID) {
+  write('$');
+  write(1);
+  write(byte(resourceID));
+  write(byte(actionID));
+  write(data);
+  write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
+}
+
+void SerialIO::sendPacket(int16_t data, uint8_t resourceID, uint8_t actionID) {
+  write('$');
+  write(2);
+  write(byte(resourceID));
+  write(byte(actionID));
+  write(highByte(data));
+  write(lowByte(data));
+  write((2+resourceID+actionID+highByte(data)+lowByte(data))%256);
+}
+
+void SerialIO::sendPacket(float data, uint8_t resourceID, uint8_t actionID) {
   union u_tag {
     uint8_t b[4];
     float dataFloat;
   } u;
   u.dataFloat = data;
 
-  serialWrite('$');
-  serialWrite(4);
-  serialWrite(byte(resourceID));
-  serialWrite(byte(actionID));
-  serialWrite(u.b[0]);
-  serialWrite(u.b[1]);
-  serialWrite(u.b[2]);
-  serialWrite(u.b[3]);
-  serialWrite((4+resourceID+actionID+u.b[0]+u.b[1]+u.b[2]+u.b[3])%256);
+  write('$');
+  write(4);
+  write(byte(resourceID));
+  write(byte(actionID));
+  write(u.b[0]);
+  write(u.b[1]);
+  write(u.b[2]);
+  write(u.b[3]);
+  write((4+resourceID+actionID+u.b[0]+u.b[1]+u.b[2]+u.b[3])%256);
 }
 
-void RCTransmitService::print(String data) {
-  if (isHwSerial0Used) {
-    #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
-      Serial.print(data);
-    #endif
-  } else if (isHwSerial1Used) {
-    #if defined(UBRR1H)
-      Serial1.print(data);
-    #endif
-  } else if (isHwSerial2Used) {
-    #if defined(UBRR2H)
-      Serial2.print(data);
-    #endif
-  } else if (isHwSerial3Used) {
-    #if defined(UBRR3H)
-      Serial3.print(data);
-    #endif
-  } else if (isSwSerialUsed) {
-    softwareSerial.print(data);
+void SerialIO::print(String data) {
+  switch(selectedSerialPort) {
+    case serialPort0:
+      #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+        Serial.print(data);
+      #endif
+      break;
+    case serialPort1:
+      #if defined(UBRR1H)
+        Serial1.print(data);
+      #endif
+      break;
+    case serialPort2:
+      #if defined(UBRR2H)
+        Serial2.print(data);
+      #endif
+      break;
+    case serialPort3:
+      #if defined(UBRR3H)
+        Serial3.print(data);
+      #endif
+      break;
+    case swSerialPort:
+      softwareSerial.print(data);
+      break;
+    default:
+      Serial.println("Error: incorrectly configured serial settings.");
   }
 }
 
-void RCTransmitService::write(byte data) {
-  if (isHwSerial0Used) {
-    #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
-      Serial.write(data);
-    #endif
-  } else if (isHwSerial1Used) {
-    #if defined(UBRR1H)
-      Serial1.write(data);
-    #endif
-  } else if (isHwSerial2Used) {
-    #if defined(UBRR2H)
-      Serial2.write(data);
-    #endif
-  } else if (isHwSerial3Used) {
-    #if defined(UBRR3H)
-      Serial3.write(data);
-    #endif
-  } else if (isSwSerialUsed) {
-    softwareSerial.write(data);
-  }
-}
-
-void RCTransmitService::readBytes(char *buffer, int bytesToRead) {
+void SerialIO::readBytes(char *buffer, int bytesToRead) {
+/*
   if (isHwSerial0Used) {
     #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
       Serial.readBytes(buffer, bytesToRead);
@@ -285,45 +318,46 @@ void RCTransmitService::readBytes(char *buffer, int bytesToRead) {
   } else if (isSwSerialUsed) {
     softwareSerial.readBytes(buffer, bytesToRead);
   }
+*/
 }
 // ***********************************************
 // AvantRC Class Implementation
 // ***********************************************
 AvantRC::AvantRC() {};
-AvantRC::AvantRC(RCTransmitService *rcTservice, Callback *callback) {
+AvantRC::AvantRC(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
 
 void AvantRC::setAileron(int value){
-  service->sendData(value, 2, 4);
+  service->sendPacket(value, 2, 4);
 };
 void AvantRC::setElevator(int value){
-  service->sendData(value, 2, 3);
+  service->sendPacket(value, 2, 3);
 };
 void AvantRC::setThrottle(int value){
-  service->sendData(value, 2, 2);
+  service->sendPacket(value, 2, 2);
 };
 void AvantRC::setRudder(int value){
-  service->sendData(value, 2, 1);
+  service->sendPacket(value, 2, 1);
 }; 
 void AvantRC::setFlightMode(int value){
-  service->sendData(value, 2, 5);
+  service->sendPacket(value, 2, 5);
 };
 void AvantRC::getAileron(){
-  service->sendData(0, 2, 9);
+  service->sendPacket(0, 2, 9);
 }
 void AvantRC::getElevator(){
-  service->sendData(0, 2, 8);
+  service->sendPacket(0, 2, 8);
 }
 void AvantRC::getThrottle(){
-  service->sendData(0, 2, 7);
+  service->sendPacket(0, 2, 7);
 }
 void AvantRC::getRudder(){
-  service->sendData(0, 2, 6);
+  service->sendPacket(0, 2, 6);
 }
 void AvantRC::getFlightMode(){
-  service->sendData(0, 2, 10);
+  service->sendPacket(0, 2, 10);
 }
 
 void AvantRC::flightModeCallback(void (*function)(byte)) {
@@ -355,8 +389,8 @@ void AvantRC::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8
 // AvantTransmitter Class Implementation
 // ***********************************************
 AvantTransmitter::AvantTransmitter(){};
-AvantTransmitter::AvantTransmitter(RCTransmitService *rcService) {
-  service = rcService;
+AvantTransmitter::AvantTransmitter(SerialIO *serialIO) {
+  service = serialIO;
   elevatorMax = 777;
   elevatorMin = 136;
   aileronMax = 872;
@@ -416,10 +450,10 @@ void AvantTransmitter::sendSticks(){
   if (Rudder > 100) Rudder = 100;
   if (Rudder < -100) Rudder = -100;    
 
-  service->sendData(Elevator, 2, 3);
-  service->sendData(Aileron, 2, 4);
-  service->sendData(Throttle, 2, 2);
-  service->sendData(Rudder, 2, 1);
+  service->sendPacket(Elevator, 2, 3);
+  service->sendPacket(Aileron, 2, 4);
+  service->sendPacket(Throttle, 2, 2);
+  service->sendPacket(Rudder, 2, 1);
 }
 
 void AvantTransmitter::throttleEndpoints(uint8_t min, uint8_t max) {
@@ -443,33 +477,33 @@ void AvantTransmitter::elevatorEndpoints(uint8_t min, uint8_t max) {
 //************************************************
 AvantGPIO::AvantGPIO() {};
 
-AvantGPIO::AvantGPIO(RCTransmitService *rcTservice, Callback *callback) {
+AvantGPIO::AvantGPIO(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
 
 void AvantGPIO::digitalWrite(uint8_t pin, bool logicLevel) {
-  service->sendData(logicLevel, 6, pin);
+  service->sendPacket(logicLevel, 6, pin);
 }
 
 void AvantGPIO::pinMode(uint8_t pin, int logicLevel) {
-  service->sendData(logicLevel, 5, pin);
+  service->sendPacket(logicLevel, 5, pin);
 }
 
 void AvantGPIO::digitalRead(uint8_t pin) {
-  service->sendData(0, 8, pin);
+  service->sendPacket(0, 8, pin);
 }
 
 void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
-  service->sendData(value, 7, pin);
+  service->sendPacket(value, 7, pin);
 }
 
 void AvantGPIO::pulseIn(uint8_t pin) {
-  service->sendData(0, 16, pin);
+  service->sendPacket(0, 16, pin);
 }
 
 void AvantGPIO::analogRead(uint8_t pin) {
-  service->sendData(0, 17, pin);
+  service->sendPacket(0, 17, pin);
 }
 
 void AvantGPIO::digitalReadCallback(void (*function)(byte), int pin) {
@@ -531,17 +565,17 @@ void AvantGPIO::analogReadCallback(void (*function)(byte), uint8_t pin) {
 
 void AvantGPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 1;
-  service->sendData(pin, 18, actionID);
+  service->sendPacket(pin, 18, actionID);
 }
 
 void AvantGPIO::detachServo(uint8_t servoNumber) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 3;
-  service->sendData(0, 18, actionID);
+  service->sendPacket(0, 18, actionID);
 }
 
 void AvantGPIO::writeServo(uint8_t servoNumber, uint8_t data) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 2;
-  service->sendData(data, 18, actionID);
+  service->sendPacket(data, 18, actionID);
 }
 
 //**********************************
@@ -549,31 +583,31 @@ void AvantGPIO::writeServo(uint8_t servoNumber, uint8_t data) {
 //**********************************
 AvantI2C::AvantI2C(){}
 
-AvantI2C::AvantI2C(RCTransmitService *rcTservice, Callback *callback) {
+AvantI2C::AvantI2C(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
 
 void AvantI2C::deviceID(uint8_t ID){
-  service->sendData(ID, 11, 7);
+  service->sendPacket(ID, 11, 7);
 }
 void AvantI2C::beginTransmission(void){
-  service->sendData(0, 11, 8);
+  service->sendPacket(0, 11, 8);
 }
 
 void AvantI2C::endTransmission(void){
-  service->sendData(0, 11, 4);
+  service->sendPacket(0, 11, 4);
 }
 
 void AvantI2C::write(uint8_t data){
-  service->sendData(data, 11, 3);
+  service->sendPacket(data, 11, 3);
 }
 
 void AvantI2C::read(void){
-  service->sendData(0, 11, 5);
+  service->sendPacket(0, 11, 5);
 }
 void AvantI2C::wireRequest(uint8_t bytes){
-  service->sendData(bytes, 11, 6);
+  service->sendPacket(bytes, 11, 6);
 }
 
 void AvantI2C::readCallback(void (*function)(byte)) {
@@ -586,7 +620,7 @@ void AvantI2C::readCallback(void (*function)(byte)) {
 //********************************************
 AvantXbee::AvantXbee(){}
 
-AvantXbee::AvantXbee(RCTransmitService *rcTservice, Callback *callback) {
+AvantXbee::AvantXbee(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
@@ -608,37 +642,37 @@ void AvantXbee::id(uint8_t id) {
 //********************************************
 AvantPose::AvantPose(){}
 
-AvantPose::AvantPose(RCTransmitService *rcTservice, Callback *callback) {
+AvantPose::AvantPose(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
 
 void AvantPose::getGPSData(void) {
-  service->sendData(0, 9, 1);
+  service->sendPacket(0, 9, 1);
 }
 
 void AvantPose::getLatitude(void) {
-  service->sendData(0, 9, 2);
+  service->sendPacket(0, 9, 2);
 }
 
 void AvantPose::getLongitude(void) {
-  service->sendData(0, 9, 3);
+  service->sendPacket(0, 9, 3);
 }
 
 void AvantPose::getAltitude(void ) {
-  service->sendData(0, 9, 4);
+  service->sendPacket(0, 9, 4);
 }
 
 void AvantPose::getSatellites(void) {
-  service->sendData(0, 9, 5);
+  service->sendPacket(0, 9, 5);
 }
 
 void AvantPose::getSpeed(void) {
-  service->sendData(0, 9, 6);
+  service->sendPacket(0, 9, 6);
 }
 
 void AvantPose::getOrientation(void){
-  service->sendData(0, 9, 7);
+  service->sendPacket(0, 9, 7);
 }
 
 void AvantPose::longitudeCallback(void (*function)(float)) {
@@ -670,25 +704,25 @@ void AvantPose::orientationCallback(void (*function)(float)) {
 //AvantSPI Class Implementation
 //*******************************************
 AvantSPI::AvantSPI(){}
-AvantSPI::AvantSPI(RCTransmitService *rcTservice, Callback *callback) {
+AvantSPI::AvantSPI(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
 
 void AvantSPI::transfer(uint8_t data){
-  service->sendData(data, 10, 1);
+  service->sendPacket(data, 10, 1);
 }
 
 void AvantSPI::setBitOrder(uint8_t data){
-  service->sendData(data, 10, 2);
+  service->sendPacket(data, 10, 2);
 }
 
 void AvantSPI::setClockDivider(uint8_t data){
-  service->sendData(data, 10, 3);
+  service->sendPacket(data, 10, 3);
 }
 
 void AvantSPI::setDataMode(uint8_t data){
-  service->sendData(data, 10, 4);
+  service->sendPacket(data, 10, 4);
 }
 
 void AvantSPI::transferCallback(void (*function)(byte)) {
@@ -699,184 +733,184 @@ void AvantSPI::transferCallback(void (*function)(byte)) {
 //AvantAutoPilot Class Implementation
 //*******************************************
 AvantAutoPilot::AvantAutoPilot(){}
-AvantAutoPilot::AvantAutoPilot(RCTransmitService *rcTservice, Callback *callback) {
+AvantAutoPilot::AvantAutoPilot(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
 
 void AvantAutoPilot::gpsExecute() {
-  service->sendData(0, 3, 1);
+  service->sendPacket(0, 3, 1);
 }
 
 void AvantAutoPilot::compassExecute() {
-  service->sendData(0, 3, 2);
+  service->sendPacket(0, 3, 2);
 }
 
 void AvantAutoPilot::setYawError(float error) {
-  service->sendData(error, 3, 3);
+  service->sendPacket(error, 3, 3);
 }
 
 void AvantAutoPilot::setThrottleError(float error) {
-  service->sendData(error, 3, 4);
+  service->sendPacket(error, 3, 4);
 }
 
 void AvantAutoPilot::setElevatorError(float error) {
-  service->sendData(error, 3, 5);
+  service->sendPacket(error, 3, 5);
 }
 
 void AvantAutoPilot::setAileronError(float error) {
-  service->sendData(error, 3, 6);
+  service->sendPacket(error, 3, 6);
 }
 
 void AvantAutoPilot::setWaypointLatitude(float latitude) {
-  service->sendData(latitude, 15, 1);
+  service->sendPacket(latitude, 15, 1);
 }
 
 void AvantAutoPilot::setWaypointLongitude(float longitude) {
-  service->sendData(longitude, 15, 2);
+  service->sendPacket(longitude, 15, 2);
 }
 
 void AvantAutoPilot::setWaypointAltitude(float altitude) {
-  service->sendData(altitude, 15, 3);
+  service->sendPacket(altitude, 15, 3);
 }
 
 void AvantAutoPilot::setWaypointOrientation(float orientation) {
-  service->sendData(orientation, 15, 4);
+  service->sendPacket(orientation, 15, 4);
 }
 
 void AvantAutoPilot::setYawKP(float kp) {
-  service->sendData(kp, 15, 5);
+  service->sendPacket(kp, 15, 5);
 }
 
 void AvantAutoPilot::setYawKD(float kd) {
-  service->sendData(kd, 15, 6);
+  service->sendPacket(kd, 15, 6);
 }
 
 void AvantAutoPilot::setYawKI(float ki) {
-  service->sendData(ki, 15, 7);
+  service->sendPacket(ki, 15, 7);
 }
 
 void AvantAutoPilot::setThrottleKP(float kp) {
-  service->sendData(kp, 15, 8);
+  service->sendPacket(kp, 15, 8);
 }
 
 void AvantAutoPilot::setThrottleKD(float kd) {
-  service->sendData(kd, 15, 9);
+  service->sendPacket(kd, 15, 9);
 }
 
 void AvantAutoPilot::setThrottleKI(float ki) {
-  service->sendData(ki, 15, 10);
+  service->sendPacket(ki, 15, 10);
 }
 
 void AvantAutoPilot::setElevatorKP(float kp) {
-  service->sendData(kp, 15, 11);
+  service->sendPacket(kp, 15, 11);
 }
 
 void AvantAutoPilot::setElevatorKD(float kd) {
-  service->sendData(kd, 15, 12);
+  service->sendPacket(kd, 15, 12);
 }
 
 void AvantAutoPilot::setElevatorKI(float ki) {
-  service->sendData(ki, 15, 13);
+  service->sendPacket(ki, 15, 13);
 }
 
 void AvantAutoPilot::setAileronKP(float kp) {
-  service->sendData(kp, 15, 14);
+  service->sendPacket(kp, 15, 14);
 }
 
 void AvantAutoPilot::setAileronKD(float kd) {
-  service->sendData(kd, 15, 15);
+  service->sendPacket(kd, 15, 15);
 }
 
 void AvantAutoPilot::setAileronKI(float ki) {
-  service->sendData(ki, 15, 16);
+  service->sendPacket(ki, 15, 16);
 }
 
 void AvantAutoPilot::getWaypointLatitude(void (*function)(float)) {
   (*myCallback).getWaypointLatitude = function;
-  service->sendData(0, 15, 22);
+  service->sendPacket(0, 15, 22);
 }
 
 void AvantAutoPilot::getWaypointLongitude(void (*function)(float)) {
   (*myCallback).getWaypointLongitude = function;
-  service->sendData(0, 15, 23);
+  service->sendPacket(0, 15, 23);
 }
 
 void AvantAutoPilot::getWaypointAltitude(void (*function)(float)) {
   (*myCallback).getWaypointAltitude = function;
-  service->sendData(0, 15, 24);
+  service->sendPacket(0, 15, 24);
 }
 
 void AvantAutoPilot::getWaypointOrientation(void (*function)(float)) {
   (*myCallback).getWaypointOrientation = function;
-  service->sendData(0, 15, 25);
+  service->sendPacket(0, 15, 25);
 }
 
 void AvantAutoPilot::getYawKP(void (*function)(float)) {
   (*myCallback).getYawKP = function;
-  service->sendData(0, 15, 26);
+  service->sendPacket(0, 15, 26);
 }
 
 void AvantAutoPilot::getYawKD(void (*function)(float)) {
   (*myCallback).getYawKD = function;
-  service->sendData(0, 15, 27);
+  service->sendPacket(0, 15, 27);
 }
 
 void AvantAutoPilot::getYawKI(void (*function)(float)) {
   (*myCallback).getYawKI = function;
-  service->sendData(0, 15, 28);
+  service->sendPacket(0, 15, 28);
 }
 
 void AvantAutoPilot::getThrottleKP(void (*function)(float)) {
   (*myCallback).getThrottleKP = function;
-  service->sendData(0, 15, 29);
+  service->sendPacket(0, 15, 29);
 }
 
 void AvantAutoPilot::getThrottleKD(void (*function)(float)) {
   (*myCallback).getThrottleKD = function;
-  service->sendData(0, 15, 30);
+  service->sendPacket(0, 15, 30);
 }
 
 void AvantAutoPilot::getThrottleKI(void (*function)(float)) {
   (*myCallback).getThrottleKI = function;
-  service->sendData(0, 15, 31);
+  service->sendPacket(0, 15, 31);
 }
 
 void AvantAutoPilot::getElevatorKP(void (*function)(float)) {
   (*myCallback).getElevatorKP = function;
-  service->sendData(0, 15, 32);
+  service->sendPacket(0, 15, 32);
 }
 
 void AvantAutoPilot::getElevatorKD(void (*function)(float)) {
   (*myCallback).getElevatorKD = function;
-  service->sendData(0, 15, 33);
+  service->sendPacket(0, 15, 33);
 }
 
 void AvantAutoPilot::getElevatorKI(void (*function)(float)) {
   (*myCallback).getElevatorKI = function;
-  service->sendData(0, 15, 34);
+  service->sendPacket(0, 15, 34);
 }
 
 void AvantAutoPilot::getAileronKP(void (*function)(float)) {
   (*myCallback).getAileronKP = function;
-  service->sendData(0, 15, 35);
+  service->sendPacket(0, 15, 35);
 }
 
 void AvantAutoPilot::getAileronKD(void (*function)(float)) {
   (*myCallback).getAileronKD = function;
-  service->sendData(0, 15, 36);
+  service->sendPacket(0, 15, 36);
 }
 
 void AvantAutoPilot::getAileronKI(void (*function)(float)) {
   (*myCallback).getAileronKI = function;
-  service->sendData(0, 15, 37);
+  service->sendPacket(0, 15, 37);
 }
 
 //*******************************************
 //AvantResponseHandler Class Implementation
 //*******************************************
 AvantResponseHandler::AvantResponseHandler(){};
-AvantResponseHandler::AvantResponseHandler(RCTransmitService *rcTservice, Callback *callback) {
+AvantResponseHandler::AvantResponseHandler(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
@@ -903,356 +937,44 @@ long AvantResponseHandler::dataToLong(byte data[]) {
 }
 
 void AvantResponseHandler::responseHandler() {
-  if (service->isHwSerial0Used) {
-    char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
-    int length = 0;
-    int resourceID = 0;
-    int actionID = 0;
-    int datasum = 0;
-    byte i = 0;
-    while (Serial.available() > 0) { 
-      if (Serial.read() == '$') {  //this is the start of a Data Packet
-        while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
-          int s = Serial.read();
-          if (length == -1 && s != -1) {
-            length = s;         //set the length
-          } else if (resourceID == -1 && s != -1) {
-            resourceID = s;     //set the resourceID
-          } else if (actionID == -1 && s != -1) {
-            actionID = s;       //set the actionID
-          }
-          i++;
-        }
-        byte data[length+1]; // create a buffer to store the data and checksum info 
-        i = 0;    //reset the i to zero to begin a new iteration process
-        for (int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
-          if (i == length+1) {               //if all desired bytes have been read then break
-            break;
-          }
-          int s = Serial.read();
-          if (s != -1) {
-            data[i] = byte(s);
-            i++;
-          }
-        }
-        for(int i=0;i<length;i++){
-          datasum = datasum+byte(data[i]);
-        }
-        
-        if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
-          //route the data to the appropriate place here
-          switch(resourceID) {
-            case 1:
-              //Flight_Setup
-              Serial.println("got Flight Setup");
-              break;
-            case 2:
-              //Manual_Controls
-              break;
-            case 3:
-              //Mission_Planner
-              break;
-            case 4:
-              //Battery_Status
-              break;
-            case 5:
-              //Pin_Mode
-              break;
-            case 6:
-              //Digital_Write
-              break;
-            case 7:
-              //Analog_Write
-              break;
-            case 8:
-              //Digital_Read
-              if(actionID == 1)
-                (*myCallback).digitalRead1(data[0]);
-              if(actionID == 2)
-                (*myCallback).digitalRead2(data[0]);
-              if(actionID == 3)
-                (*myCallback).digitalRead3(data[0]);
-              if(actionID == 4)
-                (*myCallback).digitalRead4(data[0]);
-              if(actionID == 5)
-                (*myCallback).digitalRead5(data[0]);
-              if(actionID == 6)
-                (*myCallback).digitalRead6(data[0]);
-              if(actionID == 7)
-                (*myCallback).digitalRead7(data[0]);
-              if(actionID == 8)
-                (*myCallback).digitalRead8(data[0]);
-              if(actionID == 9)
-                (*myCallback).digitalRead9(data[0]);
-              if(actionID == 10)
-                (*myCallback).digitalRead10(data[0]);
-              break;
-            case 9:
-              //Pose_Data
-              if(actionID == 2)
-                (*myCallback).longitude(dataToFloat(data));
-              if(actionID == 3)
-                (*myCallback).latitude(dataToFloat(data));
-              if(actionID == 4)
-                (*myCallback).altitude(dataToFloat(data));
-              if(actionID == 5)
-                (*myCallback).satellite(data[0]);
-              if(actionID == 6)
-                (*myCallback).speed(dataToFloat(data));
-              if(actionID == 7)
-                (*myCallback).orientation(dataToFloat(data));
-              break;
-            case 10:
-              //SPI_Communication
-              break;
-            case 11:
-              //I2C_Communication
-              break;
-            case 12:
-              //Uart_Communication
-              break;
-            case 13:
-              //Transmission_And_Security
-              break;
-            case 14:
-              //Scripting
-              break;
-            case 15:
-              //SimpleAP
-              break;
-            case 16:
-              if(actionID == 1)
-                (*myCallback).pulseIn1(dataToLong(data));
-              if(actionID == 2)
-                (*myCallback).pulseIn2(dataToLong(data));
-              if(actionID == 3)
-                (*myCallback).pulseIn3(dataToLong(data));
-              if(actionID == 4)
-                (*myCallback).pulseIn4(dataToLong(data));
-              if(actionID == 5)
-                (*myCallback).pulseIn5(dataToLong(data));
-              if(actionID == 6)
-                (*myCallback).pulseIn6(dataToLong(data));
-              if(actionID == 7)
-                (*myCallback).pulseIn7(dataToLong(data));
-              if(actionID == 8)
-                (*myCallback).pulseIn8(dataToLong(data));
-              if(actionID == 9)
-                (*myCallback).pulseIn9(dataToLong(data));
-              if(actionID == 10)
-                (*myCallback).pulseIn10(dataToLong(data));
-              break;
-            case 17:
-              if(actionID == 1)
-                (*myCallback).analogRead1(data[0]);
-              if(actionID == 2)
-                (*myCallback).analogRead2(data[0]);
-              if(actionID == 3)
-                (*myCallback).analogRead3(data[0]);
-              if(actionID == 4)
-                (*myCallback).analogRead4(data[0]);
-              break;
-        }//end of data packet router
-      }//end of checksum
-      else
-        Serial.println("checksum failed");
-      }//end of if Serial available
-    }//end of Serial.read
-  }
-
-#if defined(UBRR1H)
-  if (service->isHwSerial1Used) {
-    int length = -1;
-    int resourceID = -1;
-    int actionID = -1;
-    int datasum = 0;
-    byte i = 0;
-    if (Serial1.available() > 0) { 
-      if (Serial1.read() == '$') {  //this is the start of a Data Packet
-        while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
-          int s = Serial1.read();
-          if (length == -1 && s != -1) {
-            length = s;         //set the length
-          } else if (resourceID == -1 && s != -1) {
-            resourceID = s;       //set the resourceID
-          } else if (actionID == -1 && s != -1) {
-            actionID = s;         //set the actionID
-          }
-          i++;
-        }
-        byte data[length+1]; // create a buffer to store the data and checksum info 
-        i = 0;    //reset the i to zero to begin a new iteration process
-        for (int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
-          if(i == length+1) {               //if all desired bytes have been read then break
-            break;
-          }
-          int s = Serial1.read();
-          if(s != -1) {
-            data[i] = byte(s);
-            i++;
-          }
-        }
-        for (int i=0;i<length;i++) {
-          datasum = datasum+data[i];
-        }
-        if (data[length]== byte((length+resourceID+actionID+datasum)%256)) {  //check the checksum
-          //route the data to the appropriate place here
-          switch(resourceID) {
-            case 1:
-              //Flight_Setup
-              Serial.println("got Flight Setup");
-              break;
-            case 2:
-              //Manual_Controls
-              break;
-            case 3:
-              //Mission_Planner
-              break;
-            case 4:
-              //Battery_Status
-              break;
-            case 5:
-              //Pin_Mode
-              break;
-            case 6:
-              //Digital_Write
-              break;
-            case 7:
-              //Analog_Write
-              break;
-            case 8:
-              //Digital_Read
-              if(actionID == 1)
-                (*myCallback).digitalRead1(data[0]);
-              if(actionID == 2)
-                (*myCallback).digitalRead2(data[0]);
-              if(actionID == 3)
-                (*myCallback).digitalRead3(data[0]);
-              if(actionID == 4)
-                (*myCallback).digitalRead4(data[0]);
-              if(actionID == 5)
-                (*myCallback).digitalRead5(data[0]);
-              if(actionID == 6)
-                (*myCallback).digitalRead6(data[0]);
-              if(actionID == 7)
-                (*myCallback).digitalRead7(data[0]);
-              if(actionID == 8)
-                (*myCallback).digitalRead8(data[0]);
-              if(actionID == 9)
-                (*myCallback).digitalRead9(data[0]);
-              if(actionID == 10)
-                (*myCallback).digitalRead10(data[0]);
-              break;
-            case 9:
-              //Pose_Data
-              if(actionID == 2)
-                (*myCallback).longitude(dataToFloat(data));
-              if(actionID == 3)
-                (*myCallback).latitude(dataToFloat(data));
-              if(actionID == 4)
-                (*myCallback).altitude(dataToFloat(data));
-              if(actionID == 5)
-                (*myCallback).satellite(data[0]);
-              if(actionID == 6)
-                (*myCallback).speed(dataToFloat(data));
-              if(actionID == 7)
-                (*myCallback).orientation(dataToFloat(data));
-              break;
-            case 10:
-              //SPI_Communication
-              break;
-            case 11:
-              //I2C_Communication
-              //Avant::i2cRead(data);
-              break;
-            case 12:
-              //Uart_Communication
-              break;
-            case 13:
-              //Transmission_And_Security
-              break;
-            case 14:
-              //Scripting
-              break;
-            case 15:
-              //SimpleAP
-              break;
-            case 16:
-              if(actionID == 1)
-                (*myCallback).pulseIn1(dataToLong(data));
-              if(actionID == 2)
-                (*myCallback).pulseIn2(dataToLong(data));
-              if(actionID == 3)
-                (*myCallback).pulseIn3(dataToLong(data));
-              if(actionID == 4)
-                (*myCallback).pulseIn4(dataToLong(data));
-              if(actionID == 5)
-                (*myCallback).pulseIn5(dataToLong(data));
-              if(actionID == 6)
-                (*myCallback).pulseIn6(dataToLong(data));
-              if(actionID == 7)
-                (*myCallback).pulseIn7(dataToLong(data));
-              if(actionID == 8)
-                (*myCallback).pulseIn8(dataToLong(data));
-              if(actionID == 9)
-                (*myCallback).pulseIn9(dataToLong(data));
-              if(actionID == 10)
-                (*myCallback).pulseIn10(dataToLong(data));
-              break;
-            case 17:
-              if(actionID == 1)
-                (*myCallback).analogRead1(data[0]);
-              if(actionID == 2)
-                (*myCallback).analogRead2(data[0]);
-              if(actionID == 3)
-                (*myCallback).analogRead3(data[0]);
-              if(actionID == 4)
-                (*myCallback).analogRead4(data[0]);
-              break;
-          }//end of data packet router
-        }//end of checksum
-      }//end of if Serial available
-    }//end of Serial.read
-  }
-#endif
-#if defined(UBRR2H)
-  if (service->isHwSerial2Used) {
-    char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
-    int length = 0;
-    int resourceID = 0;
-    int actionID = 0;
-    int datasum = 0;
-    byte i = 0;
-    while (Serial2.available() > 0) { 
-    if (Serial2.read() == '$') {  //this is the start of a Data Packet
-      while ((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
-        int s = Serial2.read();
+  uint8_t buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
+  uint8_t length = 0;
+  uint8_t resourceID = 0;
+  uint8_t actionID = 0;
+  uint16_t datasum = 0;
+  uint8_t i = 0;
+  while (service->serialAvailable() > 0) {
+    if (service->serialRead() == '$') {  //this is the start of a Data Packet
+      while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
+        uint8_t s = service->serialRead();
         if (length == -1 && s != -1) {
           length = s;         //set the length
         } else if (resourceID == -1 && s != -1) {
-          resourceID = s;       //set the resourceID
+          resourceID = s;     //set the resourceID
         } else if (actionID == -1 && s != -1) {
-          actionID = s;         //set the actionID
+          actionID = s;       //set the actionID
         }
         i++;
       }
-      byte data[length+1]; // create a buffer to store the data and checksum info 
+      uint8_t data[length+1]; // create a buffer to store the data and checksum info 
       i = 0;    //reset the i to zero to begin a new iteration process
+      // TODO: explain `80` better
       for (int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
         if (i == length+1) {               //if all desired bytes have been read then break
           break;
         }
-        int s = Serial2.read();
-        if(s != -1) {
-          data[i] = byte(s);
+        uint8_t s = service->serialRead();
+        if (s != -1) {
+          data[i] = s;
           i++;
         }
       }
       for(int i=0;i<length;i++){
-        datasum = datasum+byte(data[i]);
+        datasum = datasum+data[i];
       }
-      if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
-        ///////route the data to the appropriate place here
+      
+      if (data[length] == (length+resourceID+actionID+datasum)%256) {  //check the checksum
+        //route the data to the appropriate place here
         switch(resourceID) {
           case 1:
             //Flight_Setup
@@ -1279,47 +1001,46 @@ void AvantResponseHandler::responseHandler() {
           case 8:
             //Digital_Read
             if(actionID == 1)
-              (*myCallback).digitalRead1(data[0]);
+              myCallback->digitalRead1(data[0]);
             if(actionID == 2)
-              (*myCallback).digitalRead2(data[0]);
+              myCallback->digitalRead2(data[0]);
             if(actionID == 3)
-              (*myCallback).digitalRead3(data[0]);
+              myCallback->digitalRead3(data[0]);
             if(actionID == 4)
-              (*myCallback).digitalRead4(data[0]);
+              myCallback->digitalRead4(data[0]);
             if(actionID == 5)
-              (*myCallback).digitalRead5(data[0]);
+              myCallback->digitalRead5(data[0]);
             if(actionID == 6)
-              (*myCallback).digitalRead6(data[0]);
+              myCallback->digitalRead6(data[0]);
             if(actionID == 7)
-              (*myCallback).digitalRead7(data[0]);
+              myCallback->digitalRead7(data[0]);
             if(actionID == 8)
-              (*myCallback).digitalRead8(data[0]);
+              myCallback->digitalRead8(data[0]);
             if(actionID == 9)
-              (*myCallback).digitalRead9(data[0]);
+              myCallback->digitalRead9(data[0]);
             if(actionID == 10)
-              (*myCallback).digitalRead10(data[0]);
+              myCallback->digitalRead10(data[0]);
             break;
           case 9:
             //Pose_Data
             if(actionID == 2)
-              (*myCallback).longitude(dataToFloat(data));
+              myCallback->longitude(dataToFloat(data));
             if(actionID == 3)
-              (*myCallback).latitude(dataToFloat(data));
+              myCallback->latitude(dataToFloat(data));
             if(actionID == 4)
-              (*myCallback).altitude(dataToFloat(data));
+              myCallback->altitude(dataToFloat(data));
             if(actionID == 5)
-              (*myCallback).satellite(data[0]);
+              myCallback->satellite(data[0]);
             if(actionID == 6)
-              (*myCallback).speed(dataToFloat(data));
+              myCallback->speed(dataToFloat(data));
             if(actionID == 7)
-              (*myCallback).orientation(dataToFloat(data));
+              myCallback->orientation(dataToFloat(data));
             break;
           case 10:
             //SPI_Communication
             break;
           case 11:
             //I2C_Communication
-            //Avant::i2cRead(data);
             break;
           case 12:
             //Uart_Communication
@@ -1334,366 +1055,44 @@ void AvantResponseHandler::responseHandler() {
             //SimpleAP
             break;
           case 16:
-            if (actionID == 1)
-              (*myCallback).pulseIn1(dataToLong(data));
-            if (actionID == 2)
-              (*myCallback).pulseIn2(dataToLong(data));
-            if (actionID == 3)
-              (*myCallback).pulseIn3(dataToLong(data));
-            if (actionID == 4)
-              (*myCallback).pulseIn4(dataToLong(data));
-            if (actionID == 5)
-              (*myCallback).pulseIn5(dataToLong(data));
-            if (actionID == 6)
-              (*myCallback).pulseIn6(dataToLong(data));
-            if (actionID == 7)
-              (*myCallback).pulseIn7(dataToLong(data));
-            if (actionID == 8)
-              (*myCallback).pulseIn8(dataToLong(data));
-            if (actionID == 9)
-              (*myCallback).pulseIn9(dataToLong(data));
-            if (actionID == 10)
-              (*myCallback).pulseIn10(dataToLong(data));
-            break;
-          case 17:
-            if (actionID == 1)
-              (*myCallback).analogRead1(data[0]);
-            if (actionID == 2)
-              (*myCallback).analogRead2(data[0]);
-            if (actionID == 3)
-              (*myCallback).analogRead3(data[0]);
-            if (actionID == 4)
-             (*myCallback).analogRead4(data[0]);
-            break;
-        }//end of data packet router
-      }//end of checksum
-      else
-        Serial.println("checksum failed");
-      }//end of if Serial available
-    }//end of Serial.read
-  }
-#endif
-#if defined(UBRR3H)
-  if (service->isHwSerial3Used) {
-    char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
-    int length = 0;
-    int resourceID = 0;
-    int actionID = 0;
-    int datasum = 0;
-    byte i = 0;
-    while (Serial3.available() > 0) { 
-    if (Serial3.read() == '$') {  //this is the start of a Data Packet
-      while((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
-        int s = Serial3.read();
-        if (length == -1 && s != -1){
-          length = s;         //set the length
-        }
-        else if (resourceID == -1 && s != -1) {
-          resourceID = s;       //set the resourceID
-        }
-        else if (actionID == -1 && s != -1) {
-          actionID = s;         //set the actionID
-        }
-        i++;
-      }
-      byte data[length+1]; // create a buffer to store the data and checksum info 
-      i = 0;    //reset the i to zero to begin a new iteration process
-      for (int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
-        if(i == length+1) {               //if all desired bytes have been read then break
-          break;
-        }
-        int s = Serial3.read();
-        if(s != -1) {
-          data[i] = byte(s);
-          i++;
-        }
-      }
-      for(int i=0;i<length;i++){
-        datasum = datasum+byte(data[i]);
-      }
-        
-      if(byte(data[length])==(length+resourceID+actionID+datasum)%256){  //check the checksum
-        ///////route the data to the appropriate place here
-        switch(resourceID) {
-          case 1:
-            //Flight_Setup
-            Serial.println("got Flight Setup");
-            break;
-          case 2:
-            //Manual_Controls
-            break;
-          case 3:
-            //Mission_Planner
-            break;
-          case 4:
-            //Battery_Status
-            break;
-          case 5:
-            //Pin_Mode
-            break;
-          case 6:
-            //Digital_Write
             if(actionID == 1)
-              (*myCallback).digitalRead1(data[0]);
+              myCallback->pulseIn1(dataToLong(data));
             if(actionID == 2)
-              (*myCallback).digitalRead2(data[0]);
+              myCallback->pulseIn2(dataToLong(data));
             if(actionID == 3)
-              (*myCallback).digitalRead3(data[0]);
+              myCallback->pulseIn3(dataToLong(data));
             if(actionID == 4)
-              (*myCallback).digitalRead4(data[0]);
+              myCallback->pulseIn4(dataToLong(data));
             if(actionID == 5)
-              (*myCallback).digitalRead5(data[0]);
+              myCallback->pulseIn5(dataToLong(data));
             if(actionID == 6)
-              (*myCallback).digitalRead6(data[0]);
+              myCallback->pulseIn6(dataToLong(data));
             if(actionID == 7)
-              (*myCallback).digitalRead7(data[0]);
+              myCallback->pulseIn7(dataToLong(data));
             if(actionID == 8)
-              (*myCallback).digitalRead8(data[0]);
+              myCallback->pulseIn8(dataToLong(data));
             if(actionID == 9)
-              (*myCallback).digitalRead9(data[0]);
+              myCallback->pulseIn9(dataToLong(data));
             if(actionID == 10)
-              (*myCallback).digitalRead10(data[0]);
-            break;
-          case 7:
-            //Analog_Write
-            break;
-          case 8:
-            //Digital_Read
-            break;
-          case 9:
-            //Pose_Data
-            if(actionID == 2)
-              (*myCallback).longitude(dataToFloat(data));
-            if(actionID == 3)
-              (*myCallback).latitude(dataToFloat(data));
-            if(actionID == 4)
-              (*myCallback).altitude(dataToFloat(data));
-            if(actionID == 5)
-              (*myCallback).satellite(data[0]);
-            if(actionID == 6)
-              (*myCallback).speed(dataToFloat(data));
-            if(actionID == 7)
-              (*myCallback).orientation(dataToFloat(data));
-            break;
-          case 10:
-            //SPI_Communication
-            break;
-          case 11:
-            //I2C_Communication
-            //Avant::i2cRead(data);
-            break;
-          case 12:
-            //Uart_Communication
-            break;
-          case 13:
-            //Transmission_And_Security
-            break;
-          case 14:
-            //Scripting
-            break;
-          case 15:
-            //SimpleAP
-          case 16:
-            if(actionID == 1)
-              (*myCallback).pulseIn1(dataToLong(data));
-            if(actionID == 2)
-              (*myCallback).pulseIn2(dataToLong(data));
-            if(actionID == 3)
-              (*myCallback).pulseIn3(dataToLong(data));
-            if(actionID == 4)
-              (*myCallback).pulseIn4(dataToLong(data));
-            if(actionID == 5)
-              (*myCallback).pulseIn5(dataToLong(data));
-            if(actionID == 6)
-              (*myCallback).pulseIn6(dataToLong(data));
-            if(actionID == 7)
-              (*myCallback).pulseIn7(dataToLong(data));
-            if(actionID == 8)
-              (*myCallback).pulseIn8(dataToLong(data));
-            if(actionID == 9)
-              (*myCallback).pulseIn9(dataToLong(data));
-            if(actionID == 10)
-              (*myCallback).pulseIn10(dataToLong(data));
+              myCallback->pulseIn10(dataToLong(data));
             break;
           case 17:
             if(actionID == 1)
-              (*myCallback).analogRead1(data[0]);
+              myCallback->analogRead1(data[0]);
             if(actionID == 2)
-              (*myCallback).analogRead2(data[0]);
+              myCallback->analogRead2(data[0]);
             if(actionID == 3)
-              (*myCallback).analogRead3(data[0]);
+              myCallback->analogRead3(data[0]);
             if(actionID == 4)
-              (*myCallback).analogRead4(data[0]);
+              myCallback->analogRead4(data[0]);
             break;
-        }//end of data packet router
-      }//end of checksum
-      else
-        Serial.println("checksum failed");
-      }//end of if Serial available
-    }//end of Serial.read
-  }
-#endif
-  if(service->isSwSerialUsed) {
-    char buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
-    int length = 0;
-    int resourceID = 0;
-    int actionID = 0;
-    int datasum = 0;
-    byte i = 0;
-    while (service->softwareSerial.available() > 0) { 
-      Serial.println("Here");
-      if (service->softwareSerial.read() == '$') {  //this is the start of a Data Packet
-        while ((actionID == -1 || resourceID == -1 || length == -1 ) && (i < 250)) {
-          int s = service->softwareSerial.read();
-          if (length == -1 && s != -1){
-            length = s;         //set the length
-          }
-          else if (resourceID == -1 && s != -1) {
-            resourceID = s;       //set the resourceID
-          }
-          else if (actionID == -1 && s != -1) {
-            actionID = s;         //set the actionID
-          }
-          i++;
-        }
-        byte data[length+1]; // create a buffer to store the data and checksum info 
-        i = 0;    //reset the i to zero to begin a new iteration process
-        for(int iterate = 0; iterate < 80*length; iterate++) { //iterate for certain amount of times based on number of desired bytes
-          if(i == length+1) {               //if all desired bytes have been read then break
-            break;
-          }
-          int s = service->softwareSerial.read();
-          if(s != -1) {
-            data[i] = byte(s);
-            i++;
-          }
-        }
-        for(int i=0;i<length;i++){
-          datasum = datasum+byte(data[i]);
-        }
-        
-        if (byte(data[length])==(length+resourceID+actionID+datasum)%256) {  //check the checksum
-          ///////route the data to the appropriate place here
-          switch(resourceID) {
-            case 1:
-              //Flight_Setup
-              Serial.println("got Flight Setup");
-              break;
-            case 2:
-              //Manual_Controls
-              break;
-            case 3:
-              //Mission_Planner
-              break;
-            case 4:
-              //Battery_Status
-              break;
-            case 5:
-              //Pin_Mode
-              break;
-            case 6:
-              //Digital_Write
-              if(actionID == 1)
-                (*myCallback).digitalRead1(data[0]);
-              if(actionID == 2)
-                (*myCallback).digitalRead2(data[0]);
-              if(actionID == 3)
-                (*myCallback).digitalRead3(data[0]);
-              if(actionID == 4)
-                (*myCallback).digitalRead4(data[0]);
-              if(actionID == 5)
-                (*myCallback).digitalRead5(data[0]);
-              if(actionID == 6)
-                (*myCallback).digitalRead6(data[0]);
-              if(actionID == 7)
-                (*myCallback).digitalRead7(data[0]);
-              if(actionID == 8)
-                (*myCallback).digitalRead8(data[0]);
-              if(actionID == 9)
-                (*myCallback).digitalRead9(data[0]);
-              if(actionID == 10)
-                (*myCallback).digitalRead10(data[0]);
-              break;
-            case 7:
-              //Analog_Write
-              break;
-            case 8:
-              //Digital_Read
-              break;
-            case 9:
-              //Pose_Data
-              if(actionID == 2)
-                (*myCallback).longitude(dataToFloat(data));
-              if(actionID == 3)
-                (*myCallback).latitude(dataToFloat(data));
-              if(actionID == 4)
-                (*myCallback).altitude(dataToFloat(data));
-              if(actionID == 5)
-                (*myCallback).satellite(data[0]);
-              if(actionID == 6)
-                (*myCallback).speed(dataToFloat(data));
-              if(actionID == 7)
-                (*myCallback).orientation(dataToFloat(data));
-              break;
-            case 10:
-              //SPI_Communication
-              break;
-            case 11:
-              //I2C_Communication
-              break;
-            case 12:
-              //Uart_Communication
-              break;
-            case 13:
-              //Transmission_And_Security
-              break;
-            case 14:
-              //Scripting
-              break;
-            case 15:
-              //SimpleAP
-              break;
-            case 16:
-              if(actionID == 1)
-                (*myCallback).pulseIn1(dataToLong(data));
-              if(actionID == 2)
-                (*myCallback).pulseIn2(dataToLong(data));
-              if(actionID == 3)
-                (*myCallback).pulseIn3(dataToLong(data));
-              if(actionID == 4)
-                (*myCallback).pulseIn4(dataToLong(data));
-              if(actionID == 5)
-                (*myCallback).pulseIn5(dataToLong(data));
-              if(actionID == 6)
-                (*myCallback).pulseIn6(dataToLong(data));
-              if(actionID == 7)
-                (*myCallback).pulseIn7(dataToLong(data));
-              if(actionID == 8)
-                (*myCallback).pulseIn8(dataToLong(data));
-              if(actionID == 9)
-                (*myCallback).pulseIn9(dataToLong(data));
-              if(actionID == 10)
-                (*myCallback).pulseIn10(dataToLong(data));
-              break;
-            case 17:
-              if(actionID == 1)
-                (*myCallback).analogRead1(data[0]);
-              if(actionID == 2)
-                (*myCallback).analogRead2(data[0]);
-              if(actionID == 3)
-                (*myCallback).analogRead3(data[0]);
-              if(actionID == 4)
-                (*myCallback).analogRead4(data[0]);
-              break;  
-        }//end of data packet router
-      }//end of checksum
-      else
-        Serial.println("checksum failed");
-      }//end of if Serial available
-    }//end of Serial.read
-  }
+      }//end of data packet router
+    }//end of checksum
+    else
+      Serial.println("checksum failed");
+    }//end of if Serial available
+  }//end of Serial.read
 }
-
 
 //*****************************************************
 //SoftwareSerial Code
