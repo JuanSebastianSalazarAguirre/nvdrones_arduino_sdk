@@ -1035,7 +1035,7 @@ public:
 };
 
 //\cond
-class Avant 
+class Drone 
 //\endcond
 {
     private:
@@ -1050,9 +1050,9 @@ class Avant
       AvantSPI avantSPI;
       AvantAutoPilot avantAutoPilot;
     public:
-      Avant();
-      Avant(SerialPort serialPort);
-      Avant(int txPin, int rxPin);
+      Drone();
+      Drone(SerialPort serialPort);
+      Drone(int txPin, int rxPin);
       AvantTransmitter& transmitter();
       AvantRC& RC();
       AvantGPIO& GPIO();

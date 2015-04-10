@@ -30,13 +30,13 @@ http://arduiniana.org.
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <Arduino.h>
-#include <Avant.h>
+#include "Drone.h"
 #include <avr/io.h>
 
 // ***********************************************
 // Avant Class Implementation
 // ***********************************************
-Avant::Avant() {
+Drone::Drone() {
   serialIO = SerialIO(serialPort0);
   callback = Callback();
   avantRC = AvantRC(&serialIO, &callback);
@@ -49,7 +49,7 @@ Avant::Avant() {
   avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
 }
 
-Avant::Avant(SerialPort serialPort) {
+Drone::Drone(SerialPort serialPort) {
   serialIO = SerialIO(serialPort);
   callback = Callback();
   avantRC = AvantRC(&serialIO, &callback);
@@ -61,7 +61,7 @@ Avant::Avant(SerialPort serialPort) {
   avantSPI = AvantSPI(&serialIO, &callback);
   avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
 }
-Avant::Avant(int txPin, int rxPin) {
+Drone::Drone(int txPin, int rxPin) {
   serialIO = SerialIO(txPin, rxPin);
   callback = Callback();
   avantRC = AvantRC(&serialIO, &callback);
@@ -74,20 +74,20 @@ Avant::Avant(int txPin, int rxPin) {
   avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
 }
 
-AvantGPIO& Avant::GPIO() {return avantGPIO;} 
-AvantResponseHandler& Avant::avantResponseHandler(){return responseHandler;}
-AvantTransmitter& Avant::transmitter() {return avantTransmitter;} //sets the analog pins that 
-AvantRC& Avant::RC() {return avantRC;} //functionality for sending RC data to the drone
-AvantI2C& Avant::I2C() {return avantI2C;}
-AvantPose& Avant::pose() {return avantPose;}
-AvantSPI& Avant::SPI() {return avantSPI;}
-AvantAutoPilot& Avant::AutoPilot() {return avantAutoPilot;}
+AvantGPIO& Drone::GPIO() {return avantGPIO;} 
+AvantResponseHandler& Drone::avantResponseHandler(){return responseHandler;}
+AvantTransmitter& Drone::transmitter() {return avantTransmitter;} //sets the analog pins that 
+AvantRC& Drone::RC() {return avantRC;} //functionality for sending RC data to the drone
+AvantI2C& Drone::I2C() {return avantI2C;}
+AvantPose& Drone::pose() {return avantPose;}
+AvantSPI& Drone::SPI() {return avantSPI;}
+AvantAutoPilot& Drone::AutoPilot() {return avantAutoPilot;}
 
-void Avant::initialize() {
+void Drone::initialize() {
   serialIO.softwareSerial.begin(57600);
 }
 
-void Avant::armDrone() {
+void Drone::armDrone() {
   serialIO.sendPacket((int8_t)-100, 2, 1);
   serialIO.sendPacket((int8_t)-100, 2, 2);
   serialIO.sendPacket((int8_t)-100, 2, 3);
