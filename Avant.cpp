@@ -92,15 +92,15 @@ void Avant::initialize() {
 }
 
 void Avant::armDrone() {
-  serialIO.sendPacket((int)-100, 2, 1);
-  serialIO.sendPacket((int)-100, 2, 2);
-  serialIO.sendPacket((int)-100, 2, 3);
-  serialIO.sendPacket((int)-100, 2, 4);
+  serialIO.sendPacket((int8_t)-100, 2, 1);
+  serialIO.sendPacket((int8_t)-100, 2, 2);
+  serialIO.sendPacket((int8_t)-100, 2, 3);
+  serialIO.sendPacket((int8_t)-100, 2, 4);
   delay(500);
-  serialIO.sendPacket((int)0, 2, 1);
-  serialIO.sendPacket((int)-100, 2, 2);
-  serialIO.sendPacket((int)0, 2, 3);
-  serialIO.sendPacket((int)0, 2, 4);
+  serialIO.sendPacket((int8_t)0, 2, 1);
+  serialIO.sendPacket((int8_t)-100, 2, 2);
+  serialIO.sendPacket((int8_t)0, 2, 3);
+  serialIO.sendPacket((int8_t)0, 2, 4);
 }
 
 
@@ -233,10 +233,20 @@ bool SerialIO::serialAvailable() {
 void SerialIO::sendPacket(uint8_t data, uint8_t resourceID, uint8_t actionID) {
   write('$');
   write(1);
+  write(resourceID);
+  write(actionID);
+  write(data);
+  write((1+resourceID+actionID+data)%256);
+}
+
+void SerialIO::sendPacket(int8_t data, uint8_t resourceID, uint8_t actionID) {
+  write('$');
+  write(1);
   write(byte(resourceID));
   write(byte(actionID));
   write(data);
-  write((1+resourceID+actionID+highByte(data)+lowByte(data))%256);
+  // Cast data because the firmware interprets packets as unsigned for calculating checksum.
+  write((1+resourceID+actionID+(uint8_t)data)%256);
 }
 
 void SerialIO::sendPacket(int16_t data, uint8_t resourceID, uint8_t actionID) {
@@ -329,19 +339,19 @@ AvantRC::AvantRC(SerialIO *rcTservice, Callback *callback) {
   myCallback = callback;
 }
 
-void AvantRC::setAileron(int value){
+void AvantRC::setAileron(int8_t value){
   service->sendPacket(value, 2, 4);
 };
-void AvantRC::setElevator(int value){
+void AvantRC::setElevator(int8_t value){
   service->sendPacket(value, 2, 3);
 };
-void AvantRC::setThrottle(int value){
+void AvantRC::setThrottle(int8_t value){
   service->sendPacket(value, 2, 2);
 };
-void AvantRC::setRudder(int value){
+void AvantRC::setRudder(int8_t value){
   service->sendPacket(value, 2, 1);
 }; 
-void AvantRC::setFlightMode(int value){
+void AvantRC::setFlightMode(int8_t value){
   service->sendPacket(value, 2, 5);
 };
 void AvantRC::getAileron(){
@@ -931,7 +941,7 @@ long AvantResponseHandler::dataToLong(byte data[]) {
   long data_long = 0;
   data_long = data[0] << 8;
   data_long = (data_long + data[1]) << 8;
-  data_long = (data_long + data[2) << 8;
+  data_long = (data_long + data[2]) << 8;
   data_long = data_long + data[3]; 
   return data_long;
 }
