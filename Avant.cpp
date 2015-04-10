@@ -254,7 +254,7 @@ void SerialIO::sendPacket(int8_t data, uint8_t resourceID, uint8_t actionID) {
   write((1+resourceID+actionID+(uint8_t)data)%256);
 }
 
-void SerialIO::sendPacket(int16_t data, uint8_t resourceID, uint8_t actionID) {
+void SerialIO::sendPacket(int data, uint8_t resourceID, uint8_t actionID) {
   write('$');
   write(2);
   write(byte(resourceID));
