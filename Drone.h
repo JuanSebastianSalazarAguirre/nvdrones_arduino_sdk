@@ -15,8 +15,8 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
-#ifndef Avant_h
-#define Avant_h
+#ifndef __ArduinoSDK__Drone__
+#define __ArduinoSDK__Drone__
 
 #include <inttypes.h>
 #include <Stream.h>
@@ -111,7 +111,6 @@ class SoftwareSerial : public Stream
 #undef abs
 #undef round
 
-#endif
 
 //*****************************************
 //Avant Classes
@@ -268,150 +267,6 @@ class AvantResponseHandler
     void callbackTest(byte test){
     myCallback->i2cRead(test);
     }   
-};
-
-class AvantTransmitter 
-/**
- This class allows you to do initial setup of the hardware after you connected it to the drone. 
- You will have to tell the NVextender what pin is connected to what drone controller. 
- Based on the naming convention from the methods in this class you should be able 
- to easily understand what type of information the hardware needs.
-
- # Example
-
- @htmlonly
-    <script src="https://gist.github.com/davidgatti/cf3331742d53f5f80609.js"></script>
- @endhtmlonly
-
-*/
-{
-  private:
-    int elevatorPin;
-    int AileronPin;
-    int throttlePin;
-    int rudderPin;
-    int flightModePin;
-    
-    int elevatorMax;
-    int elevatorMin;
-    int aileronMax;
-    int aileronMin;
-    int throttleMax;
-    int throttleMin;
-    int rudderMax;
-    int rudderMin;
-    
-    //\cond
-    SerialIO *service;
-    //\endcond
-  public:
-    //\cond
-    AvantTransmitter();
-    
-    AvantTransmitter(SerialIO *serialIO);
-    //\endcond
-
-    /**
-    Sets the analogue pin that the Elevator potentiometer is connected to.
-
-    @param pin Hardware pin number.
-    */
-    void setElevatorPin(int pin);
-  
-    /**
-    Returns the analogue pin that the Aileron potentiometer is connected to.
-    */
-    int getElevatorPin();
-  
-    /**
-    Sets the analogue pin that the Aileron potentiometer is connected to.
-     
-    @param pin number of the hardware pin you connected it to.
-    */
-    void setAileronPin(int pin);
-  
-    /**
-    Returns the analogue pin that the Aileron potentiometer is connected to.
-     
-    */
-    int getAileronPin();
-  
-    /**
-    Sets the analogue pin that the Throttle potentiometer is connected to.
-     
-    @param pin number of the hardware pin you connected it to.
-    */
-    void setThrottlePin(int pin);
-  
-    /**
-    Returns the analogue pin that the Elevator potentiometer is connected to.
-
-    */
-    int getThrottlePin();
-  
-    /**
-    Sets the analogue pin that the Rudder potentiometer is connected to.
- 
-    @param pin number of the hardware pin you connected it to.
-    */
-    void setRudderPin(int pin);
-  
-    /**
-    Returns the analogue pin that the Rudder potentiometer is connected to.
-
-    */
-    int getRudderPin();
-  
-    /**
-    Sets the analogue pin that the Flight Mode potentiometer is connected to.
- 
-    @param pin number of the hardware pin you connected it to.
-    */
-    void setFlightModePin(int pin);
-  
-    /**
-    Returns the analogue pin that the Flight Mode potentiometer is connected to.
-
-    */
-    int getFlightModePin();
-  
-    /**
-    Reads all of the analogue values, maps the value to between -100 and 100, and sends the 
-    values using the sendRTEA function.
-    */
-    void sendSticks();
-  
-    /**
-    Sets the values that sendSticks() uses for mapping.  
-   
-    @param min The analogue value that the arduino reads when the stick position is all the way down.
-    @param max The analogue value that the arduino reads when the stick position is all the way up. 
-    */
-    void throttleEndpoints(uint8_t min, uint8_t max);
-  
-    /**
-    Sets the values that sendSticks() uses for mapping.  
-   
-    @param min The analogue value that the arduino reads when the stick position is all the way down.
-    @param max The analogue value that the arduino reads when the stick position is all the way up. 
-    */
-    void rudderEndpoints(uint8_t min, uint8_t max);
-  
-    /**
-    Sets the values that sendSticks() uses for mapping.  
-   
-    @param min The analogue value that the arduino reads when the stick position is all the way down.
-    @param max The analogue value that the arduino reads when the stick position is all the way up. 
-    */
-    void aileronEndpoints(uint8_t min, uint8_t max);
-  
-    /**
-    Sets the values that sendSticks() uses for mapping.  
-   
-    @param min The analogue value that the arduino reads when the stick position is all the way down.
-    @param max The analogue value that the arduino reads when the stick position is all the way up. 
-    */
-    void elevatorEndpoints(uint8_t min, uint8_t max);
 };
 
 class AvantPose
@@ -1039,7 +894,6 @@ class Drone
 //\endcond
 {
     private:
-      AvantTransmitter avantTransmitter;
       AvantRC avantRC;
       SerialIO serialIO;
       AvantGPIO avantGPIO;
@@ -1053,7 +907,6 @@ class Drone
       Drone();
       Drone(SerialPort serialPort);
       Drone(int txPin, int rxPin);
-      AvantTransmitter& transmitter();
       AvantRC& RC();
       AvantGPIO& GPIO();
       AvantI2C& I2C();
@@ -1061,6 +914,8 @@ class Drone
       AvantResponseHandler& avantResponseHandler();
       AvantSPI& SPI();
       AvantAutoPilot& AutoPilot();
-      void armDrone();
+      void arm();
       void initialize();
 };
+
+#endif

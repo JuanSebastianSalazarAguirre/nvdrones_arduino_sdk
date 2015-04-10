@@ -42,7 +42,6 @@ Drone::Drone() {
   avantRC = AvantRC(&serialIO, &callback);
   avantGPIO = AvantGPIO(&serialIO, &callback);
   responseHandler = AvantResponseHandler(&serialIO, &callback);
-  avantTransmitter = AvantTransmitter(&serialIO);
   avantI2C = AvantI2C(&serialIO, &callback);
   avantPose = AvantPose(&serialIO, &callback);
   avantSPI = AvantSPI(&serialIO, &callback);
@@ -55,7 +54,6 @@ Drone::Drone(SerialPort serialPort) {
   avantRC = AvantRC(&serialIO, &callback);
   avantGPIO = AvantGPIO(&serialIO, &callback);
   responseHandler = AvantResponseHandler(&serialIO, &callback);
-  avantTransmitter = AvantTransmitter(&serialIO);
   avantI2C = AvantI2C(&serialIO, &callback);
   avantPose = AvantPose(&serialIO, &callback);
   avantSPI = AvantSPI(&serialIO, &callback);
@@ -67,7 +65,6 @@ Drone::Drone(int txPin, int rxPin) {
   avantRC = AvantRC(&serialIO, &callback);
   avantGPIO = AvantGPIO(&serialIO, &callback);
   responseHandler = AvantResponseHandler(&serialIO, &callback);
-  avantTransmitter = AvantTransmitter(&serialIO);
   avantI2C = AvantI2C(&serialIO, &callback);
   avantPose = AvantPose(&serialIO, &callback);
   avantSPI = AvantSPI(&serialIO, &callback);
@@ -76,7 +73,6 @@ Drone::Drone(int txPin, int rxPin) {
 
 AvantGPIO& Drone::GPIO() {return avantGPIO;} 
 AvantResponseHandler& Drone::avantResponseHandler(){return responseHandler;}
-AvantTransmitter& Drone::transmitter() {return avantTransmitter;} //sets the analog pins that 
 AvantRC& Drone::RC() {return avantRC;} //functionality for sending RC data to the drone
 AvantI2C& Drone::I2C() {return avantI2C;}
 AvantPose& Drone::pose() {return avantPose;}
@@ -87,7 +83,7 @@ void Drone::initialize() {
   serialIO.softwareSerial.begin(57600);
 }
 
-void Drone::armDrone() {
+void Drone::arm() {
   serialIO.sendPacket((int8_t)-100, 2, 1);
   serialIO.sendPacket((int8_t)-100, 2, 2);
   serialIO.sendPacket((int8_t)-100, 2, 3);
@@ -396,93 +392,6 @@ void AvantRC::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8
 }
 
 
-// ***********************************************
-// AvantTransmitter Class Implementation
-// ***********************************************
-AvantTransmitter::AvantTransmitter(){};
-AvantTransmitter::AvantTransmitter(SerialIO *serialIO) {
-  service = serialIO;
-  elevatorMax = 777;
-  elevatorMin = 136;
-  aileronMax = 872;
-  aileronMin = 124;
-  throttleMax = 780;
-  throttleMin = 118;
-  rudderMax = 867;
-  rudderMin = 97;
-}
-
-void AvantTransmitter::setElevatorPin(int pin) {
-  elevatorPin = pin;
-}
-int AvantTransmitter::getElevatorPin(){
-  return elevatorPin;
-}
-void AvantTransmitter::setAileronPin(int pin) {
-  AileronPin = pin;
-}
-int AvantTransmitter::getAileronPin(){
-  return AileronPin;
-}
-void AvantTransmitter::setThrottlePin(int pin) {
-  throttlePin = pin;
-}
-int AvantTransmitter::getThrottlePin(){
-  return throttlePin;
-}
-void AvantTransmitter::setRudderPin(int pin) {
-  rudderPin = pin;
-}
-int AvantTransmitter::getRudderPin(){
-  return rudderPin;
-}
-void AvantTransmitter::setFlightModePin(int pin) {
-  flightModePin = pin;
-}
-int AvantTransmitter::getFlightModePin() {
-  return flightModePin;
-}
-
-void AvantTransmitter::sendSticks(){
-  int Elevator = analogRead(elevatorPin);
-  int Aileron = analogRead(AileronPin);
-  int Throttle = analogRead(throttlePin);
-  int Rudder = analogRead(rudderPin);
-  Elevator = map(Elevator, elevatorMax, elevatorMin, -100, 100);
-  Aileron = map(Aileron, aileronMax, aileronMin, -100, 100);
-  Throttle = map(Throttle, throttleMax, throttleMin, -100, 100);
-  Rudder = map(Rudder, rudderMax, rudderMin, -100, 100);
-  if (Elevator > 100) Elevator = 100;
-  if (Elevator < -100) Elevator = -100;
-  if (Aileron > 100) Aileron = 100;
-  if (Aileron < -100) Aileron = -100;        
-  if (Throttle > 100) Throttle = 100;
-  if (Throttle < -100) Throttle = -100;  
-  if (Rudder > 100) Rudder = 100;
-  if (Rudder < -100) Rudder = -100;    
-
-  service->sendPacket((int16_t)Elevator, 2, 3);
-  service->sendPacket((int16_t)Aileron, 2, 4);
-  service->sendPacket((int16_t)Throttle, 2, 2);
-  service->sendPacket((int16_t)Rudder, 2, 1);
-}
-
-void AvantTransmitter::throttleEndpoints(uint8_t min, uint8_t max) {
-  throttleMax = max;
-  throttleMin = min;
-}
-void AvantTransmitter::rudderEndpoints(uint8_t min, uint8_t max) {
-  rudderMax = max;
-  rudderMin = min;
-}
-void AvantTransmitter::aileronEndpoints(uint8_t min, uint8_t max) {
-  aileronMax = max;
-  aileronMin = min;
-}
-void AvantTransmitter::elevatorEndpoints(uint8_t min, uint8_t max) {
-  elevatorMax = max;
-  elevatorMin = min;
-}
 //************************************************
 //AvantGPIO Class Implementation
 //************************************************
