@@ -213,7 +213,7 @@ class SerialIO
 
     @param hwSerialCode
     */
-    SerialIO(int hwSerialCode);
+    SerialIO(SerialPort serialPort);
 
     /**
     TODO
@@ -600,7 +600,7 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
     @param value The value to set the Aileron channel to
 
     */
-    void setAileron(int value);
+    void setAileron(int8_t value);
     
     /**
          
@@ -609,7 +609,7 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
     @param value The value to set the Extender channel to
         
     */
-    void setElevator(int value);
+    void setElevator(int8_t value);
     
     /**
         
@@ -618,7 +618,7 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
     @param value The value to set the Throttle channel to
          
     */
-    void setThrottle(int value);
+    void setThrottle(int8_t value);
     
     /**
          
@@ -627,7 +627,7 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
     @param value The value to set the Rudder channel to
          
     */
-    void setRudder(int value);
+    void setRudder(int8_t value);
     
     /**
          
@@ -636,7 +636,7 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
     @param value The value to set the Flight Mode channel to
          
     */
-    void setFlightMode(int value);
+    void setFlightMode(int8_t value);
     
     /**
          
@@ -1090,7 +1090,7 @@ class Avant
       AvantAutoPilot avantAutoPilot;
     public:
       Avant();
-      Avant(int hardwareSerialCode);
+      Avant(SerialPort serialPort);
       Avant(int txPin, int rxPin);
       AvantTransmitter& transmitter();
       AvantRC& RC();

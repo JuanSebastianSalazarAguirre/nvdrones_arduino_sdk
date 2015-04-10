@@ -37,9 +37,9 @@ http://arduiniana.org.
 // Avant Class Implementation
 // ***********************************************
 Avant::Avant() {
-  serialIO = SerialIO(0);
-  avantRC = AvantRC(&serialIO, &callback);
+  serialIO = SerialIO(serialPort0);
   callback = Callback();
+  avantRC = AvantRC(&serialIO, &callback);
   avantGPIO = AvantGPIO(&serialIO, &callback);
   responseHandler = AvantResponseHandler(&serialIO, &callback);
   avantTransmitter = AvantTransmitter(&serialIO);
@@ -50,10 +50,10 @@ Avant::Avant() {
   avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
 }
 
-Avant::Avant(int hardwareSerialCode) {
-  serialIO = SerialIO(hardwareSerialCode);
-  avantRC = AvantRC(&serialIO, &callback);
+Avant::Avant(SerialPort serialPort) {
+  serialIO = SerialIO(serialPort);
   callback = Callback();
+  avantRC = AvantRC(&serialIO, &callback);
   avantGPIO = AvantGPIO(&serialIO, &callback);
   responseHandler = AvantResponseHandler(&serialIO, &callback);
   avantTransmitter = AvantTransmitter(&serialIO);
@@ -65,8 +65,8 @@ Avant::Avant(int hardwareSerialCode) {
 }
 Avant::Avant(int txPin, int rxPin) {
   serialIO = SerialIO(txPin, rxPin);
-  avantRC = AvantRC(&serialIO, &callback);
   callback = Callback();
+  avantRC = AvantRC(&serialIO, &callback);
   avantGPIO = AvantGPIO(&serialIO, &callback);
   responseHandler = AvantResponseHandler(&serialIO, &callback);
   avantTransmitter = AvantTransmitter(&serialIO);
@@ -116,27 +116,32 @@ SerialIO::SerialIO(int txPin , int rxPin) {
   selectedSerialPort = swSerialPort;
 }
 
-SerialIO::SerialIO(int hwSerialCode) {
-  if (hwSerialCode == 0) {
-    #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
-      Serial.begin(57600);
-    #endif
-	selectedSerialPort = serialPort0;
-  } else if (hwSerialCode == 1) {
-    #if defined(UBRR1H)
-      Serial1.begin(57600);
-    #endif
-	selectedSerialPort = serialPort1;
-  } else if (hwSerialCode == 2) {
-    #if defined(UBRR2H)
-      Serial2.begin(57600);
-    #endif
-	selectedSerialPort = serialPort2;
-  } else if (hwSerialCode == 3) {
-    #if defined(UBRR3H)
-      Serial3.begin(57600);
-    #endif
-	selectedSerialPort = serialPort3;
+SerialIO::SerialIO(SerialPort serialPort) {
+  selectedSerialPort = serialPort;
+  switch(serialPort) {
+    case serialPort0:
+      #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
+        Serial.begin(57600);
+      #endif
+      break;
+    case serialPort1:
+      #if defined(UBRR1H)
+        Serial1.begin(57600);
+      #endif
+      break;
+    case serialPort2:
+      #if defined(UBRR2H)
+        Serial2.begin(57600);
+      #endif
+      break;
+    case serialPort3:
+      #if defined(UBRR3H)
+        Serial3.begin(57600);
+      #endif
+      break;
+    default:
+      Serial.println("Error: bad argument to SerialIO constructor");
+      break;
   }
 }
 
