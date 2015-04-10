@@ -165,7 +165,6 @@ class Callback
     void (*analogRead2)(byte);
     void (*analogRead3)(byte);
     void (*analogRead4)(byte);
-    //Xbee Callbacks
     //AutoPilot Callbacks
     void (*getWaypointLatitude)(float);
     void (*getWaypointLongitude)(float);
@@ -247,7 +246,6 @@ class SerialIO
     */
     void print(String data);
 
-    //TODO: Only Xbee class  uses it "REMOVE"
     /**
     Method description
     */
@@ -414,41 +412,6 @@ class AvantTransmitter
     @param max The analogue value that the arduino reads when the stick position is all the way up. 
     */
     void elevatorEndpoints(uint8_t min, uint8_t max);
-};
-
-class AvantXbee
-/**
-
- This class configure the Xbee connected to both the drone and the arduino board. 
- With this calls you can pair both Xbee in code instead of the hardware button.
- This approach gives you much more flexibility if you are in noisy environment 
- and need to change frequencies etc. Also allows you to reconnect in code to a drone
- if the paring between the two Xbee get lost.
-
-*/
- {
-  private:
-    //\cond
-    SerialIO *service;
-    Callback *myCallback;
-    //\endcond
-  public:
-    //\cond
-    AvantXbee();
-    
-    AvantXbee(SerialIO *rcTservice, Callback *callback);
-    //\endcond
-
-    /// modulation rate in symbols per second, default is 115200
-    int baud;
-    
-    /**
-    Sets the PanID of the Xbee connected to the arduino to (int id). It accepts values between 0 and 0xFF.
-    
-    @param id int
-    @returns -1 if there was an error with setting the PanID and 1 if it was successful.
-    */
-    void id(uint8_t id);
 };
 
 class AvantPose
@@ -1078,7 +1041,6 @@ class Avant
     private:
       AvantTransmitter avantTransmitter;
       AvantRC avantRC;
-      AvantXbee avantXbee;
       SerialIO serialIO;
       AvantGPIO avantGPIO;
       AvantResponseHandler responseHandler;
@@ -1095,7 +1057,6 @@ class Avant
       AvantRC& RC();
       AvantGPIO& GPIO();
       AvantI2C& I2C();
-      AvantXbee& xbee();
       AvantPose& pose();
       AvantResponseHandler& avantResponseHandler();
       AvantSPI& SPI();

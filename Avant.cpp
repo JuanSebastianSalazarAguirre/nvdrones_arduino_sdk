@@ -44,7 +44,6 @@ Avant::Avant() {
   responseHandler = AvantResponseHandler(&serialIO, &callback);
   avantTransmitter = AvantTransmitter(&serialIO);
   avantI2C = AvantI2C(&serialIO, &callback);
-  avantXbee = AvantXbee(&serialIO, &callback);
   avantPose = AvantPose(&serialIO, &callback);
   avantSPI = AvantSPI(&serialIO, &callback);
   avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
@@ -58,7 +57,6 @@ Avant::Avant(SerialPort serialPort) {
   responseHandler = AvantResponseHandler(&serialIO, &callback);
   avantTransmitter = AvantTransmitter(&serialIO);
   avantI2C = AvantI2C(&serialIO, &callback);
-  avantXbee = AvantXbee(&serialIO, &callback);
   avantPose = AvantPose(&serialIO, &callback);
   avantSPI = AvantSPI(&serialIO, &callback);
   avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
@@ -71,7 +69,6 @@ Avant::Avant(int txPin, int rxPin) {
   responseHandler = AvantResponseHandler(&serialIO, &callback);
   avantTransmitter = AvantTransmitter(&serialIO);
   avantI2C = AvantI2C(&serialIO, &callback);
-  avantXbee = AvantXbee(&serialIO, &callback);
   avantPose = AvantPose(&serialIO, &callback);
   avantSPI = AvantSPI(&serialIO, &callback);
   avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
@@ -82,7 +79,6 @@ AvantResponseHandler& Avant::avantResponseHandler(){return responseHandler;}
 AvantTransmitter& Avant::transmitter() {return avantTransmitter;} //sets the analog pins that 
 AvantRC& Avant::RC() {return avantRC;} //functionality for sending RC data to the drone
 AvantI2C& Avant::I2C() {return avantI2C;}
-AvantXbee& Avant::xbee() {return avantXbee;}
 AvantPose& Avant::pose() {return avantPose;}
 AvantSPI& Avant::SPI() {return avantSPI;}
 AvantAutoPilot& Avant::AutoPilot() {return avantAutoPilot;}
@@ -627,29 +623,6 @@ void AvantI2C::wireRequest(uint8_t bytes){
 
 void AvantI2C::readCallback(void (*function)(byte)) {
   (*myCallback).i2cRead = function;
-}
-
-
-//********************************************
-//AvantXbee Class Implementation
-//********************************************
-AvantXbee::AvantXbee(){}
-
-AvantXbee::AvantXbee(SerialIO *rcTservice, Callback *callback) {
-  service = rcTservice;
-  myCallback = callback;
-}
-   
-void AvantXbee::id(uint8_t id) {
-  char acknowledge[2];
-  service->print("+++");
-  delay(1200);
-  service->print("ATID");
-  //service->write(id);
-  service->write(15);
-  service->readBytes(&acknowledge[0], 2);
-  service->print("ATCN");
-  Serial.println(acknowledge);
 }
 
 //********************************************
