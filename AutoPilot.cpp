@@ -1,12 +1,9 @@
-
 #include "AutoPilot.h"
 
-//*******************************************
-//AutoPilot Class Implementation
-//*******************************************
 AutoPilot::AutoPilot(){}
-AutoPilot::AutoPilot(SerialIO *rcTservice, Callback *callback) {
-  service = rcTservice;
+
+AutoPilot::AutoPilot(SerialIO *serialIO, Callback *callback) {
+  service = serialIO;
   myCallback = callback;
 }
 

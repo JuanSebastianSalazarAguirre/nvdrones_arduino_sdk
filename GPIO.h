@@ -1,12 +1,5 @@
-/*
- * GPIO.h
- *
- *  Created on: Apr 10, 2015
- *      Author: amey
- */
-
-#ifndef AVANTGPIO_H_
-#define AVANTGPIO_H_
+#ifndef __ArduinoSDK__GPIO__
+#define __ArduinoSDK__GPIO__
 
 #include "SerialIO.h"
 #include "Callback.h"
@@ -157,6 +150,4 @@ class GPIO
     void writeServo(uint8_t servoNumber, uint8_t data);
 };
 
-
-
-#endif /* AVANTGPIO_H_ */
+#endif /* defined __ArduinoSDK__GPIO__ */

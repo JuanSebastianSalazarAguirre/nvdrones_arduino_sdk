@@ -1,7 +1,5 @@
-
 #ifndef __ArduinoSDK__I2C__
 #define __ArduinoSDK__I2C__
-
 
 #include "SerialIO.h"
 #include "Callback.h"
@@ -99,4 +97,4 @@ class I2C
     void readCallback(void (*function)(byte));
 };
 
-#endif
+#endif /* defined __ArduinoSDK__I2C__ */

@@ -1,12 +1,5 @@
-/*
- * RC.h
- *
- *  Created on: Apr 10, 2015
- *      Author: amey
- */
-
-#ifndef AVANTRC_H_
-#define AVANTRC_H_
+#ifndef __ArduinoSDK__RC__
+#define __ArduinoSDK__RC__
 
 #include "Callback.h"
 #include "SerialIO.h"
@@ -154,7 +147,4 @@ class RC //handles sending values to the PWM/PPM port(s)
     void sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron);
 };
 
-
-
-
-#endif /* AVANTRC_H_ */
+#endif /* __ArduinoSDK__RC__ */

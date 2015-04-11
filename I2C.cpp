@@ -1,8 +1,5 @@
 #include "I2C.h"
 
-//**********************************
-//I2C Class Implementation
-//**********************************
 I2C::I2C(){}
 
 I2C::I2C(SerialIO *rcTservice, Callback *callback) {

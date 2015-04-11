@@ -1,15 +1,9 @@
-// 
-// Includes
-// 
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <Arduino.h>
 #include "Drone.h"
 #include <avr/io.h>
 
-// ***********************************************
-// Avant Class Implementation
-// ***********************************************
 Drone::Drone() {
   serialIO = SerialIO(serialPort0);
   callback = Callback();
@@ -44,7 +38,7 @@ Drone::Drone(int txPin, int rxPin) {
 
 GPIO& Drone::gpio() {return avantGPIO;} 
 ResponseHandler& Drone::avantResponseHandler(){return responseHandler;}
-RC& Drone::rc() {return avantRC;} //functionality for sending RC data to the drone
+RC& Drone::rc() {return avantRC;}
 I2C& Drone::i2c() {return avantI2C;}
 Pose& Drone::pose() {return avantPose;}
 AutoPilot& Drone::autoPilot() {return avantAutoPilot;}
@@ -64,4 +58,3 @@ void Drone::arm() {
   serialIO.sendPacket((int8_t)0, 2, 3);
   serialIO.sendPacket((int8_t)0, 2, 4);
 }
-

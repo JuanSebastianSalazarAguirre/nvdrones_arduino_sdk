@@ -1,10 +1,3 @@
-/*
- * SoftwareSerial.cpp
- *
- *  Created on: Apr 10, 2015
- *      Author: amey
- */
-
 #include "SoftwareSerial.h"
 
 //*****************************************************
@@ -458,4 +451,3 @@ int SoftwareSerial::peek() {
 #undef float
 #undef abs
 #undef round
-

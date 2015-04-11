@@ -1,10 +1,7 @@
-
 #include "ResponseHandler.h"
 
-//*******************************************
-//ResponseHandler Class Implementation
-//*******************************************
 ResponseHandler::ResponseHandler(){};
+
 ResponseHandler::ResponseHandler(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;

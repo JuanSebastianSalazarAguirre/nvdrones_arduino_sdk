@@ -1,12 +1,6 @@
-/*
- * SerialIO.h
- *
- *  Created on: Apr 10, 2015
- *      Author: amey
- */
+#ifndef __ArduinoSDK__SerialIO__
+#define __ArduinoSDK__SerialIO__
 
-#ifndef SERIALIO_H_
-#define SERIALIO_H_
 #include <Arduino.h>
 #include "SoftwareSerial.h"
 
@@ -87,8 +81,4 @@ class SerialIO
     void readBytes(char *buffer, int bytesToRead);
 };
 
-
-
-
-
-#endif /* SERIALIO_H_ */
+#endif /* defined __ArduinoSDK__SerialIO__ */

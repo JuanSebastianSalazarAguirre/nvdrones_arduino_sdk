@@ -1,16 +1,5 @@
-/*
- * GPIO.cpp
- *
- *  Created on: Apr 10, 2015
- *      Author: amey
- */
 #include "GPIO.h"
 
-
-
-//************************************************
-//GPIO Class Implementation
-//************************************************
 GPIO::GPIO() {};
 
 GPIO::GPIO(SerialIO *rcTservice, Callback *callback) {
@@ -113,5 +102,3 @@ void GPIO::writeServo(uint8_t servoNumber, uint8_t data) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 2;
   service->sendPacket(data, 18, actionID);
 }
-
-

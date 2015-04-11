@@ -125,4 +125,4 @@ class Pose
     void orientationCallback(void (*function)(float));
 };
 
-#endif
+#endif /* defined __ArduinoSDK__Pose__ */

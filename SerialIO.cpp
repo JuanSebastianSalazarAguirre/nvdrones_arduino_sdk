@@ -1,15 +1,5 @@
-/*
- * SerialIO.cpp
- *
- *  Created on: Apr 10, 2015
- *      Author: amey
- */
 #include "SerialIO.h"
 
-
-// ***********************************************
-// SerialIO Class Implementation
-// ***********************************************
 SerialIO::SerialIO() {}
 
 SerialIO::SerialIO(int txPin , int rxPin) {
@@ -214,6 +204,7 @@ void SerialIO::print(String data) {
   }
 }
 
+// TODO: make this work
 void SerialIO::readBytes(char *buffer, int bytesToRead) {
 /*
   if (isHwSerial0Used) {

@@ -1,13 +1,4 @@
 /*
- * SoftwareSerial.h
- *
- *  Created on: Apr 10, 2015
- *      Author: amey
- */
-
-#ifndef SOFTWARESERIAL_H_
-#define SOFTWARESERIAL_H_
-/*
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -26,6 +17,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 The latest version of this library can always be found at
 http://arduiniana.org.
 */
+
+#ifndef __ArduinoSDK__SoftwareSerial__
+#define __ArduinoSDK__SoftwareSerial__
 
 // When set, _DEBUG co-opts pins 11 and 13 for debugging with an
 // oscilloscope or logic analyzer.  Beware: it also slightly modifies
@@ -103,4 +97,4 @@ class SoftwareSerial : public Stream
     static inline void handle_interrupt();
 };
 
-#endif /* SOFTWARESERIAL_H_ */
+#endif /* defined __ArduinoSDK__SoftwareSerial__ */

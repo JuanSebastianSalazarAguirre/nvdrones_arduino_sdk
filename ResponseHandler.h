@@ -22,4 +22,4 @@ class ResponseHandler
     }   
 };
 
-#endif 
+#endif /* defined __ArduinoSDK__ResponseHandler__ */

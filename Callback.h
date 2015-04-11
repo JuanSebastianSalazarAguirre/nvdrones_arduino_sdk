@@ -1,12 +1,6 @@
-/*
- * Callback.h
- *
- *  Created on: Apr 10, 2015
- *      Author: amey
- */
+#ifndef __ArduinoSDK__Callback__
+#define __ArduinoSDK__Callback__
 
-#ifndef CALLBACK_H_
-#define CALLBACK_H_
 #include <Arduino.h>
 
 class Callback
@@ -77,7 +71,4 @@ class Callback
 
 };
 
-
-
-
-#endif /* CALLBACK_H_ */
+#endif /* defined __ArduinoSDK__Callback__ */

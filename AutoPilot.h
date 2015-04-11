@@ -53,4 +53,4 @@ public:
     void getAileronKI(void (*function)(float));
 };
 
-#endif
+#endif /* defined __ArduinoSDK__AutoPilot__ */
