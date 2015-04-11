@@ -1,5 +1,5 @@
 /*
- * AvantGPIO.h
+ * GPIO.h
  *
  *  Created on: Apr 10, 2015
  *      Author: amey
@@ -11,7 +11,7 @@
 #include "SerialIO.h"
 #include "Callback.h"
 
-class AvantGPIO
+class GPIO
 /**
 
  This class controls all functionality related to the general purpose IO pins on the drone, 
@@ -29,9 +29,9 @@ class AvantGPIO
     //\endcond
   public:
     //\cond
-    AvantGPIO();
+    GPIO();
     
-    AvantGPIO(SerialIO *rcTservice, Callback *callback);
+    GPIO(SerialIO *rcTservice, Callback *callback);
     //\endcond
 
 

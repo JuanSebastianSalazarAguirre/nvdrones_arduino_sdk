@@ -1,10 +1,10 @@
-#ifndef __ArduinoSDK__AvantPose__
-#define __ArduinoSDK__AvantPose__
+#ifndef __ArduinoSDK__Pose__
+#define __ArduinoSDK__Pose__
 
 #import "SerialIO.h"
 #import "Callback.h"
 
-class AvantPose
+class Pose
 /**
  
  The pose class allow you to gather from one place all the data related to position. 
@@ -19,9 +19,9 @@ class AvantPose
     //\endcond
   public:
     //\cond
-    AvantPose();
+    Pose();
     
-    AvantPose(SerialIO *rcTservice, Callback *callback);
+    Pose(SerialIO *rcTservice, Callback *callback);
     //\endcond
 
     /**

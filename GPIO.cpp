@@ -1,48 +1,48 @@
 /*
- * AvantGPIO.cpp
+ * GPIO.cpp
  *
  *  Created on: Apr 10, 2015
  *      Author: amey
  */
-#include "AvantGPIO.h"
+#include "GPIO.h"
 
 
 
 //************************************************
-//AvantGPIO Class Implementation
+//GPIO Class Implementation
 //************************************************
-AvantGPIO::AvantGPIO() {};
+GPIO::GPIO() {};
 
-AvantGPIO::AvantGPIO(SerialIO *rcTservice, Callback *callback) {
+GPIO::GPIO(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
 
-void AvantGPIO::digitalWrite(uint8_t pin, bool logicLevel) {
+void GPIO::digitalWrite(uint8_t pin, bool logicLevel) {
   service->sendPacket((uint8_t)logicLevel, 6, pin);
 }
 
-void AvantGPIO::pinMode(uint8_t pin, int logicLevel) {
+void GPIO::pinMode(uint8_t pin, int logicLevel) {
   service->sendPacket((int16_t)logicLevel, 5, pin);
 }
 
-void AvantGPIO::digitalRead(uint8_t pin) {
+void GPIO::digitalRead(uint8_t pin) {
   service->sendPacket((int16_t)0, 8, pin);
 }
 
-void AvantGPIO::analogWrite(uint8_t pin, uint8_t value) {
+void GPIO::analogWrite(uint8_t pin, uint8_t value) {
   service->sendPacket(value, 7, pin);
 }
 
-void AvantGPIO::pulseIn(uint8_t pin) {
+void GPIO::pulseIn(uint8_t pin) {
   service->sendPacket((int16_t)0, 16, pin);
 }
 
-void AvantGPIO::analogRead(uint8_t pin) {
+void GPIO::analogRead(uint8_t pin) {
   service->sendPacket((int16_t)0, 17, pin);
 }
 
-void AvantGPIO::digitalReadCallback(void (*function)(byte), int pin) {
+void GPIO::digitalReadCallback(void (*function)(byte), int pin) {
   if(pin == 1)
     (*myCallback).digitalRead1 = function;
   else if(pin == 2)
@@ -65,7 +65,7 @@ void AvantGPIO::digitalReadCallback(void (*function)(byte), int pin) {
     (*myCallback).digitalRead10 = function;
 }
 
-void AvantGPIO::pulseInCallback(void (*function)(long), uint8_t pin) {
+void GPIO::pulseInCallback(void (*function)(long), uint8_t pin) {
   if(pin == 1)
     (*myCallback).pulseIn1 = function;
   if(pin == 2)
@@ -88,7 +88,7 @@ void AvantGPIO::pulseInCallback(void (*function)(long), uint8_t pin) {
     (*myCallback).pulseIn10 = function;
 }
 
-void AvantGPIO::analogReadCallback(void (*function)(byte), uint8_t pin) {
+void GPIO::analogReadCallback(void (*function)(byte), uint8_t pin) {
   if(pin == 1)
     (*myCallback).analogRead1 = function;
   if(pin == 2)
@@ -99,17 +99,17 @@ void AvantGPIO::analogReadCallback(void (*function)(byte), uint8_t pin) {
     (*myCallback).analogRead4 = function;
 }
 
-void AvantGPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
+void GPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 1;
   service->sendPacket(pin, 18, actionID);
 }
 
-void AvantGPIO::detachServo(uint8_t servoNumber) {
+void GPIO::detachServo(uint8_t servoNumber) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 3;
   service->sendPacket((int16_t)0, 18, actionID);
 }
 
-void AvantGPIO::writeServo(uint8_t servoNumber, uint8_t data) {
+void GPIO::writeServo(uint8_t servoNumber, uint8_t data) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 2;
   service->sendPacket(data, 18, actionID);
 }

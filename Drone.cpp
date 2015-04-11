@@ -13,41 +13,41 @@
 Drone::Drone() {
   serialIO = SerialIO(serialPort0);
   callback = Callback();
-  avantRC = AvantRC(&serialIO, &callback);
-  avantGPIO = AvantGPIO(&serialIO, &callback);
-  responseHandler = AvantResponseHandler(&serialIO, &callback);
-  avantI2C = AvantI2C(&serialIO, &callback);
-  avantPose = AvantPose(&serialIO, &callback);
-  avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
+  avantRC = RC(&serialIO, &callback);
+  avantGPIO = GPIO(&serialIO, &callback);
+  responseHandler = ResponseHandler(&serialIO, &callback);
+  avantI2C = I2C(&serialIO, &callback);
+  avantPose = Pose(&serialIO, &callback);
+  avantAutoPilot = AutoPilot(&serialIO, &callback);
 }
 
 Drone::Drone(SerialPort serialPort) {
   serialIO = SerialIO(serialPort);
   callback = Callback();
-  avantRC = AvantRC(&serialIO, &callback);
-  avantGPIO = AvantGPIO(&serialIO, &callback);
-  responseHandler = AvantResponseHandler(&serialIO, &callback);
-  avantI2C = AvantI2C(&serialIO, &callback);
-  avantPose = AvantPose(&serialIO, &callback);
-  avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
+  avantRC = RC(&serialIO, &callback);
+  avantGPIO = GPIO(&serialIO, &callback);
+  responseHandler = ResponseHandler(&serialIO, &callback);
+  avantI2C = I2C(&serialIO, &callback);
+  avantPose = Pose(&serialIO, &callback);
+  avantAutoPilot = AutoPilot(&serialIO, &callback);
 }
 Drone::Drone(int txPin, int rxPin) {
   serialIO = SerialIO(txPin, rxPin);
   callback = Callback();
-  avantRC = AvantRC(&serialIO, &callback);
-  avantGPIO = AvantGPIO(&serialIO, &callback);
-  responseHandler = AvantResponseHandler(&serialIO, &callback);
-  avantI2C = AvantI2C(&serialIO, &callback);
-  avantPose = AvantPose(&serialIO, &callback);
-  avantAutoPilot = AvantAutoPilot(&serialIO, &callback);
+  avantRC = RC(&serialIO, &callback);
+  avantGPIO = GPIO(&serialIO, &callback);
+  responseHandler = ResponseHandler(&serialIO, &callback);
+  avantI2C = I2C(&serialIO, &callback);
+  avantPose = Pose(&serialIO, &callback);
+  avantAutoPilot = AutoPilot(&serialIO, &callback);
 }
 
-AvantGPIO& Drone::GPIO() {return avantGPIO;} 
-AvantResponseHandler& Drone::avantResponseHandler(){return responseHandler;}
-AvantRC& Drone::RC() {return avantRC;} //functionality for sending RC data to the drone
-AvantI2C& Drone::I2C() {return avantI2C;}
-AvantPose& Drone::pose() {return avantPose;}
-AvantAutoPilot& Drone::AutoPilot() {return avantAutoPilot;}
+GPIO& Drone::gpio() {return avantGPIO;} 
+ResponseHandler& Drone::avantResponseHandler(){return responseHandler;}
+RC& Drone::rc() {return avantRC;} //functionality for sending RC data to the drone
+I2C& Drone::i2c() {return avantI2C;}
+Pose& Drone::pose() {return avantPose;}
+AutoPilot& Drone::autoPilot() {return avantAutoPilot;}
 
 void Drone::initialize() {
   serialIO.softwareSerial.begin(57600);

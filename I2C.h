@@ -1,12 +1,12 @@
 
-#ifndef __ArduinoSDK__AvantI2C__
-#define __ArduinoSDK__AvantI2C__
+#ifndef __ArduinoSDK__I2C__
+#define __ArduinoSDK__I2C__
 
 
 #include "SerialIO.h"
 #include "Callback.h"
 
-class AvantI2C
+class I2C
 /**
 
  This class allow you to gain access to the I2C serial bus, allowing you to communicate with
@@ -27,9 +27,9 @@ class AvantI2C
     //\endcond
   public:
     //\cond
-    AvantI2C();
+    I2C();
     
-    AvantI2C(SerialIO *rcTservice, Callback *callback);
+    I2C(SerialIO *rcTservice, Callback *callback);
     //\endcond
 
     /**

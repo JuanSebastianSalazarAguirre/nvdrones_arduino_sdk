@@ -24,7 +24,7 @@ enum SerialPort {
 class SerialIO
 //\endcond
 {
-  friend class AvantResponseHandler;
+  friend class ResponseHandler;
   private:
     SerialPort selectedSerialPort;
 

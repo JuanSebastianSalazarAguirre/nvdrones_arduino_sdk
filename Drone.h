@@ -21,38 +21,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <inttypes.h>
 #include <Stream.h>
 #include <Arduino.h>
-#include "AvantRC.h"
+#include "RC.h"
 #include "SerialIO.h"
 #include "Callback.h"
-#include "AvantPose.h"
-#include "AvantGPIO.h"
-#include "AvantI2C.h"  
-#include "AvantResponseHandler.h"
-#include "AvantAutoPilot.h"
+#include "Pose.h"
+#include "GPIO.h"
+#include "I2C.h"  
+#include "ResponseHandler.h"
+#include "AutoPilot.h"
 
 //\cond
 class Drone 
 //\endcond
 {
     private:
-      AvantRC avantRC;
+      RC avantRC;
       SerialIO serialIO;
-      AvantGPIO avantGPIO;
-      AvantResponseHandler responseHandler;
-      AvantI2C avantI2C;
+      GPIO avantGPIO;
+      ResponseHandler responseHandler;
+      I2C avantI2C;
       Callback callback;
-      AvantPose avantPose;
-      AvantAutoPilot avantAutoPilot;
+      Pose avantPose;
+      AutoPilot avantAutoPilot;
     public:
       Drone();
       Drone(SerialPort serialPort);
       Drone(int txPin, int rxPin);
-      AvantRC& RC();
-      AvantGPIO& GPIO();
-      AvantI2C& I2C();
-      AvantPose& pose();
-      AvantResponseHandler& avantResponseHandler();
-      AvantAutoPilot& AutoPilot();
+      RC& rc();
+      GPIO& gpio();
+      I2C& i2c();
+      Pose& pose();
+      ResponseHandler& avantResponseHandler();
+      AutoPilot& autoPilot();
       void arm();
       void initialize();
 };

@@ -1,18 +1,18 @@
-#ifndef __ArduinoSDK__AvantAutoPilot__
-#define __ArduinoSDK__AvantAutoPilot__
+#ifndef __ArduinoSDK__AutoPilot__
+#define __ArduinoSDK__AutoPilot__
 
 #include "SerialIO.h"
 #include "Callback.h"
 
-class AvantAutoPilot
+class AutoPilot
 {
 private:
     SerialIO *service;
     Callback *myCallback;
 
 public:
-    AvantAutoPilot();
-    AvantAutoPilot(SerialIO *rcTservice, Callback *callback);
+    AutoPilot();
+    AutoPilot(SerialIO *rcTservice, Callback *callback);
     void gpsExecute();
     void compassExecute();
     void setYawError(float error);

@@ -1,16 +1,16 @@
 
-#include "AvantResponseHandler.h"
+#include "ResponseHandler.h"
 
 //*******************************************
-//AvantResponseHandler Class Implementation
+//ResponseHandler Class Implementation
 //*******************************************
-AvantResponseHandler::AvantResponseHandler(){};
-AvantResponseHandler::AvantResponseHandler(SerialIO *rcTservice, Callback *callback) {
+ResponseHandler::ResponseHandler(){};
+ResponseHandler::ResponseHandler(SerialIO *rcTservice, Callback *callback) {
   service = rcTservice;
   myCallback = callback;
 }
 
-float AvantResponseHandler::dataToFloat(byte data[]) {
+float ResponseHandler::dataToFloat(byte data[]) {
   union u_tag {
     byte b[4];
     float data_float;
@@ -22,7 +22,7 @@ float AvantResponseHandler::dataToFloat(byte data[]) {
   return u.data_float;
 }
 
-long AvantResponseHandler::dataToLong(byte data[]) {
+long ResponseHandler::dataToLong(byte data[]) {
   long data_long = 0;
   data_long = data[0] << 8;
   data_long = (data_long + data[1]) << 8;
@@ -31,7 +31,7 @@ long AvantResponseHandler::dataToLong(byte data[]) {
   return data_long;
 }
 
-void AvantResponseHandler::responseHandler() {
+void ResponseHandler::responseHandler() {
   uint8_t buffer[2];  //this is a buffer to store the length, resourceID, ActionID coming in through serial
   uint8_t length = 0;
   uint8_t resourceID = 0;

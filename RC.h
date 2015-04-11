@@ -1,5 +1,5 @@
 /*
- * AvantRC.h
+ * RC.h
  *
  *  Created on: Apr 10, 2015
  *      Author: amey
@@ -11,7 +11,7 @@
 #include "Callback.h"
 #include "SerialIO.h"
 
-class AvantRC //handles sending values to the PWM/PPM port(s)
+class RC //handles sending values to the PWM/PPM port(s)
 /**
 
  This class allows you to control your drone: set the throttle, rudder, elevator, and aileron channels on the drone.
@@ -26,9 +26,9 @@ class AvantRC //handles sending values to the PWM/PPM port(s)
     //\endcond
   public:
     //\cond
-    AvantRC();
+    RC();
 
-    AvantRC(SerialIO *rcTservice, Callback *callback);
+    RC(SerialIO *rcTservice, Callback *callback);
     //\endcond
 
     /**
