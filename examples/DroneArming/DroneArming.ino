@@ -8,7 +8,7 @@ Drone drone(serialPort1); //create an instance of Avant
 void setup() {
   Serial.begin(57600);
   delay(3000);             //turn the drone on and off every 5 seconds
-  Serial.println("Arming 1");
+  Serial.println("Arming 3");
   drone.arm();     //This will turn the drone on and off
 }
 
