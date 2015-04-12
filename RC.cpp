@@ -7,20 +7,20 @@ RC::RC(SerialIO *rcTservice, Callback *callback) {
   myCallback = callback;
 }
 
-void RC::setAileron(int8_t value){
-  service->sendPacket(value, 2, 4);
-};
-
-void RC::setElevator(int8_t value){
-  service->sendPacket(value, 2, 3);
+void RC::setRudder(int8_t value){
+  service->sendPacket(value, 2, 1);
 };
 
 void RC::setThrottle(int8_t value){
   service->sendPacket(value, 2, 2);
 };
 
-void RC::setRudder(int8_t value){
-  service->sendPacket(value, 2, 1);
+void RC::setElevator(int8_t value){
+  service->sendPacket(value, 2, 3);
+};
+
+void RC::setAileron(int8_t value){
+  service->sendPacket(value, 2, 4);
 };
 
 void RC::setFlightMode(int8_t value){

@@ -52,15 +52,15 @@ void Drone::initialize() {
 }
 
 void Drone::arm() {
-  serialIO.sendPacket((int8_t)-100, 2, 1);
-  serialIO.sendPacket((int8_t)-100, 2, 2);
-  serialIO.sendPacket((int8_t)-100, 2, 3);
-  serialIO.sendPacket((int8_t)-100, 2, 4);
+  rc.setRudder(-100);
+  rc.setThrottle(-100);
+  rc.setElevator(-100);
+  rc.setAileron(-100);
   delay(500);
-  serialIO.sendPacket((int8_t)0, 2, 1);
-  serialIO.sendPacket((int8_t)-100, 2, 2);
-  serialIO.sendPacket((int8_t)0, 2, 3);
-  serialIO.sendPacket((int8_t)0, 2, 4);
+  rc.setRudder(0);
+  rc.setThrottle(-100);
+  rc.setElevator(0);
+  rc.setAileron(0);
 }
 
 
