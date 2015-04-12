@@ -28,19 +28,19 @@ void RC::setFlightMode(int8_t value){
 };
 
 void RC::getAileron(){
-  service->sendPacket((int16_t)0, 2, 9);
+  service->sendPacket((int16_t)0, 2, 6);
 }
 
 void RC::getElevator(){
-  service->sendPacket((int16_t)0, 2, 8);
-}
-
-void RC::getThrottle(){
   service->sendPacket((int16_t)0, 2, 7);
 }
 
+void RC::getThrottle(){
+  service->sendPacket((int16_t)0, 2, 8);
+}
+
 void RC::getRudder(){
-  service->sendPacket((int16_t)0, 2, 6);
+  service->sendPacket((int16_t)0, 2, 9);
 }
 
 void RC::getFlightMode(){
