@@ -95,82 +95,130 @@ void AutoPilot::setAileronKI(float ki) {
   service->sendPacket(ki, 15, 16);
 }
 
-void AutoPilot::getWaypointLatitude(void (*function)(float)) {
-  (*myCallback).getWaypointLatitude = function;
+void AutoPilot::getWaypointLatitude() {
   service->sendPacket((int16_t)0, 15, 22);
 }
 
-void AutoPilot::getWaypointLongitude(void (*function)(float)) {
-  (*myCallback).getWaypointLongitude = function;
+void AutoPilot::getWaypointLongitude() {
   service->sendPacket((int16_t)0, 15, 23);
 }
 
-void AutoPilot::getWaypointAltitude(void (*function)(float)) {
-  (*myCallback).getWaypointAltitude = function;
+void AutoPilot::getWaypointAltitude() {
   service->sendPacket((int16_t)0, 15, 24);
 }
 
-void AutoPilot::getWaypointOrientation(void (*function)(float)) {
-  (*myCallback).getWaypointOrientation = function;
+void AutoPilot::getWaypointOrientation() {
   service->sendPacket((int16_t)0, 15, 25);
 }
 
-void AutoPilot::getYawKP(void (*function)(float)) {
-  (*myCallback).getYawKP = function;
+void AutoPilot::getYawKP() {
   service->sendPacket((int16_t)0, 15, 26);
 }
 
-void AutoPilot::getYawKD(void (*function)(float)) {
-  (*myCallback).getYawKD = function;
+void AutoPilot::getYawKD() {
   service->sendPacket((int16_t)0, 15, 27);
 }
 
-void AutoPilot::getYawKI(void (*function)(float)) {
-  (*myCallback).getYawKI = function;
+void AutoPilot::getYawKI() {
   service->sendPacket((int16_t)0, 15, 28);
 }
 
-void AutoPilot::getThrottleKP(void (*function)(float)) {
-  (*myCallback).getThrottleKP = function;
+void AutoPilot::getThrottleKP() {
   service->sendPacket((int16_t)0, 15, 29);
 }
 
-void AutoPilot::getThrottleKD(void (*function)(float)) {
-  (*myCallback).getThrottleKD = function;
+void AutoPilot::getThrottleKD() {
   service->sendPacket((int16_t)0, 15, 30);
 }
 
-void AutoPilot::getThrottleKI(void (*function)(float)) {
-  (*myCallback).getThrottleKI = function;
+void AutoPilot::getThrottleKI() {
   service->sendPacket((int16_t)0, 15, 31);
 }
 
-void AutoPilot::getElevatorKP(void (*function)(float)) {
-  (*myCallback).getElevatorKP = function;
+void AutoPilot::getElevatorKP() {
   service->sendPacket((int16_t)0, 15, 32);
 }
 
-void AutoPilot::getElevatorKD(void (*function)(float)) {
-  (*myCallback).getElevatorKD = function;
+void AutoPilot::getElevatorKD() {
   service->sendPacket((int16_t)0, 15, 33);
 }
 
-void AutoPilot::getElevatorKI(void (*function)(float)) {
-  (*myCallback).getElevatorKI = function;
+void AutoPilot::getElevatorKI() {
   service->sendPacket((int16_t)0, 15, 34);
 }
 
-void AutoPilot::getAileronKP(void (*function)(float)) {
-  (*myCallback).getAileronKP = function;
+void AutoPilot::getAileronKP() {
   service->sendPacket((int16_t)0, 15, 35);
 }
 
-void AutoPilot::getAileronKD(void (*function)(float)) {
-  (*myCallback).getAileronKD = function;
+void AutoPilot::getAileronKD() {
   service->sendPacket((int16_t)0, 15, 36);
 }
 
-void AutoPilot::getAileronKI(void (*function)(float)) {
-  (*myCallback).getAileronKI = function;
+void AutoPilot::getAileronKI() {
   service->sendPacket((int16_t)0, 15, 37);
+}
+
+void AutoPilot::setWaypointLatitudeCallback(void (*cb)(float)) {
+  myCallback->waypointLatitude = cb;
+}
+
+void AutoPilot::setWaypointLongitudeCallback(void (*cb)(float)) {
+  myCallback->waypointLongitude = cb;
+}
+
+void AutoPilot::setWaypointAltitudeCallback(void (*cb)(float)) {
+  myCallback->waypointAltitude = cb;
+}
+
+void AutoPilot::setWaypointOrientationCallback(void (*cb)(float)) {
+  myCallback->waypointOrientation = cb;
+}
+
+void AutoPilot::setYawKPCallback(void (*cb)(float)) {
+  myCallback->yawKP = cb;
+}
+
+void AutoPilot::setYawKDCallback(void (*cb)(float)) {
+  myCallback->yawKD = cb;
+}
+
+void AutoPilot::setYawKICallback(void (*cb)(float)) {
+  myCallback->yawKI = cb;
+}
+
+void AutoPilot::setThrottleKPCallback(void (*cb)(float)) {
+  myCallback->throttleKP = cb;
+}
+
+void AutoPilot::setThrottleKDCallback(void (*cb)(float)) {
+  myCallback->throttleKD = cb;
+}
+
+void AutoPilot::setThrottleKICallback(void (*cb)(float)) {
+  myCallback->throttleKI = cb;
+}
+
+void AutoPilot::setElevatorKPCallback(void (*cb)(float)) {
+  myCallback->elevatorKP = cb;
+}
+
+void AutoPilot::setElevatorKDCallback(void (*cb)(float)) {
+  myCallback->elevatorKD = cb;
+}
+
+void AutoPilot::setElevatorKICallback(void (*cb)(float)) {
+  myCallback->elevatorKI = cb;
+}
+
+void AutoPilot::setAileronKPCallback(void (*cb)(float)) {
+  myCallback->aileronKP = cb;
+}
+
+void AutoPilot::setAileronKDCallback(void (*cb)(float)) {
+  myCallback->aileronKD = cb;
+}
+
+void AutoPilot::setAileronKICallback(void (*cb)(float)) {
+  myCallback->aileronKI = cb;
 }

@@ -47,24 +47,24 @@ void RC::getFlightMode(){
   service->sendPacket((int16_t)0, 2, 10);
 }
 
-void RC::flightModeCallback(void (*function)(byte)) {
-  (*myCallback).flightMode = function;
+void RC::setFlightModeCallback(void (*cb)(byte)) {
+  (*myCallback).flightMode = cb;
 }
 
-void RC::elevatorCallback(void (*function)(byte)) {
-  (*myCallback).elevator= function;
+void RC::setElevatorCallback(void (*cb)(byte)) {
+  (*myCallback).elevator = cb;
 }
 
-void RC::aileronCallback(void (*function)(byte)) {
-  (*myCallback).aileron = function;
+void RC::setAileronCallback(void (*cb)(byte)) {
+  (*myCallback).aileron = cb;
 }
 
-void RC::rudderCallback(void (*function)(byte)) {
-  (*myCallback).rudder = function;
+void RC::setRudderCallback(void (*cb)(byte)) {
+  (*myCallback).rudder = cb;
 }
 
-void RC::throttleCallback(void (*function)(byte)) {
-  (*myCallback).throttle = function;
+void RC::setThrottleCallback(void (*cb)(byte)) {
+  (*myCallback).throttle = cb;
 }
 
 void RC::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron){

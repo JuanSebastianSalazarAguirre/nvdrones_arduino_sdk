@@ -109,35 +109,35 @@ class RC //handles sending values to the PWM/PPM port(s)
     Execute funtion in a thread to not freez the drone.
 
     */
-    void aileronCallback(void (*function)(byte));
+    void setAileronCallback(void (*function)(byte));
 
     /**
 
     Execute funtion in a thread to not freez the drone.
 
     */
-    void flightModeCallback(void (*function)(byte));
+    void setFlightModeCallback(void (*function)(byte));
 
     /**
 
     Execute funtion in a thread to not freez the drone.
 
     */
-    void throttleCallback(void (*function)(byte));
+    void setThrottleCallback(void (*function)(byte));
 
     /**
 
     Execute funtion in a thread to not freez the drone.
 
     */
-    void rudderCallback(void (*function)(byte));
+    void setRudderCallback(void (*function)(byte));
 
     /**
 
     Execute funtion in a thread to not freez the drone.
 
     */
-    void elevatorCallback(void (*function)(byte));
+    void setElevatorCallback(void (*function)(byte));
 
     /**
 

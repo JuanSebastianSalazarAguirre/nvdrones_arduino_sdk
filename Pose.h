@@ -87,42 +87,42 @@ class Pose
     Callback function which passes longitude information to the function that it is passed.
          
     */
-    void longitudeCallback(void (*function)(float));
+    void setLongitudeCallback(void (*function)(float));
     
     /**
          
     Callback function which passes latitude information to the function that it is passed.
          
     */
-    void latitudeCallback(void (*function)(float));
+    void setLatitudeCallback(void (*function)(float));
     
     /**
          
     Callback function which passes altitude information to the function that it is passed.
          
     */
-    void altitudeCallback(void (*function)(float));
+    void setAltitudeCallback(void (*function)(float));
     
     /**
          
     Callback function which passes number of locked satellites to the function that it is passed.
          
     */
-    void satelliteCallback(void (*function)(byte));
+    void setSatelliteCallback(void (*function)(byte));
     
     /**
          
     Callback function which passes speed information to the function that it is passed.
          
     */
-    void speedCallback(void (*function)(float));
+    void setSpeedCallback(void (*function)(float));
     
     /**
          
     Callback function which passes orientation information to the function that it is passed
          
     */
-    void orientationCallback(void (*function)(float));
+    void setOrientationCallback(void (*function)(float));
 };
 
 #endif /* defined __ArduinoSDK__Pose__ */

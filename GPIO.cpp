@@ -31,61 +31,61 @@ void GPIO::analogRead(uint8_t pin) {
   service->sendPacket((int16_t)0, 17, pin);
 }
 
-void GPIO::digitalReadCallback(void (*function)(byte), int pin) {
+void GPIO::setDigitalReadCallback(void (*cb)(byte), int pin) {
   if(pin == 1)
-    (*myCallback).digitalRead1 = function;
+    (*myCallback).digitalRead1 = cb;
   else if(pin == 2)
-    (*myCallback).digitalRead2 = function;
+    (*myCallback).digitalRead2 = cb;
   else if(pin == 3)
-    (*myCallback).digitalRead3 = function;
+    (*myCallback).digitalRead3 = cb;
   else if(pin == 4)
-    (*myCallback).digitalRead4 = function;
+    (*myCallback).digitalRead4 = cb;
   else if(pin == 5)
-    (*myCallback).digitalRead5 = function;
+    (*myCallback).digitalRead5 = cb;
   else if(pin == 6)
-    (*myCallback).digitalRead6 = function;
+    (*myCallback).digitalRead6 = cb;
   else if(pin == 7)
-    (*myCallback).digitalRead7 = function;
+    (*myCallback).digitalRead7 = cb;
   else if(pin == 8)
-    (*myCallback).digitalRead8 = function;
+    (*myCallback).digitalRead8 = cb;
   else if(pin == 9)
-    (*myCallback).digitalRead9 = function;
+    (*myCallback).digitalRead9 = cb;
   else if(pin == 10)
-    (*myCallback).digitalRead10 = function;
+    (*myCallback).digitalRead10 = cb;
 }
 
-void GPIO::pulseInCallback(void (*function)(long), uint8_t pin) {
+void GPIO::setPulseInCallback(void (*cb)(long), uint8_t pin) {
   if(pin == 1)
-    (*myCallback).pulseIn1 = function;
+    (*myCallback).pulseIn1 = cb;
   if(pin == 2)
-    (*myCallback).pulseIn2 = function;
+    (*myCallback).pulseIn2 = cb;
   if(pin == 3)
-    (*myCallback).pulseIn3 = function;
+    (*myCallback).pulseIn3 = cb;
   if(pin == 4)
-    (*myCallback).pulseIn4 = function;
+    (*myCallback).pulseIn4 = cb;
   if(pin == 5)
-    (*myCallback).pulseIn5 = function;
+    (*myCallback).pulseIn5 = cb;
   if(pin == 6)
-    (*myCallback).pulseIn6 = function;
+    (*myCallback).pulseIn6 = cb;
   if(pin == 7)
-    (*myCallback).pulseIn7 = function;
+    (*myCallback).pulseIn7 = cb;
   if(pin == 8)
-    (*myCallback).pulseIn8 = function;
+    (*myCallback).pulseIn8 = cb;
   if(pin == 9)
-    (*myCallback).pulseIn9 = function;
+    (*myCallback).pulseIn9 = cb;
   if(pin == 10)
-    (*myCallback).pulseIn10 = function;
+    (*myCallback).pulseIn10 = cb;
 }
 
-void GPIO::analogReadCallback(void (*function)(byte), uint8_t pin) {
+void GPIO::setAnalogReadCallback(void (*cb)(byte), uint8_t pin) {
   if(pin == 1)
-    (*myCallback).analogRead1 = function;
+    (*myCallback).analogRead1 = cb;
   if(pin == 2)
-    (*myCallback).analogRead2 = function;
+    (*myCallback).analogRead2 = cb;
   if(pin == 3)
-    (*myCallback).analogRead3 = function;
+    (*myCallback).analogRead3 = cb;
   if(pin == 4)
-    (*myCallback).analogRead4 = function;
+    (*myCallback).analogRead4 = cb;
 }
 
 void GPIO::attachServo(uint8_t servoNumber, uint8_t pin) {

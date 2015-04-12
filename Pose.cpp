@@ -35,26 +35,26 @@ void Pose::getOrientation(void){
   service->sendPacket((int16_t)0, 9, 7);
 }
 
-void Pose::longitudeCallback(void (*function)(float)) {
+void Pose::setLongitudeCallback(void (*function)(float)) {
   (*myCallback).longitude = function;
 }
 
-void Pose::latitudeCallback(void (*function)(float)) {
+void Pose::setLatitudeCallback(void (*function)(float)) {
   (*myCallback).latitude = function;
 }
 
-void Pose::altitudeCallback(void (*function)(float)) {
+void Pose::setAltitudeCallback(void (*function)(float)) {
   (*myCallback).altitude = function;
 }
 
-void Pose::speedCallback(void (*function)(float)) {
+void Pose::setSpeedCallback(void (*function)(float)) {
   (*myCallback).speed = function;
 }
 
-void Pose::satelliteCallback(void (*function)(byte)) {
+void Pose::setSatelliteCallback(void (*function)(byte)) {
   (*myCallback).satellite = function;
 }
 
-void Pose::orientationCallback(void (*function)(float)) {
+void Pose::setOrientationCallback(void (*function)(float)) {
   (*myCallback).orientation = function;
 }

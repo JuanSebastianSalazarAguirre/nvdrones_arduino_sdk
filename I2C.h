@@ -91,10 +91,10 @@ class I2C
     This callback function is executed everytime it gets I2C information.  It passes
     this information to the function specified in the argument.
         
-    @param function name of the method
+    @param cb name of the method
     
     */
-    void readCallback(void (*function)(byte));
+    void setReadCallback(void (*cb)(byte));
 };
 
 #endif /* defined __ArduinoSDK__I2C__ */

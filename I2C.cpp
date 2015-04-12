@@ -29,6 +29,6 @@ void I2C::wireRequest(uint8_t bytes){
   service->sendPacket(bytes, 11, 6);
 }
 
-void I2C::readCallback(void (*function)(byte)) {
-  (*myCallback).i2cRead = function;
+void I2C::setReadCallback(void (*cb)(byte)) {
+  (*myCallback).i2cRead = cb;
 }

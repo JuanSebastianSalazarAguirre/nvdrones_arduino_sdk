@@ -92,33 +92,33 @@ class GPIO
     This callback function is executed everytime it gets digitalRead information.  It passes
     this information to the function specified in the argument.
  
-    @param function function name of the function to pass received information to
+    @param cb function name of the function to pass received information to
     @param pin the desired pin to sample logic level information from 
  
     */
-    void digitalReadCallback(void (*function)(byte), int pin);
+    void setDigitalReadCallback(void (*cb)(byte), int pin);
     
     /**
     
     This callback function is executed every time it gets pulseIn information.  It passes
     this information to the function specified in the argument.
      
-    @param function name of the function to pass received information to
+    @param cb name of the function to pass received information to
     @param pin the desired pin to sample pulseIn information from 
      
     */
-    void pulseInCallback(void (*function)(long), uint8_t pin);
+    void setPulseInCallback(void (*cb)(long), uint8_t pin);
     
     /**
      
     This callback function is executed every time it gets analogRead information.  It passes
     this information to the function specified in the argument.
      
-    @param function function name of the function to pass received information to
+    @param cb function name of the function to pass received information to
     @param pin the desired pin to sample analog information from 
      
     */
-    void analogReadCallback(void (*function)(byte), uint8_t pin);
+    void setAnalogReadCallback(void (*cb)(byte), uint8_t pin);
 
     /**
 

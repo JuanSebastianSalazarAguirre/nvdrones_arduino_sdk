@@ -52,22 +52,22 @@ class Callback
     void (*analogRead3)(byte);
     void (*analogRead4)(byte);
     //AutoPilot Callbacks
-    void (*getWaypointLatitude)(float);
-    void (*getWaypointLongitude)(float);
-    void (*getWaypointAltitude)(float);
-    void (*getWaypointOrientation)(float);
-    void (*getElevatorKP)(float);
-    void (*getElevatorKD)(float);
-    void (*getElevatorKI)(float);
-    void (*getThrottleKP)(float);
-    void (*getThrottleKD)(float);
-    void (*getThrottleKI)(float);
-    void (*getAileronKP)(float);
-    void (*getAileronKD)(float);
-    void (*getAileronKI)(float);
-    void (*getYawKP)(float);
-    void (*getYawKD)(float);
-    void (*getYawKI)(float);
+    void (*waypointLatitude)(float);
+    void (*waypointLongitude)(float);
+    void (*waypointAltitude)(float);
+    void (*waypointOrientation)(float);
+    void (*elevatorKP)(float);
+    void (*elevatorKD)(float);
+    void (*elevatorKI)(float);
+    void (*throttleKP)(float);
+    void (*throttleKD)(float);
+    void (*throttleKI)(float);
+    void (*aileronKP)(float);
+    void (*aileronKD)(float);
+    void (*aileronKI)(float);
+    void (*yawKP)(float);
+    void (*yawKD)(float);
+    void (*yawKI)(float);
 
 };
 

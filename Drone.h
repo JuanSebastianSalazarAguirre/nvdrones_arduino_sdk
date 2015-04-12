@@ -412,7 +412,7 @@ public:
   by calling endTransmission().
       
   */
-  void beginTransmission(void);
+  void beginTransmission();
 
   /**
 
@@ -420,7 +420,7 @@ public:
   the bytes that were queued by write().
        
   */
-  void endTransmission(void);
+  void endTransmission();
 
   /**
        
@@ -438,17 +438,17 @@ public:
   the information to the arduino.  The relpies are handled by the readCallback() function.  
      
   */
-  void read(void);
+  void read();
 
   /**
 
   Sends a request to the App Extender to read multiple bytes of information from the I2C buffer and return 
   the information to the arduino. The relpies are handled by the readCallback() function.  
       
-  @param bytes Sets the number of bytes to read from the I2C buffer
+  @param byteCount Sets the number of bytes to read from the I2C buffer
       
   */
-  void wireRequest(uint8_t bytes);
+  void wireRequest(uint8_t byteCount);
 
   /**
        
@@ -458,7 +458,7 @@ public:
   @param function name of the method
 
   */
-  void readCallback(void (*function)(byte));
+  void setReadCallback(void (*function)(byte));
 
 
   void gpsExecute();
