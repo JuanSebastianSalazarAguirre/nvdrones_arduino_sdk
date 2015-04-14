@@ -1,9 +1,9 @@
 
 #include "IncomingPacket.h"
 
-IncomingPacket::IncomingPacket(int _actionID, int _resourceID, uint8_t *_data, int _length):
-actionID(_actionID),
+IncomingPacket::IncomingPacket(int _resourceID, int _actionID, uint8_t *_data, int _length):
 resourceID(_resourceID),
+actionID(_actionID),
 data(_data),
 length(_length)
 {

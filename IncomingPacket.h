@@ -7,13 +7,13 @@
 class IncomingPacket
 {
 public:
-  IncomingPacket(int _actionID, int _resourceID, uint8_t *_data, int _length);
+  IncomingPacket(int _resourceID, int _actionID, uint8_t *_data, int _length);
 
   // TODO: implement destructor
   // ~IncomingPacket();
 
-  int actionID;
   int resourceID;
+  int actionID;
   uint8_t *data;
   int length;
   bool isValid();

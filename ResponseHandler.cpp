@@ -1,6 +1,12 @@
 #include "ResponseHandler.h"
 
-ResponseHandler::ResponseHandler(){};
+#if NV_DEBUG
+#define LOG(x,y) Serial.print(x); Serial.println(y);
+#else
+#define LOG(x,y)
+#endif
+
+ResponseHandler::ResponseHandler() {};
 
 ResponseHandler::ResponseHandler(SerialIO *_serialIO, Callback *_callbacks):
 serialIO(_serialIO),
@@ -35,7 +41,7 @@ long ResponseHandler::dataToLong(byte data[]) {
 void ResponseHandler::listen() {
   while (serialIO->available() > 0) {
     IncomingPacket p = tryToReadNextPacket();
-    if (!p.isValid()) { /* TODO: Error handling */ }
+    if (!p.isValid()) { continue; }
 
     switch (p.resourceID) {
       case 9:
@@ -45,6 +51,10 @@ void ResponseHandler::listen() {
         if (p.actionID == 5) callbacks->satellite(dataToFloat(p.data));
         if (p.actionID == 6) callbacks->speed(dataToFloat(p.data));
         if (p.actionID == 7) callbacks->orientation(dataToFloat(p.data));
+        break;
+      default:
+        LOG("We don't support resourceID ", p.resourceID);
+        break;
     }
   }
 }
@@ -56,28 +66,47 @@ IncomingPacket ResponseHandler::tryToReadNextPacket() {
   if (serialIO->read() != '$') return errorPacket;
 
   int16_t length = serialIO->multipleRead(maxIterations);
-  if (length == -1) { /* TODO: Error handling */ }
-  int16_t actionID = serialIO->multipleRead(maxIterations);
-  if (actionID == -1) { /* TODO: Error handling */ }
+  LOG("length: ", length);
+  if (length == -1) {
+    Serial.println("Error reading length");
+    return errorPacket;
+  }
   int16_t resourceID = serialIO->multipleRead(maxIterations);
-  if (resourceID == -1) { /* TODO: Error handling */ }
+  LOG("resourceID: ", resourceID);
+  if (resourceID == -1) {
+    Serial.println("Error reading resourceID");
+    return errorPacket;
+  }
+  int16_t actionID = serialIO->multipleRead(maxIterations);
+  LOG("actionID: ", actionID);
+  if (actionID == -1) {
+    Serial.println("Error reading actionID");
+    return errorPacket;
+  }
 
   uint8_t data[length];
   for (int i=0; i<length; ++i) {
     data[i] = serialIO->multipleRead(maxIterations);
+    LOG("data: ", data[i]);
   }
+  // TODO: add error checking.
 
-  int16_t checksumRead = serialIO->multipleRead(maxIterations);
-  if (checksumRead == 256) { /* TODO: Error handling */ }
-  uint8_t checksum = lowByte(checksum);
+  int16_t checksum = serialIO->multipleRead(maxIterations);
+  if (checksum == -1) { /* TODO: Error handling */ }
+  LOG("checksum: ", checksum);
 
   int16_t calculatedSum = length + actionID + resourceID;
   for (int i=0; i<length; ++i) {
     calculatedSum += data[i];
   }
+  LOG("calculated checksum: ", calculatedSum%256);
 
-  if (checksum != calculatedSum%256) { /* TODO: Error handling */ }
+  if (checksum != calculatedSum%256) {
+    Serial.println("Failed checksum");
+    return errorPacket;
+  }
 
-  IncomingPacket result(actionID, resourceID, data, length);
+  IncomingPacket result(resourceID, actionID, data, length);
+  LOG("Is packet valid? ", result.isValid());
   return result;
 }
