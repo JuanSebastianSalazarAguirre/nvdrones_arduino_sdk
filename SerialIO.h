@@ -53,12 +53,14 @@ class SerialIO
     /**
     Method description
     */
-    uint8_t serialRead();
+    int16_t read();
+
+    int16_t multipleRead(uint16_t count);
 
     /**
     Method description
     */
-    bool serialAvailable();
+    bool available();
 
 
     void sendPacket(int16_t data, uint8_t resourceID, uint8_t actionID);
@@ -74,11 +76,6 @@ class SerialIO
     Method description
     */
     void print(String data);
-
-    /**
-    Method description
-    */
-    void readBytes(char *buffer, int bytesToRead);
 };
 
 #endif /* defined __ArduinoSDK__SerialIO__ */

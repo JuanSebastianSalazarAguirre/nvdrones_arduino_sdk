@@ -3,23 +3,22 @@
 
 #include "SerialIO.h"
 #include "Callback.h"
+#include "IncomingPacket.h"
 
 //\cond
 class ResponseHandler
 //\endcond
 {
   private:
-    SerialIO *service;
-    Callback *myCallback;
+    SerialIO *serialIO;
+    Callback *callbacks;
     float dataToFloat(byte data[]);
     long  dataToLong(byte data[]);
   public:
     ResponseHandler();
-    ResponseHandler(SerialIO *rcTservice, Callback *callback);
-    void responseHandler();
-    void callbackTest(byte test){
-    myCallback->i2cRead(test);
-    }   
+    ResponseHandler(SerialIO *_serialIO, Callback *_callbacks);
+    void listen();
+    IncomingPacket tryToReadNextPacket();
 };
 
 #endif /* defined __ArduinoSDK__ResponseHandler__ */

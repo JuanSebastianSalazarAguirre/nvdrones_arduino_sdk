@@ -67,7 +67,7 @@ void SerialIO::write(uint8_t data) {
   }
 }
 
-uint8_t SerialIO::serialRead() {
+int16_t SerialIO::read() {
   switch(selectedSerialPort) {
     case serialPort0:
       #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
@@ -97,7 +97,17 @@ uint8_t SerialIO::serialRead() {
   }
 }
 
-bool SerialIO::serialAvailable() {
+// TODO: rename to something more intelligent
+int16_t SerialIO::multipleRead(uint16_t count) {
+  int16_t result = -1;
+  for (uint16_t i=0; i<count; ++i) {
+    result = read();
+    if (result != -1) break;
+  }
+  return result;
+}
+
+bool SerialIO::available() {
   switch(selectedSerialPort) {
     case serialPort0:
       #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
@@ -203,29 +213,3 @@ void SerialIO::print(String data) {
       Serial.println("Error: incorrectly configured serial settings.");
   }
 }
-
-// TODO: make this work
-void SerialIO::readBytes(char *buffer, int bytesToRead) {
-/*
-  if (isHwSerial0Used) {
-    #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
-      Serial.readBytes(buffer, bytesToRead);
-    #endif
-  } else if (isHwSerial1Used) {
-    #if defined(UBRR1H)
-      Serial1.readBytes(buffer, bytesToRead);
-    #endif
-  } else if (isHwSerial2Used) {
-    #if defined(UBRR2H)
-      Serial2.readBytes(buffer, bytesToRead);
-    #endif
-  } else if (isHwSerial3Used) {
-    #if defined(UBRR3H)
-        Serial3.readBytes(buffer, bytesToRead);
-    #endif
-  } else if (isSwSerialUsed) {
-    softwareSerial.readBytes(buffer, bytesToRead);
-  }
-*/
-}
-
