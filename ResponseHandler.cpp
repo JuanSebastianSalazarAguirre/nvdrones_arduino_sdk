@@ -59,8 +59,8 @@ void ResponseHandler::listen() {
         else if (p.actionID == 10) callbacks->flightMode((int16_t)p.data[0]); 
         break;
       case 9:
-        if (p.actionID == 2) callbacks->longitude(dataToFloat(p.data));
-        else if (p.actionID == 3) callbacks->latitude(dataToFloat(p.data));
+        if (p.actionID == 2) callbacks->latitude(dataToFloat(p.data));
+        else if (p.actionID == 3) callbacks->longitude(dataToFloat(p.data));
         else if (p.actionID == 4) callbacks->altitude(dataToFloat(p.data));
         else if (p.actionID == 5) callbacks->satellite(dataToFloat(p.data));
         else if (p.actionID == 6) callbacks->speed(dataToFloat(p.data));
