@@ -116,8 +116,6 @@ IncomingPacket ResponseHandler::tryToReadNextPacket() {
   LOG("calculated checksum: ", calculatedSum%256);
 
   if (checksum != calculatedSum%256) {
-    Serial.print("checksum: ");Serial.println(checksum);
-    Serial.print("calculated checksum: ");Serial.println(calculatedSum);
     Serial.println("Failed checksum");
     return errorPacket;
   }
