@@ -12,27 +12,27 @@ void Pose::getGPSData(void) {
 }
 
 void Pose::getLatitude(void) {
-  service->sendPacket((int16_t)0, 9, 2);
+  service->sendPacket((int8_t)0, 9, 2);
 }
 
 void Pose::getLongitude(void) {
-  service->sendPacket((int16_t)0, 9, 3);
+  service->sendPacket((int8_t)0, 9, 3);
 }
 
 void Pose::getAltitude(void ) {
-  service->sendPacket((int16_t)0, 9, 4);
+  service->sendPacket((int8_t)0, 9, 4);
 }
 
 void Pose::getSatellites(void) {
-  service->sendPacket((int16_t)0, 9, 5);
+  service->sendPacket((int8_t)0, 9, 5);
 }
 
 void Pose::getSpeed(void) {
-  service->sendPacket((int16_t)0, 9, 6);
+  service->sendPacket((int8_t)0, 9, 6);
 }
 
 void Pose::getOrientation(void){
-  service->sendPacket((int16_t)0, 9, 7);
+  service->sendPacket((int8_t)0, 9, 7);
 }
 
 void Pose::setLongitudeCallback(void (*function)(float)) {

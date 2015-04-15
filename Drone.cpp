@@ -101,11 +101,11 @@ void Drone::getElevator()                               { rc.getElevator(); }
 void Drone::getThrottle()                               { rc.getThrottle(); }
 void Drone::getRudder()                                 { rc.getRudder(); }
 void Drone::getFlightMode()                             { rc.getFlightMode(); }
-void Drone::setAileronCallback(void (*cb)(uint8_t))     { rc.setAileronCallback(cb); }
-void Drone::setFlightModeCallback(void (*cb)(uint8_t))  { rc.setFlightModeCallback(cb); }
-void Drone::setThrottleCallback(void (*cb)(uint8_t))    { rc.setThrottleCallback(cb); }
-void Drone::setRudderCallback(void (*cb)(uint8_t))      { rc.setRudderCallback(cb); }
-void Drone::setElevatorCallback(void (*cb)(uint8_t))    { rc.setElevatorCallback(cb); }
+void Drone::setAileronCallback(void (*cb)(int16_t))     { rc.setAileronCallback(cb); }
+void Drone::setFlightModeCallback(void (*cb)(int16_t))  { rc.setFlightModeCallback(cb); }
+void Drone::setThrottleCallback(void (*cb)(int16_t))    { rc.setThrottleCallback(cb); }
+void Drone::setRudderCallback(void (*cb)(int16_t))      { rc.setRudderCallback(cb); }
+void Drone::setElevatorCallback(void (*cb)(int16_t))    { rc.setElevatorCallback(cb); }
 void Drone::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron) {
   // TODO: rename RTEA to something less cryptic
   rc.sendRTEA(rudder, throttle, elevator, aileron);

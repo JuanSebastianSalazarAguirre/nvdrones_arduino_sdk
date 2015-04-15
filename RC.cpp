@@ -28,42 +28,42 @@ void RC::setFlightMode(int8_t value){
 };
 
 void RC::getAileron(){
-  service->sendPacket((int16_t)0, 2, 6);
+  service->sendPacket((int8_t)0, 2, 6);
 }
 
 void RC::getElevator(){
-  service->sendPacket((int16_t)0, 2, 7);
+  service->sendPacket((int8_t)0, 2, 7);
 }
 
 void RC::getThrottle(){
-  service->sendPacket((int16_t)0, 2, 8);
+  service->sendPacket((int8_t)0, 2, 8);
 }
 
 void RC::getRudder(){
-  service->sendPacket((int16_t)0, 2, 9);
+  service->sendPacket((int8_t)0, 2, 9);
 }
 
 void RC::getFlightMode(){
-  service->sendPacket((int16_t)0, 2, 10);
+  service->sendPacket((int8_t)0, 2, 10);
 }
 
-void RC::setFlightModeCallback(void (*cb)(byte)) {
+void RC::setFlightModeCallback(void (*cb)(int16_t)) {
   (*myCallback).flightMode = cb;
 }
 
-void RC::setElevatorCallback(void (*cb)(byte)) {
+void RC::setElevatorCallback(void (*cb)(int16_t)) {
   (*myCallback).elevator = cb;
 }
 
-void RC::setAileronCallback(void (*cb)(byte)) {
+void RC::setAileronCallback(void (*cb)(int16_t)) {
   (*myCallback).aileron = cb;
 }
 
-void RC::setRudderCallback(void (*cb)(byte)) {
+void RC::setRudderCallback(void (*cb)(int16_t)) {
   (*myCallback).rudder = cb;
 }
 
-void RC::setThrottleCallback(void (*cb)(byte)) {
+void RC::setThrottleCallback(void (*cb)(int16_t)) {
   (*myCallback).throttle = cb;
 }
 

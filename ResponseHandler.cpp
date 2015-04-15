@@ -1,5 +1,5 @@
 #include "ResponseHandler.h"
-
+//#define NV_DEBUG 1   //uncomment to turn log statments on
 #if NV_DEBUG
 #define LOG(x,y) Serial.print(x); Serial.println(y);
 #else
@@ -38,19 +38,33 @@ long ResponseHandler::dataToLong(byte data[]) {
   return data_long;
 }
 
+int ResponseHandler::dataToInt(byte data[]) {
+ int data_int = 0;
+ data_int = byte(data[0]) << 8;
+ data_int = data_int + byte(data[1]);
+ return data_int; 
+}
+
 void ResponseHandler::listen() {
   while (serialIO->available() > 0) {
     IncomingPacket p = tryToReadNextPacket();
     if (!p.isValid()) { continue; }
 
     switch (p.resourceID) {
+      case 2:
+        if (p.actionID == 6) callbacks->aileron((int16_t)p.data[0]);
+        else if (p.actionID == 7) callbacks->elevator((int16_t)p.data[0]);
+        else if (p.actionID == 8) callbacks->throttle((int16_t)p.data[0]);
+        else if (p.actionID == 9) callbacks->rudder((int16_t)p.data[0]);
+        else if (p.actionID == 10) callbacks->flightMode((int16_t)p.data[0]); 
+        break;
       case 9:
         if (p.actionID == 2) callbacks->longitude(dataToFloat(p.data));
-        if (p.actionID == 3) callbacks->latitude(dataToFloat(p.data));
-        if (p.actionID == 4) callbacks->altitude(dataToFloat(p.data));
-        if (p.actionID == 5) callbacks->satellite(dataToFloat(p.data));
-        if (p.actionID == 6) callbacks->speed(dataToFloat(p.data));
-        if (p.actionID == 7) callbacks->orientation(dataToFloat(p.data));
+        else if (p.actionID == 3) callbacks->latitude(dataToFloat(p.data));
+        else if (p.actionID == 4) callbacks->altitude(dataToFloat(p.data));
+        else if (p.actionID == 5) callbacks->satellite(dataToFloat(p.data));
+        else if (p.actionID == 6) callbacks->speed(dataToFloat(p.data));
+        else if (p.actionID == 7) callbacks->orientation(dataToFloat(p.data));
         break;
       default:
         LOG("We don't support resourceID ", p.resourceID);
@@ -102,6 +116,8 @@ IncomingPacket ResponseHandler::tryToReadNextPacket() {
   LOG("calculated checksum: ", calculatedSum%256);
 
   if (checksum != calculatedSum%256) {
+    Serial.print("checksum: ");Serial.println(checksum);
+    Serial.print("calculated checksum: ");Serial.println(calculatedSum);
     Serial.println("Failed checksum");
     return errorPacket;
   }

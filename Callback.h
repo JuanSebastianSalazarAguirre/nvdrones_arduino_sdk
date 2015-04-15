@@ -19,11 +19,11 @@ class Callback
     void (*satellite)(byte);
     void (*orientation)(float);
     //RC Callbacks
-    void (*flightMode)(byte);
-    void (*elevator)(byte);
-    void (*aileron)(byte);
-    void (*throttle)(byte);
-    void (*rudder)(byte);
+    void (*flightMode)(int16_t);
+    void (*elevator)(int16_t);
+    void (*aileron)(int16_t);
+    void (*throttle)(int16_t);
+    void (*rudder)(int16_t);
     //pulseIn Callbacks
     void (*pulseIn1)(long);
     void (*pulseIn2)(long);
