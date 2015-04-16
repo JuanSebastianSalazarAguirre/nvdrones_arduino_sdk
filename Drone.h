@@ -135,7 +135,7 @@ public:
   Callback function which passes number of locked satellites to the function that it is passed.
        
   */
-  void setSatelliteCallback(void (*function)(byte));
+  void setSatelliteCallback(void (*function)(int16_t));
 
   /**
        
@@ -150,6 +150,48 @@ public:
        
   */
   void setOrientationCallback(void (*function)(float));
+
+  /**
+
+  Synchronous version of `getLatitude`.
+
+  */
+  float getLatitudeSync();
+
+  /**
+
+  Synchronous version of `getLongitude`.
+
+  */
+  float getLongitudeSync();
+
+  /**
+
+  Synchronous version of `getAltitude`.
+
+  */
+  float getAltitudeSync();
+
+  /**
+
+  Synchronous version of `getSatellites`.
+
+  */
+  int16_t getSatellitesSync();
+
+  /**
+
+  Synchronous version of `getSpeed`.
+
+  */
+  float getSpeedSync();
+
+  /**
+
+  Synchronous version of `getOrientation`.
+
+  */
+  float getOrientationSync();
 
   /**
 

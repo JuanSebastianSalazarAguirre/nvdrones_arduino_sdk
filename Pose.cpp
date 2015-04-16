@@ -1,60 +1,134 @@
 #include "Pose.h"
+#include "Utils.h"
 
 Pose::Pose(){}
 
-Pose::Pose(SerialIO *rcTservice, Callback *callback) {
-  service = rcTservice;
-  myCallback = callback;
+Pose::Pose(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHandler) {
+  serialIO = _serialIO;
+  callbacks = _callbacks;
+  responseHandler = _responseHandler;
 }
 
 void Pose::getGPSData(void) {
-  service->sendPacket((int16_t)0, 9, 1);
+  serialIO->sendPacket((int16_t)0, 9, 1);
 }
 
 void Pose::getLatitude(void) {
-  service->sendPacket((int8_t)0, 9, 2);
+  serialIO->sendPacket((int8_t)0, 9, 2);
 }
 
 void Pose::getLongitude(void) {
-  service->sendPacket((int8_t)0, 9, 3);
+  serialIO->sendPacket((int8_t)0, 9, 3);
 }
 
 void Pose::getAltitude(void ) {
-  service->sendPacket((int8_t)0, 9, 4);
+  serialIO->sendPacket((int8_t)0, 9, 4);
 }
 
 void Pose::getSatellites(void) {
-  service->sendPacket((int8_t)0, 9, 5);
+  serialIO->sendPacket((int8_t)0, 9, 5);
 }
 
 void Pose::getSpeed(void) {
-  service->sendPacket((int8_t)0, 9, 6);
+  serialIO->sendPacket((int8_t)0, 9, 6);
 }
 
 void Pose::getOrientation(void){
-  service->sendPacket((int8_t)0, 9, 7);
+  serialIO->sendPacket((int8_t)0, 9, 7);
 }
 
-void Pose::setLongitudeCallback(void (*function)(float)) {
-  (*myCallback).longitude = function;
+void Pose::setLongitudeCallback(void (*cb)(float)) {
+  callbacks->longitude = cb;
 }
 
-void Pose::setLatitudeCallback(void (*function)(float)) {
-  (*myCallback).latitude = function;
+void Pose::setLatitudeCallback(void (*cb)(float)) {
+  callbacks->latitude = cb;
 }
 
-void Pose::setAltitudeCallback(void (*function)(float)) {
-  (*myCallback).altitude = function;
+void Pose::setAltitudeCallback(void (*cb)(float)) {
+  callbacks->altitude = cb;
 }
 
-void Pose::setSpeedCallback(void (*function)(float)) {
-  (*myCallback).speed = function;
+void Pose::setSpeedCallback(void (*cb)(float)) {
+  callbacks->speed = cb;
 }
 
-void Pose::setSatelliteCallback(void (*function)(byte)) {
-  (*myCallback).satellite = function;
+void Pose::setSatelliteCallback(void (*cb)(int16_t)) {
+  callbacks->satellite = cb;
 }
 
-void Pose::setOrientationCallback(void (*function)(float)) {
-  (*myCallback).orientation = function;
+void Pose::setOrientationCallback(void (*cb)(float)) {
+  callbacks->orientation = cb;
+}
+
+float Pose::getLatitudeSync() {
+  getLatitude();
+  IncomingPacket p(0,0,0,0);
+  unsigned long startTime = millis();
+  while ((millis() - startTime) < 1000) {
+    p = responseHandler->tryToReadNextPacket();
+    if (p.resourceID == 9 && p.actionID == 2 && p.isValid())
+      return Utils::dataToFloat(p.data);
+  }
+  return -1;
+}
+
+float Pose::getLongitudeSync() {
+  getLongitude();
+  IncomingPacket p(0,0,0,0);
+  unsigned long startTime = millis();
+  while ((millis() - startTime) < 1000) {
+    p = responseHandler->tryToReadNextPacket();
+    if (p.resourceID == 9 && p.actionID == 3 && p.isValid())
+      return Utils::dataToFloat(p.data);
+  }
+  return -1;
+}
+
+float Pose::getAltitudeSync() {
+  getAltitude();
+  IncomingPacket p(0,0,0,0);
+  unsigned long startTime = millis();
+  while ((millis() - startTime) < 1000) {
+    p = responseHandler->tryToReadNextPacket();
+    if (p.resourceID == 9 && p.actionID == 4 && p.isValid())
+      return Utils::dataToFloat(p.data);
+  }
+  return -1;
+}
+
+int16_t Pose::getSatellitesSync() {
+  getSatellites();
+  IncomingPacket p(0,0,0,0);
+  unsigned long startTime = millis();
+  while ((millis() - startTime) < 1000) {
+    p = responseHandler->tryToReadNextPacket();
+    if (p.resourceID == 9 && p.actionID == 5 && p.isValid())
+      return (int16_t)p.data[0];
+  }
+  return -1;
+}
+
+float Pose::getSpeedSync() {
+  getSpeed();
+  IncomingPacket p(0,0,0,0);
+  unsigned long startTime = millis();
+  while ((millis() - startTime) < 1000) {
+    p = responseHandler->tryToReadNextPacket();
+    if (p.resourceID == 9 && p.actionID == 6 && p.isValid())
+      return Utils::dataToFloat(p.data);
+  }
+  return -1;
+}
+
+float Pose::getOrientationSync() {
+  getOrientation();
+  IncomingPacket p(0,0,0,0);
+  unsigned long startTime = millis();
+  while ((millis() - startTime) < 1000) {
+    p = responseHandler->tryToReadNextPacket();
+    if (p.resourceID == 9 && p.actionID == 7 && p.isValid())
+      return Utils::dataToFloat(p.data);
+  }
+  return -1;
 }

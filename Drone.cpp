@@ -12,33 +12,33 @@
 Drone::Drone() {
   serialIO = SerialIO(serialPort0);
   callback = Callback();
+  responseHandler = ResponseHandler(&serialIO, &callback);
   rc = RC(&serialIO, &callback);
   gpio = GPIO(&serialIO, &callback);
-  responseHandler = ResponseHandler(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
-  pose = Pose(&serialIO, &callback);
+  pose = Pose(&serialIO, &callback, &responseHandler);
   autoPilot = AutoPilot(&serialIO, &callback);
 }
 
 Drone::Drone(SerialPort serialPort) {
   serialIO = SerialIO(serialPort);
   callback = Callback();
+  responseHandler = ResponseHandler(&serialIO, &callback);
   rc = RC(&serialIO, &callback);
   gpio = GPIO(&serialIO, &callback);
-  responseHandler = ResponseHandler(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
-  pose = Pose(&serialIO, &callback);
+  pose = Pose(&serialIO, &callback, &responseHandler);
   autoPilot = AutoPilot(&serialIO, &callback);
 }
 
 Drone::Drone(int txPin, int rxPin) {
   serialIO = SerialIO(txPin, rxPin);
   callback = Callback();
+  responseHandler = ResponseHandler(&serialIO, &callback);
   rc = RC(&serialIO, &callback);
   gpio = GPIO(&serialIO, &callback);
-  responseHandler = ResponseHandler(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
-  pose = Pose(&serialIO, &callback);
+  pose = Pose(&serialIO, &callback, &responseHandler);
   autoPilot = AutoPilot(&serialIO, &callback);
 }
 
@@ -72,6 +72,7 @@ void Drone::listen() {
 // Pose Methods
 //
 
+// Async Getters
 void Drone::getGPSData()                              { pose.getGPSData(); }
 void Drone::getLongitude()                            { pose.getLongitude(); }
 void Drone::getLatitude()                             { pose.getLatitude(); }
@@ -82,9 +83,17 @@ void Drone::getOrientation()                          { pose.getOrientation(); }
 void Drone::setLongitudeCallback(void (*cb)(float))   { pose.setLongitudeCallback(cb); }
 void Drone::setLatitudeCallback(void (*cb)(float))    { pose.setLatitudeCallback(cb); }
 void Drone::setAltitudeCallback(void (*cb)(float))    { pose.setAltitudeCallback(cb); }
-void Drone::setSatelliteCallback(void (*cb)(uint8_t)) { pose.setSatelliteCallback(cb); }
+void Drone::setSatelliteCallback(void (*cb)(int16_t)) { pose.setSatelliteCallback(cb); }
 void Drone::setSpeedCallback(void (*cb)(float))       { pose.setSpeedCallback(cb); }
 void Drone::setOrientationCallback(void (*cb)(float)) { pose.setOrientationCallback(cb); }
+
+// Sync Getters
+float Drone::getLatitudeSync()      { return pose.getLatitudeSync(); }
+float Drone::getLongitudeSync()     { return pose.getLongitudeSync(); }
+float Drone::getAltitudeSync()      { return pose.getAltitudeSync(); }
+int16_t Drone::getSatellitesSync()  { return pose.getSatellitesSync(); }
+float Drone::getSpeedSync()         { return pose.getSpeedSync(); }
+float Drone::getOrientationSync()   { return pose.getOrientationSync(); }
 
 //
 // TODO: rename RC
@@ -132,13 +141,13 @@ void Drone::writeServo(uint8_t servoNumber, uint8_t data)           { gpio.write
 // I2C Methods
 //
 
-void Drone::deviceID(uint8_t id)              { i2c.deviceID(id); }
-void Drone::beginTransmission()               { i2c.beginTransmission(); }
-void Drone::endTransmission()                 { i2c.endTransmission(); }
-void Drone::write(uint8_t data)               { i2c.write(data); }
-void Drone::read()                            { i2c.read(); }
-void Drone::wireRequest(uint8_t byteCount)    { i2c.wireRequest(byteCount); }
-void Drone::setReadCallback(void (*cb)(uint8_t)) { i2c.setReadCallback(cb); }
+void Drone::deviceID(uint8_t id)                  { i2c.deviceID(id); }
+void Drone::beginTransmission()                   { i2c.beginTransmission(); }
+void Drone::endTransmission()                     { i2c.endTransmission(); }
+void Drone::write(uint8_t data)                   { i2c.write(data); }
+void Drone::read()                                { i2c.read(); }
+void Drone::wireRequest(uint8_t byteCount)        { i2c.wireRequest(byteCount); }
+void Drone::setReadCallback(void (*cb)(uint8_t))  { i2c.setReadCallback(cb); }
 
 //
 // Autopilot Methods
