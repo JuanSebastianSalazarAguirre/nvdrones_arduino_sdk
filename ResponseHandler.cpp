@@ -28,7 +28,7 @@ void ResponseHandler::listen() {
       case 2:
         if (p.actionID == 6) callbacks->aileron((int16_t)p.data[0]);
         else if (p.actionID == 7) callbacks->elevator((int16_t)p.data[0]);
-        else if (p.actionID == 8) callbacks->throttle((int16_t)p.data[0]);
+        else if (p.actionID == 8) callbacks->throttle((int16_t)(int8_t)p.data[0]);
         else if (p.actionID == 9) callbacks->rudder((int16_t)p.data[0]);
         else if (p.actionID == 10) callbacks->flightMode((int16_t)p.data[0]); 
         break;

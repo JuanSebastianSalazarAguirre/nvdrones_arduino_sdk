@@ -2,6 +2,7 @@
 #include <avr/pgmspace.h>
 #include <Arduino.h>
 #include "Drone.h"
+#include "ResponseHandler.h"
 #include <avr/io.h>
 
 
@@ -13,7 +14,7 @@ Drone::Drone() {
   serialIO = SerialIO(serialPort0);
   callback = Callback();
   responseHandler = ResponseHandler(&serialIO, &callback);
-  rc = RC(&serialIO, &callback);
+  rc = RC(&serialIO, &callback, &responseHandler);
   gpio = GPIO(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
   pose = Pose(&serialIO, &callback, &responseHandler);
@@ -24,7 +25,7 @@ Drone::Drone(SerialPort serialPort) {
   serialIO = SerialIO(serialPort);
   callback = Callback();
   responseHandler = ResponseHandler(&serialIO, &callback);
-  rc = RC(&serialIO, &callback);
+  rc = RC(&serialIO, &callback, &responseHandler);
   gpio = GPIO(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
   pose = Pose(&serialIO, &callback, &responseHandler);
@@ -35,7 +36,7 @@ Drone::Drone(int txPin, int rxPin) {
   serialIO = SerialIO(txPin, rxPin);
   callback = Callback();
   responseHandler = ResponseHandler(&serialIO, &callback);
-  rc = RC(&serialIO, &callback);
+  rc = RC(&serialIO, &callback, &responseHandler);
   gpio = GPIO(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
   pose = Pose(&serialIO, &callback, &responseHandler);
@@ -100,11 +101,14 @@ float Drone::getOrientationSync()   { return pose.getOrientationSync(); }
 // RC Methods
 //
 
+// Setters
 void Drone::setAileron(int8_t value)                    { rc.setAileron(value); }
 void Drone::setElevator(int8_t value)                   { rc.setElevator(value); }
 void Drone::setThrottle(int8_t value)                   { rc.setThrottle(value); }
 void Drone::setRudder(int8_t value)                     { rc.setRudder(value); }
 void Drone::setFlightMode(int8_t value)                 { rc.setFlightMode(value); }
+
+// Async Getters
 void Drone::getAileron()                                { rc.getAileron(); }
 void Drone::getElevator()                               { rc.getElevator(); }
 void Drone::getThrottle()                               { rc.getThrottle(); }
@@ -119,6 +123,13 @@ void Drone::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t
   // TODO: rename RTEA to something less cryptic
   rc.sendRTEA(rudder, throttle, elevator, aileron);
 }
+
+// Sync Getters
+int16_t Drone::getAileronSync()                         { rc.getAileronSync(); }
+int16_t Drone::getElevatorSync()                        { rc.getElevatorSync(); }
+int16_t Drone::getThrottleSync()                        { rc.getThrottleSync(); }
+int16_t Drone::getRudderSync()                          { rc.getRudderSync(); }
+int16_t Drone::getFlightModeSync()                      { rc.getFlightModeSync(); }
 
 //
 // GPIO Methods
