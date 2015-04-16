@@ -11,8 +11,25 @@ unsigned long previousMillis = 0;
 void setup() {
   Serial.begin(57600);
 
-  drone.setLongitudeCallback(printLongitude);
   drone.setLatitudeCallback(printLatitude);
+  drone.setLongitudeCallback(printLongitude);
+
+  delay(2000);
+
+  float latitude = drone.getLatitudeSync();
+  float longitude = drone.getLongitudeSync();
+  float altitude = drone.getAltitudeSync();
+  int satellites = drone.getSatellitesSync();
+  float speed = drone.getSpeedSync();
+  float orientation = drone.getOrientationSync();
+  Serial.print("Sync latitude is: "); Serial.println(latitude, 6);
+  Serial.print("Sync longitude is: "); Serial.println(longitude, 6);
+  Serial.print("Sync altitude is: "); Serial.println(altitude, 6);
+  Serial.print("Sync satellites is: "); Serial.println(satellites, 6);
+  Serial.print("Sync speed is: "); Serial.println(speed, 6);
+  Serial.print("Sync orientation is: "); Serial.println(orientation, 6);
+
+  delay(2000);
 }
 
 void loop() {

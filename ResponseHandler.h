@@ -12,9 +12,6 @@ class ResponseHandler
   private:
     SerialIO *serialIO;
     Callback *callbacks;
-    float dataToFloat(byte data[]);
-    long  dataToLong(byte data[]);
-    int dataToInt(byte data[]);
   public:
     ResponseHandler();
     ResponseHandler(SerialIO *_serialIO, Callback *_callbacks);

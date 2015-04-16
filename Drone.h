@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "Pose.h"
 #include "GPIO.h"
 #include "I2C.h"  
-#include "ResponseHandler.h"
 #include "AutoPilot.h"
 
 class Drone 
@@ -135,7 +134,7 @@ public:
   Callback function which passes number of locked satellites to the function that it is passed.
        
   */
-  void setSatelliteCallback(void (*function)(byte));
+  void setSatelliteCallback(void (*function)(int16_t));
 
   /**
        
@@ -150,6 +149,48 @@ public:
        
   */
   void setOrientationCallback(void (*function)(float));
+
+  /**
+
+  Synchronous version of `getLatitude`.
+
+  */
+  float getLatitudeSync();
+
+  /**
+
+  Synchronous version of `getLongitude`.
+
+  */
+  float getLongitudeSync();
+
+  /**
+
+  Synchronous version of `getAltitude`.
+
+  */
+  float getAltitudeSync();
+
+  /**
+
+  Synchronous version of `getSatellites`.
+
+  */
+  int16_t getSatellitesSync();
+
+  /**
+
+  Synchronous version of `getSpeed`.
+
+  */
+  float getSpeedSync();
+
+  /**
+
+  Synchronous version of `getOrientation`.
+
+  */
+  float getOrientationSync();
 
   /**
 
@@ -272,6 +313,41 @@ public:
 
   */
   void sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron);
+
+  /**
+
+  Synchronous version of `getAileron`.
+
+  */
+  int16_t getAileronSync();
+
+  /**
+
+  Synchronous version of `getElevator`.
+
+  */
+  int16_t getElevatorSync();
+
+  /**
+
+  Synchronous version of `getThrottle`.
+
+  */
+  int16_t getThrottleSync();
+
+  /**
+
+  Synchronous version of `getRudder`.
+
+  */
+  int16_t getRudderSync();
+
+  /**
+
+  Synchronous version of `getFlightMode`.
+
+  */
+  int16_t getFlightModeSync();
   
   /**
    

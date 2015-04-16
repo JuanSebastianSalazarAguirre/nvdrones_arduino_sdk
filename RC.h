@@ -3,6 +3,7 @@
 
 #include "Callback.h"
 #include "SerialIO.h"
+#include "ResponseHandler.h"
 
 class RC //handles sending values to the PWM/PPM port(s)
 /**
@@ -12,139 +13,175 @@ class RC //handles sending values to the PWM/PPM port(s)
 
 */
 {
-  private:
-    //\cond
-    SerialIO *service;
-    Callback *myCallback;
-    //\endcond
-  public:
-    //\cond
-    RC();
+private:
+  //\cond
+  SerialIO *serialIO;
+  Callback *callbacks;
+  ResponseHandler *responseHandler;
+  //\endcond
+public:
+  //\cond
+  RC();
 
-    RC(SerialIO *rcTservice, Callback *callback);
-    //\endcond
+  RC(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHandler);
+  //\endcond
 
-    /**
+  /**
 
-    Sends a request to the extender to set the Aileron channel to a specific channel between -100 and 100.
+  Sends a request to the extender to set the Aileron channel to a specific channel between -100 and 100.
 
-    @param value The value to set the Aileron channel to
+  @param value The value to set the Aileron channel to
 
-    */
-    void setAileron(int8_t value);
+  */
+  void setAileron(int8_t value);
 
-    /**
+  /**
 
-    Sends a request to the extender to set the Extender channel to a specific channel between -100 and 100.
+  Sends a request to the extender to set the Extender channel to a specific channel between -100 and 100.
 
-    @param value The value to set the Extender channel to
+  @param value The value to set the Extender channel to
 
-    */
-    void setElevator(int8_t value);
+  */
+  void setElevator(int8_t value);
 
-    /**
+  /**
 
-    Sends a request to the extender to set the Throttle channel to a specific channel between -100 and 100.
+  Sends a request to the extender to set the Throttle channel to a specific channel between -100 and 100.
 
-    @param value The value to set the Throttle channel to
+  @param value The value to set the Throttle channel to
 
-    */
-    void setThrottle(int8_t value);
+  */
+  void setThrottle(int8_t value);
 
-    /**
+  /**
 
-    Sends a request to the extender to set the Rudder channel to a specific channel between -100 and 100.
+  Sends a request to the extender to set the Rudder channel to a specific channel between -100 and 100.
 
-    @param value The value to set the Rudder channel to
+  @param value The value to set the Rudder channel to
 
-    */
-    void setRudder(int8_t value);
+  */
+  void setRudder(int8_t value);
 
-    /**
+  /**
 
-    Sends a request to the extender to set the Flight Mode channel to a specific channel between -100 and 100.
+  Sends a request to the extender to set the Flight Mode channel to a specific channel between -100 and 100.
 
-    @param value The value to set the Flight Mode channel to
+  @param value The value to set the Flight Mode channel to
 
-    */
-    void setFlightMode(int8_t value);
+  */
+  void setFlightMode(int8_t value);
 
-    /**
+  /**
 
-    Sends a request to the extender to reply with message containing the current Aileron value.
+  Sends a request to the extender to reply with message containing the current Aileron value.
 
-    */
-    void getAileron();
+  */
+  void getAileron();
 
-    /**
+  /**
 
-    Sends a request to the extender to reply with message containing the current Elevator value.
+  Sends a request to the extender to reply with message containing the current Elevator value.
 
-    */
-    void getElevator();
+  */
+  void getElevator();
 
-    /**
+  /**
 
-    Sends a request to the extender to reply with message containing the current Throttle value.
+  Sends a request to the extender to reply with message containing the current Throttle value.
 
-    */
-    void getThrottle();
+  */
+  void getThrottle();
 
-    /**
+  /**
 
-    Sends a request to the extender to reply with message containing the current Rudder value.
+  Sends a request to the extender to reply with message containing the current Rudder value.
 
-    */
-    void getRudder();
+  */
+  void getRudder();
 
-    /**
+  /**
 
-    Sends a request to the extender to reply with message containing the current Flight Mode value.
+  Sends a request to the extender to reply with message containing the current Flight Mode value.
 
-    */
-    void getFlightMode();
+  */
+  void getFlightMode();
 
-    /**
+  /**
 
-    Execute funtion in a thread to not freez the drone.
+  Execute funtion in a thread to not freez the drone.
 
-    */
-    void setAileronCallback(void (*function)(int16_t));
+  */
+  void setAileronCallback(void (*function)(int16_t));
 
-    /**
+  /**
 
-    Execute funtion in a thread to not freez the drone.
+  Execute funtion in a thread to not freez the drone.
 
-    */
-    void setFlightModeCallback(void (*function)(int16_t));
+  */
+  void setFlightModeCallback(void (*function)(int16_t));
 
-    /**
+  /**
 
-    Execute funtion in a thread to not freez the drone.
+  Execute funtion in a thread to not freez the drone.
 
-    */
-    void setThrottleCallback(void (*function)(int16_t));
+  */
+  void setThrottleCallback(void (*function)(int16_t));
 
-    /**
+  /**
 
-    Execute funtion in a thread to not freez the drone.
+  Execute funtion in a thread to not freez the drone.
 
-    */
-    void setRudderCallback(void (*function)(int16_t));
+  */
+  void setRudderCallback(void (*function)(int16_t));
 
-    /**
+  /**
 
-    Execute funtion in a thread to not freez the drone.
+  Execute funtion in a thread to not freez the drone.
 
-    */
-    void setElevatorCallback(void (*function)(int16_t));
+  */
+  void setElevatorCallback(void (*function)(int16_t));
 
-    /**
+  /**
 
-    Execute funtion in a thread to not freez the drone.
+  Execute funtion in a thread to not freez the drone.
 
-    */
-    void sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron);
+  */
+  void sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron);
+
+  /**
+
+  Synchronous version of `getAileron`.
+
+  */
+  int16_t getAileronSync();
+
+  /**
+
+  Synchronous version of `getElevator`.
+
+  */
+  int16_t getElevatorSync();
+
+  /**
+
+  Synchronous version of `getThrottle`.
+
+  */
+  int16_t getThrottleSync();
+
+  /**
+
+  Synchronous version of `getRudder`.
+
+  */
+  int16_t getRudderSync();
+
+  /**
+
+  Synchronous version of `getFlightMode`.
+
+  */
+  int16_t getFlightModeSync();
 };
 
 #endif /* __ArduinoSDK__RC__ */

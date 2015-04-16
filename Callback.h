@@ -16,7 +16,7 @@ class Callback
     void (*latitude)(float);
     void (*altitude)(float);
     void (*speed)(float);
-    void (*satellite)(byte);
+    void (*satellite)(int16_t);
     void (*orientation)(float);
     //RC Callbacks
     void (*flightMode)(int16_t);

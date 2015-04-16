@@ -1,10 +1,14 @@
 #include "ResponseHandler.h"
+#include "Utils.h"
+
 //#define NV_DEBUG 1   //uncomment to turn log statments on
 #if NV_DEBUG
 #define LOG(x,y) Serial.print(x); Serial.println(y);
 #else
 #define LOG(x,y)
 #endif
+
+using namespace Utils;
 
 ResponseHandler::ResponseHandler() {};
 
@@ -13,36 +17,6 @@ serialIO(_serialIO),
 callbacks(_callbacks)
 {
 
-}
-
-// TODO: remove from ResponseHandler class, just make it static
-float ResponseHandler::dataToFloat(byte data[]) {
-  union u_tag {
-    byte b[4];
-    float data_float;
-  } u;
-  u.b[0] = byte(data[0]);
-  u.b[1] = byte(data[1]);
-  u.b[2] = byte(data[2]);
-  u.b[3] = byte(data[3]);
-  return u.data_float;
-}
-
-// TODO: remove from ResponseHandler class, just make it static
-long ResponseHandler::dataToLong(byte data[]) {
-  long data_long = 0;
-  data_long = data[0] << 8;
-  data_long = (data_long + data[1]) << 8;
-  data_long = (data_long + data[2]) << 8;
-  data_long = data_long + data[3]; 
-  return data_long;
-}
-
-int ResponseHandler::dataToInt(byte data[]) {
- int data_int = 0;
- data_int = byte(data[0]) << 8;
- data_int = data_int + byte(data[1]);
- return data_int; 
 }
 
 void ResponseHandler::listen() {
@@ -54,7 +28,7 @@ void ResponseHandler::listen() {
       case 2:
         if (p.actionID == 6) callbacks->aileron((int16_t)p.data[0]);
         else if (p.actionID == 7) callbacks->elevator((int16_t)p.data[0]);
-        else if (p.actionID == 8) callbacks->throttle((int16_t)p.data[0]);
+        else if (p.actionID == 8) callbacks->throttle((int16_t)(int8_t)p.data[0]);
         else if (p.actionID == 9) callbacks->rudder((int16_t)p.data[0]);
         else if (p.actionID == 10) callbacks->flightMode((int16_t)p.data[0]); 
         break;
@@ -62,7 +36,7 @@ void ResponseHandler::listen() {
         if (p.actionID == 2) callbacks->latitude(dataToFloat(p.data));
         else if (p.actionID == 3) callbacks->longitude(dataToFloat(p.data));
         else if (p.actionID == 4) callbacks->altitude(dataToFloat(p.data));
-        else if (p.actionID == 5) callbacks->satellite(dataToFloat(p.data));
+        else if (p.actionID == 5) callbacks->satellite((int16_t)p.data[0]);
         else if (p.actionID == 6) callbacks->speed(dataToFloat(p.data));
         else if (p.actionID == 7) callbacks->orientation(dataToFloat(p.data));
         break;
