@@ -96,67 +96,67 @@ void AutoPilot::setAileronKI(float ki) {
 }
 
 void AutoPilot::getWaypointLatitude() {
-  service->sendPacket((int16_t)0, 15, 22);
+  service->sendPacket((uint8_t)0, 15, 22);
 }
 
 void AutoPilot::getWaypointLongitude() {
-  service->sendPacket((int16_t)0, 15, 23);
+  service->sendPacket((uint8_t)0, 15, 23);
 }
 
 void AutoPilot::getWaypointAltitude() {
-  service->sendPacket((int16_t)0, 15, 24);
+  service->sendPacket((uint8_t)0, 15, 24);
 }
 
 void AutoPilot::getWaypointOrientation() {
-  service->sendPacket((int16_t)0, 15, 25);
+  service->sendPacket((uint8_t)0, 15, 25);
 }
 
 void AutoPilot::getYawKP() {
-  service->sendPacket((int16_t)0, 15, 26);
+  service->sendPacket((uint8_t)0, 15, 26);
 }
 
 void AutoPilot::getYawKD() {
-  service->sendPacket((int16_t)0, 15, 27);
+  service->sendPacket((uint8_t)0, 15, 27);
 }
 
 void AutoPilot::getYawKI() {
-  service->sendPacket((int16_t)0, 15, 28);
+  service->sendPacket((uint8_t)0, 15, 28);
 }
 
 void AutoPilot::getThrottleKP() {
-  service->sendPacket((int16_t)0, 15, 29);
+  service->sendPacket((uint8_t)0, 15, 29);
 }
 
 void AutoPilot::getThrottleKD() {
-  service->sendPacket((int16_t)0, 15, 30);
+  service->sendPacket((uint8_t)0, 15, 30);
 }
 
 void AutoPilot::getThrottleKI() {
-  service->sendPacket((int16_t)0, 15, 31);
+  service->sendPacket((uint8_t)0, 15, 31);
 }
 
 void AutoPilot::getElevatorKP() {
-  service->sendPacket((int16_t)0, 15, 32);
+  service->sendPacket((uint8_t)0, 15, 32);
 }
 
 void AutoPilot::getElevatorKD() {
-  service->sendPacket((int16_t)0, 15, 33);
+  service->sendPacket((uint8_t)0, 15, 33);
 }
 
 void AutoPilot::getElevatorKI() {
-  service->sendPacket((int16_t)0, 15, 34);
+  service->sendPacket((uint8_t)0, 15, 34);
 }
 
 void AutoPilot::getAileronKP() {
-  service->sendPacket((int16_t)0, 15, 35);
+  service->sendPacket((uint8_t)0, 15, 35);
 }
 
 void AutoPilot::getAileronKD() {
-  service->sendPacket((int16_t)0, 15, 36);
+  service->sendPacket((uint8_t)0, 15, 36);
 }
 
 void AutoPilot::getAileronKI() {
-  service->sendPacket((int16_t)0, 15, 37);
+  service->sendPacket((uint8_t)0, 15, 37);
 }
 
 void AutoPilot::setWaypointLatitudeCallback(void (*cb)(float)) {
