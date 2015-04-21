@@ -7,12 +7,12 @@
 class AutoPilot
 {
 private:
-  SerialIO *service;
-  Callback *myCallback;
+  SerialIO *serialIO;
+  Callback *callbacks;
 
 public:
   AutoPilot();
-  AutoPilot(SerialIO *rcTservice, Callback *callback);
+  AutoPilot(SerialIO *_serialIO, Callback *_callbacks);
   void gpsExecute();
   void compassExecute();
   void setYawError(float error);
@@ -35,6 +35,10 @@ public:
   void setAileronKP(float kp);
   void setAileronKD(float kd);
   void setAileronKI(float ki);
+  void setYawMax(float max);
+  void setThrottleMax(float max);
+  void setElevatorMax(float max);
+  void setAileronMax(float max);
   void getWaypointLatitude();
   void getWaypointLongitude();
   void getWaypointAltitude();
@@ -51,6 +55,10 @@ public:
   void getAileronKP();
   void getAileronKD();
   void getAileronKI();
+  void getYawMax();
+  void getThrottleMax();
+  void getElevatorMax();
+  void getAileronMax();
   void setWaypointLatitudeCallback(void (*cb)(float));
   void setWaypointLongitudeCallback(void (*cb)(float));
   void setWaypointAltitudeCallback(void (*cb)(float));
@@ -67,6 +75,10 @@ public:
   void setAileronKPCallback(void (*cb)(float));
   void setAileronKDCallback(void (*cb)(float));
   void setAileronKICallback(void (*cb)(float));
+  void setYawMaxCallback(void (*cb)(float));
+  void setThrottleMaxCallback(void (*cb)(float));
+  void setElevatorMaxCallback(void (*cb)(float));
+  void setAileronMaxCallback(void (*cb)(float));
 };
 
 #endif /* defined __ArduinoSDK__AutoPilot__ */
