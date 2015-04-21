@@ -111,35 +111,35 @@ public:
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setAileronCallback(void (*function)(int16_t));
+  void aileronCallback(void (*function)(int16_t));
 
   /**
 
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setFlightModeCallback(void (*function)(int16_t));
+  void flightModeCallback(void (*function)(int16_t));
 
   /**
 
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setThrottleCallback(void (*function)(int16_t));
+  void throttleCallback(void (*function)(int16_t));
 
   /**
 
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setRudderCallback(void (*function)(int16_t));
+  void rudderCallback(void (*function)(int16_t));
 
   /**
 
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setElevatorCallback(void (*function)(int16_t));
+  void elevatorCallback(void (*function)(int16_t));
 
   /**
 

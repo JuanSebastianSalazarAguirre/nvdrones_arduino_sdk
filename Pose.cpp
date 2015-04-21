@@ -37,27 +37,27 @@ void Pose::getOrientation(void){
   serialIO->sendPacket((int8_t)0, 9, 7);
 }
 
-void Pose::setLongitudeCallback(void (*cb)(float)) {
+void Pose::longitudeCallback(void (*cb)(float)) {
   callbacks->longitude = cb;
 }
 
-void Pose::setLatitudeCallback(void (*cb)(float)) {
+void Pose::latitudeCallback(void (*cb)(float)) {
   callbacks->latitude = cb;
 }
 
-void Pose::setAltitudeCallback(void (*cb)(float)) {
+void Pose::altitudeCallback(void (*cb)(float)) {
   callbacks->altitude = cb;
 }
 
-void Pose::setSpeedCallback(void (*cb)(float)) {
+void Pose::speedCallback(void (*cb)(float)) {
   callbacks->speed = cb;
 }
 
-void Pose::setSatelliteCallback(void (*cb)(int16_t)) {
+void Pose::satelliteCallback(void (*cb)(int16_t)) {
   callbacks->satellite = cb;
 }
 
-void Pose::setOrientationCallback(void (*cb)(float)) {
+void Pose::orientationCallback(void (*cb)(float)) {
   callbacks->orientation = cb;
 }
 

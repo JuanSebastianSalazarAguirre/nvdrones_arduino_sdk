@@ -20,14 +20,14 @@ class I2C
 {
   private:
     //\cond
-    SerialIO *service;
-    Callback *myCallback;
+    SerialIO *serialIO;
+    Callback *callbacks;
     //\endcond
   public:
     //\cond
     I2C();
     
-    I2C(SerialIO *rcTservice, Callback *callback);
+    I2C(SerialIO *_serialIO, Callback *_callback);
     //\endcond
 
     /**
@@ -94,7 +94,7 @@ class I2C
     @param cb name of the method
     
     */
-    void setReadCallback(void (*cb)(byte));
+    void readCallback(void (*cb)(byte));
 };
 
 #endif /* defined __ArduinoSDK__I2C__ */

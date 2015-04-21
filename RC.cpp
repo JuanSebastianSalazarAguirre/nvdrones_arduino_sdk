@@ -48,23 +48,23 @@ void RC::getFlightMode(){
   serialIO->sendPacket((int8_t)0, 2, 10);
 }
 
-void RC::setFlightModeCallback(void (*cb)(int16_t)) {
+void RC::flightModeCallback(void (*cb)(int16_t)) {
   callbacks->flightMode = cb;
 }
 
-void RC::setElevatorCallback(void (*cb)(int16_t)) {
+void RC::elevatorCallback(void (*cb)(int16_t)) {
   callbacks->elevator = cb;
 }
 
-void RC::setAileronCallback(void (*cb)(int16_t)) {
+void RC::aileronCallback(void (*cb)(int16_t)) {
   callbacks->aileron = cb;
 }
 
-void RC::setRudderCallback(void (*cb)(int16_t)) {
+void RC::rudderCallback(void (*cb)(int16_t)) {
   callbacks->rudder = cb;
 }
 
-void RC::setThrottleCallback(void (*cb)(int16_t)) {
+void RC::throttleCallback(void (*cb)(int16_t)) {
   callbacks->throttle = cb;
 }
 

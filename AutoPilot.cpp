@@ -191,82 +191,82 @@ void AutoPilot::getAileronMax() {
   serialIO->sendPacket((int16_t)0, 3, 46);
 }
 
-void AutoPilot::setWaypointLatitudeCallback(void (*cb)(float)) {
+void AutoPilot::waypointLatitudeCallback(void (*cb)(float)) {
   callbacks->waypointLatitude = cb;
 }
 
-void AutoPilot::setWaypointLongitudeCallback(void (*cb)(float)) {
+void AutoPilot::waypointLongitudeCallback(void (*cb)(float)) {
   callbacks->waypointLongitude = cb;
 }
 
-void AutoPilot::setWaypointAltitudeCallback(void (*cb)(float)) {
+void AutoPilot::waypointAltitudeCallback(void (*cb)(float)) {
   callbacks->waypointAltitude = cb;
 }
 
-void AutoPilot::setWaypointOrientationCallback(void (*cb)(float)) {
+void AutoPilot::waypointOrientationCallback(void (*cb)(float)) {
   callbacks->waypointOrientation = cb;
 }
 
-void AutoPilot::setYawKPCallback(void (*cb)(float)) {
+void AutoPilot::yawKPCallback(void (*cb)(float)) {
   callbacks->yawKP = cb;
 }
 
-void AutoPilot::setYawKDCallback(void (*cb)(float)) {
+void AutoPilot::yawKDCallback(void (*cb)(float)) {
   callbacks->yawKD = cb;
 }
 
-void AutoPilot::setYawKICallback(void (*cb)(float)) {
+void AutoPilot::yawKICallback(void (*cb)(float)) {
   callbacks->yawKI = cb;
 }
 
-void AutoPilot::setThrottleKPCallback(void (*cb)(float)) {
+void AutoPilot::throttleKPCallback(void (*cb)(float)) {
   callbacks->throttleKP = cb;
 }
 
-void AutoPilot::setThrottleKDCallback(void (*cb)(float)) {
+void AutoPilot::throttleKDCallback(void (*cb)(float)) {
   callbacks->throttleKD = cb;
 }
 
-void AutoPilot::setThrottleKICallback(void (*cb)(float)) {
+void AutoPilot::throttleKICallback(void (*cb)(float)) {
   callbacks->throttleKI = cb;
 }
 
-void AutoPilot::setElevatorKPCallback(void (*cb)(float)) {
+void AutoPilot::elevatorKPCallback(void (*cb)(float)) {
   callbacks->elevatorKP = cb;
 }
 
-void AutoPilot::setElevatorKDCallback(void (*cb)(float)) {
+void AutoPilot::elevatorKDCallback(void (*cb)(float)) {
   callbacks->elevatorKD = cb;
 }
 
-void AutoPilot::setElevatorKICallback(void (*cb)(float)) {
+void AutoPilot::elevatorKICallback(void (*cb)(float)) {
   callbacks->elevatorKI = cb;
 }
 
-void AutoPilot::setAileronKPCallback(void (*cb)(float)) {
+void AutoPilot::aileronKPCallback(void (*cb)(float)) {
   callbacks->aileronKP = cb;
 }
 
-void AutoPilot::setAileronKDCallback(void (*cb)(float)) {
+void AutoPilot::aileronKDCallback(void (*cb)(float)) {
   callbacks->aileronKD = cb;
 }
 
-void AutoPilot::setAileronKICallback(void (*cb)(float)) {
+void AutoPilot::aileronKICallback(void (*cb)(float)) {
   callbacks->aileronKI = cb;
 }
 
-void AutoPilot::setYawMaxCallback(void (*cb)(float)) {
+void AutoPilot::yawMaxCallback(void (*cb)(float)) {
   callbacks->yawMax = cb;
 }
 
-void AutoPilot::setThrottleMaxCallback(void (*cb)(float)) {
+void AutoPilot::throttleMaxCallback(void (*cb)(float)) {
   callbacks->throttleMax = cb;
 }
 
-void AutoPilot::setElevatorMaxCallback(void (*cb)(float)) {
+void AutoPilot::elevatorMaxCallback(void (*cb)(float)) {
   callbacks->elevatorMax = cb;
 }
 
-void AutoPilot::setAileronMaxCallback(void (*cb)(float)) {
+void AutoPilot::aileronMaxCallback(void (*cb)(float)) {
   callbacks->aileronMax = cb;
 }
