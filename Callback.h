@@ -56,19 +56,22 @@ class Callback
     void (*waypointLongitude)(float);
     void (*waypointAltitude)(float);
     void (*waypointOrientation)(float);
-    void (*elevatorKP)(float);
-    void (*elevatorKD)(float);
-    void (*elevatorKI)(float);
-    void (*throttleKP)(float);
-    void (*throttleKD)(float);
-    void (*throttleKI)(float);
-    void (*aileronKP)(float);
-    void (*aileronKD)(float);
-    void (*aileronKI)(float);
     void (*yawKP)(float);
     void (*yawKD)(float);
     void (*yawKI)(float);
-
+    void (*throttleKP)(float);
+    void (*throttleKD)(float);
+    void (*throttleKI)(float);
+    void (*elevatorKP)(float);
+    void (*elevatorKD)(float);
+    void (*elevatorKI)(float);
+    void (*aileronKP)(float);
+    void (*aileronKD)(float);
+    void (*aileronKI)(float);
+    void (*yaxMax)(float);
+    void (*throttleMax)(float);
+    void (*elevatorMax)(float);
+    void (*aileronMax)(float);
 };
 
 #endif /* defined __ArduinoSDK__Callback__ */

@@ -37,7 +37,7 @@ public:
   /**
        
   Sends a request to the Extender asking for it to reply with the vehicles current Longitude
-  The response gets handled through the callback function longitudeCallbackCallback().
+  The response gets handled through the callback function longitudeCallback().
        
   */
   void getLongitude();
@@ -89,42 +89,42 @@ public:
   Callback function which passes longitude information to the function that it is passed.
        
   */
-  void setLongitudeCallback(void (*cb)(float));
+  void longitudeCallback(void (*cb)(float));
   
   /**
        
   Callback function which passes latitude information to the function that it is passed.
        
   */
-  void setLatitudeCallback(void (*cb)(float));
+  void latitudeCallback(void (*cb)(float));
   
   /**
        
   Callback function which passes altitude information to the function that it is passed.
        
   */
-  void setAltitudeCallback(void (*cb)(float));
+  void altitudeCallback(void (*cb)(float));
   
   /**
        
   Callback function which passes number of locked satellites to the function that it is passed.
        
   */
-  void setSatelliteCallback(void (*cb)(int16_t));
+  void satelliteCallback(void (*cb)(int16_t));
   
   /**
        
   Callback function which passes speed information to the function that it is passed.
        
   */
-  void setSpeedCallback(void (*cb)(float));
+  void speedCallback(void (*cb)(float));
   
   /**
        
   Callback function which passes orientation information to the function that it is passed
        
   */
-  void setOrientationCallback(void (*cb)(float));
+  void orientationCallback(void (*cb)(float));
 
   /**
 

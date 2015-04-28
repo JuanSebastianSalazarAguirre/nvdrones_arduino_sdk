@@ -7,12 +7,12 @@
 class AutoPilot
 {
 private:
-  SerialIO *service;
-  Callback *myCallback;
+  SerialIO *serialIO;
+  Callback *callbacks;
 
 public:
   AutoPilot();
-  AutoPilot(SerialIO *rcTservice, Callback *callback);
+  AutoPilot(SerialIO *_serialIO, Callback *_callbacks);
   void gpsExecute();
   void compassExecute();
   void setYawError(float error);
@@ -35,6 +35,10 @@ public:
   void setAileronKP(float kp);
   void setAileronKD(float kd);
   void setAileronKI(float ki);
+  void setYawMax(float max);
+  void setThrottleMax(float max);
+  void setElevatorMax(float max);
+  void setAileronMax(float max);
   void getWaypointLatitude();
   void getWaypointLongitude();
   void getWaypointAltitude();
@@ -51,22 +55,30 @@ public:
   void getAileronKP();
   void getAileronKD();
   void getAileronKI();
-  void setWaypointLatitudeCallback(void (*cb)(float));
-  void setWaypointLongitudeCallback(void (*cb)(float));
-  void setWaypointAltitudeCallback(void (*cb)(float));
-  void setWaypointOrientationCallback(void (*cb)(float));
-  void setYawKPCallback(void (*cb)(float));
-  void setYawKDCallback(void (*cb)(float));
-  void setYawKICallback(void (*cb)(float));
-  void setThrottleKPCallback(void (*cb)(float));
-  void setThrottleKDCallback(void (*cb)(float));
-  void setThrottleKICallback(void (*cb)(float));
-  void setElevatorKPCallback(void (*cb)(float));
-  void setElevatorKDCallback(void (*cb)(float));
-  void setElevatorKICallback(void (*cb)(float));
-  void setAileronKPCallback(void (*cb)(float));
-  void setAileronKDCallback(void (*cb)(float));
-  void setAileronKICallback(void (*cb)(float));
+  void getYawMax();
+  void getThrottleMax();
+  void getElevatorMax();
+  void getAileronMax();
+  void waypointLatitudeCallback(void (*cb)(float));
+  void waypointLongitudeCallback(void (*cb)(float));
+  void waypointAltitudeCallback(void (*cb)(float));
+  void waypointOrientationCallback(void (*cb)(float));
+  void yawKPCallback(void (*cb)(float));
+  void yawKDCallback(void (*cb)(float));
+  void yawKICallback(void (*cb)(float));
+  void throttleKPCallback(void (*cb)(float));
+  void throttleKDCallback(void (*cb)(float));
+  void throttleKICallback(void (*cb)(float));
+  void elevatorKPCallback(void (*cb)(float));
+  void elevatorKDCallback(void (*cb)(float));
+  void elevatorKICallback(void (*cb)(float));
+  void aileronKPCallback(void (*cb)(float));
+  void aileronKDCallback(void (*cb)(float));
+  void aileronKICallback(void (*cb)(float));
+  void yawMaxCallback(void (*cb)(float));
+  void throttleMaxCallback(void (*cb)(float));
+  void elevatorMaxCallback(void (*cb)(float));
+  void aileronMaxCallback(void (*cb)(float));
 };
 
 #endif /* defined __ArduinoSDK__AutoPilot__ */

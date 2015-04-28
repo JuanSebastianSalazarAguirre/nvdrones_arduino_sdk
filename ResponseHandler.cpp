@@ -41,6 +41,8 @@ void ResponseHandler::listen() {
         else if (p.actionID == 7) callbacks->orientation(dataToFloat(p.data));
         break;
       case 15:
+        if(p.actionID == 22) callbacks->waypointLatitude(dataToFloat(p.data));
+        if(p.actionID == 23) callbacks->waypointLongitude(dataToFloat(p.data));
       default:
         LOG("We don't support resourceID ", p.resourceID);
         break;

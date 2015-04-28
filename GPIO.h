@@ -17,14 +17,14 @@ class GPIO
 {
   private:
     //\cond
-    SerialIO *service;
-    Callback *myCallback;
+    SerialIO *serialIO;
+    Callback *callbacks;
     //\endcond
   public:
     //\cond
     GPIO();
     
-    GPIO(SerialIO *rcTservice, Callback *callback);
+    GPIO(SerialIO *_serialIO, Callback *_callbacks);
     //\endcond
 
 
@@ -96,7 +96,7 @@ class GPIO
     @param pin the desired pin to sample logic level information from 
  
     */
-    void setDigitalReadCallback(void (*cb)(byte), int pin);
+    void digitalReadCallback(void (*cb)(byte), int pin);
     
     /**
     
@@ -107,7 +107,7 @@ class GPIO
     @param pin the desired pin to sample pulseIn information from 
      
     */
-    void setPulseInCallback(void (*cb)(long), uint8_t pin);
+    void pulseInCallback(void (*cb)(long), uint8_t pin);
     
     /**
      
@@ -118,7 +118,7 @@ class GPIO
     @param pin the desired pin to sample analog information from 
      
     */
-    void setAnalogReadCallback(void (*cb)(byte), uint8_t pin);
+    void analogReadCallback(void (*cb)(byte), uint8_t pin);
 
     /**
 
