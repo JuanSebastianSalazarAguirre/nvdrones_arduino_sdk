@@ -40,6 +40,7 @@ void ResponseHandler::listen() {
         else if (p.actionID == 6) callbacks->speed(dataToFloat(p.data));
         else if (p.actionID == 7) callbacks->orientation(dataToFloat(p.data));
         break;
+      case 15:
       default:
         LOG("We don't support resourceID ", p.resourceID);
         break;
