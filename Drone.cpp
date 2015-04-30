@@ -18,7 +18,6 @@ Drone::Drone() {
   gpio = GPIO(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
   pose = Pose(&serialIO, &callback, &responseHandler);
-  autoPilot = AutoPilot(&serialIO, &callback);
 }
 
 Drone::Drone(SerialPort serialPort) {
@@ -29,7 +28,6 @@ Drone::Drone(SerialPort serialPort) {
   gpio = GPIO(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
   pose = Pose(&serialIO, &callback, &responseHandler);
-  autoPilot = AutoPilot(&serialIO, &callback);
 }
 
 Drone::Drone(int txPin, int rxPin) {
@@ -40,7 +38,6 @@ Drone::Drone(int txPin, int rxPin) {
   gpio = GPIO(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
   pose = Pose(&serialIO, &callback, &responseHandler);
-  autoPilot = AutoPilot(&serialIO, &callback);
 }
 
 //
@@ -159,62 +156,3 @@ void Drone::write(uint8_t data)                   { i2c.write(data); }
 void Drone::read()                                { i2c.read(); }
 void Drone::wireRequest(uint8_t byteCount)        { i2c.wireRequest(byteCount); }
 void Drone::setReadCallback(void (*cb)(uint8_t))  { i2c.setReadCallback(cb); }
-
-//
-// Autopilot Methods
-//
-
-void Drone::gpsExecute()                                      { autoPilot.gpsExecute(); }
-void Drone::compassExecute()                                  { autoPilot.compassExecute(); }
-void Drone::setYawError(float error)                          { autoPilot.setYawError(error); }
-void Drone::setThrottleError(float error)                     { autoPilot.setThrottleError(error); }
-void Drone::setElevatorError(float error)                     { autoPilot.setElevatorError(error); }
-void Drone::setAileronError(float error)                      { autoPilot.setAileronError(error); }
-void Drone::setWaypointLatitude(float latitude)               { autoPilot.setWaypointLatitude(latitude); }
-void Drone::setWaypointLongitude(float longitude)             { autoPilot.setWaypointLongitude(longitude); }
-void Drone::setWaypointAltitude(float altitude)               { autoPilot.setWaypointAltitude(altitude); }
-void Drone::setWaypointOrientation(float orientation)         { autoPilot.setWaypointOrientation(orientation); }
-void Drone::setYawKP(float kp)                                { autoPilot.setYawKP(kp); }
-void Drone::setYawKD(float kd)                                { autoPilot.setYawKD(kd); }
-void Drone::setYawKI(float ki)                                { autoPilot.setYawKI(ki); }
-void Drone::setThrottleKP(float kp)                           { autoPilot.setThrottleKP(kp); }
-void Drone::setThrottleKD(float kd)                           { autoPilot.setThrottleKD(kd); }
-void Drone::setThrottleKI(float ki)                           { autoPilot.setThrottleKI(ki); }
-void Drone::setElevatorKP(float kp)                           { autoPilot.setElevatorKP(kp); }
-void Drone::setElevatorKD(float kd)                           { autoPilot.setElevatorKD(kd); }
-void Drone::setElevatorKI(float ki)                           { autoPilot.setElevatorKI(ki); }
-void Drone::setAileronKP(float kp)                            { autoPilot.setAileronKP(kp); }
-void Drone::setAileronKD(float kd)                            { autoPilot.setAileronKD(kd); }
-void Drone::setAileronKI(float ki)                            { autoPilot.setAileronKI(ki); }
-void Drone::getWaypointLatitude()                             { autoPilot.getWaypointLatitude(); }
-void Drone::getWaypointLongitude()                            { autoPilot.getWaypointLongitude(); }
-void Drone::getWaypointAltitude()                             { autoPilot.getWaypointAltitude(); }
-void Drone::getWaypointOrientation()                          { autoPilot.getWaypointOrientation(); }
-void Drone::getYawKP()                                        { autoPilot.getYawKP(); }
-void Drone::getYawKD()                                        { autoPilot.getYawKD(); }
-void Drone::getYawKI()                                        { autoPilot.getYawKI(); }
-void Drone::getThrottleKP()                                   { autoPilot.getThrottleKP(); }
-void Drone::getThrottleKD()                                   { autoPilot.getThrottleKD(); }
-void Drone::getThrottleKI()                                   { autoPilot.getThrottleKI(); }
-void Drone::getElevatorKP()                                   { autoPilot.getElevatorKP(); }
-void Drone::getElevatorKD()                                   { autoPilot.getElevatorKD(); }
-void Drone::getElevatorKI()                                   { autoPilot.getElevatorKI(); }
-void Drone::getAileronKP()                                    { autoPilot.getAileronKP(); }
-void Drone::getAileronKD()                                    { autoPilot.getAileronKD(); }
-void Drone::getAileronKI()                                    { autoPilot.getAileronKI(); }
-void Drone::setWaypointLatitudeCallback(void (*cb)(float))    { autoPilot.setWaypointLatitudeCallback(cb); }
-void Drone::setWaypointLongitudeCallback(void (*cb)(float))   { autoPilot.setWaypointLongitudeCallback(cb); }
-void Drone::setWaypointAltitudeCallback(void (*cb)(float))    { autoPilot.setWaypointAltitudeCallback(cb); }
-void Drone::setWaypointOrientationCallback(void (*cb)(float)) { autoPilot.setWaypointOrientationCallback(cb); }
-void Drone::setYawKPCallback(void (*cb)(float))               { autoPilot.setYawKPCallback(cb); }
-void Drone::setYawKDCallback(void (*cb)(float))               { autoPilot.setYawKDCallback(cb); }
-void Drone::setYawKICallback(void (*cb)(float))               { autoPilot.setYawKICallback(cb); }
-void Drone::setThrottleKPCallback(void (*cb)(float))          { autoPilot.setThrottleKPCallback(cb); }
-void Drone::setThrottleKDCallback(void (*cb)(float))          { autoPilot.setThrottleKDCallback(cb); }
-void Drone::setThrottleKICallback(void (*cb)(float))          { autoPilot.setThrottleKICallback(cb); }
-void Drone::setElevatorKPCallback(void (*cb)(float))          { autoPilot.setElevatorKPCallback(cb); }
-void Drone::setElevatorKDCallback(void (*cb)(float))          { autoPilot.setElevatorKDCallback(cb); }
-void Drone::setElevatorKICallback(void (*cb)(float))          { autoPilot.setElevatorKICallback(cb); }
-void Drone::setAileronKPCallback(void (*cb)(float))           { autoPilot.setAileronKPCallback(cb); }
-void Drone::setAileronKDCallback(void (*cb)(float))           { autoPilot.setAileronKDCallback(cb); }
-void Drone::setAileronKICallback(void (*cb)(float))           { autoPilot.setAileronKICallback(cb); }
