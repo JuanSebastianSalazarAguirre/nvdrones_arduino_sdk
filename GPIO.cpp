@@ -1,4 +1,5 @@
 #include "GPIO.h"
+#include "IDs.h"
 
 GPIO::GPIO() {};
 
@@ -8,27 +9,27 @@ GPIO::GPIO(SerialIO *_serialIO, Callback *_callbacks) {
 }
 
 void GPIO::digitalWrite(uint8_t pin, bool logicLevel) {
-  serialIO->sendPacket((uint8_t)logicLevel, 6, pin);
+  serialIO->sendPacket((uint8_t)logicLevel, resourceID::digitalWrite, pin);
 }
 
 void GPIO::pinMode(uint8_t pin, int logicLevel) {
-  serialIO->sendPacket((int16_t)logicLevel, 5, pin);
+  serialIO->sendPacket((int16_t)logicLevel, resourceID::pinMode, pin);
 }
 
 void GPIO::digitalRead(uint8_t pin) {
-  serialIO->sendPacket((int16_t)0, 8, pin);
+  serialIO->sendPacket((int16_t)0, resourceID::digitalRead, pin);
 }
 
 void GPIO::analogWrite(uint8_t pin, uint8_t value) {
-  serialIO->sendPacket(value, 7, pin);
+  serialIO->sendPacket(value, resourceID::analogWrite, pin);
 }
 
 void GPIO::pulseIn(uint8_t pin) {
-  serialIO->sendPacket((int16_t)0, 16, pin);
+  serialIO->sendPacket((int16_t)0, resourceID::pulseIn, pin);
 }
 
 void GPIO::analogRead(uint8_t pin) {
-  serialIO->sendPacket((int16_t)0, 17, pin);
+  serialIO->sendPacket((int16_t)0, resourceID::analogRead, pin);
 }
 
 void GPIO::digitalReadCallback(void (*cb)(byte), int pin) {
@@ -90,15 +91,15 @@ void GPIO::analogReadCallback(void (*cb)(byte), uint8_t pin) {
 
 void GPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 1;
-  serialIO->sendPacket(pin, 18, actionID);
+  serialIO->sendPacket(pin, resourceID::servo, actionID);
 }
 
 void GPIO::detachServo(uint8_t servoNumber) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 3;
-  serialIO->sendPacket((int16_t)0, 18, actionID);
+  serialIO->sendPacket((int16_t)0, resourceID::servo, actionID);
 }
 
 void GPIO::writeServo(uint8_t servoNumber, uint8_t data) {
   uint8_t actionID = ((servoNumber - 1) * 3) + 2;
-  serialIO->sendPacket(data, 18, actionID);
+  serialIO->sendPacket(data, resourceID::servo, actionID);
 }

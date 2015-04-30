@@ -1,4 +1,5 @@
 #include "RC.h"
+#include "IDs.h"
 
 RC::RC() {};
 
@@ -9,43 +10,43 @@ RC::RC(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHand
 }
 
 void RC::setRudder(int8_t value){
-  serialIO->sendPacket(value, 2, 1);
+  serialIO->sendPacket(value, resourceID::rc, actionID::setRudder);
 };
 
 void RC::setThrottle(int8_t value){
-  serialIO->sendPacket(value, 2, 2);
+  serialIO->sendPacket(value, resourceID::rc, actionID::setThrottle);
 };
 
 void RC::setElevator(int8_t value){
-  serialIO->sendPacket(value, 2, 3);
+  serialIO->sendPacket(value, resourceID::rc, actionID::setElevator);
 };
 
 void RC::setAileron(int8_t value){
-  serialIO->sendPacket(value, 2, 4);
+  serialIO->sendPacket(value, resourceID::rc, actionID::setAileron);
 };
 
 void RC::setFlightMode(int8_t value){
-  serialIO->sendPacket(value, 2, 5);
+  serialIO->sendPacket(value, resourceID::rc, actionID::setFlightMode);
 };
 
 void RC::getAileron(){
-  serialIO->sendPacket((int8_t)0, 2, 6);
+  serialIO->sendPacket((int8_t)0, resourceID::rc, actionID::getAileron);
 }
 
 void RC::getElevator(){
-  serialIO->sendPacket((int8_t)0, 2, 7);
+  serialIO->sendPacket((int8_t)0, resourceID::rc, actionID::getElevator);
 }
 
 void RC::getThrottle(){
-  serialIO->sendPacket((int8_t)0, 2, 8);
+  serialIO->sendPacket((int8_t)0, resourceID::rc, actionID::getThrottle);
 }
 
 void RC::getRudder(){
-  serialIO->sendPacket((int8_t)0, 2, 9);
+  serialIO->sendPacket((int8_t)0, resourceID::rc, actionID::getRudder);
 }
 
 void RC::getFlightMode(){
-  serialIO->sendPacket((int8_t)0, 2, 10);
+  serialIO->sendPacket((int8_t)0, resourceID::rc, actionID::getFlightMode);
 }
 
 void RC::flightModeCallback(void (*cb)(int16_t)) {
@@ -78,7 +79,7 @@ int16_t RC::getAileronSync() {
   unsigned long startTime = millis();
   while ((millis() - startTime) < 1000) {
     p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == 2 && p.actionID == 6 && p.isValid())
+    if (p.resourceID == resourceID::rc && p.actionID == actionID::getAileron && p.isValid())
       return (int16_t)p.data[0];
   }
   return -1;
@@ -90,7 +91,7 @@ int16_t RC::getElevatorSync() {
   unsigned long startTime = millis();
   while ((millis() - startTime) < 1000) {
     p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == 2 && p.actionID == 7 && p.isValid())
+    if (p.resourceID == resourceID::rc && p.actionID == actionID::getElevator && p.isValid())
       return (int16_t)p.data[0];
   }
   return -1;
@@ -102,7 +103,7 @@ int16_t RC::getThrottleSync() {
   unsigned long startTime = millis();
   while ((millis() - startTime) < 1000) {
     p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == 2 && p.actionID == 8 && p.isValid())
+    if (p.resourceID == resourceID::rc && p.actionID == actionID::getThrottle && p.isValid())
       return (int16_t)(int8_t)p.data[0];
   }
   return -1;
@@ -114,7 +115,7 @@ int16_t RC::getRudderSync() {
   unsigned long startTime = millis();
   while ((millis() - startTime) < 1000) {
     p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == 2 && p.actionID == 9 && p.isValid())
+    if (p.resourceID == resourceID::rc && p.actionID == actionID::getRudder && p.isValid())
       return (int16_t)p.data[0];
   }
   return -1;
@@ -126,7 +127,7 @@ int16_t RC::getFlightModeSync() {
   unsigned long startTime = millis();
   while ((millis() - startTime) < 1000) {
     p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == 2 && p.actionID == 10 && p.isValid())
+    if (p.resourceID == resourceID::rc && p.actionID == actionID::getFlightMode && p.isValid())
       return (int16_t)p.data[0];
   }
   return -1;

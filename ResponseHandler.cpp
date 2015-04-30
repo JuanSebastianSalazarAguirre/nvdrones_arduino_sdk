@@ -1,4 +1,5 @@
 #include "ResponseHandler.h"
+#include "IDs.h"
 #include "Utils.h"
 
 //#define NV_DEBUG 1   //uncomment to turn log statments on
@@ -25,24 +26,21 @@ void ResponseHandler::listen() {
     if (!p.isValid()) { continue; }
 
     switch (p.resourceID) {
-      case 2:
-        if (p.actionID == 6) callbacks->aileron((int16_t)p.data[0]);
-        else if (p.actionID == 7) callbacks->elevator((int16_t)p.data[0]);
-        else if (p.actionID == 8) callbacks->throttle((int16_t)(int8_t)p.data[0]);
-        else if (p.actionID == 9) callbacks->rudder((int16_t)p.data[0]);
-        else if (p.actionID == 10) callbacks->flightMode((int16_t)p.data[0]); 
+      case resourceID::rc:
+        if (p.actionID == actionID::getAileron) callbacks->aileron((int16_t)p.data[0]);
+        else if (p.actionID == actionID::getElevator) callbacks->elevator((int16_t)p.data[0]);
+        else if (p.actionID == actionID::getThrottle) callbacks->throttle((int16_t)(int8_t)p.data[0]);
+        else if (p.actionID == actionID::getRudder) callbacks->rudder((int16_t)p.data[0]);
+        else if (p.actionID == actionID::getFlightMode) callbacks->flightMode((int16_t)p.data[0]); 
         break;
-      case 9:
-        if (p.actionID == 2) callbacks->latitude(dataToFloat(p.data));
-        else if (p.actionID == 3) callbacks->longitude(dataToFloat(p.data));
-        else if (p.actionID == 4) callbacks->altitude(dataToFloat(p.data));
-        else if (p.actionID == 5) callbacks->satellite((int16_t)p.data[0]);
-        else if (p.actionID == 6) callbacks->speed(dataToFloat(p.data));
-        else if (p.actionID == 7) callbacks->orientation(dataToFloat(p.data));
+      case resourceID::pose:
+        if (p.actionID == actionID::getLatitude) callbacks->latitude(dataToFloat(p.data));
+        else if (p.actionID == actionID::getLongitude) callbacks->longitude(dataToFloat(p.data));
+        else if (p.actionID == actionID::getAltitude) callbacks->altitude(dataToFloat(p.data));
+        else if (p.actionID == actionID::getSatellites) callbacks->satellite((int16_t)p.data[0]);
+        else if (p.actionID == actionID::getSpeed) callbacks->speed(dataToFloat(p.data));
+        else if (p.actionID == actionID::getYaw) callbacks->orientation(dataToFloat(p.data));
         break;
-      case 15:
-        if(p.actionID == 22) callbacks->waypointLatitude(dataToFloat(p.data));
-        if(p.actionID == 23) callbacks->waypointLongitude(dataToFloat(p.data));
       default:
         LOG("We don't support resourceID ", p.resourceID);
         break;
