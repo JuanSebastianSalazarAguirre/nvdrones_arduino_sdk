@@ -11,8 +11,8 @@ unsigned long previousMillis = 0;
 void setup() {
   Serial.begin(57600);
 
-  drone.setLatitudeCallback(printLatitude);
-  drone.setLongitudeCallback(printLongitude);
+  drone.latitudeCallback(printLatitude);
+  drone.longitudeCallback(printLongitude);
 
   delay(2000);
 

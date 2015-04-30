@@ -111,42 +111,42 @@ public:
   Callback function which passes longitude information to the function that it is passed.
        
   */
-  void setLongitudeCallback(void (*function)(float));
+  void longitudeCallback(void (*cb)(float));
 
   /**
        
   Callback function which passes latitude information to the function that it is passed.
        
   */
-  void setLatitudeCallback(void (*function)(float));
+  void latitudeCallback(void (*cb)(float));
 
   /**
        
   Callback function which passes altitude information to the function that it is passed.
        
   */
-  void setAltitudeCallback(void (*function)(float));
+  void altitudeCallback(void (*cb)(float));
 
   /**
        
   Callback function which passes number of locked satellites to the function that it is passed.
        
   */
-  void setSatelliteCallback(void (*function)(int16_t));
+  void satelliteCallback(void (*cb)(int16_t));
 
   /**
        
   Callback function which passes speed information to the function that it is passed.
        
   */
-  void setSpeedCallback(void (*function)(float));
+  void speedCallback(void (*cb)(float));
 
   /**
        
   Callback function which passes orientation information to the function that it is passed
        
   */
-  void setOrientationCallback(void (*function)(float));
+  void orientationCallback(void (*cb)(float));
 
   /**
 
@@ -275,35 +275,35 @@ public:
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setAileronCallback(void (*function)(int16_t));
+  void aileronCallback(void (*cb)(int16_t));
 
   /**
 
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setFlightModeCallback(void (*function)(int16_t));
+  void flightModeCallback(void (*cb)(int16_t));
 
   /**
 
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setThrottleCallback(void (*function)(int16_t));
+  void throttleCallback(void (*cb)(int16_t));
 
   /**
 
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setRudderCallback(void (*function)(int16_t));
+  void rudderCallback(void (*cb)(int16_t));
 
   /**
 
   Execute funtion in a thread to not freez the drone.
 
   */
-  void setElevatorCallback(void (*function)(int16_t));
+  void elevatorCallback(void (*cb)(int16_t));
 
   /**
 
@@ -415,7 +415,7 @@ public:
   @param pin the desired pin to sample logic level information from 
 
   */
-  void setDigitalReadCallback(void (*function)(byte), int pin);
+  void digitalReadCallback(void (*cb)(byte), int pin);
 
   /**
 
@@ -426,7 +426,7 @@ public:
   @param pin the desired pin to sample pulseIn information from 
    
   */
-  void setPulseInCallback(void (*function)(long), uint8_t pin);
+  void pulseInCallback(void (*cb)(long), uint8_t pin);
 
   /**
    
@@ -437,7 +437,7 @@ public:
   @param pin the desired pin to sample analog information from 
    
   */
-  void setAnalogReadCallback(void (*function)(byte), uint8_t pin);
+  void analogReadCallback(void (*cb)(byte), uint8_t pin);
 
   /**
 
@@ -532,7 +532,7 @@ public:
   @param function name of the method
 
   */
-  void setReadCallback(void (*function)(byte));
+  void readCallback(void (*cb)(byte));
 
 };
 
