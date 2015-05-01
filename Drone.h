@@ -27,7 +27,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "Callback.h"
 #include "Pose.h"
 #include "GPIO.h"
-#include "I2C.h"  
+#include "I2C.h"
+#include "Heartbeat.h"
 
 class Drone 
 {
@@ -39,6 +40,7 @@ private:
   I2C i2c;
   Callback callback;
   Pose pose;
+  Heartbeat heartbeat;
 public:
   Drone();
   Drone(SerialPort serialPort);
@@ -477,7 +479,7 @@ public:
   @param ID range from 0 to 255
       
   */
-  void deviceID(uint8_t ID);
+  void setDeviceAddress(uint8_t ID);
 
   /**
 
@@ -533,6 +535,13 @@ public:
 
   */
   void readCallback(void (*cb)(byte));
+
+  /**
+
+  TODO: add documentation.
+
+  */
+  void heartbeatLostCallback(void (*cb)(void));
 
 };
 

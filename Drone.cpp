@@ -13,7 +13,8 @@
 Drone::Drone() {
   serialIO = SerialIO(serialPort0);
   callback = Callback();
-  responseHandler = ResponseHandler(&serialIO, &callback);
+  heartbeat = Heartbeat(&serialIO, &callback);
+  responseHandler = ResponseHandler(&serialIO, &callback, &heartbeat);
   rc = RC(&serialIO, &callback, &responseHandler);
   gpio = GPIO(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
@@ -23,7 +24,8 @@ Drone::Drone() {
 Drone::Drone(SerialPort serialPort) {
   serialIO = SerialIO(serialPort);
   callback = Callback();
-  responseHandler = ResponseHandler(&serialIO, &callback);
+  heartbeat = Heartbeat(&serialIO, &callback);
+  responseHandler = ResponseHandler(&serialIO, &callback, &heartbeat);
   rc = RC(&serialIO, &callback, &responseHandler);
   gpio = GPIO(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
@@ -33,7 +35,8 @@ Drone::Drone(SerialPort serialPort) {
 Drone::Drone(int txPin, int rxPin) {
   serialIO = SerialIO(txPin, rxPin);
   callback = Callback();
-  responseHandler = ResponseHandler(&serialIO, &callback);
+  heartbeat = Heartbeat(&serialIO, &callback);
+  responseHandler = ResponseHandler(&serialIO, &callback, &heartbeat);
   rc = RC(&serialIO, &callback, &responseHandler);
   gpio = GPIO(&serialIO, &callback);
   i2c = I2C(&serialIO, &callback);
@@ -64,6 +67,8 @@ void Drone::arm() {
 
 void Drone::listen() {
   responseHandler.listen();
+
+  heartbeat.tick();
 }
 
 // 
@@ -149,10 +154,16 @@ void Drone::writeServo(uint8_t servoNumber, uint8_t data)        { gpio.writeSer
 // I2C Methods
 //
 
-void Drone::deviceID(uint8_t id)              { i2c.deviceID(id); }
+void Drone::setDeviceAddress(uint8_t id)      { i2c.setDeviceAddress(id); }
 void Drone::beginTransmission()               { i2c.beginTransmission(); }
 void Drone::endTransmission()                 { i2c.endTransmission(); }
 void Drone::write(uint8_t data)               { i2c.write(data); }
 void Drone::read()                            { i2c.read(); }
 void Drone::wireRequest(uint8_t byteCount)    { i2c.wireRequest(byteCount); }
 void Drone::readCallback(void (*cb)(uint8_t)) { i2c.readCallback(cb); }
+
+//
+// Heartbeat Methods
+//
+
+void Drone::heartbeatLostCallback(void (*cb)(void)) { heartbeat.heartbeatLostCallback(cb); }

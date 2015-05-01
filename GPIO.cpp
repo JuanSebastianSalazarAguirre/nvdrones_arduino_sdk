@@ -90,8 +90,8 @@ void GPIO::analogReadCallback(void (*cb)(byte), uint8_t pin) {
 }
 
 void GPIO::interruptCallback(void (*cb)(void), uint8_t interrupt) {
+  if (interrupt == 0) callbacks->interrupt0 = cb;
   if (interrupt == 1) callbacks->interrupt1 = cb;
-  if (interrupt == 2) callbacks->interrupt2 = cb;
 }
 
 void GPIO::attachServo(uint8_t servoNumber, uint8_t pin) {

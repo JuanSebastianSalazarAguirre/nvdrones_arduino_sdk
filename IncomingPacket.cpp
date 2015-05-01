@@ -14,3 +14,9 @@ bool IncomingPacket::isValid()
 {
 	return actionID != 0 && resourceID != 0;
 }
+
+bool IncomingPacket::isHearbeat() {
+  return actionID == -1 && resourceID == -1;
+}
+
+const IncomingPacket IncomingPacket::heartbeatPacket(-1,-1,0,0);

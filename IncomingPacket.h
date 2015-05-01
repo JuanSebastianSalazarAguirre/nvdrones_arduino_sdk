@@ -17,6 +17,9 @@ public:
   uint8_t *data;
   int length;
   bool isValid();
+  bool isHearbeat();
+
+  static const IncomingPacket heartbeatPacket;
 }; 
 
 #endif // IncomingPacket_h

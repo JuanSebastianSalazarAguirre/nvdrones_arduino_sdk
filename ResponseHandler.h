@@ -4,6 +4,7 @@
 #include "SerialIO.h"
 #include "Callback.h"
 #include "IncomingPacket.h"
+#include "Heartbeat.h"
 
 //\cond
 class ResponseHandler
@@ -12,9 +13,10 @@ class ResponseHandler
   private:
     SerialIO *serialIO;
     Callback *callbacks;
+    Heartbeat *heartbeat;
   public:
     ResponseHandler();
-    ResponseHandler(SerialIO *_serialIO, Callback *_callbacks);
+    ResponseHandler(SerialIO *_serialIO, Callback *_callbacks, Heartbeat *_heartbeat);
     void listen();
     IncomingPacket tryToReadNextPacket();
 };

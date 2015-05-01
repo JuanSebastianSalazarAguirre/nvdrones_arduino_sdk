@@ -13,9 +13,10 @@ using namespace Utils;
 
 ResponseHandler::ResponseHandler() {};
 
-ResponseHandler::ResponseHandler(SerialIO *_serialIO, Callback *_callbacks):
+ResponseHandler::ResponseHandler(SerialIO *_serialIO, Callback *_callbacks, Heartbeat *_heartbeat):
 serialIO(_serialIO),
-callbacks(_callbacks)
+callbacks(_callbacks),
+heartbeat(_heartbeat)
 {
 
 }
@@ -24,6 +25,11 @@ void ResponseHandler::listen() {
   while (serialIO->available() > 0) {
     IncomingPacket p = tryToReadNextPacket();
     if (!p.isValid()) { continue; }
+
+    if (p.isHearbeat()) {
+      heartbeat->receive();
+      continue;
+    }
 
     switch (p.resourceID) {
       case resourceID::rc:
@@ -42,25 +48,25 @@ void ResponseHandler::listen() {
         else if (p.actionID == actionID::getYaw) callbacks->orientation(dataToFloat(p.data));
         break;
       case resourceID::i2c:
-        if (p.actionID == actionID::readI2c) callbacks->i2cRead(p.data[0]);
+        if (p.actionID == actionID::readI2C) callbacks->i2cRead(p.data[0]);
         break;
       case resourceID::digitalRead:
-        if (p.actionID == 1) callbacks->digitalRead1(p.data);
-        if (p.actionID == 2) callbacks->digitalRead2(p.data);
-        if (p.actionID == 3) callbacks->digitalRead3(p.data);
-        if (p.actionID == 4) callbacks->digitalRead4(p.data);
-        if (p.actionID == 5) callbacks->digitalRead5(p.data);
-        if (p.actionID == 6) callbacks->digitalRead6(p.data);
-        if (p.actionID == 7) callbacks->digitalRead7(p.data);
-        if (p.actionID == 8) callbacks->digitalRead8(p.data);
-        if (p.actionID == 9) callbacks->digitalRead9(p.data);
-        if (p.actionID == 10) callbacks->digitalRead10(p.data);
+        if (p.actionID == 1) callbacks->digitalRead1(p.data[0]);
+        if (p.actionID == 2) callbacks->digitalRead2(p.data[0]);
+        if (p.actionID == 3) callbacks->digitalRead3(p.data[0]);
+        if (p.actionID == 4) callbacks->digitalRead4(p.data[0]);
+        if (p.actionID == 5) callbacks->digitalRead5(p.data[0]);
+        if (p.actionID == 6) callbacks->digitalRead6(p.data[0]);
+        if (p.actionID == 7) callbacks->digitalRead7(p.data[0]);
+        if (p.actionID == 8) callbacks->digitalRead8(p.data[0]);
+        if (p.actionID == 9) callbacks->digitalRead9(p.data[0]);
+        if (p.actionID == 10) callbacks->digitalRead10(p.data[0]);
         break;
       case resourceID::analogRead:
-        if (p.actionID == 1) callbacks->analogRead1(p.data);
-        if (p.actionID == 2) callbacks->analogRead2(p.data);
-        if (p.actionID == 3) callbacks->analogRead3(p.data);
-        if (p.actionID == 4) callbacks->analogRead4(p.data);
+        if (p.actionID == 1) callbacks->analogRead1(p.data[0]);
+        if (p.actionID == 2) callbacks->analogRead2(p.data[0]);
+        if (p.actionID == 3) callbacks->analogRead3(p.data[0]);
+        if (p.actionID == 4) callbacks->analogRead4(p.data[0]);
         break;
       case resourceID::pulseIn:
         if (p.actionID == 1) callbacks->pulseIn1(dataToLong(p.data));
@@ -89,7 +95,14 @@ IncomingPacket ResponseHandler::tryToReadNextPacket() {
   int maxIterations = 250;
   IncomingPacket errorPacket(0,0,0,0);
   if (serialIO->available() == 0) return errorPacket;
-  if (serialIO->read() != '$') return errorPacket;
+
+  int16_t startByte = serialIO->read();
+  LOG("start byte: ", startByte);
+  if (startByte == '!') return IncomingPacket::heartbeatPacket;
+  if (startByte != '$') {
+    Serial.println("Invalid start byte");
+    return errorPacket;
+  }
 
   int16_t length = serialIO->multipleRead(maxIterations);
   LOG("length: ", length);

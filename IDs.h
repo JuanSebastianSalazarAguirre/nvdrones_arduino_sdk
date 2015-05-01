@@ -56,7 +56,7 @@ namespace actionID {
   // Servo
   const int16_t attachServo1 = 1;
   const int16_t writeServo1 = 2;
-  const int16_t detachServo1 = 3
+  const int16_t detachServo1 = 3;
   const int16_t attachServo2 = 4;
   const int16_t writeServo2 = 5;
   const int16_t detachServo2 = 6;
