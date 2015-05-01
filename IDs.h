@@ -45,12 +45,12 @@ namespace actionID {
   const int16_t getRoll = 9;
 
   // I2C
-  const int16_t writeI2C = 3;
+  const int16_t setI2CDeviceAddress = 1;
+  const int16_t i2cWireRequest = 2;
+  const int16_t beginI2CTransmission = 3;
   const int16_t endI2CTransmission = 4;
-  const int16_t readI2C = 5;
-  const int16_t i2cWireRequest = 6;
-  const int16_t setI2CDeviceID = 7;
-  const int16_t beginI2CTransmission = 8;
+  const int16_t writeI2C = 5;
+  const int16_t readI2C = 6
 }
 
 #endif // IDs_h

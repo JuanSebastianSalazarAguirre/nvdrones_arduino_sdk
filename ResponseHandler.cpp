@@ -41,6 +41,9 @@ void ResponseHandler::listen() {
         else if (p.actionID == actionID::getSpeed) callbacks->speed(dataToFloat(p.data));
         else if (p.actionID == actionID::getYaw) callbacks->orientation(dataToFloat(p.data));
         break;
+      case resourceID::i2c:
+        if (p.actionID == actionID::readI2c) callbacks->i2cRead(p.data[0]);
+        break;
       default:
         LOG("We don't support resourceID ", p.resourceID);
         break;

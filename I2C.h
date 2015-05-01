@@ -39,8 +39,18 @@ class I2C
     @param ID range from 0 to 255
         
     */
-    void deviceID(uint8_t ID);
+    void setDeviceAddress(uint8_t address);
+
+    /**
     
+    Sends a request to the App Extender to read multiple bytes of information from the I2C buffer and return
+    the information to the arduino. The relpies are handled by the readCallback() function.
+
+    @param bytes Sets the number of bytes to read from the I2C buffer
+
+    */
+    void wireRequest(uint8_t bytes);
+
     /**
     
     Begin a transmission to the I2C slave device with the address specified by deviceID(ID)
@@ -48,7 +58,7 @@ class I2C
     by calling endTransmission().
         
     */
-    void beginTransmission(void);
+    void beginTransmission();
     
     /**
     
@@ -56,7 +66,7 @@ class I2C
     the bytes that were queued by write().
          
     */
-    void endTransmission(void);
+    void endTransmission();
     
     /**
          
@@ -74,17 +84,7 @@ class I2C
     the information to the arduino.  The relpies are handled by the readCallback() function.  
        
     */
-    void read(void);
-    
-    /**
-    
-    Sends a request to the App Extender to read multiple bytes of information from the I2C buffer and return 
-    the information to the arduino. The relpies are handled by the readCallback() function.  
-        
-    @param bytes Sets the number of bytes to read from the I2C buffer
-        
-    */
-    void wireRequest(uint8_t bytes);
+    void read();
     
     /**
          
