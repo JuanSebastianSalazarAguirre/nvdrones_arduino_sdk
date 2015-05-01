@@ -89,17 +89,65 @@ void GPIO::analogReadCallback(void (*cb)(byte), uint8_t pin) {
     callbacks->analogRead4 = cb;
 }
 
+void GPIO::interruptCallback(void (*cb)(void), uint8_t interrupt) {
+  if (interrupt == 1) callbacks->interrupt1 = cb;
+  if (interrupt == 2) callbacks->interrupt2 = cb;
+}
+
 void GPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
-  uint8_t actionID = ((servoNumber - 1) * 3) + 1;
+  uint8_t actionID = 0;
+  switch (servoNumber) {
+    case 1:
+      actionID = actionID::attachServo1;
+      break;
+    case 2:
+      actionID = actionID::attachServo2;
+      break;
+    case 3:
+      actionID = actionID::attachServo3;
+      break;
+    default:
+      // TODO: add error handling.
+      return;
+  }
+
   serialIO->sendPacket(pin, resourceID::servo, actionID);
 }
 
 void GPIO::detachServo(uint8_t servoNumber) {
-  uint8_t actionID = ((servoNumber - 1) * 3) + 3;
+  uint8_t actionID = 0;
+  switch (servoNumber) {
+    case 1:
+      actionID = actionID::detachServo1;
+      break;
+    case 2:
+      actionID = actionID::detachServo2;
+      break;
+    case 3:
+      actionID = actionID::detachServo3;
+      break;
+    default:
+      // TODO: add error handling.
+      return;
+  }
   serialIO->sendPacket((int16_t)0, resourceID::servo, actionID);
 }
 
 void GPIO::writeServo(uint8_t servoNumber, uint8_t data) {
-  uint8_t actionID = ((servoNumber - 1) * 3) + 2;
+  uint8_t actionID = 0;
+  switch (servoNumber) {
+    case 1:
+      actionID = actionID::writeServo1;
+      break;
+    case 2:
+      actionID = actionID::writeServo2;
+      break;
+    case 3:
+      actionID = actionID::writeServo3;
+      break;
+    default:
+      // TODO: add error handling.
+      return;
+  }
   serialIO->sendPacket(data, resourceID::servo, actionID);
 }

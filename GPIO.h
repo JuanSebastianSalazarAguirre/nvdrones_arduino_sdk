@@ -122,6 +122,13 @@ class GPIO
 
     /**
 
+    TODO: description
+
+    */
+    void interruptCallback(void (*cb)(void), uint8_t interrupt);
+
+    /**
+
     Associates a servo with a pin.
 
     @param servoNumber which of the three servos to attach. Values should be 1-3.

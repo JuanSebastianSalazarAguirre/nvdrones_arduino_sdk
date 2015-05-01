@@ -51,6 +51,9 @@ class Callback
     void (*analogRead2)(byte);
     void (*analogRead3)(byte);
     void (*analogRead4)(byte);
+    // interrupt callbacks
+    void (*interrupt1)(void);
+    void (*interrupt2)(void);
 };
 
 #endif /* defined __ArduinoSDK__Callback__ */

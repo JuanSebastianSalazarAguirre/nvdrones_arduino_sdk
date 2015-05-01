@@ -13,6 +13,7 @@ namespace resourceID {
   const int16_t pose = 9;
   const int16_t spi = 10;
   const int16_t i2c = 11;
+  const int16_t interrupt = 14;
   const int16_t pulseIn = 16;
   const int16_t analogRead = 17;
   const int16_t servo = 18;
@@ -50,7 +51,22 @@ namespace actionID {
   const int16_t beginI2CTransmission = 3;
   const int16_t endI2CTransmission = 4;
   const int16_t writeI2C = 5;
-  const int16_t readI2C = 6
+  const int16_t readI2C = 6;
+
+  // Servo
+  const int16_t attachServo1 = 1;
+  const int16_t writeServo1 = 2;
+  const int16_t detachServo1 = 3
+  const int16_t attachServo2 = 4;
+  const int16_t writeServo2 = 5;
+  const int16_t detachServo2 = 6;
+  const int16_t attachServo3 = 7;
+  const int16_t writeServo3 = 8;
+  const int16_t detachServo3 = 9;
+
+  // Interrupt
+  const int16_t interrupt0 = 1;
+  const int16_t interrupt1 = 2;
 }
 
 #endif // IDs_h
