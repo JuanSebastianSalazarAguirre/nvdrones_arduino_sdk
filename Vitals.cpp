@@ -66,3 +66,9 @@ void Vitals::_sendHeartbeat() {
   _serialIO->write('!');
   _lastHeartbeatSent = millis();
 }
+
+// Error Handler
+
+void Vitals::setErrorHandler(void (*cb)(int16_t)) {
+  _callbacks->errorHandler = cb;
+}

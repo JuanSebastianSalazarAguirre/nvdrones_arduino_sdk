@@ -18,6 +18,7 @@ namespace resourceID {
   const int16_t analogRead = 17;
   const int16_t servo = 18;
   const int16_t vitals = 19;
+  const int16_t error = 20;
 }
 
 namespace actionID {
@@ -72,6 +73,34 @@ namespace actionID {
   // Vitals
   const int16_t getVoltage = 1;
   const int16_t getSignalStrength = 2;
+
+  // Error
+  const int16_t invalidPacketStartByte = 1;
+  const int16_t unableToReadPacketLength = 2;
+  const int16_t unableToReadPacketResourceID = 3;
+  const int16_t unableToReadPacketActionID = 4;
+  const int16_t unableToReadPacketData = 5;
+  const int16_t unableToReadPacketChecksum = 6;
+  const int16_t failedPacketChecksum = 7;
+  const int16_t receivedInvalidResourceID = 8;
+  const int16_t receivedInvalidActionIDForManualControls = 9;
+  const int16_t receivedInvalidActionIDForPose = 10;
+  const int16_t receivedInvalidActionIDForI2C = 11;
+  const int16_t receivedInvalidActionIDForServo = 12;
+  const int16_t receivedInvalidActionIDForVitals = 13;
+  const int16_t heartbeatTimeout = 14;
+  const int16_t invalidPinForPinMode = 15;
+  const int16_t invalidPinForDigitalWrite = 16;
+  const int16_t invalidPinForDigitalRead = 17;
+  const int16_t invalidPinForPulseIn = 18;
+  const int16_t invalidPinForAnalogRead = 19;
+  const int16_t invalidPinForServoAttach = 20;
+  const int16_t invalidServoForServoAttach = 21;
+  const int16_t invalidServoForServoWrite = 22;
+  const int16_t invalidServoForServoDetach = 23;
+  const int16_t invalidI2CAddress = 24;
+  const int16_t unsetI2CAddress = 25;
+  const int16_t gpsError = 26;
 }
 
 #endif // IDs_h

@@ -89,6 +89,9 @@ void ResponseHandler::listen() {
         if (p.actionID == actionID::getVoltage) callbacks->voltage(p.data[0]);
         if (p.actionID == actionID::getSignalStrength) callbacks->signalStrength(p.data[0]);
         break;
+      case resourceID::error:
+        callbacks->errorHandler(p.actionID);
+        break;
       default:
         LOG("Invalid resourceID ", p.resourceID);
         break;

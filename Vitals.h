@@ -24,6 +24,8 @@ public:
   void receiveHeartbeat();
   void heartbeatLostCallback(void (*cb)(void));
 
+  void setErrorHandler(void (*cb)(int16_t));
+
 private:
   SerialIO *_serialIO;
   Callback *_callbacks;

@@ -58,6 +58,8 @@ class Callback
     void (*heartbeatLost)(void);
     void (*voltage)(byte);
     void (*signalStrength)(byte);
+    // error handler callback
+    void (*errorHandler)(int);
 };
 
 #endif /* defined __ArduinoSDK__Callback__ */

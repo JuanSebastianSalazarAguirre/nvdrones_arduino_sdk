@@ -616,6 +616,13 @@ public:
   */
   void signalStrengthCallback(void (*cb)(uint8_t));
 
+  /**
+
+  TODO: add documentation.
+
+  */
+  void setErrorHandler(void (*cb)(int16_t));
+
 };
 
 #endif /* defined __ArduinoSDK__Drone__ */

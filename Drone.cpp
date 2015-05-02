@@ -188,3 +188,4 @@ void Drone::voltageCallback(void (*cb)(uint8_t)) { vitals.voltageCallback(cb); }
 void Drone::getSignalStrength() { vitals.getSignalStrength(); }
 int16_t Drone::getSignalStrengthSync() { return vitals.getSignalStrengthSync(); }
 void Drone::signalStrengthCallback(void (*cb)(uint8_t)) { vitals.signalStrengthCallback(cb); }
+void Drone::setErrorHandler(void (*cb)(int16_t)) { vitals.setErrorHandler(cb); }
