@@ -21,6 +21,6 @@ public:
 
   static const IncomingPacket heartbeatPacket;
   static const IncomingPacket emptyPacket;
-}; 
+};
 
 #endif // IncomingPacket_h

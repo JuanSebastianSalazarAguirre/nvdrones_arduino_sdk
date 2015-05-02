@@ -3,7 +3,7 @@
 
 #import "SerialIO.h"
 #import "Callback.h"
-#import "ResponseHandler.h"
+#import "IncomingPacketReader.h"
 
 class Pose
 /**
@@ -17,13 +17,13 @@ private:
    //\cond
   SerialIO *serialIO;
   Callback *callbacks;
-  ResponseHandler *responseHandler;
+  IncomingPacketReader *incomingPacketReader;
   //\endcond
 public:
   //\cond
   Pose();
   
-  Pose(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHandler);
+  Pose(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader);
   //\endcond
 
   /**

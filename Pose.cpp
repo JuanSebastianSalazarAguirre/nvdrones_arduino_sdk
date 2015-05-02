@@ -4,10 +4,10 @@
 
 Pose::Pose(){}
 
-Pose::Pose(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHandler) {
+Pose::Pose(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader) {
   serialIO = _serialIO;
   callbacks = _callbacks;
-  responseHandler = _responseHandler;
+  incomingPacketReader = _incomingPacketReader;
 }
 
 void Pose::getGPSData(void) {
@@ -64,30 +64,30 @@ void Pose::orientationCallback(void (*cb)(float)) {
 
 float Pose::getLatitudeSync() {
   getLatitude();
-  return Utils::blockForFloatData(resourceID::pose, actionID::getLatitude, responseHandler);
+  return Utils::blockForFloatData(resourceID::pose, actionID::getLatitude, incomingPacketReader);
 }
 
 float Pose::getLongitudeSync() {
   getLongitude();
-  return Utils::blockForFloatData(resourceID::pose, actionID::getLongitude, responseHandler);
+  return Utils::blockForFloatData(resourceID::pose, actionID::getLongitude, incomingPacketReader);
 }
 
 float Pose::getAltitudeSync() {
   getAltitude();
-  return Utils::blockForFloatData(resourceID::pose, actionID::getAltitude, responseHandler);
+  return Utils::blockForFloatData(resourceID::pose, actionID::getAltitude, incomingPacketReader);
 }
 
 int16_t Pose::getSatellitesSync() {
   getSatellites();
-  return Utils::blockForIntData(resourceID::pose, actionID::getSatellites, responseHandler);
+  return Utils::blockForIntData(resourceID::pose, actionID::getSatellites, incomingPacketReader);
 }
 
 float Pose::getSpeedSync() {
   getSpeed();
-  return Utils::blockForFloatData(resourceID::pose, actionID::getSpeed, responseHandler);
+  return Utils::blockForFloatData(resourceID::pose, actionID::getSpeed, incomingPacketReader);
 }
 
 float Pose::getOrientationSync() {
   getOrientation();
-  return Utils::blockForFloatData(resourceID::pose, actionID::getYaw, responseHandler);
+  return Utils::blockForFloatData(resourceID::pose, actionID::getYaw, incomingPacketReader);
 }

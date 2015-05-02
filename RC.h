@@ -3,7 +3,7 @@
 
 #include "Callback.h"
 #include "SerialIO.h"
-#include "ResponseHandler.h"
+#include "IncomingPacketReader.h"
 
 class RC //handles sending values to the PWM/PPM port(s)
 /**
@@ -17,13 +17,13 @@ private:
   //\cond
   SerialIO *serialIO;
   Callback *callbacks;
-  ResponseHandler *responseHandler;
+  IncomingPacketReader *incomingPacketReader;
   //\endcond
 public:
   //\cond
   RC();
 
-  RC(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHandler);
+  RC(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader);
   //\endcond
 
   /**

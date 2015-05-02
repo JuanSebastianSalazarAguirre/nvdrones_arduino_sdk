@@ -54,8 +54,10 @@ class Callback
     // interrupt callbacks
     void (*interrupt0)(void);
     void (*interrupt1)(void);
-    // heartbeat callback
+    // vitals callback
     void (*heartbeatLost)(void);
+    void (*voltage)(byte);
+    void (*signalStrength)(byte);
 };
 
 #endif /* defined __ArduinoSDK__Callback__ */

@@ -4,10 +4,10 @@
 
 RC::RC() {};
 
-RC::RC(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHandler) {
+RC::RC(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader) {
   serialIO = _serialIO;
   callbacks = _callbacks;
-  responseHandler = _responseHandler;
+  incomingPacketReader = _incomingPacketReader;
 }
 
 void RC::setRudder(int8_t value){
@@ -76,25 +76,25 @@ void RC::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t ai
 
 int16_t RC::getAileronSync() {
   getAileron();
-  return Utils::blockForIntData(resourceID::rc, actionID::getAileron, responseHandler);
+  return Utils::blockForIntData(resourceID::rc, actionID::getAileron, incomingPacketReader);
 }
 
 int16_t RC::getElevatorSync() {
   getElevator();
-  return Utils::blockForIntData(resourceID::rc, actionID::getElevator, responseHandler);
+  return Utils::blockForIntData(resourceID::rc, actionID::getElevator, incomingPacketReader);
 }
 
 int16_t RC::getThrottleSync() {
   getThrottle();
-  return Utils::blockForIntData(resourceID::rc, actionID::getThrottle, responseHandler);
+  return Utils::blockForIntData(resourceID::rc, actionID::getThrottle, incomingPacketReader);
 }
 
 int16_t RC::getRudderSync() {
   getRudder();
-  return Utils::blockForIntData(resourceID::rc, actionID::getRudder, responseHandler);
+  return Utils::blockForIntData(resourceID::rc, actionID::getRudder, incomingPacketReader);
 }
 
 int16_t RC::getFlightModeSync() {
   getFlightMode();
-  return Utils::blockForIntData(resourceID::rc, actionID::getFlightMode, responseHandler);
+  return Utils::blockForIntData(resourceID::rc, actionID::getFlightMode, incomingPacketReader);
 }

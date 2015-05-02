@@ -2,7 +2,7 @@
 #include <avr/pgmspace.h>
 #include <Arduino.h>
 #include "Drone.h"
-#include "ResponseHandler.h"
+
 #include <avr/io.h>
 
 
@@ -13,34 +13,37 @@
 Drone::Drone() {
   serialIO = SerialIO(serialPort0);
   callback = Callback();
-  heartbeat = Heartbeat(&serialIO, &callback);
-  responseHandler = ResponseHandler(&serialIO, &callback, &heartbeat);
-  rc = RC(&serialIO, &callback, &responseHandler);
-  gpio = GPIO(&serialIO, &callback, &responseHandler);
-  i2c = I2C(&serialIO, &callback, &responseHandler);
-  pose = Pose(&serialIO, &callback, &responseHandler);
+  incomingPacketReader = IncomingPacketReader(&serialIO);
+  vitals = Vitals(&serialIO, &incomingPacketReader, &callback);
+  responseHandler = ResponseHandler(&serialIO, &incomingPacketReader, &callback, &vitals);
+  rc = RC(&serialIO, &callback, &incomingPacketReader);
+  gpio = GPIO(&serialIO, &callback, &incomingPacketReader);
+  i2c = I2C(&serialIO, &callback, &incomingPacketReader);
+  pose = Pose(&serialIO, &callback, &incomingPacketReader);
 }
 
 Drone::Drone(SerialPort serialPort) {
   serialIO = SerialIO(serialPort);
   callback = Callback();
-  heartbeat = Heartbeat(&serialIO, &callback);
-  responseHandler = ResponseHandler(&serialIO, &callback, &heartbeat);
-  rc = RC(&serialIO, &callback, &responseHandler);
-  gpio = GPIO(&serialIO, &callback, &responseHandler);
-  i2c = I2C(&serialIO, &callback, &responseHandler);
-  pose = Pose(&serialIO, &callback, &responseHandler);
+  incomingPacketReader = IncomingPacketReader(&serialIO);
+  vitals = Vitals(&serialIO, &incomingPacketReader, &callback);
+  responseHandler = ResponseHandler(&serialIO, &incomingPacketReader, &callback, &vitals);
+  rc = RC(&serialIO, &callback, &incomingPacketReader);
+  gpio = GPIO(&serialIO, &callback, &incomingPacketReader);
+  i2c = I2C(&serialIO, &callback, &incomingPacketReader);
+  pose = Pose(&serialIO, &callback, &incomingPacketReader);
 }
 
 Drone::Drone(int txPin, int rxPin) {
   serialIO = SerialIO(txPin, rxPin);
   callback = Callback();
-  heartbeat = Heartbeat(&serialIO, &callback);
-  responseHandler = ResponseHandler(&serialIO, &callback, &heartbeat);
-  rc = RC(&serialIO, &callback, &responseHandler);
-  gpio = GPIO(&serialIO, &callback, &responseHandler);
-  i2c = I2C(&serialIO, &callback, &responseHandler);
-  pose = Pose(&serialIO, &callback, &responseHandler);
+  incomingPacketReader = IncomingPacketReader(&serialIO);
+  vitals = Vitals(&serialIO, &incomingPacketReader, &callback);
+  responseHandler = ResponseHandler(&serialIO, &incomingPacketReader, &callback, &vitals);
+  rc = RC(&serialIO, &callback, &incomingPacketReader);
+  gpio = GPIO(&serialIO, &callback, &incomingPacketReader);
+  i2c = I2C(&serialIO, &callback, &incomingPacketReader);
+  pose = Pose(&serialIO, &callback, &incomingPacketReader);
 }
 
 //
@@ -68,7 +71,7 @@ void Drone::arm() {
 void Drone::listen() {
   responseHandler.listen();
 
-  heartbeat.tick();
+  vitals.tick();
 }
 
 // 
@@ -173,7 +176,15 @@ void Drone::readCallback(void (*cb)(uint8_t)) { i2c.readCallback(cb); }
 int16_t Drone::readSync() { return i2c.readSync(); }
 
 //
-// Heartbeat Methods
+// Vitals Methods
 //
 
-void Drone::heartbeatLostCallback(void (*cb)(void)) { heartbeat.heartbeatLostCallback(cb); }
+void Drone::heartbeatLostCallback(void (*cb)(void)) { vitals.heartbeatLostCallback(cb); }
+
+void Drone::getVoltage() { vitals.getVoltage(); }
+int16_t Drone::getVoltageSync() { return vitals.getVoltageSync(); }
+void Drone::voltageCallback(void (*cb)(uint8_t)) { vitals.voltageCallback(cb); }
+
+void Drone::getSignalStrength() { vitals.getSignalStrength(); }
+int16_t Drone::getSignalStrengthSync() { return vitals.getSignalStrengthSync(); }
+void Drone::signalStrengthCallback(void (*cb)(uint8_t)) { vitals.signalStrengthCallback(cb); }

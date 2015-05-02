@@ -17,6 +17,7 @@ namespace resourceID {
   const int16_t pulseIn = 16;
   const int16_t analogRead = 17;
   const int16_t servo = 18;
+  const int16_t vitals = 19;
 }
 
 namespace actionID {
@@ -67,6 +68,10 @@ namespace actionID {
   // Interrupt
   const int16_t interrupt0 = 1;
   const int16_t interrupt1 = 2;
+
+  // Vitals
+  const int16_t getVoltage = 1;
+  const int16_t getSignalStrength = 2;
 }
 
 #endif // IDs_h

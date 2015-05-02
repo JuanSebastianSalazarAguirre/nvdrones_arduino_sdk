@@ -4,7 +4,7 @@
 
 #include <inttypes.h>
 #include "IncomingPacket.h"
-#include "ResponseHandler.h"
+#include "IncomingPacketReader.h"
 
 namespace Utils
 {
@@ -12,11 +12,11 @@ namespace Utils
   long  dataToLong(uint8_t data[]);
   int dataToInt(uint8_t data[]);
 
-  int16_t blockForByteData(int16_t rID, int16_t aID, ResponseHandler *responseHandler);
-  int16_t blockForIntData(int16_t rID, int16_t aID, ResponseHandler *responseHandler);
-  int32_t blockForLongData(int16_t rID, int16_t aID, ResponseHandler *responseHandler);
-  float blockForFloatData(int16_t rID, int16_t aID, ResponseHandler *responseHandler);
-  IncomingPacket blockForPacket(int16_t rID, int16_t aID, ResponseHandler *responseHandler);
+  int16_t blockForByteData(int16_t rID, int16_t aID, IncomingPacketReader *incomingPacketReader);
+  int16_t blockForIntData(int16_t rID, int16_t aID, IncomingPacketReader *incomingPacketReader);
+  int32_t blockForLongData(int16_t rID, int16_t aID, IncomingPacketReader *incomingPacketReader);
+  float blockForFloatData(int16_t rID, int16_t aID, IncomingPacketReader *incomingPacketReader);
+  IncomingPacket blockForPacket(int16_t rID, int16_t aID, IncomingPacketReader *incomingPacketReader);
 }
 
 #endif // Utils_h

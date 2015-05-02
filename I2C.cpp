@@ -4,10 +4,10 @@
 
 I2C::I2C(){}
 
-I2C::I2C(SerialIO *_serialIO, Callback *_callback, ResponseHandler *_responseHandler) {
+I2C::I2C(SerialIO *_serialIO, Callback *_callback, IncomingPacketReader *_incomingPacketReader) {
   serialIO = _serialIO;
   callbacks = _callback;
-  responseHandler = _responseHandler;
+  incomingPacketReader = _incomingPacketReader;
 }
 
 void I2C::setDeviceAddress(uint8_t address){
@@ -36,7 +36,7 @@ void I2C::read(){
 
 int16_t I2C::readSync() {
   read();
-  return Utils::blockForByteData(resourceID::i2c, actionID::readI2C, responseHandler);
+  return Utils::blockForByteData(resourceID::i2c, actionID::readI2C, incomingPacketReader);
 }
 
 void I2C::readCallback(void (*cb)(byte)) {

@@ -13,21 +13,22 @@ using namespace Utils;
 
 ResponseHandler::ResponseHandler() {};
 
-ResponseHandler::ResponseHandler(SerialIO *_serialIO, Callback *_callbacks, Heartbeat *_heartbeat):
+ResponseHandler::ResponseHandler(SerialIO *_serialIO, IncomingPacketReader *_incomingPacketReader, Callback *_callbacks, Vitals *_vitals):
 serialIO(_serialIO),
 callbacks(_callbacks),
-heartbeat(_heartbeat)
+vitals(_vitals),
+incomingPacketReader(_incomingPacketReader)
 {
 
 }
 
 void ResponseHandler::listen() {
   while (serialIO->available() > 0) {
-    IncomingPacket p = tryToReadNextPacket();
+    IncomingPacket p = incomingPacketReader->read();
     if (p.isEmpty()) { continue; }
 
     if (p.isHearbeat()) {
-      heartbeat->receive();
+      vitals->receiveHeartbeat();
       continue;
     }
 
@@ -84,66 +85,13 @@ void ResponseHandler::listen() {
         if (p.actionID == actionID::interrupt0) callbacks->interrupt0();
         if (p.actionID == actionID::interrupt1) callbacks->interrupt1();
         break;
+      case resourceID::vitals:
+        if (p.actionID == actionID::getVoltage) callbacks->voltage(p.data[0]);
+        if (p.actionID == actionID::getSignalStrength) callbacks->signalStrength(p.data[0]);
+        break;
       default:
         LOG("Invalid resourceID ", p.resourceID);
         break;
     }
   }
-}
-
-IncomingPacket ResponseHandler::tryToReadNextPacket() {
-  int maxIterations = 250;
-  if (serialIO->available() == 0) return IncomingPacket::emptyPacket;
-
-  int16_t startByte = serialIO->read();
-  LOG("start byte: ", startByte);
-  if (startByte == '!') return IncomingPacket::heartbeatPacket;
-  if (startByte != '$') {
-    Serial.println("Invalid start byte");
-    return IncomingPacket::emptyPacket;
-  }
-
-  int16_t length = serialIO->multipleRead(maxIterations);
-  LOG("length: ", length);
-  if (length == -1) {
-    Serial.println("Error reading length");
-    return IncomingPacket::emptyPacket;
-  }
-  int16_t resourceID = serialIO->multipleRead(maxIterations);
-  LOG("resourceID: ", resourceID);
-  if (resourceID == -1) {
-    Serial.println("Error reading resourceID");
-    return IncomingPacket::emptyPacket;
-  }
-  int16_t actionID = serialIO->multipleRead(maxIterations);
-  LOG("actionID: ", actionID);
-  if (actionID == -1) {
-    Serial.println("Error reading actionID");
-    return IncomingPacket::emptyPacket;
-  }
-
-  uint8_t data[length];
-  for (int i=0; i<length; ++i) {
-    data[i] = serialIO->multipleRead(maxIterations);
-    LOG("data: ", data[i]);
-  }
-  // TODO: add error checking.
-
-  int16_t checksum = serialIO->multipleRead(maxIterations);
-  if (checksum == -1) { /* TODO: Error handling */ }
-  LOG("checksum: ", checksum);
-
-  int16_t calculatedSum = length + actionID + resourceID;
-  for (int i=0; i<length; ++i) {
-    calculatedSum += data[i];
-  }
-  LOG("calculated checksum: ", calculatedSum%256);
-
-  if (checksum != calculatedSum%256) {
-    Serial.println("Failed checksum");
-    return IncomingPacket::emptyPacket;
-  }
-
-  IncomingPacket result(resourceID, actionID, data, length);
-  return result;
 }

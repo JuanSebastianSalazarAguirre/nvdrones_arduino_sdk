@@ -5,10 +5,10 @@
 
 GPIO::GPIO() {};
 
-GPIO::GPIO(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHandler) {
+GPIO::GPIO(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader) {
   serialIO = _serialIO;
   callbacks = _callbacks;
-  responseHandler = _responseHandler;
+  incomingPacketReader = _incomingPacketReader;
 }
 
 void GPIO::digitalWrite(uint8_t pin, bool logicLevel) {
@@ -60,7 +60,7 @@ void GPIO::digitalReadCallback(void (*cb)(byte), uint8_t pin) {
 
 int16_t GPIO::digitalReadSync(uint8_t pin) {
   digitalRead(pin);
-  return Utils::blockForByteData(resourceID::digitalRead, pin, responseHandler);
+  return Utils::blockForByteData(resourceID::digitalRead, pin, incomingPacketReader);
 }
 
 
@@ -89,7 +89,7 @@ void GPIO::pulseInCallback(void (*cb)(long), uint8_t pin) {
 
 long GPIO::pulseInSync(uint8_t pin) {
   pulseIn(pin);
-  return Utils::blockForLongData(resourceID::pulseIn, pin, responseHandler);
+  return Utils::blockForLongData(resourceID::pulseIn, pin, incomingPacketReader);
 }
 
 void GPIO::analogReadCallback(void (*cb)(byte), uint8_t pin) {
@@ -105,7 +105,7 @@ void GPIO::analogReadCallback(void (*cb)(byte), uint8_t pin) {
 
 int GPIO::analogReadSync(uint8_t pin) {
   analogRead(pin);
-  return Utils::blockForByteData(resourceID::digitalRead, pin, responseHandler);
+  return Utils::blockForByteData(resourceID::digitalRead, pin, incomingPacketReader);
 }
 
 void GPIO::interruptCallback(void (*cb)(void), uint8_t interrupt) {

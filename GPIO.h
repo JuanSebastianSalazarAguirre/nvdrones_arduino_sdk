@@ -3,7 +3,7 @@
 
 #include "SerialIO.h"
 #include "Callback.h"
-#include "ResponseHandler.h"
+#include "IncomingPacketReader.h"
 
 class GPIO
 /**
@@ -20,13 +20,13 @@ class GPIO
     //\cond
     SerialIO *serialIO;
     Callback *callbacks;
-    ResponseHandler *responseHandler;
+    IncomingPacketReader *incomingPacketReader;
     //\endcond
   public:
     //\cond
     GPIO();
     
-    GPIO(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHandler);
+    GPIO(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader);
     //\endcond
 
 

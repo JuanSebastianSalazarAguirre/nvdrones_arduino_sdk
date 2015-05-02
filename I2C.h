@@ -3,7 +3,7 @@
 
 #include "SerialIO.h"
 #include "Callback.h"
-#include "ResponseHandler.h"
+#include "IncomingPacketReader.h"
 
 class I2C
 /**
@@ -23,13 +23,13 @@ class I2C
     //\cond
     SerialIO *serialIO;
     Callback *callbacks;
-    ResponseHandler *responseHandler;
+    IncomingPacketReader *incomingPacketReader;
     //\endcond
   public:
     //\cond
     I2C();
     
-    I2C(SerialIO *_serialIO, Callback *_callback, ResponseHandler *_responseHandler);
+    I2C(SerialIO *_serialIO, Callback *_callback, IncomingPacketReader *_incomingPacketReader);
     //\endcond
 
     /**

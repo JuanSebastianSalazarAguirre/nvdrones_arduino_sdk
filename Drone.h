@@ -28,7 +28,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "Pose.h"
 #include "GPIO.h"
 #include "I2C.h"
-#include "Heartbeat.h"
+#include "ResponseHandler.h"
+#include "Vitals.h"
 
 class Drone 
 {
@@ -36,11 +37,13 @@ private:
   RC rc;
   SerialIO serialIO;
   GPIO gpio;
+  IncomingPacketReader incomingPacketReader;
+  Vitals vitals;
   ResponseHandler responseHandler;
   I2C i2c;
   Callback callback;
   Pose pose;
-  Heartbeat heartbeat;
+
 public:
   Drone();
   Drone(SerialPort serialPort);
@@ -570,6 +573,48 @@ public:
 
   */
   void heartbeatLostCallback(void (*cb)(void));
+
+  /**
+
+  TODO: add documentation.
+
+  */
+  void getVoltage();
+
+  /**
+
+  TODO: add documentation.
+
+  */
+  int16_t getVoltageSync();
+
+  /**
+
+  TODO: add documentation.
+
+  */
+  void voltageCallback(void (*cb)(uint8_t));
+
+  /**
+
+  TODO: add documentation.
+
+  */
+  void getSignalStrength();
+
+  /**
+
+  TODO: add documentation.
+
+  */
+  int16_t getSignalStrengthSync();
+
+  /**
+
+  TODO: add documentation.
+
+  */
+  void signalStrengthCallback(void (*cb)(uint8_t));
 
 };
 
