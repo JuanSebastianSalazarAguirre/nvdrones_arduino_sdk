@@ -3,6 +3,7 @@
 
 #include "SerialIO.h"
 #include "Callback.h"
+#include "ResponseHandler.h"
 
 class GPIO
 /**
@@ -19,12 +20,13 @@ class GPIO
     //\cond
     SerialIO *serialIO;
     Callback *callbacks;
+    ResponseHandler *responseHandler;
     //\endcond
   public:
     //\cond
     GPIO();
     
-    GPIO(SerialIO *_serialIO, Callback *_callbacks);
+    GPIO(SerialIO *_serialIO, Callback *_callbacks, ResponseHandler *_responseHandler);
     //\endcond
 
 
@@ -96,7 +98,14 @@ class GPIO
     @param pin the desired pin to sample logic level information from 
  
     */
-    void digitalReadCallback(void (*cb)(byte), int pin);
+    void digitalReadCallback(void (*cb)(byte), uint8_t pin);
+
+    /**
+
+    TODO: add documentation.
+
+    */
+    int digitalReadSync(uint8_t pin);
     
     /**
     
@@ -108,6 +117,13 @@ class GPIO
      
     */
     void pulseInCallback(void (*cb)(long), uint8_t pin);
+
+    /**
+
+    TODO: add documentation.
+
+    */
+    long pulseInSync(uint8_t pin);
     
     /**
      
@@ -119,6 +135,13 @@ class GPIO
      
     */
     void analogReadCallback(void (*cb)(byte), uint8_t pin);
+
+    /**
+
+    TODO: add documentation.
+
+    */
+    int analogReadSync(uint8_t pin);
 
     /**
 

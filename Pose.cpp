@@ -64,72 +64,30 @@ void Pose::orientationCallback(void (*cb)(float)) {
 
 float Pose::getLatitudeSync() {
   getLatitude();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::pose && p.actionID == actionID::getLatitude && p.isValid())
-      return Utils::dataToFloat(p.data);
-  }
-  return -1;
+  return Utils::blockForFloatData(resourceID::pose, actionID::getLatitude, responseHandler);
 }
 
 float Pose::getLongitudeSync() {
   getLongitude();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::pose && p.actionID == actionID::getLongitude && p.isValid())
-      return Utils::dataToFloat(p.data);
-  }
-  return -1;
+  return Utils::blockForFloatData(resourceID::pose, actionID::getLongitude, responseHandler);
 }
 
 float Pose::getAltitudeSync() {
   getAltitude();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::pose && p.actionID == actionID::getAltitude && p.isValid())
-      return Utils::dataToFloat(p.data);
-  }
-  return -1;
+  return Utils::blockForFloatData(resourceID::pose, actionID::getAltitude, responseHandler);
 }
 
 int16_t Pose::getSatellitesSync() {
   getSatellites();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::pose && p.actionID == actionID::getSatellites && p.isValid())
-      return (int16_t)p.data[0];
-  }
-  return -1;
+  return Utils::blockForIntData(resourceID::pose, actionID::getSatellites, responseHandler);
 }
 
 float Pose::getSpeedSync() {
   getSpeed();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::pose && p.actionID == actionID::getSpeed && p.isValid())
-      return Utils::dataToFloat(p.data);
-  }
-  return -1;
+  return Utils::blockForFloatData(resourceID::pose, actionID::getSpeed, responseHandler);
 }
 
 float Pose::getOrientationSync() {
   getOrientation();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::pose && p.actionID == actionID::getYaw && p.isValid())
-      return Utils::dataToFloat(p.data);
-  }
-  return -1;
+  return Utils::blockForFloatData(resourceID::pose, actionID::getYaw, responseHandler);
 }

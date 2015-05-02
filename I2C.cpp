@@ -1,11 +1,13 @@
 #include "I2C.h"
 #include "IDs.h"
+#include "Utils.h"
 
 I2C::I2C(){}
 
-I2C::I2C(SerialIO *_serialIO, Callback *_callback) {
+I2C::I2C(SerialIO *_serialIO, Callback *_callback, ResponseHandler *_responseHandler) {
   serialIO = _serialIO;
   callbacks = _callback;
+  responseHandler = _responseHandler;
 }
 
 void I2C::setDeviceAddress(uint8_t address){
@@ -30,6 +32,11 @@ void I2C::write(uint8_t data){
 
 void I2C::read(){
   serialIO->sendPacket((int16_t)0, resourceID::i2c, actionID::readI2C);
+}
+
+int16_t I2C::readSync() {
+  read();
+  return Utils::blockForByteData(resourceID::i2c, actionID::readI2C, responseHandler);
 }
 
 void I2C::readCallback(void (*cb)(byte)) {

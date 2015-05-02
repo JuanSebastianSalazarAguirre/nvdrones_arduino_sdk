@@ -16,8 +16,8 @@ Drone::Drone() {
   heartbeat = Heartbeat(&serialIO, &callback);
   responseHandler = ResponseHandler(&serialIO, &callback, &heartbeat);
   rc = RC(&serialIO, &callback, &responseHandler);
-  gpio = GPIO(&serialIO, &callback);
-  i2c = I2C(&serialIO, &callback);
+  gpio = GPIO(&serialIO, &callback, &responseHandler);
+  i2c = I2C(&serialIO, &callback, &responseHandler);
   pose = Pose(&serialIO, &callback, &responseHandler);
 }
 
@@ -27,8 +27,8 @@ Drone::Drone(SerialPort serialPort) {
   heartbeat = Heartbeat(&serialIO, &callback);
   responseHandler = ResponseHandler(&serialIO, &callback, &heartbeat);
   rc = RC(&serialIO, &callback, &responseHandler);
-  gpio = GPIO(&serialIO, &callback);
-  i2c = I2C(&serialIO, &callback);
+  gpio = GPIO(&serialIO, &callback, &responseHandler);
+  i2c = I2C(&serialIO, &callback, &responseHandler);
   pose = Pose(&serialIO, &callback, &responseHandler);
 }
 
@@ -38,8 +38,8 @@ Drone::Drone(int txPin, int rxPin) {
   heartbeat = Heartbeat(&serialIO, &callback);
   responseHandler = ResponseHandler(&serialIO, &callback, &heartbeat);
   rc = RC(&serialIO, &callback, &responseHandler);
-  gpio = GPIO(&serialIO, &callback);
-  i2c = I2C(&serialIO, &callback);
+  gpio = GPIO(&serialIO, &callback, &responseHandler);
+  i2c = I2C(&serialIO, &callback, &responseHandler);
   pose = Pose(&serialIO, &callback, &responseHandler);
 }
 
@@ -150,6 +150,13 @@ void Drone::attachServo(uint8_t servoNumber, uint8_t pin)        { gpio.attachSe
 void Drone::detachServo(uint8_t servoNumber)                     { gpio.detachServo(servoNumber); }
 void Drone::writeServo(uint8_t servoNumber, uint8_t data)        { gpio.writeServo(servoNumber, data); }
 
+// Sync Getters
+int16_t Drone::pulseInSync(uint8_t pin)     { return gpio.pulseInSync(pin); }
+int16_t Drone::digitalReadSync(uint8_t pin) { return gpio.digitalReadSync(pin); }
+int16_t Drone::analogReadSync(uint8_t pin)  { return gpio.analogReadSync(pin); }
+
+
+
 //
 // I2C Methods
 //
@@ -161,6 +168,9 @@ void Drone::write(uint8_t data)               { i2c.write(data); }
 void Drone::read()                            { i2c.read(); }
 void Drone::wireRequest(uint8_t byteCount)    { i2c.wireRequest(byteCount); }
 void Drone::readCallback(void (*cb)(uint8_t)) { i2c.readCallback(cb); }
+
+// Sync Getters
+int16_t Drone::readSync() { return i2c.readSync(); }
 
 //
 // Heartbeat Methods

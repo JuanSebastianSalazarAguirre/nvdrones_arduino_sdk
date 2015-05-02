@@ -16,10 +16,11 @@ public:
   int actionID;
   uint8_t *data;
   int length;
-  bool isValid();
+  bool isEmpty();
   bool isHearbeat();
 
   static const IncomingPacket heartbeatPacket;
+  static const IncomingPacket emptyPacket;
 }; 
 
 #endif // IncomingPacket_h

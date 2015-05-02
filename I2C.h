@@ -3,6 +3,7 @@
 
 #include "SerialIO.h"
 #include "Callback.h"
+#include "ResponseHandler.h"
 
 class I2C
 /**
@@ -22,12 +23,13 @@ class I2C
     //\cond
     SerialIO *serialIO;
     Callback *callbacks;
+    ResponseHandler *responseHandler;
     //\endcond
   public:
     //\cond
     I2C();
     
-    I2C(SerialIO *_serialIO, Callback *_callback);
+    I2C(SerialIO *_serialIO, Callback *_callback, ResponseHandler *_responseHandler);
     //\endcond
 
     /**
@@ -85,6 +87,13 @@ class I2C
        
     */
     void read();
+
+    /**
+
+    TODO: add documentation.
+
+    */
+    int16_t readSync();
     
     /**
          

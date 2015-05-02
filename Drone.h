@@ -389,6 +389,13 @@ public:
   */
   void pulseIn(uint8_t pin);
 
+  /**
+
+  TODO: add documentation.
+
+  */
+  int pulseInSync(uint8_t pin);
+
 
   /**
 
@@ -400,6 +407,13 @@ public:
   void digitalRead(uint8_t pin);
 
   /**
+
+  TODO: add documentation.
+
+  */
+  int digitalReadSync(uint8_t pin);
+
+  /**
    
   Sends a request to the App Extender to reply with the analog value of the specified pin.  
 
@@ -407,6 +421,13 @@ public:
 
   */
   void analogRead(uint8_t pin);
+
+  /**
+
+  TODO: add documentation.
+
+  */
+  int analogReadSync(uint8_t pin);
 
   /**
 
@@ -515,6 +536,13 @@ public:
      
   */
   void read();
+
+  /**
+
+  TODO: add documentation.
+
+  */
+  int16_t readSync();
 
   /**
 

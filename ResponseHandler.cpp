@@ -24,7 +24,7 @@ heartbeat(_heartbeat)
 void ResponseHandler::listen() {
   while (serialIO->available() > 0) {
     IncomingPacket p = tryToReadNextPacket();
-    if (!p.isValid()) { continue; }
+    if (p.isEmpty()) { continue; }
 
     if (p.isHearbeat()) {
       heartbeat->receive();
@@ -93,34 +93,33 @@ void ResponseHandler::listen() {
 
 IncomingPacket ResponseHandler::tryToReadNextPacket() {
   int maxIterations = 250;
-  IncomingPacket errorPacket(0,0,0,0);
-  if (serialIO->available() == 0) return errorPacket;
+  if (serialIO->available() == 0) return IncomingPacket::emptyPacket;
 
   int16_t startByte = serialIO->read();
   LOG("start byte: ", startByte);
   if (startByte == '!') return IncomingPacket::heartbeatPacket;
   if (startByte != '$') {
     Serial.println("Invalid start byte");
-    return errorPacket;
+    return IncomingPacket::emptyPacket;
   }
 
   int16_t length = serialIO->multipleRead(maxIterations);
   LOG("length: ", length);
   if (length == -1) {
     Serial.println("Error reading length");
-    return errorPacket;
+    return IncomingPacket::emptyPacket;
   }
   int16_t resourceID = serialIO->multipleRead(maxIterations);
   LOG("resourceID: ", resourceID);
   if (resourceID == -1) {
     Serial.println("Error reading resourceID");
-    return errorPacket;
+    return IncomingPacket::emptyPacket;
   }
   int16_t actionID = serialIO->multipleRead(maxIterations);
   LOG("actionID: ", actionID);
   if (actionID == -1) {
     Serial.println("Error reading actionID");
-    return errorPacket;
+    return IncomingPacket::emptyPacket;
   }
 
   uint8_t data[length];
@@ -142,10 +141,9 @@ IncomingPacket ResponseHandler::tryToReadNextPacket() {
 
   if (checksum != calculatedSum%256) {
     Serial.println("Failed checksum");
-    return errorPacket;
+    return IncomingPacket::emptyPacket;
   }
 
   IncomingPacket result(resourceID, actionID, data, length);
-  LOG("Is packet valid? ", result.isValid());
   return result;
 }

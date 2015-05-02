@@ -1,5 +1,6 @@
 #include "RC.h"
 #include "IDs.h"
+#include "Utils.h"
 
 RC::RC() {};
 
@@ -75,60 +76,25 @@ void RC::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t ai
 
 int16_t RC::getAileronSync() {
   getAileron();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::rc && p.actionID == actionID::getAileron && p.isValid())
-      return (int16_t)p.data[0];
-  }
-  return -1;
+  return Utils::blockForIntData(resourceID::rc, actionID::getAileron, responseHandler);
 }
 
 int16_t RC::getElevatorSync() {
   getElevator();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::rc && p.actionID == actionID::getElevator && p.isValid())
-      return (int16_t)p.data[0];
-  }
-  return -1;
+  return Utils::blockForIntData(resourceID::rc, actionID::getElevator, responseHandler);
 }
 
 int16_t RC::getThrottleSync() {
   getThrottle();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::rc && p.actionID == actionID::getThrottle && p.isValid())
-      return (int16_t)(int8_t)p.data[0];
-  }
-  return -1;
+  return Utils::blockForIntData(resourceID::rc, actionID::getThrottle, responseHandler);
 }
 
 int16_t RC::getRudderSync() {
   getRudder();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::rc && p.actionID == actionID::getRudder && p.isValid())
-      return (int16_t)p.data[0];
-  }
-  return -1;
+  return Utils::blockForIntData(resourceID::rc, actionID::getRudder, responseHandler);
 }
 
 int16_t RC::getFlightModeSync() {
   getFlightMode();
-  IncomingPacket p(0,0,0,0);
-  unsigned long startTime = millis();
-  while ((millis() - startTime) < 1000) {
-    p = responseHandler->tryToReadNextPacket();
-    if (p.resourceID == resourceID::rc && p.actionID == actionID::getFlightMode && p.isValid())
-      return (int16_t)p.data[0];
-  }
-  return -1;
+  return Utils::blockForIntData(resourceID::rc, actionID::getFlightMode, responseHandler);
 }

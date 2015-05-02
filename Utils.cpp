@@ -1,5 +1,6 @@
 
 #include "Utils.h"
+#include "ResponseHandler.h"
 
 float Utils::dataToFloat(uint8_t data[]) {
   union u_tag {
@@ -27,4 +28,37 @@ int Utils::dataToInt(uint8_t data[]) {
  data_int = uint8_t(data[0]) << 8;
  data_int = data_int + uint8_t(data[1]);
  return data_int; 
+}
+
+// NOTE: this returns and int, rather than a byte, in order to return -1.
+int16_t Utils::blockForByteData(int16_t rID, int16_t aID, ResponseHandler *responseHandler) {
+  IncomingPacket p = blockForPacket(rID, aID, responseHandler);
+  return p.isEmpty() ? -1 : p.data[0];
+}
+
+int16_t Utils::blockForIntData(int16_t rID, int16_t aID, ResponseHandler *responseHandler) {
+  IncomingPacket p = blockForPacket(rID, aID, responseHandler);
+  return p.isEmpty() ? -1 : dataToInt(p.data);
+}
+
+float Utils::blockForFloatData(int16_t rID, int16_t aID, ResponseHandler *responseHandler) {
+  IncomingPacket p = blockForPacket(rID, aID, responseHandler);
+  return p.isEmpty() ? -1 : dataToFloat(p.data);
+}
+
+int32_t Utils::blockForLongData(int16_t rID, int16_t aID, ResponseHandler *responseHandler) {
+  IncomingPacket p = blockForPacket(rID, aID, responseHandler);
+  return p.isEmpty() ? -1 : dataToLong(p.data);
+}
+
+IncomingPacket Utils::blockForPacket(int16_t rID, int16_t aID, ResponseHandler *responseHandler) {
+  IncomingPacket p(0,0,0,0);
+  uint32_t startTime = millis();
+  while((millis() - startTime) < 1000) {
+    p = responseHandler->tryToReadNextPacket();
+    if (p.resourceID == rID && p.actionID == aID) {
+      return p;
+    }
+  }
+  return IncomingPacket::emptyPacket;
 }
