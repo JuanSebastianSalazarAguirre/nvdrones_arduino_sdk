@@ -45,580 +45,726 @@ private:
   Pose pose;
 
 public:
+
+  /**
+
+  Creates a new Drone instance.
+
+  */
   Drone();
+
+  /**
+
+  Creates a new Drone instance.
+
+  @param serialPort The serial port for wireless communcation with the drone.
+
+  */
   Drone(SerialPort serialPort);
+
+  /**
+
+  Creates a new Drone instance.
+
+  @param txPin The transmit pin for wireless communcation with the drone.
+  @param rxPin The receive pin for wireless communcation with the drone.
+
+  */
   Drone(int txPin, int rxPin);
 
-  void listen();
-  void arm();
+
+  /**
+
+  Performs the drone's preflight tasks.
+
+  */
   void initialize();
 
   /**
-       
-  This sends only one message to request all of the POSE data. 
-  The Extender will reply with 6 messages containing Long, Lat, number of Sat, Speed, Orientation, and Altitude
-       
+
+  Turns the drone on/off.
+
   */
-  void getGPSData();
+  void arm();
+
+  /**
+
+  Checks for (and handles) communcation with the drone. Should be called in the loop()
+  of your Arduino sketch.
+
+  */
+  void listen();
 
   /**
        
-  Sends a request to the Extender asking for it to reply with the vehicles current Longitude
-  The response gets handled through the callback function longitudeCallbackCallback().
+  Requests the drone's current longitude. The response gets handled through the
+  callback function set using longitudeCallback().
        
   */
   void getLongitude();
 
   /**
-       
-  Sends a request to the Extender asking for it to reply with the vehicles current Latitude.
-  The response gets handled through the callback function latitudeCallback().
-       
+
+  Synchronous version of getLongitude(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's current longtitude, or -1 if timeout.
+
   */
-  void getLatitude();
+  float getLongitudeSync();
 
   /**
        
-  Sends a request to the Extender asking for it to reply with the vehicles current Altitude.
-  The response gets handled through the callback function altitudeCallback().
-       
-  */
-  void getAltitude();
+  Registers the function to be called when the Arduino receives longitude data from the drone.
 
-  /**
-       
-  Sends a request to the Extender asking for it to reply with the current number of satellites the vehicles
-  GPS is locked onto.
-  The response gets handled through the callback function satelliteCallback().
-  The more satellites you have the higher the accuracy is.  There needs to be a minimum of 4 satellites to get a lock.  
-       
-  */
-  void getSatellites();
-
-  /**
-       
-  Sends a request to the Extender asking for it to reply with the vehicles current Land Speed given by the GPS.
-  The response gets handled through the callback function speedCallback().
-       
-  */
-  void getSpeed();
-
-  /**
-       
-  Sends a request to the Extender asking for it to reply with the vehicles current Orientation given by the Compass.
-  The response gets handled through the callback function orientationCallback().
-       
-  */
-  void getOrientation();
-
-  /**
-       
-  Callback function which passes longitude information to the function that it is passed.
+  @param cb The function to be called with the drone's longitude.
        
   */
   void longitudeCallback(void (*cb)(float));
 
   /**
        
-  Callback function which passes latitude information to the function that it is passed.
+  Requests the drone's current latitude. The response gets handled through the
+  callback function set using latitudeCallback().
+       
+  */
+  void getLatitude();
+
+  /**
+
+  Synchronous version of getLatitude(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's current latitude, or -1 if timeout.
+
+  */
+  float getLatitudeSync();
+
+  /**
+       
+  Registers the function to be called when the Arduino receives latitude data from the drone.
+
+  @param cb The function to be called with the drone's latitude.
        
   */
   void latitudeCallback(void (*cb)(float));
 
   /**
        
-  Callback function which passes altitude information to the function that it is passed.
+  Requests the drone's current altitude. The response gets handled through the
+  callback function set using altitudeCallback().
+       
+  */
+  void getAltitude();
+
+  /**
+
+  Synchronous version of getAltitude(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's current altitude, or -1 if timeout.
+
+  */
+  float getAltitudeSync();
+
+  /**
+       
+  Registers the function to be called when the Arduino receives altitude data from the drone.
+
+  @param cb The function to be called with the drone's altitude.
        
   */
   void altitudeCallback(void (*cb)(float));
 
   /**
+
+  Requests the number of satellites the drone's GPS is locked onto. Being locked onto more satellites is
+  correlated to higher GPS accuracy. The minimum number of satellites to get GPS data is 4. The response
+  gets handled through the callback function set using satellitesCallback().
        
-  Callback function which passes number of locked satellites to the function that it is passed.
+  */
+  void getSatellites();
+
+  /**
+
+  Synchronous version of getSatellites(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The number of satellites the drone's GPS is locked onto, or -1 if timeout.
+
+  */
+  int getSatellitesSync();
+
+  /**
+       
+  Registers the function to be called when the Arduino receives the number of connected GPS satellites from the drone.
+
+  @param cb The function to be called with the drone's satellite count.
        
   */
   void satelliteCallback(void (*cb)(int16_t));
 
   /**
        
-  Callback function which passes speed information to the function that it is passed.
+  Requests the drone's current speed. The response gets handled through the
+  callback function set using speedCallback().
        
   */
-  void speedCallback(void (*cb)(float));
-
-  /**
-       
-  Callback function which passes orientation information to the function that it is passed
-       
-  */
-  void orientationCallback(void (*cb)(float));
+  void getSpeed();
 
   /**
 
-  Synchronous version of `getLatitude`.
+  Synchronous version of getSpeed(). Waits until a response is received, timing out
+  after 1 second.
 
-  */
-  float getLatitudeSync();
+  @return The drone's current speed, or -1 if timeout.
 
-  /**
-
-  Synchronous version of `getLongitude`.
-
-  */
-  float getLongitudeSync();
-
-  /**
-
-  Synchronous version of `getAltitude`.
-
-  */
-  float getAltitudeSync();
-
-  /**
-
-  Synchronous version of `getSatellites`.
-
-  */
-  int16_t getSatellitesSync();
-
-  /**
-
-  Synchronous version of `getSpeed`.
 
   */
   float getSpeedSync();
 
   /**
 
-  Synchronous version of `getOrientation`.
+  Registers the function to be called when the Arduino receives speed data from the drone.
+
+  @param cb The function to be called with the drone's speed.
+
+  */
+  void speedCallback(void (*cb)(float));
+
+  /**
+
+  Requests the drone's current orientation. The response gets handled through the
+  callback function set using orientationCallback().
+
+  */
+  void getOrientation();
+
+  /**
+
+  Synchronous version of getOrientation().  Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's current orientation, or -1 if timeout.
 
   */
   float getOrientationSync();
 
   /**
 
-  Sends a request to the extender to set the Aileron channel to a specific channel between -100 and 100.
+  Registers the function to be called when the Arduino receives orientation data from the drone.
 
-  @param value The value to set the Aileron channel to
+  @param cb The function to be called with the drone's orientation.
 
   */
-  void setAileron(int8_t value);
+  void orientationCallback(void (*cb)(float));
 
   /**
 
-  Sends a request to the extender to set the Extender channel to a specific channel between -100 and 100.
-
-  @param value The value to set the Extender channel to
+  Helper to call getLatitude(), getLongitude(), getAltitude(), getSatellites(), getSpeed(), and getOrientation().
 
   */
-  void setElevator(int8_t value);
+  void getGPSData();
 
   /**
 
-  Sends a request to the extender to set the Throttle channel to a specific channel between -100 and 100.
-
-  @param value The value to set the Throttle channel to
-
-  */
-  void setThrottle(int8_t value);
-
-  /**
-
-  Sends a request to the extender to set the Rudder channel to a specific channel between -100 and 100.
-
-  @param value The value to set the Rudder channel to
-
-  */
-  void setRudder(int8_t value);
-
-  /**
-
-  Sends a request to the extender to set the Flight Mode channel to a specific channel between -100 and 100.
-
-  @param value The value to set the Flight Mode channel to
-
-  */
-  void setFlightMode(int8_t value);
-
-  /**
-
-  Sends a request to the extender to reply with message containing the current Aileron value.
+  Requests the drone's current aileron value. The response gets handled through the
+  callback function set using aileronCallback().
 
   */
   void getAileron();
 
   /**
 
-  Sends a request to the extender to reply with message containing the current Elevator value.
+  Synchronous version of getAileron(). Waits until a response is received, timing out
+  after 1 second.
 
-  */
-  void getElevator();
-
-  /**
-
-  Sends a request to the extender to reply with message containing the current Throttle value.
-
-  */
-  void getThrottle();
-
-  /**
-
-  Sends a request to the extender to reply with message containing the current Rudder value.
-
-  */
-  void getRudder();
-
-  /**
-
-  Sends a request to the extender to reply with message containing the current Flight Mode value.
-
-  */
-  void getFlightMode();
-
-  /**
-
-  Execute funtion in a thread to not freez the drone.
-
-  */
-  void aileronCallback(void (*cb)(int16_t));
-
-  /**
-
-  Execute funtion in a thread to not freez the drone.
-
-  */
-  void flightModeCallback(void (*cb)(int16_t));
-
-  /**
-
-  Execute funtion in a thread to not freez the drone.
-
-  */
-  void throttleCallback(void (*cb)(int16_t));
-
-  /**
-
-  Execute funtion in a thread to not freez the drone.
-
-  */
-  void rudderCallback(void (*cb)(int16_t));
-
-  /**
-
-  Execute funtion in a thread to not freez the drone.
-
-  */
-  void elevatorCallback(void (*cb)(int16_t));
-
-  /**
-
-  Execute funtion in a thread to not freez the drone.
-
-  */
-  void sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron);
-
-  /**
-
-  Synchronous version of `getAileron`.
+  @return The drone's aileron value, or -1 if timeout.
 
   */
   int16_t getAileronSync();
 
   /**
 
-  Synchronous version of `getElevator`.
+  Registers the function to be called when the Arduino receives aileron data from the drone.
+
+  @param cb The function to be called with the drone's aileron value.
+
+  */
+  void aileronCallback(void (*cb)(int16_t));
+
+  /**
+
+  Sets the drone's aileron. Accepts values between -100 and 100.
+
+  @param value The new aileron value.
+
+  */
+  void setAileron(int8_t value);
+
+  /**
+
+  Requests the drone's current elevator value. The response gets handled through the
+  callback function set using elevatorCallback().
+
+  */
+  void getElevator();
+
+  /**
+
+  Synchronous version of getElevator(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's elevator value, or -1 if timeout.
 
   */
   int16_t getElevatorSync();
 
   /**
 
-  Synchronous version of `getThrottle`.
+  Registers the function to be called when the Arduino receives the drone's elevator value.
+
+  @param cb The function to be called with the drone's elevator value.
 
   */
-  int16_t getThrottleSync();
+  void elevatorCallback(void (*cb)(int16_t));
 
   /**
 
-  Synchronous version of `getRudder`.
+  Sets the drone's elevator. Accepts values between -100 and 100.
+
+  @param value The new elevator value.
+
+  */
+  void setElevator(int8_t value);
+
+  /**
+
+  Requests the drone's current rudder value. The response gets handled through the
+  callback function set using rudderCallback().
+
+  */
+  void getRudder();
+
+  /**
+
+  Synchronous version of getRudder(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's rudder value, or -1 if timeout.
 
   */
   int16_t getRudderSync();
 
   /**
 
-  Synchronous version of `getFlightMode`.
+  Registers the function to be called when the Arduino receives the drone's rudder value.
+
+  @param cb The function to be called with the drone's rudder value.
+
+  */
+  void rudderCallback(void (*cb)(int16_t));
+
+  /**
+
+  Sets the drone's rudder. Accepts values between -100 and 100.
+
+  @param value The new rudder value.
+
+  */
+  void setRudder(int8_t value);
+
+  /**
+
+  Requests the drone's current throttle value. The response gets handled through the
+  callback function set using throttleCallback().
+
+  */
+  void getThrottle();
+
+  /**
+
+  Synchronous version of getThrottle(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's throttle value, or -1 if timeout.
+
+  */
+  int16_t getThrottleSync();
+
+  /**
+
+  Registers the function to be called when the Arduino receives the drone's throttle value.
+
+  @param cb The function to be called with the drone's throttle value.
+
+  */
+  void throttleCallback(void (*cb)(int16_t));
+
+  /**
+
+  Sets the drone's throttle. Accepts values between -100 and 100.
+
+  @param value The new throttle value.
+
+  */
+  void setThrottle(int8_t value);
+
+  /**
+
+  Synchronous version of getFlightMode(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's flight mode, or -1 if timeout.
 
   */
   int16_t getFlightModeSync();
-  
+
+  /**
+
+  Requests the drone's current flightMode. The response gets handled through the
+  callback function set using flightModeCallback().
+
+  */
+  void getFlightMode();
+
+  /**
+
+  Registers the function to be called when the Arduino receives the drone's flight mode.
+
+  @param cb The function to be called with the drone's flight mode.
+
+  */
+  void flightModeCallback(void (*cb)(int16_t));
+
+  /**
+
+  Sets the drone's flight mode. Accepts values between -100 and 100.
+
+  @param value The new flight mode value.
+
+  */
+  void setFlightMode(int8_t value);
+
+  /**
+
+  Sets the drone's rudder, throttle, elevator, and aileron. All values should be between -100 and 100.
+
+  @param aileron The new aileron value.
+  @param elevator The new elevator value.
+  @param rudder The new rudder value.
+  @param throttle The new throttle value.
+
+  */
+  void setAileronElevatorRudderThrottle(uint8_t aileron, uint8_t elevator, uint8_t rudder, uint8_t throttle);
+
   /**
    
   Configures the specified pin on the App Extender to behave either as an input or an output.
 
+  @param pin The pin number. Pins 1 to 8 are available.
+  @param mode INPUT or OUTPUT.
    
-  @param pin value expected 0 to 10
-  @param logicLevel expected 0 or 1
-   
   */
-  void pinMode(uint8_t pin, int logicLevel);
+  void pinMode(uint8_t pin, int mode);
 
   /**
 
-  Write a HIGH or LOW value to a digital pin on the App Extender.
+  Requests the value from a digital pin. The response gets handled through the
+  callback function set using digitalReadCallback().
 
-  @param pin value expected 0 to 10
-  @param logicLevel expected 0 or 1
-
-  */
-  void digitalWrite(uint8_t pin, bool logicLevel);
-
-  /**
-
-  Writes an analog value (PWM wave) to the specified pin on the App Extender. 
-
-  @param pin sets pins 1-10 on the App Extender to the PWM value specified by value
-  @param value sets the PWM values duty cycle ranging from 0 and 255 
-
-  */
-  void analogWrite(uint8_t pin, uint8_t value);
-
-  /**
-   
-  Writes an a request to the Extender to check the duration of a pulse on the specified pin.
-
-  @param pin sets pins 1-10 on the App Extender to the PWM value specified by value 
-
-  */
-  void pulseIn(uint8_t pin);
-
-  /**
-
-  TODO: add documentation.
-
-  */
-  int pulseInSync(uint8_t pin);
-
-
-  /**
-
-  Sends a request to the App Extender to reply with the logical state of the specified pin.  
-
-  @param pin Selects which GPIO pin on the App Extender it should return.
+  @param pin The pin number. Pins 1 to 8 are available.
 
   */
   void digitalRead(uint8_t pin);
 
   /**
 
-  TODO: add documentation.
+  Synchronous version of digitalRead(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return HIGH or LOW, or -1 if timeout.
 
   */
   int digitalReadSync(uint8_t pin);
 
   /**
-   
-  Sends a request to the App Extender to reply with the analog value of the specified pin.  
 
-  @param pin Selects which analog pin on the App Extender it should return.
+  Registers the function to be called when the Arduino receives digital read data on
+  the specified pin from the drone.
 
-  */
-  void analogRead(uint8_t pin);
-
-  /**
-
-  TODO: add documentation.
-
-  */
-  int analogReadSync(uint8_t pin);
-
-  /**
-
-  This callback function is executed everytime it gets digitalRead information.  It passes
-  this information to the function specified in the argument.
-
-  @param function function name of the function to pass received information to
-  @param pin the desired pin to sample logic level information from 
+  @param cb The function to be called when the Arduino receives digital read data.
+  @param pin The pin number. Pins 1 to 8 are available.
 
   */
   void digitalReadCallback(void (*cb)(byte), int pin);
 
   /**
 
-  This callback function is executed every time it gets pulseIn information.  It passes
-  this information to the function specified in the argument.
-   
-  @param function name of the function to pass received information to
-  @param pin the desired pin to sample pulseIn information from 
-   
+  Write a HIGH or LOW value to a digital pin on the App Extender.
+
+  @param pin The pin number. Pins 1 to 8 are available.
+  @param logicLevel HIGH or LOW.
+
   */
-  void pulseInCallback(void (*cb)(long), uint8_t pin);
+  void digitalWrite(uint8_t pin, bool logicLevel);
+
+  /**
+
+  Requests the value from an analog pin. The response gets handled through the
+  callback function set using analogReadCallback().
+
+  @param pin The pin number. Pins 1 to 8 are available.
+
+  */
+  void analogRead(uint8_t pin);
+
+  /**
+
+  Synchronous version of analogRead(). Waits until a response is received, timing out
+  after 1 second.
+
+  @param pin The pin number. Pins 1 to 8 are available.
+  @return 0 to 1023, or -1 if timeout.
+
+  */
+  int analogReadSync(uint8_t pin);
 
   /**
    
   This callback function is executed every time it gets analogRead information.  It passes
   this information to the function specified in the argument.
-   
-  @param function function name of the function to pass received information to
-  @param pin the desired pin to sample analog information from 
-   
+
+  @param cb The function to be called when the Arduino receives analog read data.
+  @param pin The pin number. Pins 1 to 8 are available.
+
   */
   void analogReadCallback(void (*cb)(byte), uint8_t pin);
 
   /**
 
-  Associates a servo with a pin.
+  Writes an analog value (PWM wave) to a pin on the App Extender. After a call to analogWrite(),
+  the pin will generate a steady square wave of the specified duty cycle until the next call to
+  analogWrite() (or a call to digitalRead() or digitalWrite() on the same pin).
 
-  @param servoNumber which of the three servos to attach. Values should be 1-3.
-  @param pin the desired pin to associate with the servo.
+  @param pin The pin number. Pins 1 to 8 are available.
+  @param value The duty cycle ranging from 0 (always off) and 255 (always on).
+
+  */
+  void analogWrite(uint8_t pin, uint8_t value);
+
+  /**
+
+  Reads a pulse (either HIGH or LOW) on a pin on the App Extender. For example, if value is HIGH,
+  pulseIn() waits for the pin to go HIGH, starts timing, then waits for the pin to go LOW and
+  stops timing. Returns the length of the pulse in microseconds. Gives up and returns 0 if no
+  pulse starts within a specified time out.
+
+  The response gets handled through thecallback function set using pulseInCallback().
+
+  @param pin The pin number. Pins 1 to 8 are available.
+  @param value The type of the pulse to read. Either HIGH or LOW.
+  @param pin (optional) The number of microseconds to wait for the pulse to start. Default is 3000 microseconds.
+
+  */
+  void pulseIn(int pin, int value);
+  void pulseIn(int pin, int value, unsigned long timeout);
+
+  /**
+
+  Synchronous version of pulseIn(). Waits up to 1 second to receive a response.
+
+  @param pin The pin number. Pins 1 to 8 are available.
+  @param value The type of the pulse to read. Either HIGH or LOW.
+  @param pin (optional) The number of microseconds to wait for the pulse to start. Default is 3000 microseconds.
+  @return The length of the pulse (in microseconds), 0 if no pulse detected, or -1 if no
+  pulse length was received from the drone.
+
+  */
+  void pulseInSync(int pin, int value);
+  void pulseInSync(int pin, int value, unsigned long timeout);
+
+  /**
+
+  Registers the function to be called when the Arduino receives pulse data from the drone.
+
+  @param cb The function to be called when the Arduino receives pulse data.
+  @param pin The pin number. Pins 1 to 8 are available.
+   
+  */
+  void pulseInCallback(void (*cb)(long), uint8_t pin);
+
+  /**
+
+  Associates a servo to a pin.
+
+  @param servoNumber The servo to attach. Values should be 1 to 3.
+  @param pin The pin number to attach the servo to. Pins 1 to 8 are available.
 
   */
   void attachServo(uint8_t servoNumber, uint8_t pin);
 
   /**
 
-  Clear a previously set assocation between the given servo and pin.
+  Clear a previously set assocation between a servo and pin.
 
-  @param servoNumber the desired servo to detach. Values should be 1-3.
+  @param servoNumber The servo to detach. Values should be 1 to 3.
 
   */
   void detachServo(uint8_t servoNumber);
 
   /**
 
-  Write data to a servo. This servo should already be attached via the `attachServo` method.
+  Writes a value to the servo, controlling the shaft accordingly. On a standard servo, this
+  will set the angle of the shaft (in degrees), moving the shaft to that orientation. On a
+  continuous rotation servo, this will set the speed of the servo (with 0 being full-speed in
+  one direction, 180 being full speed in the other, and a value near 90 being no movement).
 
-  @param servoNumber the servo to send data too. Values should be 1-3.
-  @param data the data to send to the servo.
+  This servo should have already been attached via the attachServo() method.
+
+  @param servoNumber The servo to send the angle data to. Values should be 1 to 3.
+  @param angle The value to write to the servo, from 0 to 180.
 
   */
-  void writeServo(uint8_t servoNumber, uint8_t data);
-
-  /**
-       
-  This sets the address of the device that the App Extender sends data too.
-  This address will be continuously used by beginTransmission, write, read, and wireRequest
-  until it is reset to a different value.  
-      
-  @param ID range from 0 to 255
-      
-  */
-  void setDeviceAddress(uint8_t ID);
+  void writeServo(uint8_t servoNumber, uint8_t angle);
 
   /**
 
-  Begin a transmission to the I2C slave device with the address specified by deviceID(ID)
-  Subsequently, queue bytes for transmission with the write() function and transmit them
-  by calling endTransmission().
-      
+  This sets the address of the I2C device that the App Extender communicates with. This
+  address will be continuously used by i2cBeginTransmission() and i2cWireRequest() until it
+  is reset to a different value.
+
+  @param address The I2C device's slave address. Available address range from 0 to 127.
+
   */
-  void beginTransmission();
+  void i2cSetDeviceAddress(uint8_t address);
 
   /**
 
-  Ends a transmission to a slave device that was begun by beginTransmission() and transmits
-  the bytes that were queued by write().
-       
-  */
-  void endTransmission();
+  Begin a transmission to the I2C slave device address specified by setDeviceAddress().
+  Subsequently, queue bytes for transmission with the i2cWrite() function and transmit them
+  by calling i2cEndTransmission().
 
-  /**
-       
-  Queues bytes for transmission from the App Extender to a slave device, in between calls to 
-  beginTransmission() and endTransmission().  
-      
-  @param data Adds one byte of information to the queue
-      
   */
-  void write(uint8_t data);
+  void i2cBeginTransmission();
 
   /**
 
-  Sends a request to the App Extender to read one byte of information from the I2C buffer and return 
-  the information to the arduino.  The relpies are handled by the readCallback() function.  
-     
+  Ends a transmission to a slave device that was begun by i2cBeginTransmission() and transmits
+  the bytes that were queued by i2cWrite().
+
   */
-  void read();
+  void i2cEndTransmission();
 
   /**
 
-  TODO: add documentation.
+  Queues bytes for transmission from the App Extender to an I2C slave device. Should be
+  called between calls to i2cBeginTransmission() and i2cEndTransmission().
+
+  @param data Adds one byte of information to the queue.
 
   */
-  int16_t readSync();
+  void i2cWrite(uint8_t data);
 
   /**
 
-  Sends a request to the App Extender to read multiple bytes of information from the I2C buffer and return 
-  the information to the arduino. The relpies are handled by the readCallback() function.  
-      
-  @param byteCount Sets the number of bytes to read from the I2C buffer
-      
+  Sends a request to the App Extender to read one byte of information from the I2C buffer.
+  The response gets handled through thecallback function set using i2cReadCallback().
+
   */
-  void wireRequest(uint8_t byteCount);
+  void i2cRead();
 
   /**
-       
-  This callback function is executed everytime it gets I2C information.  It passes
-  this information to the function specified in the argument.
+
+  Synchronous version of i2cRead(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The read byte, or -1 if timeout.
+
+  */
+  int i2cReadSync();
+
+  /**
+
+  Used by the master to request bytes from a slave device on the App Extender. The bytes may then be
+  retrieved with the i2cRead() function.
+
+  @param quantity The number of bytes to request.
       
+  */
+  void i2cRequestFrom(uint8_t quantity);
+
+  /**
+
+  Registers the function to be called when the Arduino receives read I2C data from the drone.
+
   @param function name of the method
 
   */
-  void readCallback(void (*cb)(byte));
+  void i2cReadCallback(void (*cb)(byte));
 
   /**
 
-  TODO: add documentation.
+  Registers the function to be called when the Arduino hasn't received a heartbeat from
+  the drone for 5 seconds.
 
   */
   void heartbeatLostCallback(void (*cb)(void));
 
   /**
 
-  TODO: add documentation.
+  Requests the drone's current battery voltage. The response gets handled through the
+  callback function set using voltageCallback().
 
   */
   void getVoltage();
 
   /**
 
-  TODO: add documentation.
+  Synchronous version of getVoltage(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's battery voltage, or -1 if timeout.
 
   */
-  int16_t getVoltageSync();
+  int getVoltageSync();
 
   /**
 
-  TODO: add documentation.
+  Registers the function to be called when the Arduino receives voltage data from the drone.
 
   */
   void voltageCallback(void (*cb)(uint8_t));
 
   /**
 
-  TODO: add documentation.
+  Requests the signal strength of the wireless communcation between the drone and sender.
+  The response gets handled through thecallback function set using signalStrengthCallback().
 
   */
   void getSignalStrength();
 
   /**
 
-  TODO: add documentation.
+  Synchronous version of getSignalStrength(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The signal strength, or -1 if timeout.
 
   */
-  int16_t getSignalStrengthSync();
+  int getSignalStrengthSync();
 
   /**
 
-  TODO: add documentation.
+  Registers the function to be called when the Arduino receives signal strength
+  data from the drone.
 
   */
   void signalStrengthCallback(void (*cb)(uint8_t));
 
   /**
 
-  TODO: add documentation.
+  Registers the function to be called when the Arduino receives an error code from the drone.
 
   */
   void setErrorHandler(void (*cb)(int16_t));
