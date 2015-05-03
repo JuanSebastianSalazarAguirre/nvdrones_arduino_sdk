@@ -70,8 +70,8 @@ void RC::throttleCallback(void (*cb)(int16_t)) {
   callbacks->throttle = cb;
 }
 
-void RC::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron){
-  long data = (long(rudder+100))+ (long(throttle+100) << 8) + (long(elevator+100) << 16) + (long(aileron+100) << 24);
+void RC::setAileronElevatorRudderThrottle(uint8_t aileron, uint8_t elevator, uint8_t rudder, uint8_t throttle) {
+  // TODO: implement
 }
 
 int16_t RC::getAileronSync() {

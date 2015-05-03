@@ -3,6 +3,9 @@
 #include "IncomingPacket.h"
 #include "Utils.h"
 
+
+// TODO: add error checking for valid pins/servos?
+
 GPIO::GPIO() {};
 
 GPIO::GPIO(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader) {
@@ -11,31 +14,42 @@ GPIO::GPIO(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_inc
   incomingPacketReader = _incomingPacketReader;
 }
 
-void GPIO::digitalWrite(uint8_t pin, bool logicLevel) {
-  serialIO->sendPacket((uint8_t)logicLevel, resourceID::digitalWrite, pin);
+void GPIO::digitalWrite(int16_t pin, bool logicLevel) {
+  serialIO->sendPacket((uint8_t)logicLevel, resourceID::digitalWrite, (uint8_t)pin);
 }
 
-void GPIO::pinMode(uint8_t pin, int logicLevel) {
-  serialIO->sendPacket((int16_t)logicLevel, resourceID::pinMode, pin);
+void GPIO::pinMode(int16_t pin, int16_t logicLevel) {
+  serialIO->sendPacket(logicLevel, resourceID::pinMode, (uint8_t)pin);
 }
 
-void GPIO::digitalRead(uint8_t pin) {
-  serialIO->sendPacket((int16_t)0, resourceID::digitalRead, pin);
+void GPIO::digitalRead(int16_t pin) {
+  serialIO->sendPacket((int16_t)0, resourceID::digitalRead, (uint8_t)pin);
 }
 
-void GPIO::analogWrite(uint8_t pin, uint8_t value) {
-  serialIO->sendPacket(value, resourceID::analogWrite, pin);
+void GPIO::analogWrite(int16_t pin, int16_t value) {
+  serialIO->sendPacket((uint8_t)value, resourceID::analogWrite, (uint8_t)pin);
 }
 
-void GPIO::pulseIn(uint8_t pin) {
-  serialIO->sendPacket((int16_t)0, resourceID::pulseIn, pin);
+void GPIO::pulseIn(int16_t pin, int16_t value) {
+  // combine the two values.
+  serialIO->sendPacket((int16_t)0, resourceID::pulseIn, (uint8_t)pin);
 }
 
-void GPIO::analogRead(uint8_t pin) {
-  serialIO->sendPacket((int16_t)0, resourceID::analogRead, pin);
+void GPIO::pulseIn(int16_t pin, int16_t value, uint32_t timeout) {
+  // combine the three values
+  serialIO->sendPacket((int16_t)0, resourceID::pulseIn, 0);
 }
 
-void GPIO::digitalReadCallback(void (*cb)(byte), uint8_t pin) {
+uint32_t GPIO::pulseInSync(int16_t pin, int16_t value) {
+  pulseIn(pin, value);
+  return Utils::blockForFloatData(resourceID::pulseIn, pin, incomingPacketReader);
+}
+
+void GPIO::analogRead(int16_t pin) {
+  serialIO->sendPacket((int16_t)0, resourceID::analogRead, (uint8_t)pin);
+}
+
+void GPIO::digitalReadCallback(void (*cb)(int16_t), int16_t pin) {
   if(pin == 1)
     callbacks->digitalRead1 = cb;
   else if(pin == 2)
@@ -58,13 +72,13 @@ void GPIO::digitalReadCallback(void (*cb)(byte), uint8_t pin) {
     callbacks->digitalRead10 = cb;
 }
 
-int16_t GPIO::digitalReadSync(uint8_t pin) {
+int16_t GPIO::digitalReadSync(int16_t pin) {
   digitalRead(pin);
   return Utils::blockForByteData(resourceID::digitalRead, pin, incomingPacketReader);
 }
 
 
-void GPIO::pulseInCallback(void (*cb)(long), uint8_t pin) {
+void GPIO::pulseInCallback(void (*cb)(uint32_t), int16_t pin) {
   if(pin == 1)
     callbacks->pulseIn1 = cb;
   if(pin == 2)
@@ -87,12 +101,7 @@ void GPIO::pulseInCallback(void (*cb)(long), uint8_t pin) {
     callbacks->pulseIn10 = cb;
 }
 
-long GPIO::pulseInSync(uint8_t pin) {
-  pulseIn(pin);
-  return Utils::blockForLongData(resourceID::pulseIn, pin, incomingPacketReader);
-}
-
-void GPIO::analogReadCallback(void (*cb)(byte), uint8_t pin) {
+void GPIO::analogReadCallback(void (*cb)(int16_t), int16_t pin) {
   if(pin == 1)
     callbacks->analogRead1 = cb;
   if(pin == 2)
@@ -103,17 +112,17 @@ void GPIO::analogReadCallback(void (*cb)(byte), uint8_t pin) {
     callbacks->analogRead4 = cb;
 }
 
-int GPIO::analogReadSync(uint8_t pin) {
+int GPIO::analogReadSync(int16_t pin) {
   analogRead(pin);
   return Utils::blockForByteData(resourceID::digitalRead, pin, incomingPacketReader);
 }
 
-void GPIO::interruptCallback(void (*cb)(void), uint8_t interrupt) {
+void GPIO::interruptCallback(void (*cb)(void), int16_t interrupt) {
   if (interrupt == 0) callbacks->interrupt0 = cb;
   if (interrupt == 1) callbacks->interrupt1 = cb;
 }
 
-void GPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
+void GPIO::attachServo(int16_t servoNumber, int16_t pin) {
   uint8_t actionID = 0;
   switch (servoNumber) {
     case 1:
@@ -130,10 +139,10 @@ void GPIO::attachServo(uint8_t servoNumber, uint8_t pin) {
       return;
   }
 
-  serialIO->sendPacket(pin, resourceID::servo, actionID);
+  serialIO->sendPacket((uint8_t)pin, resourceID::servo, actionID);
 }
 
-void GPIO::detachServo(uint8_t servoNumber) {
+void GPIO::detachServo(int16_t servoNumber) {
   uint8_t actionID = 0;
   switch (servoNumber) {
     case 1:
@@ -152,7 +161,7 @@ void GPIO::detachServo(uint8_t servoNumber) {
   serialIO->sendPacket((int16_t)0, resourceID::servo, actionID);
 }
 
-void GPIO::writeServo(uint8_t servoNumber, uint8_t data) {
+void GPIO::writeServo(int16_t servoNumber, int16_t data) {
   uint8_t actionID = 0;
   switch (servoNumber) {
     case 1:
@@ -168,5 +177,5 @@ void GPIO::writeServo(uint8_t servoNumber, uint8_t data) {
       // TODO: add error handling.
       return;
   }
-  serialIO->sendPacket(data, resourceID::servo, actionID);
+  serialIO->sendPacket((uint8_t)data, resourceID::servo, actionID);
 }

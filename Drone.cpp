@@ -50,7 +50,6 @@ Drone::Drone(int txPin, int rxPin) {
 // Initialization methods
 //
 
-// TODO: figure out how to make this work in the constructor.
 void Drone::initialize() {
   serialIO.softwareSerial.begin(57600);
 }
@@ -107,11 +106,11 @@ float Drone::getOrientationSync()   { return pose.getOrientationSync(); }
 //
 
 // Setters
-void Drone::setAileron(int8_t value)                 { rc.setAileron(value); }
-void Drone::setElevator(int8_t value)                { rc.setElevator(value); }
-void Drone::setThrottle(int8_t value)                { rc.setThrottle(value); }
-void Drone::setRudder(int8_t value)                  { rc.setRudder(value); }
-void Drone::setFlightMode(int8_t value)              { rc.setFlightMode(value); }
+void Drone::setAileron(int16_t value)                 { rc.setAileron(value); }
+void Drone::setElevator(int16_t value)                { rc.setElevator(value); }
+void Drone::setThrottle(int16_t value)                { rc.setThrottle(value); }
+void Drone::setRudder(int16_t value)                  { rc.setRudder(value); }
+void Drone::setFlightMode(int16_t value)              { rc.setFlightMode(value); }
 
 // Async Getters
 void Drone::getAileron()                             { rc.getAileron(); }
@@ -124,9 +123,9 @@ void Drone::flightModeCallback(void (*cb)(int16_t))  { rc.flightModeCallback(cb)
 void Drone::throttleCallback(void (*cb)(int16_t))    { rc.throttleCallback(cb); }
 void Drone::rudderCallback(void (*cb)(int16_t))      { rc.rudderCallback(cb); }
 void Drone::elevatorCallback(void (*cb)(int16_t))    { rc.elevatorCallback(cb); }
-void Drone::sendRTEA(uint8_t rudder, uint8_t throttle, uint8_t elevator, uint8_t aileron) {
-  // TODO: rename RTEA to something less cryptic
-  rc.sendRTEA(rudder, throttle, elevator, aileron);
+void Drone::setAileronElevatorRudderThrottle(int16_t aileron,
+  int16_t elevator, int16_t rudder, int16_t throttle) {
+  rc.setAileronElevatorRudderThrottle(aileron, elevator, rudder, throttle);
 }
 
 // Sync Getters
@@ -140,23 +139,26 @@ int16_t Drone::getFlightModeSync()                      { return rc.getFlightMod
 // GPIO Methods
 //
 
-void Drone::pinMode(uint8_t pin, int logicLevel)                 { gpio.pinMode(pin, logicLevel); }
-void Drone::digitalWrite(uint8_t pin, bool logicLevel)           { gpio.digitalWrite(pin, logicLevel); }
-void Drone::analogWrite(uint8_t pin, uint8_t value)              { gpio.analogWrite(pin, value); }
-void Drone::pulseIn(uint8_t pin)                                 { gpio.pulseIn(pin); }
-void Drone::digitalRead(uint8_t pin)                             { gpio.digitalRead(pin); }
-void Drone::analogRead(uint8_t pin)                              { gpio.analogRead(pin); }
-void Drone::digitalReadCallback(void (*cb)(uint8_t), int pin)    { gpio.digitalReadCallback(cb, pin); }
-void Drone::pulseInCallback(void (*cb)(long), uint8_t pin)       { gpio.pulseInCallback(cb, pin); }
-void Drone::analogReadCallback(void (*cb)(uint8_t), uint8_t pin) { gpio.analogReadCallback(cb, pin); }
-void Drone::attachServo(uint8_t servoNumber, uint8_t pin)        { gpio.attachServo(servoNumber, pin); }
-void Drone::detachServo(uint8_t servoNumber)                     { gpio.detachServo(servoNumber); }
-void Drone::writeServo(uint8_t servoNumber, uint8_t data)        { gpio.writeServo(servoNumber, data); }
+void Drone::pinMode(int16_t pin, int16_t logicLevel)              { gpio.pinMode(pin, logicLevel); }
+void Drone::digitalWrite(int16_t pin, bool logicLevel)            { gpio.digitalWrite(pin, logicLevel); }
+void Drone::analogWrite(int16_t pin, int16_t value)               { gpio.analogWrite(pin, value); }
+void Drone::pulseIn(int16_t pin, int16_t value)                   { gpio.pulseIn(pin, value); }
+void Drone::pulseIn(int16_t pin, int16_t value, uint32_t timeout) { gpio.pulseIn(pin, value, timeout); }
+void Drone::digitalRead(int16_t pin)                              { gpio.digitalRead(pin); }
+void Drone::analogRead(int16_t pin)                               { gpio.analogRead(pin); }
+void Drone::digitalReadCallback(void (*cb)(int16_t), int pin)     { gpio.digitalReadCallback(cb, pin); }
+void Drone::pulseInCallback(void (*cb)(uint32_t), int16_t pin)    { gpio.pulseInCallback(cb, pin); }
+void Drone::analogReadCallback(void (*cb)(int16_t), int16_t pin)  { gpio.analogReadCallback(cb, pin); }
+void Drone::attachServo(int16_t servoNumber, int16_t pin)         { gpio.attachServo(servoNumber, pin); }
+void Drone::detachServo(int16_t servoNumber)                      { gpio.detachServo(servoNumber); }
+void Drone::writeServo(int16_t servoNumber, int16_t data)         { gpio.writeServo(servoNumber, data); }
+void Drone::interruptCallback(void (*cb)(void), int16_t interrupt){ gpio.interruptCallback(cb, interrupt); }
 
 // Sync Getters
-int16_t Drone::pulseInSync(uint8_t pin)     { return gpio.pulseInSync(pin); }
-int16_t Drone::digitalReadSync(uint8_t pin) { return gpio.digitalReadSync(pin); }
-int16_t Drone::analogReadSync(uint8_t pin)  { return gpio.analogReadSync(pin); }
+uint32_t Drone::pulseInSync(int16_t pin, int16_t value)     { return gpio.pulseInSync(pin, value); }
+uint32_t Drone::pulseInSync(int16_t pin, int16_t value, uint32_t timeout)     { return gpio.pulseInSync(pin, value, timeout); }
+int16_t Drone::digitalReadSync(int16_t pin) { return gpio.digitalReadSync(pin); }
+int16_t Drone::analogReadSync(int16_t pin)  { return gpio.analogReadSync(pin); }
 
 
 
@@ -164,16 +166,16 @@ int16_t Drone::analogReadSync(uint8_t pin)  { return gpio.analogReadSync(pin); }
 // I2C Methods
 //
 
-void Drone::setDeviceAddress(uint8_t id)      { i2c.setDeviceAddress(id); }
-void Drone::beginTransmission()               { i2c.beginTransmission(); }
-void Drone::endTransmission()                 { i2c.endTransmission(); }
-void Drone::write(uint8_t data)               { i2c.write(data); }
-void Drone::read()                            { i2c.read(); }
-void Drone::wireRequest(uint8_t byteCount)    { i2c.wireRequest(byteCount); }
-void Drone::readCallback(void (*cb)(uint8_t)) { i2c.readCallback(cb); }
+void Drone::i2cSetDeviceAddress(int16_t id)      { i2c.setDeviceAddress(id); }
+void Drone::i2cBeginTransmission()               { i2c.beginTransmission(); }
+void Drone::i2cEndTransmission()                 { i2c.endTransmission(); }
+void Drone::i2cWrite(int16_t data)               { i2c.write(data); }
+void Drone::i2cRead()                            { i2c.read(); }
+void Drone::i2cRequestFrom(int16_t byteCount)    { i2c.wireRequest(byteCount); }
+void Drone::i2cReadCallback(void (*cb)(uint8_t)) { i2c.readCallback(cb); }
 
 // Sync Getters
-int16_t Drone::readSync() { return i2c.readSync(); }
+int16_t Drone::i2cReadSync() { return i2c.readSync(); }
 
 //
 // Vitals Methods
@@ -183,9 +185,9 @@ void Drone::heartbeatLostCallback(void (*cb)(void)) { vitals.heartbeatLostCallba
 
 void Drone::getVoltage() { vitals.getVoltage(); }
 int16_t Drone::getVoltageSync() { return vitals.getVoltageSync(); }
-void Drone::voltageCallback(void (*cb)(uint8_t)) { vitals.voltageCallback(cb); }
+void Drone::voltageCallback(void (*cb)(int16_t)) { vitals.voltageCallback(cb); }
 
 void Drone::getSignalStrength() { vitals.getSignalStrength(); }
 int16_t Drone::getSignalStrengthSync() { return vitals.getSignalStrengthSync(); }
-void Drone::signalStrengthCallback(void (*cb)(uint8_t)) { vitals.signalStrengthCallback(cb); }
+void Drone::signalStrengthCallback(void (*cb)(int16_t)) { vitals.signalStrengthCallback(cb); }
 void Drone::setErrorHandler(void (*cb)(int16_t)) { vitals.setErrorHandler(cb); }

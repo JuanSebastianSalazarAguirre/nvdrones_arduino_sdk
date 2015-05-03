@@ -14,11 +14,11 @@ public:
 
   void getVoltage();
   int16_t getVoltageSync();
-  void voltageCallback(void (*cb)(uint8_t));
+  void voltageCallback(void (*cb)(int16_t));
 
   void getSignalStrength();
   int16_t getSignalStrengthSync();
-  void signalStrengthCallback(void (*cb)(uint8_t));
+  void signalStrengthCallback(void (*cb)(int16_t));
 
   void tick();
   void receiveHeartbeat();

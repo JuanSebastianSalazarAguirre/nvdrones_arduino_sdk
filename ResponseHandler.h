@@ -7,9 +7,7 @@
 #include "IncomingPacketReader.h"
 #include "Vitals.h"
 
-//\cond
 class ResponseHandler
-//\endcond
 {
   private:
     SerialIO *serialIO;

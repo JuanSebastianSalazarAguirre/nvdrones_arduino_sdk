@@ -497,7 +497,7 @@ public:
   @param pin The pin number. Pins 1 to 8 are available.
 
   */
-  void digitalReadCallback(void (*cb)(byte), int pin);
+  void digitalReadCallback(void (*cb)(int), int pin);
 
   /**
 
@@ -539,7 +539,7 @@ public:
   @param pin The pin number. Pins 1 to 8 are available.
 
   */
-  void analogReadCallback(void (*cb)(byte), int pin);
+  void analogReadCallback(void (*cb)(int), int pin);
 
   /**
 
@@ -581,8 +581,8 @@ public:
   pulse length was received from the drone.
 
   */
-  void pulseInSync(int pin, int value);
-  void pulseInSync(int pin, int value, unsigned long timeout);
+  unsigned long pulseInSync(int pin, int value);
+  unsigned long pulseInSync(int pin, int value, unsigned long timeout);
 
   /**
 
@@ -592,7 +592,7 @@ public:
   @param pin The pin number. Pins 1 to 8 are available.
    
   */
-  void pulseInCallback(void (*cb)(long), int pin);
+  void pulseInCallback(void (*cb)(unsigned long), int pin);
 
   /**
 
@@ -627,6 +627,17 @@ public:
 
   */
   void writeServo(int servoNumber, int angle);
+
+  /**
+
+  Registers the function to be called when the Arduino is notified by the drone that
+  an interrupt occurred.
+
+  @param cb The function to be called when the Arduino is notified of an interrupt.
+  @param interrupt The interrupt number. Interrupt 0 and 1 are available.
+
+  */
+  void interruptCallback(void (*cb)(void), int interrupt);
 
   /**
 

@@ -24,7 +24,7 @@ int16_t Vitals::getVoltageSync() {
   return Utils::blockForByteData(resourceID::vitals, actionID::getVoltage, _incomingPacketReader);
 }
 
-void Vitals::voltageCallback(void (*cb)(uint8_t)) {
+void Vitals::voltageCallback(void (*cb)(int16_t)) {
   _callbacks->voltage = cb;
 }
 
@@ -39,7 +39,7 @@ int16_t Vitals::getSignalStrengthSync() {
   return Utils::blockForByteData(resourceID::vitals, actionID::getSignalStrength, _incomingPacketReader);
 }
 
-void Vitals::signalStrengthCallback(void (*cb)(uint8_t)) {
+void Vitals::signalStrengthCallback(void (*cb)(int16_t)) {
   _callbacks->signalStrength = cb;
 }
 
