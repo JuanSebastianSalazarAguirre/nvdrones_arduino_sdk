@@ -202,7 +202,7 @@ public:
   @param cb The function to be called with the drone's satellite count.
        
   */
-  void satelliteCallback(void (*cb)(int16_t));
+  void satelliteCallback(void (*cb)(int));
 
   /**
        
@@ -282,7 +282,7 @@ public:
   @return The drone's aileron value, or -1 if timeout.
 
   */
-  int16_t getAileronSync();
+  int getAileronSync();
 
   /**
 
@@ -291,7 +291,7 @@ public:
   @param cb The function to be called with the drone's aileron value.
 
   */
-  void aileronCallback(void (*cb)(int16_t));
+  void aileronCallback(void (*cb)(int));
 
   /**
 
@@ -300,7 +300,7 @@ public:
   @param value The new aileron value.
 
   */
-  void setAileron(int8_t value);
+  void setAileron(int value);
 
   /**
 
@@ -318,7 +318,7 @@ public:
   @return The drone's elevator value, or -1 if timeout.
 
   */
-  int16_t getElevatorSync();
+  int getElevatorSync();
 
   /**
 
@@ -327,7 +327,7 @@ public:
   @param cb The function to be called with the drone's elevator value.
 
   */
-  void elevatorCallback(void (*cb)(int16_t));
+  void elevatorCallback(void (*cb)(int));
 
   /**
 
@@ -336,7 +336,7 @@ public:
   @param value The new elevator value.
 
   */
-  void setElevator(int8_t value);
+  void setElevator(int value);
 
   /**
 
@@ -354,7 +354,7 @@ public:
   @return The drone's rudder value, or -1 if timeout.
 
   */
-  int16_t getRudderSync();
+  int getRudderSync();
 
   /**
 
@@ -363,7 +363,7 @@ public:
   @param cb The function to be called with the drone's rudder value.
 
   */
-  void rudderCallback(void (*cb)(int16_t));
+  void rudderCallback(void (*cb)(int));
 
   /**
 
@@ -372,7 +372,7 @@ public:
   @param value The new rudder value.
 
   */
-  void setRudder(int8_t value);
+  void setRudder(int value);
 
   /**
 
@@ -390,7 +390,7 @@ public:
   @return The drone's throttle value, or -1 if timeout.
 
   */
-  int16_t getThrottleSync();
+  int getThrottleSync();
 
   /**
 
@@ -399,7 +399,7 @@ public:
   @param cb The function to be called with the drone's throttle value.
 
   */
-  void throttleCallback(void (*cb)(int16_t));
+  void throttleCallback(void (*cb)(int));
 
   /**
 
@@ -408,7 +408,7 @@ public:
   @param value The new throttle value.
 
   */
-  void setThrottle(int8_t value);
+  void setThrottle(int value);
 
   /**
 
@@ -418,7 +418,7 @@ public:
   @return The drone's flight mode, or -1 if timeout.
 
   */
-  int16_t getFlightModeSync();
+  int getFlightModeSync();
 
   /**
 
@@ -435,7 +435,7 @@ public:
   @param cb The function to be called with the drone's flight mode.
 
   */
-  void flightModeCallback(void (*cb)(int16_t));
+  void flightModeCallback(void (*cb)(int));
 
   /**
 
@@ -444,7 +444,7 @@ public:
   @param value The new flight mode value.
 
   */
-  void setFlightMode(int8_t value);
+  void setFlightMode(int value);
 
   /**
 
@@ -456,7 +456,7 @@ public:
   @param throttle The new throttle value.
 
   */
-  void setAileronElevatorRudderThrottle(uint8_t aileron, uint8_t elevator, uint8_t rudder, uint8_t throttle);
+  void setAileronElevatorRudderThrottle(int aileron, int elevator, int rudder, int throttle);
 
   /**
    
@@ -466,7 +466,7 @@ public:
   @param mode INPUT or OUTPUT.
    
   */
-  void pinMode(uint8_t pin, int mode);
+  void pinMode(int pin, int mode);
 
   /**
 
@@ -476,7 +476,7 @@ public:
   @param pin The pin number. Pins 1 to 8 are available.
 
   */
-  void digitalRead(uint8_t pin);
+  void digitalRead(int pin);
 
   /**
 
@@ -486,7 +486,7 @@ public:
   @return HIGH or LOW, or -1 if timeout.
 
   */
-  int digitalReadSync(uint8_t pin);
+  int digitalReadSync(int pin);
 
   /**
 
@@ -507,7 +507,7 @@ public:
   @param logicLevel HIGH or LOW.
 
   */
-  void digitalWrite(uint8_t pin, bool logicLevel);
+  void digitalWrite(int pin, bool logicLevel);
 
   /**
 
@@ -517,7 +517,7 @@ public:
   @param pin The pin number. Pins 1 to 8 are available.
 
   */
-  void analogRead(uint8_t pin);
+  void analogRead(int pin);
 
   /**
 
@@ -528,7 +528,7 @@ public:
   @return 0 to 1023, or -1 if timeout.
 
   */
-  int analogReadSync(uint8_t pin);
+  int analogReadSync(int pin);
 
   /**
    
@@ -539,7 +539,7 @@ public:
   @param pin The pin number. Pins 1 to 8 are available.
 
   */
-  void analogReadCallback(void (*cb)(byte), uint8_t pin);
+  void analogReadCallback(void (*cb)(byte), int pin);
 
   /**
 
@@ -551,7 +551,7 @@ public:
   @param value The duty cycle ranging from 0 (always off) and 255 (always on).
 
   */
-  void analogWrite(uint8_t pin, uint8_t value);
+  void analogWrite(int pin, int value);
 
   /**
 
@@ -592,7 +592,7 @@ public:
   @param pin The pin number. Pins 1 to 8 are available.
    
   */
-  void pulseInCallback(void (*cb)(long), uint8_t pin);
+  void pulseInCallback(void (*cb)(long), int pin);
 
   /**
 
@@ -602,7 +602,7 @@ public:
   @param pin The pin number to attach the servo to. Pins 1 to 8 are available.
 
   */
-  void attachServo(uint8_t servoNumber, uint8_t pin);
+  void attachServo(int servoNumber, int pin);
 
   /**
 
@@ -611,7 +611,7 @@ public:
   @param servoNumber The servo to detach. Values should be 1 to 3.
 
   */
-  void detachServo(uint8_t servoNumber);
+  void detachServo(int servoNumber);
 
   /**
 
@@ -626,7 +626,7 @@ public:
   @param angle The value to write to the servo, from 0 to 180.
 
   */
-  void writeServo(uint8_t servoNumber, uint8_t angle);
+  void writeServo(int servoNumber, int angle);
 
   /**
 
@@ -637,7 +637,7 @@ public:
   @param address The I2C device's slave address. Available address range from 0 to 127.
 
   */
-  void i2cSetDeviceAddress(uint8_t address);
+  void i2cSetDeviceAddress(int address);
 
   /**
 
@@ -664,7 +664,7 @@ public:
   @param data Adds one byte of information to the queue.
 
   */
-  void i2cWrite(uint8_t data);
+  void i2cWrite(int data);
 
   /**
 
@@ -692,7 +692,7 @@ public:
   @param quantity The number of bytes to request.
       
   */
-  void i2cRequestFrom(uint8_t quantity);
+  void i2cRequestFrom(int quantity);
 
   /**
 
@@ -734,7 +734,7 @@ public:
   Registers the function to be called when the Arduino receives voltage data from the drone.
 
   */
-  void voltageCallback(void (*cb)(uint8_t));
+  void voltageCallback(void (*cb)(int));
 
   /**
 
@@ -760,14 +760,14 @@ public:
   data from the drone.
 
   */
-  void signalStrengthCallback(void (*cb)(uint8_t));
+  void signalStrengthCallback(void (*cb)(int));
 
   /**
 
   Registers the function to be called when the Arduino receives an error code from the drone.
 
   */
-  void setErrorHandler(void (*cb)(int16_t));
+  void setErrorHandler(void (*cb)(int));
 
 };
 
