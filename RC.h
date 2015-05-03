@@ -1,5 +1,6 @@
-#ifndef __ArduinoSDK__RC__
-#define __ArduinoSDK__RC__
+
+#ifndef NVRC_h
+#define NVRC_h
 
 #include "Callback.h"
 #include "SerialIO.h"
@@ -44,4 +45,4 @@ public:
   int16_t getFlightModeSync();
 };
 
-#endif /* __ArduinoSDK__RC__ */
+#endif // NVRC_h

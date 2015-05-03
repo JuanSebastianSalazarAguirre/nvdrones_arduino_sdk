@@ -1,5 +1,6 @@
-#ifndef __ArduinoSDK__I2C__
-#define __ArduinoSDK__I2C__
+
+#ifndef NVI2C_h
+#define NVI2C_h
 
 #include "SerialIO.h"
 #include "Callback.h"
@@ -37,4 +38,4 @@ class I2C
     void readCallback(void (*cb)(uint8_t));
 };
 
-#endif /* defined __ArduinoSDK__I2C__ */
+#endif // NVI2C_h

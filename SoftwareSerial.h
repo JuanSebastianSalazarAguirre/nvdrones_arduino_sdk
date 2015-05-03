@@ -18,8 +18,8 @@ The latest version of this library can always be found at
 http://arduiniana.org.
 */
 
-#ifndef __ArduinoSDK__SoftwareSerial__
-#define __ArduinoSDK__SoftwareSerial__
+#ifndef SoftwareSerial_h
+#define SoftwareSerial_h
 
 // When set, _DEBUG co-opts pins 11 and 13 for debugging with an
 // oscilloscope or logic analyzer.  Beware: it also slightly modifies
@@ -97,4 +97,4 @@ class SoftwareSerial : public Stream
     static inline void handle_interrupt();
 };
 
-#endif /* defined __ArduinoSDK__SoftwareSerial__ */
+#endif

@@ -1,6 +1,6 @@
 
-#ifndef __ArduinoSDK__Callback__
-#define __ArduinoSDK__Callback__
+#ifndef NVCallbacks_h
+#define NVCallbacks_h
 
 #include <inttypes.h>
 
@@ -68,4 +68,4 @@ class Callback
     void (*errorHandler)(int16_t);
 };
 
-#endif /* defined __ArduinoSDK__Callback__ */
+#endif // NVCallbacks_h

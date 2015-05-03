@@ -1,6 +1,6 @@
 
-#ifndef IncomingPacket_h
-#define IncomingPacket_h
+#ifndef NVIncomingPacket_h
+#define NVIncomingPacket_h
 
 #include <inttypes.h>
 
@@ -23,4 +23,4 @@ public:
   static const IncomingPacket emptyPacket;
 };
 
-#endif // IncomingPacket_h
+#endif // NVIncomingPacket_h

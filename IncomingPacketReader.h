@@ -1,6 +1,6 @@
 
-#ifndef IncomingPacketReader_h
-#define IncomingPacketReader_h
+#ifndef NVIncomingPacketReader_h
+#define NVIncomingPacketReader_h
 
 #include "IncomingPacketReader.h"
 #include "IncomingPacket.h"
@@ -16,4 +16,4 @@ private:
   SerialIO *_serialIO;
 };
 
-#endif // IncomingPacketReader_h
+#endif // NVIncomingPacketReader_h

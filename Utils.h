@@ -1,6 +1,6 @@
 
-#ifndef Utils_h
-#define Utils_h
+#ifndef NVUtils_h
+#define NVUtils_h
 
 #include <inttypes.h>
 #include "IncomingPacket.h"
@@ -19,4 +19,4 @@ namespace Utils
   IncomingPacket blockForPacket(int16_t rID, int16_t aID, IncomingPacketReader *incomingPacketReader);
 }
 
-#endif // Utils_h
+#endif // NVUtils_h

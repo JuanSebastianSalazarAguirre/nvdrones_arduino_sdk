@@ -1,5 +1,6 @@
-#ifndef __ArduinoSDK__Pose__
-#define __ArduinoSDK__Pose__
+
+#ifndef NVPose_h
+#define NVPose_h
 
 #import "SerialIO.h"
 #import "Callback.h"
@@ -42,4 +43,4 @@ public:
   float getOrientationSync();
 };
 
-#endif /* defined __ArduinoSDK__Pose__ */
+#endif // NVPose_h

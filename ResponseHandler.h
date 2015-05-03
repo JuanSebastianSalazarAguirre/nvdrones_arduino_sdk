@@ -1,5 +1,5 @@
-#ifndef __ArduinoSDK__ResponseHandler__
-#define __ArduinoSDK__ResponseHandler__
+#ifndef NVResponseHandler_h
+#define NVResponseHandler_h
 
 #include "SerialIO.h"
 #include "Callback.h"
@@ -20,4 +20,4 @@ class ResponseHandler
     void listen();
 };
 
-#endif /* defined __ArduinoSDK__ResponseHandler__ */
+#endif // NVResponseHandler_h

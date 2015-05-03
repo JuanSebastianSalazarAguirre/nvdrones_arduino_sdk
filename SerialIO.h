@@ -1,6 +1,6 @@
 
-#ifndef __ArduinoSDK__SerialIO__
-#define __ArduinoSDK__SerialIO__
+#ifndef NVSerialIO_h
+#define NVSerialIO_h
 
 #include <inttypes.h>
 #include "SoftwareSerial.h"
@@ -37,4 +37,4 @@ class SerialIO
     void print(String data);
 };
 
-#endif /* defined __ArduinoSDK__SerialIO__ */
+#endif // NVSerialIO_h

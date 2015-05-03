@@ -16,8 +16,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
 
-#ifndef __ArduinoSDK__Drone__
-#define __ArduinoSDK__Drone__
+#ifndef NVDrone_h
+#define NVDrone_h
 
 #include <inttypes.h>
 #include <Stream.h>
@@ -782,4 +782,4 @@ public:
 
 };
 
-#endif /* defined __ArduinoSDK__Drone__ */
+#endif // NVDrone_h

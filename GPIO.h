@@ -1,5 +1,6 @@
-#ifndef __ArduinoSDK__GPIO__
-#define __ArduinoSDK__GPIO__
+
+#ifndef NVGPIO_h
+#define NVGPIO_h
 
 #include "SerialIO.h"
 #include "Callback.h"
@@ -35,4 +36,4 @@ class GPIO
     void writeServo(int16_t servoNumber, int16_t data);
 };
 
-#endif /* defined __ArduinoSDK__GPIO__ */
+#endif // NVGPIO_h

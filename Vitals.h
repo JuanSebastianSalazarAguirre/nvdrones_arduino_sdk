@@ -1,6 +1,6 @@
 
-#ifndef Vital_h
-#define Vital_h
+#ifndef NVVitals_h
+#define NVVitals_h
 
 #include <inttypes.h>
 #include "SerialIO.h"
@@ -40,4 +40,4 @@ private:
   static const uint32_t _allowableHeartbeatSilencePeriod = 5000; // TODO: should this be settable?  
 };
 
-#endif // Vital_h
+#endif // NVVitals_h
