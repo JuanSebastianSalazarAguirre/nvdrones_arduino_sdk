@@ -29,6 +29,10 @@ int Utils::dataToInt(uint8_t data[]) {
  return data_int; 
 }
 
+uint16_t combine(uint8_t high, uint8_t low) {
+  return (high << 8) | (low & 0xff);
+}
+
 // NOTE: this returns and int, rather than a byte, in order to return -1.
 int16_t Utils::blockForByteData(int16_t rID, int16_t aID, IncomingPacketReader *incomingPacketReader) {
   IncomingPacket p = blockForPacket(rID, aID, incomingPacketReader);
