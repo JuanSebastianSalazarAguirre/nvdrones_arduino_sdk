@@ -33,13 +33,17 @@ void GPIO::analogWrite(int16_t pin, int16_t value) {
 }
 
 void GPIO::pulseIn(int16_t pin, int16_t value) {
-  uint16_t combined = Utils::combine(pin, value);
-  _serialIO->sendPacket((int16_t)0, resourceID::pulseIn, combined);
+  _serialIO->sendPacket((uint8_t)value, resourceID::pulseIn, pin);
 }
 
 void GPIO::pulseIn(int16_t pin, int16_t value, uint32_t timeout) {
-  // combine the three values
-  _serialIO->sendPacket((int16_t)0, resourceID::pulseIn, 0);
+  uint8_t *combined = NULL;
+  combined[0] = uint8_t(value);
+  combined[1] = (timeout >> 24) | (0xf);
+  combined[2] = (timeout >> 16) | (0xf);
+  combined[3] = (timeout >> 8) | (0xf);
+  combined[4] = timeout | 0xf;
+  _serialIO->sendPacket(combined, 5, resourceID::pulseIn, (uint8_t)pin);
 }
 
 uint32_t GPIO::pulseInSync(int16_t pin, int16_t value) {
