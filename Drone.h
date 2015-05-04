@@ -709,7 +709,7 @@ public:
 
   Registers the function to be called when the Arduino receives read I2C data from the drone.
 
-  @param function name of the method
+  @param cb The function to be called with the read I2C data.
 
   */
   void i2cReadCallback(void (*cb)(byte));
@@ -718,6 +718,8 @@ public:
 
   Registers the function to be called when the Arduino hasn't received a heartbeat from
   the drone for 5 seconds.
+
+  @param cb The function to be called when the heartbeat is lost.
 
   */
   void heartbeatLostCallback(void (*cb)(void));
