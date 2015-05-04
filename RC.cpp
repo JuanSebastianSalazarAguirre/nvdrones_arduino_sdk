@@ -72,8 +72,13 @@ void RC::throttleCallback(void (*cb)(int16_t)) {
   _callbacks->throttle = cb;
 }
 
-void RC::setAileronElevatorRudderThrottle(uint8_t aileron, uint8_t elevator, uint8_t rudder, uint8_t throttle) {
-  // TODO: implement
+void RC::setAileronElevatorRudderThrottle(int16_t aileron, int16_t elevator, int16_t rudder, int16_t throttle) {
+  uint8_t *combined = NULL;
+  combined[0] = aileron;
+  combined[1] = elevator;
+  combined[2] = rudder;
+  combined[3] = throttle;
+  _serialIO->sendPacket(combined, 4, resourceID::rc, actionID::setAileronElevatorRudderThrottle);
 }
 
 int16_t RC::getAileronSync() {

@@ -186,6 +186,19 @@ void SerialIO::sendPacket(float data, uint8_t resourceID, uint8_t actionID) {
   write((4+resourceID+actionID+u.b[0]+u.b[1]+u.b[2]+u.b[3])%256);
 }
 
+void SerialIO::sendPacket(uint8_t *data, uint8_t length, uint8_t resourceID, uint8_t actionID) {
+  write('$');
+  write(length);
+  write(resourceID);
+  write(actionID);
+  uint8_t sum = length+resourceID+actionID;
+  for (uint8_t i=0; i<length; i++) {
+    write(data[i]);
+    sum += data[i];
+  }
+  write(sum%256);
+}
+
 void SerialIO::print(String data) {
   switch(selectedSerialPort) {
     case serialPort0:

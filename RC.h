@@ -37,7 +37,7 @@ public:
   void throttleCallback(void (*function)(int16_t));
   void rudderCallback(void (*function)(int16_t));
   void elevatorCallback(void (*function)(int16_t));
-  void setAileronElevatorRudderThrottle(uint8_t aileron, uint8_t elevator, uint8_t rudder, uint8_t throttle);
+  void setAileronElevatorRudderThrottle(int16_t aileron, int16_t elevator, int16_t rudder, int16_t throttle);
   int16_t getAileronSync();
   int16_t getElevatorSync();
   int16_t getThrottleSync();
