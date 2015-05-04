@@ -95,6 +95,7 @@ int16_t SerialIO::read() {
     default:
       Serial.println("Error: incorrectly configured serial settings.");
   }
+  return -1;
 }
 
 // TODO: rename to something more intelligent
@@ -135,6 +136,7 @@ bool SerialIO::available() {
     default:
       Serial.println("Error: incorrectly configured serial settings.");
   }
+  return false;
 }
 
 void SerialIO::sendPacket(uint8_t data, uint8_t resourceID, uint8_t actionID) {
