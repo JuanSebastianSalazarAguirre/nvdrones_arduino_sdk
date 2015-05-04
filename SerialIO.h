@@ -16,25 +16,25 @@ enum SerialPort {
 
 class SerialIO
 {
-  private:
-    SerialPort selectedSerialPort;
-  public:
+private:
+  SerialPort selectedSerialPort;
+public:
 
-    SerialIO();
-    SerialIO(int txPin , int rxPin);
-    SerialIO(SerialPort serialPort);
+  SerialIO();
+  SerialIO(int txPin , int rxPin);
+  SerialIO(SerialPort serialPort);
 
-    SoftwareSerial softwareSerial;
+  SoftwareSerial softwareSerial;
 
-    void write(uint8_t data);
-    int16_t read();
-    int16_t multipleRead(uint16_t count);
-    bool available();
-    void sendPacket(int16_t data, uint8_t resourceID, uint8_t actionID);
-    void sendPacket(uint8_t data, uint8_t resourceID, uint8_t actionID);
-    void sendPacket(int8_t data, uint8_t resourceID, uint8_t actionID);
-    void sendPacket(float data, uint8_t resourceID, uint8_t actionID);
-    void print(String data);
+  void write(uint8_t data);
+  int16_t read();
+  int16_t multipleRead(uint16_t count);
+  bool available();
+  void sendPacket(int16_t data, uint8_t resourceID, uint8_t actionID);
+  void sendPacket(uint8_t data, uint8_t resourceID, uint8_t actionID);
+  void sendPacket(int8_t data, uint8_t resourceID, uint8_t actionID);
+  void sendPacket(float data, uint8_t resourceID, uint8_t actionID);
+  void print(String data);
 };
 
 #endif // NVSerialIO_h

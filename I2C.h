@@ -20,22 +20,22 @@ class I2C
  
  */
 {
-  private:
-    SerialIO *_serialIO;
-    Callback *_callbacks;
-    IncomingPacketReader *_incomingPacketReader;
-  public:
-    I2C();
-    I2C(SerialIO *serialIO, Callback *callback, IncomingPacketReader *incomingPacketReader);
+private:
+  SerialIO *_serialIO;
+  Callback *_callbacks;
+  IncomingPacketReader *_incomingPacketReader;
+public:
+  I2C();
+  I2C(SerialIO *serialIO, Callback *callback, IncomingPacketReader *incomingPacketReader);
 
-    void setDeviceAddress(int16_t address);
-    void wireRequest(int16_t quantity);
-    void beginTransmission();
-    void endTransmission();
-    void write(int16_t data);
-    void read();
-    int16_t readSync();
-    void readCallback(void (*cb)(uint8_t));
+  void setDeviceAddress(int16_t address);
+  void wireRequest(int16_t quantity);
+  void beginTransmission();
+  void endTransmission();
+  void write(int16_t data);
+  void read();
+  int16_t readSync();
+  void readCallback(void (*cb)(uint8_t));
 };
 
 #endif // NVI2C_h
