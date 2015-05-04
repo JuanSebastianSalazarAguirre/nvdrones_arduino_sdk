@@ -556,18 +556,32 @@ public:
   /**
 
   Reads a pulse (either HIGH or LOW) on a pin on the App Extender. For example, if value is HIGH,
-  pulseIn() waits for the pin to go HIGH, starts timing, then waits for the pin to go LOW and
+  pulseIn waits for the pin to go HIGH, starts timing, then waits for the pin to go LOW and
   stops timing. Returns the length of the pulse in microseconds. Gives up and returns 0 if no
-  pulse starts within a specified time out.
+  pulse starts within 3000 microseconds.
+
+  The response gets handled through the callback function set using pulseInCallback().
+
+  @param pin The pin number. Pins 1 to 8 are available.
+  @param value The type of the pulse to read. Either HIGH or LOW.
+
+  */
+  void pulseIn(int pin, int value);
+
+  /**
+
+  Reads a pulse (either HIGH or LOW) on a pin on the App Extender. For example, if value is HIGH,
+  pulseIn waits for the pin to go HIGH, starts timing, then waits for the pin to go LOW and
+  stops timing. Returns the length of the pulse in microseconds. Gives up and returns 0 if no
+  pulse starts within the specified timeout.
 
   The response gets handled through thecallback function set using pulseInCallback().
 
   @param pin The pin number. Pins 1 to 8 are available.
   @param value The type of the pulse to read. Either HIGH or LOW.
-  @param pin (optional) The number of microseconds to wait for the pulse to start. Default is 3000 microseconds.
+  @param timeout The number of microseconds to wait for the pulse to start.
 
   */
-  void pulseIn(int pin, int value);
   void pulseIn(int pin, int value, unsigned long timeout);
 
   /**
@@ -576,12 +590,23 @@ public:
 
   @param pin The pin number. Pins 1 to 8 are available.
   @param value The type of the pulse to read. Either HIGH or LOW.
-  @param pin (optional) The number of microseconds to wait for the pulse to start. Default is 3000 microseconds.
   @return The length of the pulse (in microseconds), 0 if no pulse detected, or -1 if no
   pulse length was received from the drone.
 
   */
   unsigned long pulseInSync(int pin, int value);
+
+  /**
+
+  Synchronous version of pulseIn(). Waits up to 1 second to receive a response.
+
+  @param pin The pin number. Pins 1 to 8 are available.
+  @param value The type of the pulse to read. Either HIGH or LOW.
+  @param timeout The number of microseconds to wait for the pulse to start.
+  @return The length of the pulse (in microseconds), 0 if no pulse detected, or -1 if no
+  pulse length was received from the drone.
+
+  */
   unsigned long pulseInSync(int pin, int value, unsigned long timeout);
 
   /**
