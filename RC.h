@@ -15,12 +15,12 @@ class RC //handles sending values to the PWM/PPM port(s)
 */
 {
 private:
-  SerialIO *serialIO;
-  Callback *callbacks;
-  IncomingPacketReader *incomingPacketReader;
+  SerialIO *_serialIO;
+  Callback *_callbacks;
+  IncomingPacketReader *_incomingPacketReader;
 public:
   RC();
-  RC(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader);
+  RC(SerialIO *serialIO, Callback *callbacks, IncomingPacketReader *incomingPacketReader);
 
   void setAileron(int8_t value);
   void setElevator(int8_t value);

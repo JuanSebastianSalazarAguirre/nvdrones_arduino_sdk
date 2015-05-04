@@ -34,15 +34,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 class Drone 
 {
 private:
-  RC rc;
-  SerialIO serialIO;
-  GPIO gpio;
-  IncomingPacketReader incomingPacketReader;
-  Vitals vitals;
-  ResponseHandler responseHandler;
-  I2C i2c;
-  Callback callback;
-  Pose pose;
+  RC _rc;
+  SerialIO _serialIO;
+  GPIO _gpio;
+  IncomingPacketReader _incomingPacketReader;
+  Vitals _vitals;
+  ResponseHandler _responseHandler;
+  I2C _i2c;
+  Callback _callback;
+  Pose _pose;
 
 public:
 

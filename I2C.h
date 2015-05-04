@@ -21,12 +21,12 @@ class I2C
  */
 {
   private:
-    SerialIO *serialIO;
-    Callback *callbacks;
-    IncomingPacketReader *incomingPacketReader;
+    SerialIO *_serialIO;
+    Callback *_callbacks;
+    IncomingPacketReader *_incomingPacketReader;
   public:
     I2C();
-    I2C(SerialIO *_serialIO, Callback *_callback, IncomingPacketReader *_incomingPacketReader);
+    I2C(SerialIO *serialIO, Callback *callback, IncomingPacketReader *incomingPacketReader);
 
     void setDeviceAddress(int16_t address);
     void wireRequest(int16_t quantity);

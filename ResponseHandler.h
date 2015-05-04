@@ -10,13 +10,13 @@
 class ResponseHandler
 {
   private:
-    SerialIO *serialIO;
-    Callback *callbacks;
-    Vitals *vitals;
-    IncomingPacketReader *incomingPacketReader;
+    SerialIO *_serialIO;
+    Callback *_callbacks;
+    Vitals *_vitals;
+    IncomingPacketReader *_incomingPacketReader;
   public:
     ResponseHandler();
-    ResponseHandler(SerialIO *_serialIO, IncomingPacketReader *_incomingPacketReader, Callback *_callbacks, Vitals *_vitals);
+    ResponseHandler(SerialIO *serialIO, IncomingPacketReader *incomingPacketReader, Callback *callbacks, Vitals *vitals);
     void listen();
 };
 

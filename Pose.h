@@ -15,12 +15,12 @@ class Pose
  */
 {
 private:
-  SerialIO *serialIO;
-  Callback *callbacks;
-  IncomingPacketReader *incomingPacketReader;
+  SerialIO *_serialIO;
+  Callback *_callbacks;
+  IncomingPacketReader *_incomingPacketReader;
 public:
   Pose();
-  Pose(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader);
+  Pose(SerialIO *serialIO, Callback *callbacks, IncomingPacketReader *incomingPacketReader);
 
   void getGPSData();
   void getLongitude();

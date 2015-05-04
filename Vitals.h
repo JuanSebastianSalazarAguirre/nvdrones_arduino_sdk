@@ -7,7 +7,8 @@
 #include "Callback.h"
 #include "IncomingPacketReader.h"
 
-class Vitals {
+class Vitals
+{
 public:
   Vitals();
   Vitals(SerialIO *serialIO, IncomingPacketReader *incomingPacketReader, Callback *callbacks);

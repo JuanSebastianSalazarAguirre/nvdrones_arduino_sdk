@@ -9,12 +9,12 @@
 class GPIO
 {
   private:
-    SerialIO *serialIO;
-    Callback *callbacks;
-    IncomingPacketReader *incomingPacketReader;
+    SerialIO *_serialIO;
+    Callback *_callbacks;
+    IncomingPacketReader *_incomingPacketReader;
   public:
     GPIO();
-    GPIO(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader);
+    GPIO(SerialIO *serialIO, Callback *callbacks, IncomingPacketReader *incomingPacketReader);
 
     void pinMode(int16_t pin, int16_t logicLevel);
     void digitalWrite(int16_t pin, bool logicLevel);

@@ -8,118 +8,120 @@
 
 GPIO::GPIO() {};
 
-GPIO::GPIO(SerialIO *_serialIO, Callback *_callbacks, IncomingPacketReader *_incomingPacketReader) {
-  serialIO = _serialIO;
-  callbacks = _callbacks;
-  incomingPacketReader = _incomingPacketReader;
+GPIO::GPIO(SerialIO *serialIO, Callback *callbacks, IncomingPacketReader *incomingPacketReader):
+_serialIO(serialIO),
+_callbacks(callbacks),
+_incomingPacketReader(incomingPacketReader)
+{
+
 }
 
 void GPIO::digitalWrite(int16_t pin, bool logicLevel) {
-  serialIO->sendPacket((uint8_t)logicLevel, resourceID::digitalWrite, (uint8_t)pin);
+  _serialIO->sendPacket((uint8_t)logicLevel, resourceID::digitalWrite, (uint8_t)pin);
 }
 
 void GPIO::pinMode(int16_t pin, int16_t logicLevel) {
-  serialIO->sendPacket(logicLevel, resourceID::pinMode, (uint8_t)pin);
+  _serialIO->sendPacket(logicLevel, resourceID::pinMode, (uint8_t)pin);
 }
 
 void GPIO::digitalRead(int16_t pin) {
-  serialIO->sendPacket((int16_t)0, resourceID::digitalRead, (uint8_t)pin);
+  _serialIO->sendPacket((int16_t)0, resourceID::digitalRead, (uint8_t)pin);
 }
 
 void GPIO::analogWrite(int16_t pin, int16_t value) {
-  serialIO->sendPacket((uint8_t)value, resourceID::analogWrite, (uint8_t)pin);
+  _serialIO->sendPacket((uint8_t)value, resourceID::analogWrite, (uint8_t)pin);
 }
 
 void GPIO::pulseIn(int16_t pin, int16_t value) {
   // combine the two values.
-  serialIO->sendPacket((int16_t)0, resourceID::pulseIn, (uint8_t)pin);
+  _serialIO->sendPacket((int16_t)0, resourceID::pulseIn, (uint8_t)pin);
 }
 
 void GPIO::pulseIn(int16_t pin, int16_t value, uint32_t timeout) {
   // combine the three values
-  serialIO->sendPacket((int16_t)0, resourceID::pulseIn, 0);
+  _serialIO->sendPacket((int16_t)0, resourceID::pulseIn, 0);
 }
 
 uint32_t GPIO::pulseInSync(int16_t pin, int16_t value) {
   pulseIn(pin, value);
-  return Utils::blockForFloatData(resourceID::pulseIn, pin, incomingPacketReader);
+  return Utils::blockForFloatData(resourceID::pulseIn, pin, _incomingPacketReader);
 }
 
 void GPIO::analogRead(int16_t pin) {
-  serialIO->sendPacket((int16_t)0, resourceID::analogRead, (uint8_t)pin);
+  _serialIO->sendPacket((int16_t)0, resourceID::analogRead, (uint8_t)pin);
 }
 
 void GPIO::digitalReadCallback(void (*cb)(int16_t), int16_t pin) {
   if(pin == 1)
-    callbacks->digitalRead1 = cb;
+    _callbacks->digitalRead1 = cb;
   else if(pin == 2)
-    callbacks->digitalRead2 = cb;
+    _callbacks->digitalRead2 = cb;
   else if(pin == 3)
-    callbacks->digitalRead3 = cb;
+    _callbacks->digitalRead3 = cb;
   else if(pin == 4)
-    callbacks->digitalRead4 = cb;
+    _callbacks->digitalRead4 = cb;
   else if(pin == 5)
-    callbacks->digitalRead5 = cb;
+    _callbacks->digitalRead5 = cb;
   else if(pin == 6)
-    callbacks->digitalRead6 = cb;
+    _callbacks->digitalRead6 = cb;
   else if(pin == 7)
-    callbacks->digitalRead7 = cb;
+    _callbacks->digitalRead7 = cb;
   else if(pin == 8)
-    callbacks->digitalRead8 = cb;
+    _callbacks->digitalRead8 = cb;
   else if(pin == 9)
-    callbacks->digitalRead9 = cb;
+    _callbacks->digitalRead9 = cb;
   else if(pin == 10)
-    callbacks->digitalRead10 = cb;
+    _callbacks->digitalRead10 = cb;
 }
 
 int16_t GPIO::digitalReadSync(int16_t pin) {
   digitalRead(pin);
-  return Utils::blockForByteData(resourceID::digitalRead, pin, incomingPacketReader);
+  return Utils::blockForByteData(resourceID::digitalRead, pin, _incomingPacketReader);
 }
 
 
 void GPIO::pulseInCallback(void (*cb)(uint32_t), int16_t pin) {
   if(pin == 1)
-    callbacks->pulseIn1 = cb;
+    _callbacks->pulseIn1 = cb;
   if(pin == 2)
-    callbacks->pulseIn2 = cb;
+    _callbacks->pulseIn2 = cb;
   if(pin == 3)
-    callbacks->pulseIn3 = cb;
+    _callbacks->pulseIn3 = cb;
   if(pin == 4)
-    callbacks->pulseIn4 = cb;
+    _callbacks->pulseIn4 = cb;
   if(pin == 5)
-    callbacks->pulseIn5 = cb;
+    _callbacks->pulseIn5 = cb;
   if(pin == 6)
-    callbacks->pulseIn6 = cb;
+    _callbacks->pulseIn6 = cb;
   if(pin == 7)
-    callbacks->pulseIn7 = cb;
+    _callbacks->pulseIn7 = cb;
   if(pin == 8)
-    callbacks->pulseIn8 = cb;
+    _callbacks->pulseIn8 = cb;
   if(pin == 9)
-    callbacks->pulseIn9 = cb;
+    _callbacks->pulseIn9 = cb;
   if(pin == 10)
-    callbacks->pulseIn10 = cb;
+    _callbacks->pulseIn10 = cb;
 }
 
 void GPIO::analogReadCallback(void (*cb)(int16_t), int16_t pin) {
   if(pin == 1)
-    callbacks->analogRead1 = cb;
+    _callbacks->analogRead1 = cb;
   if(pin == 2)
-    callbacks->analogRead2 = cb;
+    _callbacks->analogRead2 = cb;
   if(pin == 3)
-    callbacks->analogRead3 = cb;
+    _callbacks->analogRead3 = cb;
   if(pin == 4)
-    callbacks->analogRead4 = cb;
+    _callbacks->analogRead4 = cb;
 }
 
 int GPIO::analogReadSync(int16_t pin) {
   analogRead(pin);
-  return Utils::blockForByteData(resourceID::digitalRead, pin, incomingPacketReader);
+  return Utils::blockForByteData(resourceID::digitalRead, pin, _incomingPacketReader);
 }
 
 void GPIO::interruptCallback(void (*cb)(void), int16_t interrupt) {
-  if (interrupt == 0) callbacks->interrupt0 = cb;
-  if (interrupt == 1) callbacks->interrupt1 = cb;
+  if (interrupt == 0) _callbacks->interrupt0 = cb;
+  if (interrupt == 1) _callbacks->interrupt1 = cb;
 }
 
 void GPIO::attachServo(int16_t servoNumber, int16_t pin) {
@@ -139,7 +141,7 @@ void GPIO::attachServo(int16_t servoNumber, int16_t pin) {
       return;
   }
 
-  serialIO->sendPacket((uint8_t)pin, resourceID::servo, actionID);
+  _serialIO->sendPacket((uint8_t)pin, resourceID::servo, actionID);
 }
 
 void GPIO::detachServo(int16_t servoNumber) {
@@ -158,7 +160,7 @@ void GPIO::detachServo(int16_t servoNumber) {
       // TODO: add error handling.
       return;
   }
-  serialIO->sendPacket((int16_t)0, resourceID::servo, actionID);
+  _serialIO->sendPacket((int16_t)0, resourceID::servo, actionID);
 }
 
 void GPIO::writeServo(int16_t servoNumber, int16_t data) {
@@ -177,5 +179,5 @@ void GPIO::writeServo(int16_t servoNumber, int16_t data) {
       // TODO: add error handling.
       return;
   }
-  serialIO->sendPacket((uint8_t)data, resourceID::servo, actionID);
+  _serialIO->sendPacket((uint8_t)data, resourceID::servo, actionID);
 }
