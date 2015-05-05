@@ -93,13 +93,14 @@ namespace actionID {
   const int16_t invalidPinForDigitalRead = 17;
   const int16_t invalidPinForPulseIn = 18;
   const int16_t invalidPinForAnalogRead = 19;
-  const int16_t invalidPinForServoAttach = 20;
-  const int16_t invalidServoForServoAttach = 21;
-  const int16_t invalidServoForServoWrite = 22;
-  const int16_t invalidServoForServoDetach = 23;
-  const int16_t invalidI2CAddress = 24;
-  const int16_t unsetI2CAddress = 25;
-  const int16_t gpsError = 26;
+  const int16_t invalidPinForAnalogWrite = 20;
+  const int16_t invalidPinForServoAttach = 21;
+  const int16_t invalidServoForServoAttach = 22;
+  const int16_t invalidServoForServoWrite = 23;
+  const int16_t invalidServoForServoDetach = 24;
+  const int16_t invalidI2CAddress = 25;
+  const int16_t unsetI2CAddress = 27;
+  const int16_t gpsError = 27;
 }
 
 #endif // IDs_h
