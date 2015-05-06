@@ -7,6 +7,8 @@
 class Callback
 {
 public:
+  Callback();
+
   // I2C
   void (*i2cRead)(uint8_t);
 
