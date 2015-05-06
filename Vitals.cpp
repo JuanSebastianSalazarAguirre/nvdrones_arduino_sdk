@@ -8,7 +8,9 @@ Vitals::Vitals() {}
 Vitals::Vitals(SerialIO *serialIO, IncomingPacketReader *incomingPacketReader, Callback *callbacks):
 _serialIO(serialIO),
 _callbacks(callbacks),
-_incomingPacketReader(incomingPacketReader)
+_incomingPacketReader(incomingPacketReader),
+_lastHeartbeatSent(0),
+_lastHearbeatReceived(0)
 {
 
 }
@@ -49,13 +51,16 @@ void Vitals::tick() {
   uint32_t now = millis();
 
   if (now > _lastHearbeatReceived + _allowableHeartbeatSilencePeriod) {
-    _callbacks->heartbeatLost();
+    _serialIO->mute();
+    // _callbacks->heartbeatLost(); // Too often
   }
+
   if (now > _lastHeartbeatSent + _heartbeatInterval) _sendHeartbeat();
 }
 
 void Vitals::receiveHeartbeat() {
   _lastHearbeatReceived = millis();
+  _serialIO->unmute();
 }
 
 void Vitals::heartbeatLostCallback(void (*cb)(void)) {

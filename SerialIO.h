@@ -18,6 +18,7 @@ class SerialIO
 {
 private:
   SerialPort selectedSerialPort;
+  bool _isMuted;
 public:
 
   SerialIO();
@@ -36,6 +37,9 @@ public:
   void sendPacket(float data, uint8_t resourceID, uint8_t actionID);
   void sendPacket(uint8_t *data, uint8_t length, uint8_t resourceID, uint8_t actionID);
   void print(String data);
+
+  void mute();
+  void unmute();
 };
 
 #endif // NVSerialIO_h

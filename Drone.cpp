@@ -52,6 +52,23 @@ Drone::Drone(int txPin, int rxPin) {
 
 void Drone::initialize() {
   _serialIO.softwareSerial.begin(57600);
+
+  uint32_t t = millis();
+  uint32_t now = 0;
+  while (1) {
+    IncomingPacket p = _incomingPacketReader.read();
+    if (p.isHearbeat()) {
+      _vitals.receiveHeartbeat();
+      break;
+    }
+
+    if ((now = millis()) > 500 + t) {
+      Serial.println("Waiting to initialize. Unable to contact drone.");
+      t = now;
+    }
+  }
+
+  Serial.println("Drone initialized.");
 }
 
 void Drone::arm() {

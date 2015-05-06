@@ -1,10 +1,14 @@
 #include "SerialIO.h"
 
+const uint32_t communicationBaudRate = 115200;
+
 SerialIO::SerialIO() {}
 
-SerialIO::SerialIO(int txPin , int rxPin) {
+SerialIO::SerialIO(int txPin , int rxPin):
+_isMuted(true)
+{
   softwareSerial = SoftwareSerial(txPin, rxPin);
-  softwareSerial.begin(57600);
+  softwareSerial.begin(communicationBaudRate);
   selectedSerialPort = swSerialPort;
 }
 
@@ -13,22 +17,22 @@ SerialIO::SerialIO(SerialPort serialPort) {
   switch(serialPort) {
     case serialPort0:
       #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
-        Serial.begin(57600);
+        Serial.begin(communicationBaudRate);
       #endif
       break;
     case serialPort1:
       #if defined(UBRR1H)
-        Serial1.begin(57600);
+        Serial1.begin(communicationBaudRate);
       #endif
       break;
     case serialPort2:
       #if defined(UBRR2H)
-        Serial2.begin(57600);
+        Serial2.begin(communicationBaudRate);
       #endif
       break;
     case serialPort3:
       #if defined(UBRR3H)
-        Serial3.begin(57600);
+        Serial3.begin(communicationBaudRate);
       #endif
       break;
     default:
@@ -38,6 +42,11 @@ SerialIO::SerialIO(SerialPort serialPort) {
 }
 
 void SerialIO::write(uint8_t data) {
+  if (_isMuted) {
+    Serial.println("Unable to write to drone. No drone found.");
+    return;
+  }
+
   switch(selectedSerialPort) {
     case serialPort0:
       #if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H)
@@ -227,4 +236,12 @@ void SerialIO::print(String data) {
     default:
       Serial.println("Error: incorrectly configured serial settings.");
   }
+}
+
+void SerialIO::mute() {
+  _isMuted = true;
+}
+
+void SerialIO::unmute() {
+  _isMuted = false;
 }
