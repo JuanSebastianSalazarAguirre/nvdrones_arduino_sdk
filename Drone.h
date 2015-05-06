@@ -57,7 +57,7 @@ public:
 
   Creates a new Drone instance.
 
-  @param serialPort The serial port for wireless communcation with the drone.
+  @param serialPort The serial port for the RF device communicating with the drone.
 
   */
   Drone(SerialPort serialPort);
@@ -66,8 +66,8 @@ public:
 
   Creates a new Drone instance.
 
-  @param txPin The transmit pin for wireless communcation with the drone.
-  @param rxPin The receive pin for wireless communcation with the drone.
+  @param txPin The transmit pin for the RF device communicating with the drone.
+  @param rxPin The receive pin for the RF device communicating with the drone.
 
   */
   Drone(int txPin, int rxPin);
@@ -75,7 +75,9 @@ public:
 
   /**
 
-  Performs the drone's preflight tasks.
+  Performs the drone's preflight tasks. For example, initialize ensures the Arduino
+  is connected to the drone. This method needs to be called in the setup() function
+  of your Arduino sketch.
 
   */
   void initialize();
@@ -89,8 +91,8 @@ public:
 
   /**
 
-  Checks for (and handles) communcation with the drone. Should be called in the loop()
-  of your Arduino sketch.
+  Performs the funcationality that needs to be called repeatedly (preferably in each iteration of
+  your sketch's loop()). For example, this method allows callback functions to handle incoming data.
 
   */
   void listen();
@@ -206,8 +208,8 @@ public:
 
   /**
        
-  Requests the drone's current speed. The response gets handled through the
-  callback function set using speedCallback().
+  Requests the drone's current speed as calculated by the GPS unit. The response gets handled
+  through the callback function set using speedCallback().
        
   */
   void getSpeed();
@@ -234,8 +236,8 @@ public:
 
   /**
 
-  Requests the drone's current orientation. The response gets handled through the
-  callback function set using orientationCallback().
+  Requests the drone's current orientation from the onboard compass. The response gets handled
+  through the callback function set using orientationCallback().
 
   */
   void getOrientation();
@@ -261,7 +263,9 @@ public:
 
   /**
 
-  Helper to call getLatitude(), getLongitude(), getAltitude(), getSatellites(), getSpeed(), and getOrientation().
+  This method calls getLatitude(), getLongitude(), getAltitude(), getSatellites(), getSpeed(), and getOrientation().
+  The callback for each of these methods -- latitudeCallback(), longitudeCallback(), etc -- need to be set in order
+  to handle the incoming GPS data.
 
   */
   void getGPSData();
@@ -412,6 +416,14 @@ public:
 
   /**
 
+  Requests the drone's current flightMode. The response gets handled through the
+  callback function set using flightModeCallback().
+
+  */
+  void getFlightMode();
+
+  /**
+
   Synchronous version of getFlightMode(). Waits until a response is received, timing out
   after 1 second.
 
@@ -419,14 +431,6 @@ public:
 
   */
   int getFlightModeSync();
-
-  /**
-
-  Requests the drone's current flightMode. The response gets handled through the
-  callback function set using flightModeCallback().
-
-  */
-  void getFlightMode();
 
   /**
 
@@ -440,6 +444,11 @@ public:
   /**
 
   Sets the drone's flight mode. Accepts values between -100 and 100.
+
+  Different flight controllers handle flight modes differently. We recommend
+  setting your flight controller to "manual" (or "atitude" if your flight controller supports
+  it). Inspect your flight controller's GUI to see how different flight mode integer values
+  correspond to different flight mode settings (manual, atitude, failsafe, loiter, etc).
 
   @param value The new flight mode value.
 
@@ -460,7 +469,7 @@ public:
 
   /**
    
-  Configures the specified pin on the App Extender to behave either as an input or an output.
+  Configures the specified pin on the NVextender to behave either as an input or an output.
 
   @param pin The pin number. Pins 1 to 8 are available.
   @param mode INPUT or OUTPUT.
@@ -501,10 +510,10 @@ public:
 
   /**
 
-  Write a HIGH or LOW value to a digital pin on the App Extender.
+  Write a HIGH or LOW value to a digital pin on the NVextender.
 
   @param pin The pin number. Pins 1 to 8 are available.
-  @param logicLevel HIGH or LOW.
+  @param logicLevel HIGH (true) or LOW (false).
 
   */
   void digitalWrite(int pin, bool logicLevel);
@@ -543,7 +552,7 @@ public:
 
   /**
 
-  Writes an analog value (PWM wave) to a pin on the App Extender. After a call to analogWrite(),
+  Writes an analog value (PWM wave) to a pin on the NVextender. After a call to analogWrite(),
   the pin will generate a steady square wave of the specified duty cycle until the next call to
   analogWrite() (or a call to digitalRead() or digitalWrite() on the same pin).
 
@@ -555,12 +564,14 @@ public:
 
   /**
 
-  Reads a pulse (either HIGH or LOW) on a pin on the App Extender. For example, if value is HIGH,
-  pulseIn waits for the pin to go HIGH, starts timing, then waits for the pin to go LOW and
-  stops timing. Returns the length of the pulse in microseconds. Gives up and returns 0 if no
-  pulse starts within 3000 microseconds.
+  Reads a pulse (either HIGH or LOW) on a pin on the NVextender. For example, if the value argument
+  is HIGH, pulseIn waits for the pin to the HIGH state, starts timing, then waits for the pin to go
+  the LOW state and stops timing. Returns the length of the pulse in microseconds. Gives up and returns
+  0 if no pulse starts within 3000 microseconds.
 
   The response gets handled through the callback function set using pulseInCallback().
+
+  See also pulseIn(int pin, int value, unsigned long timeout);
 
   @param pin The pin number. Pins 1 to 8 are available.
   @param value The type of the pulse to read. Either HIGH or LOW.
@@ -570,12 +581,14 @@ public:
 
   /**
 
-  Reads a pulse (either HIGH or LOW) on a pin on the App Extender. For example, if value is HIGH,
+  Reads a pulse (either HIGH or LOW) on a pin on the NVextender. For example, if value is HIGH,
   pulseIn waits for the pin to go HIGH, starts timing, then waits for the pin to go LOW and
   stops timing. Returns the length of the pulse in microseconds. Gives up and returns 0 if no
   pulse starts within the specified timeout.
 
   The response gets handled through thecallback function set using pulseInCallback().
+
+  See also pulseIn(int pin, int value);
 
   @param pin The pin number. Pins 1 to 8 are available.
   @param value The type of the pulse to read. Either HIGH or LOW.
@@ -586,7 +599,7 @@ public:
 
   /**
 
-  Synchronous version of pulseIn(). Waits up to 1 second to receive a response.
+  Synchronous version of pulseIn(int pin, int value). Waits up to 1 second to receive a response.
 
   @param pin The pin number. Pins 1 to 8 are available.
   @param value The type of the pulse to read. Either HIGH or LOW.
@@ -598,7 +611,8 @@ public:
 
   /**
 
-  Synchronous version of pulseIn(). Waits up to 1 second to receive a response.
+  Synchronous version of pulseIn(int pin, int value, unsigned long timeout). Waits up to 1 second to
+  receive a response.
 
   @param pin The pin number. Pins 1 to 8 are available.
   @param value The type of the pulse to read. Either HIGH or LOW.
@@ -666,7 +680,7 @@ public:
 
   /**
 
-  This sets the address of the I2C device that the App Extender communicates with. This
+  This sets the address of the I2C device that the NVextender communicates with. This
   address will be continuously used by i2cBeginTransmission() and i2cWireRequest() until it
   is reset to a different value.
 
@@ -694,7 +708,7 @@ public:
 
   /**
 
-  Queues bytes for transmission from the App Extender to an I2C slave device. Should be
+  Queues bytes for transmission from the NVextender to an I2C slave device. Should be
   called between calls to i2cBeginTransmission() and i2cEndTransmission().
 
   @param data Adds one byte of information to the queue.
@@ -704,7 +718,7 @@ public:
 
   /**
 
-  Sends a request to the App Extender to read one byte of information from the I2C buffer.
+  Sends a request to the NVextender to read one byte of information from the I2C buffer.
   The response gets handled through thecallback function set using i2cReadCallback().
 
   */
@@ -722,7 +736,7 @@ public:
 
   /**
 
-  Used by the master to request bytes from a slave device on the App Extender. The bytes may then be
+  Used by the master to request bytes from a slave device on the NVextender. The bytes may then be
   retrieved with the i2cRead() function.
 
   @param quantity The number of bytes to request.
@@ -776,7 +790,10 @@ public:
 
   /**
 
-  Requests the signal strength of the wireless communcation between the drone and sender.
+  Requests the signal strength of the wireless communcation between the drone and sender. The
+  signal strength is returned as a value from 0 to 100, 0 meaning no connection, and 100 meaning
+  perfect connection.
+
   The response gets handled through thecallback function set using signalStrengthCallback().
 
   */
@@ -803,6 +820,8 @@ public:
   /**
 
   Registers the function to be called when the Arduino receives an error code from the drone.
+  The callback function will be called with an error code. Error codes -- invalidPinForPinMode,
+  unsetI2CAddress, etc -- are listed in IDs.h.
 
   */
   void setErrorHandler(void (*cb)(int));
