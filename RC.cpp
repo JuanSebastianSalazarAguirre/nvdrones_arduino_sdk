@@ -83,25 +83,25 @@ void RC::setAileronElevatorRudderThrottle(int16_t aileron, int16_t elevator, int
 
 int16_t RC::getAileronSync() {
   getAileron();
-  return Utils::blockForIntData(resourceID::rc, actionID::getAileron, _incomingPacketReader);
+  return (int8_t)Utils::blockForByteData(resourceID::rc, actionID::getAileron, _incomingPacketReader);
 }
 
 int16_t RC::getElevatorSync() {
   getElevator();
-  return Utils::blockForIntData(resourceID::rc, actionID::getElevator, _incomingPacketReader);
+  return (int8_t)Utils::blockForByteData(resourceID::rc, actionID::getElevator, _incomingPacketReader);
 }
 
 int16_t RC::getThrottleSync() {
   getThrottle();
-  return Utils::blockForIntData(resourceID::rc, actionID::getThrottle, _incomingPacketReader);
+  return (int8_t)Utils::blockForByteData(resourceID::rc, actionID::getThrottle, _incomingPacketReader);
 }
 
 int16_t RC::getRudderSync() {
   getRudder();
-  return Utils::blockForIntData(resourceID::rc, actionID::getRudder, _incomingPacketReader);
+  return (int8_t)Utils::blockForByteData(resourceID::rc, actionID::getRudder, _incomingPacketReader);
 }
 
 int16_t RC::getFlightModeSync() {
   getFlightMode();
-  return Utils::blockForIntData(resourceID::rc, actionID::getFlightMode, _incomingPacketReader);
+  return (int8_t)Utils::blockForByteData(resourceID::rc, actionID::getFlightMode, _incomingPacketReader);
 }
