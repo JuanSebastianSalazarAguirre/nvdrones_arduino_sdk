@@ -17,7 +17,7 @@ void I2C::setDeviceAddress(int16_t address){
 }
 
 void I2C::wireRequest(int16_t quantity){
-  _serialIO->sendPacket((uint8_t)quantity, resourceID::i2c, actionID::i2cWireRequest);
+  _serialIO->sendPacket((uint8_t)quantity, resourceID::i2c, actionID::i2cRequestFrom);
 }
 
 void I2C::beginTransmission(){

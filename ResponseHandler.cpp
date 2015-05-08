@@ -46,7 +46,9 @@ void ResponseHandler::listen() {
         else if (p.actionID == actionID::getAltitude) _callbacks->altitude(dataToFloat(p.data));
         else if (p.actionID == actionID::getSatellites) _callbacks->satellite((int16_t)p.data[0]);
         else if (p.actionID == actionID::getSpeed) _callbacks->speed(dataToFloat(p.data));
-        else if (p.actionID == actionID::getYaw) _callbacks->orientation(dataToFloat(p.data));
+        else if (p.actionID == actionID::getYaw) _callbacks->yaw(dataToFloat(p.data));
+        else if (p.actionID == actionID::getPitchAngle) _callbacks->pitchAngle(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRollAngle) _callbacks->rollAngle(dataToFloat(p.data));
         break;
       case resourceID::i2c:
         if (p.actionID == actionID::readI2C) _callbacks->i2cRead(p.data[0]);

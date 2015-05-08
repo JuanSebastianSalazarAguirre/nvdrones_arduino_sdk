@@ -36,8 +36,16 @@ void defaultSatelliteCallback(int16_t) {
   defaultCallback("satellite");
 }
 
-void defaultOrientationCallback(float) {
-  defaultCallback("orientation");
+void defaultYawCallback(float) {
+  defaultCallback("yaw");
+}
+
+void defaultPitchAngleCallback(float) {
+  defaultCallback("pitchAngle");
+}
+
+void defaultRollAngleCallback(float) {
+  defaultCallback("rollAngle");
 }
 
 void defaultFlightModeCallback(int16_t) {
@@ -184,7 +192,9 @@ latitude(&defaultLatitudeCallback),
 altitude(&defaultAltitudeCallback),
 speed(&defaultSpeedCallback),
 satellite(&defaultSatelliteCallback),
-orientation(&defaultOrientationCallback),
+yaw(&defaultYawCallback),
+pitchAngle(&defaultPitchAngleCallback),
+rollAngle(&defaultRollAngleCallback),
 flightMode(&defaultFlightModeCallback),
 elevator(&defaultElevatorCallback),
 aileron(&defaultAileronCallback),

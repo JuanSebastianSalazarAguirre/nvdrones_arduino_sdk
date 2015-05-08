@@ -18,7 +18,9 @@ public:
   void (*altitude)(float);
   void (*speed)(float);
   void (*satellite)(int16_t);
-  void (*orientation)(float);
+  void (*yaw)(float);
+  void (*pitchAngle)(float);
+  void (*rollAngle)(float);
 
   // RC
   void (*flightMode)(int16_t);

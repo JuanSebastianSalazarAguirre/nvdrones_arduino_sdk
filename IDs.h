@@ -43,12 +43,12 @@ namespace actionID {
   const int16_t getSatellites = 5;
   const int16_t getSpeed = 6;
   const int16_t getYaw = 7;
-  const int16_t getPitch = 8;
-  const int16_t getRoll = 9;
+  const int16_t getPitchAngle = 8;
+  const int16_t getRollAngle = 9;
 
   // I2C
   const int16_t setI2CDeviceAddress = 1;
-  const int16_t i2cWireRequest = 2;
+  const int16_t i2cRequestFrom = 2;
   const int16_t beginI2CTransmission = 3;
   const int16_t endI2CTransmission = 4;
   const int16_t writeI2C = 5;
@@ -100,7 +100,7 @@ namespace actionID {
   const int16_t invalidServoForServoDetach = 24;
   const int16_t invalidI2CAddress = 25;
   const int16_t unsetI2CAddress = 27;
-  const int16_t gpsError = 27;
+  const int16_t gpsError = 28;
 }
 
 #endif // IDs_h

@@ -28,19 +28,25 @@ public:
   void getAltitude();
   void getSatellites();
   void getSpeed();
-  void getOrientation();
+  void getYaw();
+  void getPitchAngle();
+  void getRollAngle();
   void longitudeCallback(void (*cb)(float));
   void latitudeCallback(void (*cb)(float));
   void altitudeCallback(void (*cb)(float));
   void satelliteCallback(void (*cb)(int16_t));
   void speedCallback(void (*cb)(float));
-  void orientationCallback(void (*cb)(float));
+  void yawCallback(void (*cb)(float));
+  void pitchAngleCallback(void (*cb)(float));
+  void rollAngleCallback(void (*cb)(float));
   float getLatitudeSync();
   float getLongitudeSync();
   float getAltitudeSync();
   int16_t getSatellitesSync();
   float getSpeedSync();
-  float getOrientationSync();
+  float getYawSync();
+  float getPitchAngleSync();
+  float getRollAngleSync();
 };
 
 #endif // NVPose_h

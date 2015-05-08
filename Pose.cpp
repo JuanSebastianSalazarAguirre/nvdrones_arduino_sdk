@@ -36,8 +36,16 @@ void Pose::getSpeed(void) {
   _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getSpeed);
 }
 
-void Pose::getOrientation(void){
+void Pose::getYaw(void){
   _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getYaw);
+}
+
+void Pose::getPitchAngle() {
+  _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getPitchAngle);
+}
+
+void Pose::getRollAngle() {
+  _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRollAngle);
 }
 
 void Pose::longitudeCallback(void (*cb)(float)) {
@@ -60,8 +68,16 @@ void Pose::satelliteCallback(void (*cb)(int16_t)) {
   _callbacks->satellite = cb;
 }
 
-void Pose::orientationCallback(void (*cb)(float)) {
-  _callbacks->orientation = cb;
+void Pose::yawCallback(void (*cb)(float)) {
+  _callbacks->yaw = cb;
+}
+
+void Pose::pitchAngleCallback(void (*cb)(float)) {
+  _callbacks->pitchAngle = cb;
+}
+
+void Pose::rollAngleCallback(void (*cb)(float)) {
+  _callbacks->rollAngle = cb;
 }
 
 float Pose::getLatitudeSync() {
@@ -89,7 +105,17 @@ float Pose::getSpeedSync() {
   return Utils::blockForFloatData(resourceID::pose, actionID::getSpeed, _incomingPacketReader);
 }
 
-float Pose::getOrientationSync() {
-  getOrientation();
+float Pose::getYawSync() {
+  getYaw();
   return Utils::blockForFloatData(resourceID::pose, actionID::getYaw, _incomingPacketReader);
+}
+
+float Pose::getPitchAngleSync() {
+  getPitchAngle();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getPitchAngle, _incomingPacketReader);
+}
+
+float Pose::getRollAngleSync() {
+  getRollAngle();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRollAngle, _incomingPacketReader);
 }

@@ -101,13 +101,18 @@ void Drone::getLatitude()                          { _pose.getLatitude(); }
 void Drone::getAltitude()                          { _pose.getAltitude(); }
 void Drone::getSatellites()                        { _pose.getSatellites(); }
 void Drone::getSpeed()                             { _pose.getSpeed(); }
-void Drone::getOrientation()                       { _pose.getOrientation(); }
+void Drone::getYaw()                               { _pose.getYaw(); }
+void Drone::getPitchAngle()                        { _pose.getPitchAngle(); }
+void Drone::getRollAngle()                         { _pose.getRollAngle(); }
+
 void Drone::longitudeCallback(void (*cb)(float))   { _pose.longitudeCallback(cb); }
 void Drone::latitudeCallback(void (*cb)(float))    { _pose.latitudeCallback(cb); }
 void Drone::altitudeCallback(void (*cb)(float))    { _pose.altitudeCallback(cb); }
 void Drone::satelliteCallback(void (*cb)(int16_t)) { _pose.satelliteCallback(cb); }
 void Drone::speedCallback(void (*cb)(float))       { _pose.speedCallback(cb); }
-void Drone::orientationCallback(void (*cb)(float)) { _pose.orientationCallback(cb); }
+void Drone::yawCallback(void (*cb)(float))         { _pose.yawCallback(cb); }
+void Drone::pitchAngleCallback(void (*cb)(float))  { _pose.pitchAngleCallback(cb); }
+void Drone::rollAngleCallback(void (*cb)(float))   { _pose.rollAngleCallback(cb); }
 
 // Sync Getters
 float Drone::getLatitudeSync()      { return _pose.getLatitudeSync(); }
@@ -115,7 +120,10 @@ float Drone::getLongitudeSync()     { return _pose.getLongitudeSync(); }
 float Drone::getAltitudeSync()      { return _pose.getAltitudeSync(); }
 int16_t Drone::getSatellitesSync()  { return _pose.getSatellitesSync(); }
 float Drone::getSpeedSync()         { return _pose.getSpeedSync(); }
-float Drone::getOrientationSync()   { return _pose.getOrientationSync(); }
+float Drone::getYawSync()           { return _pose.getYawSync(); }
+float Drone::getPitchAngleSync()    { return _pose.getPitchAngleSync(); }
+float Drone::getRollAngleSync()     { return _pose.getRollAngleSync(); }
+
 
 //
 // TODO: rename RC

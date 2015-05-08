@@ -236,34 +236,88 @@ public:
 
   /**
 
-  Requests the drone's current orientation from the onboard compass. The response gets handled
-  through the callback function set using orientationCallback().
+  Requests the drone's current yaw from the onboard compass. The response gets handled
+  through the callback function set using yawCallback().
 
   */
-  void getOrientation();
+  void getYaw();
 
   /**
 
-  Synchronous version of getOrientation().  Waits until a response is received, timing out
+  Synchronous version of getYaw().  Waits until a response is received, timing out
   after 1 second.
 
-  @return The drone's current orientation, or -1 if timeout.
+  @return The drone's current yaw, or -1 if timeout.
 
   */
-  float getOrientationSync();
+  float getYawSync();
 
   /**
 
-  Registers the function to be called when the Arduino receives orientation data from the drone.
+  Registers the function to be called when the Arduino receives yaw data from the drone.
 
-  @param cb The function to be called with the drone's orientation.
+  @param cb The function to be called with the drone's yaw.
 
   */
-  void orientationCallback(void (*cb)(float));
+  void yawCallback(void (*cb)(float));
 
   /**
 
-  This method calls getLatitude(), getLongitude(), getAltitude(), getSatellites(), getSpeed(), and getOrientation().
+  Requests the drone's current pitch angle. The response gets handled
+  through the callback function set using pitchAngleCallback().
+
+  */
+  void getPitchAngle();
+
+  /**
+
+  Synchronous version of getPitchAngle().  Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's current pitch angle, or -1 if timeout.
+
+  */
+  float getPitchAngleSync();
+
+  /**
+
+  Registers the function to be called when the Arduino receives pitch angle data from the drone.
+
+  @param cb The function to be called with the drone's pitch angle.
+
+  */
+  void pitchAngleCallback(void (*cb)(float));
+
+  /**
+
+  Requests the drone's current roll angle. The response gets handled
+  through the callback function set using rollAngleCallback().
+
+  */
+  void getRollAngle();
+
+  /**
+
+  Synchronous version of getRollAngle().  Waits until a response is received, timing out
+  after 1 second.
+
+  @return The drone's current roll angle, or -1 if timeout.
+
+  */
+  float getRollAngleSync();
+
+  /**
+
+  Registers the function to be called when the Arduino receives roll angle data from the drone.
+
+  @param cb The function to be called with the drone's roll angle.
+
+  */
+  void rollAngleCallback(void (*cb)(float));
+
+  /**
+
+  This method calls getLatitude(), getLongitude(), getAltitude(), getSatellites(), getSpeed(), and getYaw().
   The callback for each of these methods -- latitudeCallback(), longitudeCallback(), etc -- need to be set in order
   to handle the incoming GPS data.
 
