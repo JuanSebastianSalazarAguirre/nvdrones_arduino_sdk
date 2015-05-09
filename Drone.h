@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 class Drone 
 {
 private:
+//\cond
   RC _rc;
   SerialIO _serialIO;
   GPIO _gpio;
@@ -43,6 +44,7 @@ private:
   I2C _i2c;
   Callback _callback;
   Pose _pose;
+//\endcond
 
 public:
 
