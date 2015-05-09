@@ -31,6 +31,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "ResponseHandler.h"
 #include "Vitals.h"
 
+/**
+
+This is the class is for interacting with your drone. Controlling your drone is done
+through an instance of this class.
+
+#### For example:
+
+Arming the drone. This is released with API v0.3
+
+\htmlonly
+<script src="https://gist.github.com/NVminion/715efb3cd4daa05a7852.js"></script>
+\endhtmlonly
+
+*/
 class Drone 
 {
 private:
