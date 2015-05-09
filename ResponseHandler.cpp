@@ -2,7 +2,6 @@
 #include "IDs.h"
 #include "Utils.h"
 
-//#define NV_DEBUG 1   //uncomment to turn log statments on
 #if NV_DEBUG
 #define LOG(x,y) Serial.print(x); Serial.println(y);
 #else
