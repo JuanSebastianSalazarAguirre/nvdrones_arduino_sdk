@@ -10,7 +10,8 @@ _serialIO(serialIO),
 _callbacks(callbacks),
 _incomingPacketReader(incomingPacketReader),
 _lastHeartbeatSent(0),
-_lastHearbeatReceived(0)
+_lastHeartbeatReceived(0),
+_lastHeartbeatLostCalledTimestamp(0)
 {
 
 }
@@ -50,16 +51,19 @@ void Vitals::signalStrengthCallback(void (*cb)(int16_t)) {
 void Vitals::tick() {
   uint32_t now = millis();
 
-  if (now > _lastHearbeatReceived + _allowableHeartbeatSilencePeriod) {
+  if (now > _lastHeartbeatReceived + _allowableHeartbeatSilencePeriod) {
     _serialIO->mute();
-    // _callbacks->heartbeatLost(); // Too often
+    if (now > _lastHeartbeatLostCalledTimestamp + _heartbeatLostCallRate) {
+      _callbacks->heartbeatLost();
+      _lastHeartbeatLostCalledTimestamp = now;
+    }
   }
 
   if (now > _lastHeartbeatSent + _heartbeatInterval) _sendHeartbeat();
 }
 
 void Vitals::receiveHeartbeat() {
-  _lastHearbeatReceived = millis();
+  _lastHeartbeatReceived = millis();
   _serialIO->unmute();
 }
 

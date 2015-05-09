@@ -33,12 +33,14 @@ private:
   IncomingPacketReader *_incomingPacketReader;
 
   uint32_t _lastHeartbeatSent;
-  uint32_t _lastHearbeatReceived;
+  uint32_t _lastHeartbeatReceived;
+  uint32_t _lastHeartbeatLostCalledTimestamp;
 
   void _sendHeartbeat();
 
   static const uint32_t _heartbeatInterval = 1000;
-  static const uint32_t _allowableHeartbeatSilencePeriod = 5000; // TODO: should this be settable?  
+  static const uint32_t _allowableHeartbeatSilencePeriod = 5000; // TODO: should this be settable?
+  static const uint32_t _heartbeatLostCallRate = 500;
 };
 
 #endif // NVVitals_h
