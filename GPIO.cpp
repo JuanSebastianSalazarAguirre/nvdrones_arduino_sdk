@@ -48,7 +48,7 @@ void GPIO::pulseIn(int16_t pin, int16_t value, uint32_t timeout) {
 
 uint32_t GPIO::pulseInSync(int16_t pin, int16_t value) {
   pulseIn(pin, value);
-  return Utils::blockForFloatData(resourceID::pulseIn, pin, _incomingPacketReader);
+  return Utils::blockForLongData(resourceID::pulseIn, pin, _incomingPacketReader);
 }
 
 void GPIO::analogRead(int16_t pin) {

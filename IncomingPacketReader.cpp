@@ -2,6 +2,8 @@
 #include "IncomingPacketReader.h"
 #include <Arduino.h>
 
+#define NV_DEBUG 1
+
 #if NV_DEBUG
 #define LOG(x,y) Serial.print(x); Serial.println(y);
 #else
