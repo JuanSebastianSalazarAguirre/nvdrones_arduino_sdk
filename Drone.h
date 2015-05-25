@@ -761,7 +761,7 @@ public:
 
   /**
 
-  Begin a transmission to the I2C slave device address specified by setDeviceAddress().
+  Begin a transmission to the I2C slave device address specified by i2cSetDeviceAddress().
   Subsequently, queue bytes for transmission with the i2cWrite() function and transmit them
   by calling i2cEndTransmission().
 
