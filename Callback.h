@@ -65,6 +65,7 @@ public:
 
   // vitals
   void (*heartbeatLost)(void);
+  void (*heartbeatFound)(void);
   void (*voltage)(int16_t);
   void (*signalStrength)(int16_t);
 

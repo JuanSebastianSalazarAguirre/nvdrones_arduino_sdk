@@ -11,7 +11,8 @@ _callbacks(callbacks),
 _incomingPacketReader(incomingPacketReader),
 _lastHeartbeatSent(0),
 _lastHeartbeatReceived(0),
-_lastHeartbeatLostCalledTimestamp(0)
+_lastHeartbeatLostCalledTimestamp(0),
+_isConnected(false)
 {
 
 }
@@ -53,9 +54,9 @@ void Vitals::tick() {
 
   if (now > _lastHeartbeatReceived + _allowableHeartbeatSilencePeriod) {
     _serialIO->mute();
-    if (now > _lastHeartbeatLostCalledTimestamp + _heartbeatLostCallRate) {
+    if (_isConnected) {
       _callbacks->heartbeatLost();
-      _lastHeartbeatLostCalledTimestamp = now;
+      _isConnected = false;
     }
   }
 
@@ -63,12 +64,20 @@ void Vitals::tick() {
 }
 
 void Vitals::receiveHeartbeat() {
+  if (!_isConnected) {
+    callbacks->heartbeatFound();
+    _isConnected = true;
+  }
   _lastHeartbeatReceived = millis();
   _serialIO->unmute();
 }
 
 void Vitals::heartbeatLostCallback(void (*cb)(void)) {
   _callbacks->heartbeatLost = cb;
+}
+
+void Vitals::heartbeatFoundCallback(void (*cb)(void)) {
+  _callbacks->heartbeatFound = cb;
 }
 
 void Vitals::_sendHeartbeat() {

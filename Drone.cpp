@@ -206,7 +206,8 @@ int16_t Drone::i2cReadSync() { return _i2c.readSync(); }
 // Vitals Methods
 //
 
-void Drone::heartbeatLostCallback(void (*cb)(void)) { _vitals.heartbeatLostCallback(cb); }
+void Drone::heartbeatLostCallback(void (*cb)(void))   { _vitals.heartbeatLostCallback(cb); }
+void Drone::heartbeatFoundCallback(void (*cb)(void))  { _vitals.heartbeatFoundCallback(cb); }
 
 void Drone::getVoltage() { _vitals.getVoltage(); }
 int16_t Drone::getVoltageSync() { return _vitals.getVoltageSync(); }

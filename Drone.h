@@ -835,6 +835,16 @@ public:
 
   /**
 
+  Registers the function to be called when the Arduino receives a heartbeat from
+  the drone after not receiving any for 5 seconds or more.
+
+  @param cb The function to be called when the heartbeat is found.
+
+  */
+  void heartbeatFoundCallback(void (*cb)(void));
+
+  /**
+
   Requests the drone's current battery voltage. The response gets handled through the
   callback function set using voltageCallback().
 

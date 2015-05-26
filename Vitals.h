@@ -24,6 +24,7 @@ public:
   void tick();
   void receiveHeartbeat();
   void heartbeatLostCallback(void (*cb)(void));
+  void heartbeatFoundCallback(void (*cb)(void));
 
   void setErrorHandler(void (*cb)(int16_t));
 
@@ -35,6 +36,7 @@ private:
   uint32_t _lastHeartbeatSent;
   uint32_t _lastHeartbeatReceived;
   uint32_t _lastHeartbeatLostCalledTimestamp;
+  bool _isConnected;
 
   void _sendHeartbeat();
 

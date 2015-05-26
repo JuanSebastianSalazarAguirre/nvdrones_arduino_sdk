@@ -176,6 +176,10 @@ void defaultHeartbeatLostCallback() {
   defaultCallback("heartbeatLost");
 }
 
+void defaultHeartbeatFoundCallback() {
+  defaultCallback("heartbeatFound");
+}
+
 void defaultVoltageCallback(int16_t) {
   defaultCallback("voltage");
 }
@@ -183,7 +187,6 @@ void defaultVoltageCallback(int16_t) {
 void defaultSignalStrength(int16_t) {
   defaultCallback("signalStrength");
 }
-
 
 Callback::Callback():
 i2cRead(&defaultI2CReadCallback),
@@ -231,9 +234,9 @@ interrupt0(&defaultInterrupt0Callback),
 interrupt1(&defaultInterrupt1Callback),
 
 heartbeatLost(&defaultHeartbeatLostCallback),
+heartbeatFound(&defaultHeartbeatFoundCallback),
 voltage(&defaultVoltageCallback),
 signalStrength(&defaultSignalStrength),
-
 
 errorHandler(&defaultErrorHandler)
 {
