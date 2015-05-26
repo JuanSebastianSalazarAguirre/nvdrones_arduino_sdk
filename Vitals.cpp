@@ -65,7 +65,7 @@ void Vitals::tick() {
 
 void Vitals::receiveHeartbeat() {
   if (!_isConnected) {
-    callbacks->heartbeatFound();
+    _callbacks->heartbeatFound();
     _isConnected = true;
   }
   _lastHeartbeatReceived = millis();
