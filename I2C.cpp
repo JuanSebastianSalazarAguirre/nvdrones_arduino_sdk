@@ -44,3 +44,16 @@ int16_t I2C::readSync() {
 void I2C::readCallback(void (*cb)(uint8_t)) {
   _callbacks->i2cRead = cb;
 }
+
+void I2C::available() {
+  _serialIO->sendPacket((uint8_t)0, resourceID::i2c, actionID::i2cAvailable);
+}
+
+int16_t I2C::availableSync() {
+  available();
+  return Utils::blockForIntData(resourceID::i2c, actionID::i2cAvailable, _incomingPacketReader);
+}
+
+void I2C::availableCallback(void (*cb)(int16_t)) {
+  _callbacks->i2cAvailable = cb;
+}

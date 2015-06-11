@@ -36,6 +36,9 @@ public:
   void read();
   int16_t readSync();
   void readCallback(void (*cb)(uint8_t));
+  void available();
+  int16_t availableSync();
+  void availableCallback(void (*cb)(int16_t));
 };
 
 #endif // NVI2C_h

@@ -191,16 +191,19 @@ int16_t Drone::analogReadSync(int16_t pin)  { return _gpio.analogReadSync(pin); 
 // I2C Methods
 //
 
-void Drone::i2cSetDeviceAddress(int16_t id)      { _i2c.setDeviceAddress(id); }
-void Drone::i2cBeginTransmission()               { _i2c.beginTransmission(); }
-void Drone::i2cEndTransmission()                 { _i2c.endTransmission(); }
-void Drone::i2cWrite(int16_t data)               { _i2c.write(data); }
-void Drone::i2cRead()                            { _i2c.read(); }
-void Drone::i2cRequestFrom(int16_t byteCount)    { _i2c.wireRequest(byteCount); }
-void Drone::i2cReadCallback(void (*cb)(uint8_t)) { _i2c.readCallback(cb); }
+void Drone::i2cSetDeviceAddress(int16_t id)           { _i2c.setDeviceAddress(id); }
+void Drone::i2cBeginTransmission()                    { _i2c.beginTransmission(); }
+void Drone::i2cEndTransmission()                      { _i2c.endTransmission(); }
+void Drone::i2cWrite(int16_t data)                    { _i2c.write(data); }
+void Drone::i2cRead()                                 { _i2c.read(); }
+void Drone::i2cRequestFrom(int16_t byteCount)         { _i2c.wireRequest(byteCount); }
+void Drone::i2cReadCallback(void (*cb)(uint8_t))      { _i2c.readCallback(cb); }
+void Drone::i2cAvailable()                            { _i2c.available(); }
+void Drone::i2cAvailableCallback(void (*cb)(int16_t)) { _i2c.availableCallback(cb); }
 
 // Sync Getters
-int16_t Drone::i2cReadSync() { return _i2c.readSync(); }
+int16_t Drone::i2cReadSync()      { return _i2c.readSync(); }
+int16_t Drone::i2cAvailableSync() { return _i2c.availableSync(); }
 
 //
 // Vitals Methods

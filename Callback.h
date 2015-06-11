@@ -11,6 +11,7 @@ public:
 
   // I2C
   void (*i2cRead)(uint8_t);
+  void (*i2cAvailable)(int16_t);
 
   // GPS
   void (*longitude)(float);

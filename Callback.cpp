@@ -16,6 +16,10 @@ void defaultI2CReadCallback(uint8_t) {
   defaultCallback("i2cRead");
 }
 
+void defaultI2CAvailableCallback(int16_t) {
+  defaultCallback("i2cAvailable");
+}
+
 void defaultLongitudeCallback(float) {
   defaultCallback("longitude");
 }
@@ -190,6 +194,7 @@ void defaultSignalStrength(int16_t) {
 
 Callback::Callback():
 i2cRead(&defaultI2CReadCallback),
+i2cAvailable(&defaultI2CAvailableCallback),
 longitude(&defaultLongitudeCallback),
 latitude(&defaultLatitudeCallback),
 altitude(&defaultAltitudeCallback),

@@ -806,6 +806,24 @@ public:
 
   /**
 
+  Sends a request to the NVextender to get the number of bytes available for retrieval
+  with i2cRead(). This should be called after a call to i2cRequestFrom().
+
+  */
+  void i2cAvailable();
+
+  /**
+
+  Synchronous version of i2cAvailable(). Waits until a response is received, timing out
+  after 1 second.
+
+  @return The number of available bytes, or -1 no bytes avaiable or if timeout occurred.
+
+  */
+  int i2cAvailableSync();
+
+  /**
+
   Used by the master to request bytes from a slave device on the NVextender. The bytes may then be
   retrieved with the i2cRead() function.
 
@@ -822,6 +840,16 @@ public:
 
   */
   void i2cReadCallback(void (*cb)(byte));
+
+  /**
+
+  Registers the function to be called when the Arduino receives a response from an I2C available request
+  to the drone.
+
+  @param cb The function to be called with the number of bytes avaible for retrieval with i2cRead().
+
+  */
+  void i2cAvailableCallback(void (*cb)(int));
 
   /**
 

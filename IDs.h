@@ -53,6 +53,7 @@ namespace actionID {
   const int16_t endI2CTransmission = 4;
   const int16_t writeI2C = 5;
   const int16_t readI2C = 6;
+  const int16_t i2cAvailable = 7;
 
   // Servo
   const int16_t attachServo1 = 1;
