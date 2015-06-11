@@ -1,7 +1,0 @@
-{
-  "name": "Drone",
-  "author": "NVdrones <developers@NVdrones.com>",
-  "license": "GNU",
-  "version": "0.3.0",
-  "description": "Arduino library for interacting with NVdrones based systems"
-}
