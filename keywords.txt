@@ -1,30 +1,100 @@
 #######################################
-# Syntax Coloring Map for Avant
+# Syntax Coloring Map
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-Avant	KEYWORD1
-SoftwareSerial KEYWORD1
+Drone	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-
-begin	KEYWORD2
-end	KEYWORD2
-read	KEYWORD2
-available	KEYWORD2
-isListening	KEYWORD2
-overflow	KEYWORD2
-flush	KEYWORD2
+initialize	KEYWORD2
+arm	KEYWORD2
 listen	KEYWORD2
+getLongitude	KEYWORD2
+getLongitudeSync	KEYWORD2
+longitudeCallback	KEYWORD2
+getLatitude	KEYWORD2
+getLatitudeSync	KEYWORD2
+latitudeCallback	KEYWORD2
+getAltitude	KEYWORD2
+getAltitudeSync	KEYWORD2
+altitudeCallback	KEYWORD2
+getSatellites	KEYWORD2
+getSatellitesSync	KEYWORD2
+satelliteCallback	KEYWORD2
+getSpeed	KEYWORD2
+getSpeedSync	KEYWORD2
+speedCallback	KEYWORD2
+getYaw	KEYWORD2
+getYawSync	KEYWORD2
+yawCallback	KEYWORD2
+getPitchAngle	KEYWORD2
+getPitchAngleSync	KEYWORD2
+pitchAngleCallback	KEYWORD2
+getRollAngle	KEYWORD2
+getRollAngleSync	KEYWORD2
+rollAngleCallback	KEYWORD2
+getGPSData	KEYWORD2
+getAileron	KEYWORD2
+getAileronSync	KEYWORD2
+aileronCallback	KEYWORD2
+setAileron	KEYWORD2
+getElevator	KEYWORD2
+getElevatorSync	KEYWORD2
+elevatorCallback	KEYWORD2
+setElevator	KEYWORD2
+getRudder	KEYWORD2
+getRudderSync	KEYWORD2
+rudderCallback	KEYWORD2
+setRudder	KEYWORD2
+getThrottle	KEYWORD2
+getThrottleSync	KEYWORD2
+throttleCallback	KEYWORD2
+setThrottle	KEYWORD2
+getFlightMode	KEYWORD2
+getFlightModeSync	KEYWORD2
+flightModeCallback	KEYWORD2
+setFlightMode	KEYWORD2
+setAileronElevatorRudderThrottle	KEYWORD2
+pinMode	KEYWORD2
+digitalRead	KEYWORD2
+digitalReadSync	KEYWORD2
+digitalReadCallback	KEYWORD2
+digitalWrite	KEYWORD2
+analogRead	KEYWORD2
+analogReadSync	KEYWORD2
+analogReadCallback	KEYWORD2
+analogWrite	KEYWORD2
+pulseIn	KEYWORD2
+pulseInSync	KEYWORD2
+pulseInSync	KEYWORD2
+pulseInCallback	KEYWORD2
+attachServo	KEYWORD2
+detachServo	KEYWORD2
+writeServo	KEYWORD2
+interruptCallback	KEYWORD2
+i2cSetDeviceAddress	KEYWORD2
+i2cBeginTransmission	KEYWORD2
+i2cEndTransmission	KEYWORD2
+i2cWrite	KEYWORD2
+i2cRead	KEYWORD2
+i2cReadSync	KEYWORD2
+i2cRequestFrom	KEYWORD2
+i2cReadCallback	KEYWORD2
+heartbeatLostCallback	KEYWORD2
+getVoltage	KEYWORD2
+getVoltageSync	KEYWORD2
+voltageCallback	KEYWORD2
+getSignalStrength	KEYWORD2
+getSignalStrengthSync	KEYWORD2
+signalStrengthCallback	KEYWORD2
+setErrorHandler	KEYWORD2
 
-
-
-#######################################
+######################################
 # Constants (LITERAL1)
 #######################################
-
+KEY_NONE	LITERAL1
