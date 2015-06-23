@@ -11,6 +11,9 @@ Drone	KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
+SerialPort1	KEYWORD2
+SerialPort2	KEYWORD2
+SerialPort3	KEYWORD2
 initialize	KEYWORD2
 arm	KEYWORD2
 listen	KEYWORD2
@@ -97,4 +100,3 @@ setErrorHandler	KEYWORD2
 ######################################
 # Constants (LITERAL1)
 #######################################
-KEY_NONE	LITERAL1
