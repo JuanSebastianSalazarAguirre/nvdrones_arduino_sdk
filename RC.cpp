@@ -32,6 +32,10 @@ void RC::setFlightMode(int8_t value){
   _serialIO->sendPacket(value, resourceID::rc, actionID::setFlightMode);
 };
 
+void RC::setModeAutopilot(int8_t value){
+  _serialIO->sendPacket(value, resourceID::rc, actionID::setModeAutopilot);
+}
+
 void RC::getAileron(){
   _serialIO->sendPacket((int8_t)0, resourceID::rc, actionID::getAileron);
 }

@@ -136,6 +136,8 @@ void Drone::setElevator(int16_t value)                { _rc.setElevator(value); 
 void Drone::setThrottle(int16_t value)                { _rc.setThrottle(value); }
 void Drone::setRudder(int16_t value)                  { _rc.setRudder(value); }
 void Drone::setFlightMode(int16_t value)              { _rc.setFlightMode(value); }
+void Drone::setModeAutopilot(int16_t value)            { _rc.setModeAutopilot(value);}
+
 
 // Async Getters
 void Drone::getAileron()                             { _rc.getAileron(); }

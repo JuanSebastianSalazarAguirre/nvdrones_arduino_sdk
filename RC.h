@@ -27,6 +27,7 @@ public:
   void setThrottle(int8_t value);
   void setRudder(int8_t value);
   void setFlightMode(int8_t value);
+  void setModeAutopilot(int8_t value);
   void getAileron();
   void getElevator();
   void getThrottle();

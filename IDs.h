@@ -34,6 +34,7 @@ namespace actionID {
   const int16_t getRudder = 9;
   const int16_t getFlightMode = 10;
   const int16_t setAileronElevatorRudderThrottle = 11;
+  const int16_t setModeAutopilot = 12;
 
   // Pose
   const int16_t getAllPose = 1;

@@ -537,6 +537,17 @@ public:
   */
   void setAileronElevatorRudderThrottle(int aileron, int elevator, int rudder, int throttle);
 
+
+/**
+
+  Sets the drone's rudder, throttle, elevator, and aileron. All values should be between -100 and 100.
+
+  @param value chnges the mode of autopilot
+
+  */
+  void setModeAutopilot(int value);
+
+
   /**
    
   Configures the specified pin on the NVextender to behave either as an input or an output.
