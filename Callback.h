@@ -13,6 +13,11 @@ public:
   void (*i2cRead)(uint8_t);
   void (*i2cAvailable)(int16_t);
 
+  //Autopilot
+  void (*indoorHover)(float);
+  void (*outdoorHover)(float);
+  void (*takeover)(float);
+
   // GPS
   void (*longitude)(float);
   void (*latitude)(float);

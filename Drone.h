@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <Stream.h>
 #include <Arduino.h>
 #include "RC.h"
+#include "Autopilot.h"
 #include "SerialIO.h"
 #include "Callback.h"
 #include "Pose.h"
@@ -58,6 +59,7 @@ private:
   I2C _i2c;
   Callback _callback;
   Pose _pose;
+  Autopilot _autopilot;
 //\endcond
 
 public:
@@ -540,12 +542,15 @@ public:
 
 /**
 
-  Sets the drone's rudder, throttle, elevator, and aileron. All values should be between -100 and 100.
-
+  Sets the autopilot Mode
+  
   @param value chnges the mode of autopilot
+  0 manual override
+  1 indoor hover
+  2 outdoor hover
 
   */
-  void setModeAutopilot(int value);
+  void setAutopilotMode(int value);
 
 
   /**

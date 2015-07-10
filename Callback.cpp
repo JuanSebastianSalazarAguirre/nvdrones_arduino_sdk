@@ -192,6 +192,18 @@ void defaultSignalStrength(int16_t) {
   defaultCallback("signalStrength");
 }
 
+void defaultIndoorHoverCallback(float) {
+  defaultCallback("switchMode indoor");
+}
+
+void defaultOutdoorHoverCallback(float) {
+  defaultCallback("switchMode outdoor");
+}
+
+void defaultTakeoverCallback(float) {
+  defaultCallback("Takeover");
+}
+
 Callback::Callback():
 i2cRead(&defaultI2CReadCallback),
 i2cAvailable(&defaultI2CAvailableCallback),
@@ -243,7 +255,11 @@ heartbeatFound(&defaultHeartbeatFoundCallback),
 voltage(&defaultVoltageCallback),
 signalStrength(&defaultSignalStrength),
 
-errorHandler(&defaultErrorHandler)
+errorHandler(&defaultErrorHandler),
+
+indoorHover(&defaultIndoorHoverCallback),
+outdoorHover(&defaultOutdoorHoverCallback),
+takeover(&defaultTakeoverCallback)
 {
 
 }

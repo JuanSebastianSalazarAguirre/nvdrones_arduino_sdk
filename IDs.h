@@ -5,6 +5,7 @@
 namespace resourceID {
   const int16_t flightSetup = 1;
   const int16_t rc = 2;
+  const int16_t autopilot = 3;
   const int16_t pinMode = 5;
   const int16_t digitalWrite = 6;
   const int16_t analogWrite = 7;
@@ -35,6 +36,11 @@ namespace actionID {
   const int16_t getFlightMode = 10;
   const int16_t setAileronElevatorRudderThrottle = 11;
   const int16_t setModeAutopilot = 12;
+
+  //Autopilot
+  const int16_t manualTakeover = 47;
+  const int16_t indoorHover = 48;
+  const int16_t outdoorHover = 49;
 
   // Pose
   const int16_t getAllPose = 1;

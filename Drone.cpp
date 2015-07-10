@@ -20,6 +20,7 @@ Drone::Drone() {
   _gpio = GPIO(&_serialIO, &_callback, &_incomingPacketReader);
   _i2c = I2C(&_serialIO, &_callback, &_incomingPacketReader);
   _pose = Pose(&_serialIO, &_callback, &_incomingPacketReader);
+  _autopilot = Autopilot(&_serialIO, &_callback, &_incomingPacketReader);
 }
 
 Drone::Drone(SerialPort serialPort) {
@@ -32,6 +33,7 @@ Drone::Drone(SerialPort serialPort) {
   _gpio = GPIO(&_serialIO, &_callback, &_incomingPacketReader);
   _i2c = I2C(&_serialIO, &_callback, &_incomingPacketReader);
   _pose = Pose(&_serialIO, &_callback, &_incomingPacketReader);
+  _autopilot = Autopilot(&_serialIO, &_callback, &_incomingPacketReader);
 }
 
 Drone::Drone(int txPin, int rxPin) {
@@ -44,6 +46,7 @@ Drone::Drone(int txPin, int rxPin) {
   _gpio = GPIO(&_serialIO, &_callback, &_incomingPacketReader);
   _i2c = I2C(&_serialIO, &_callback, &_incomingPacketReader);
   _pose = Pose(&_serialIO, &_callback, &_incomingPacketReader);
+  _autopilot = Autopilot(&_serialIO, &_callback, &_incomingPacketReader);
 }
 
 //
@@ -89,6 +92,7 @@ void Drone::listen() {
 
   _vitals.tick();
 }
+
 
 // 
 // Pose Methods
@@ -136,7 +140,6 @@ void Drone::setElevator(int16_t value)                { _rc.setElevator(value); 
 void Drone::setThrottle(int16_t value)                { _rc.setThrottle(value); }
 void Drone::setRudder(int16_t value)                  { _rc.setRudder(value); }
 void Drone::setFlightMode(int16_t value)              { _rc.setFlightMode(value); }
-void Drone::setModeAutopilot(int16_t value)            { _rc.setModeAutopilot(value);}
 
 
 // Async Getters
@@ -181,6 +184,7 @@ void Drone::detachServo(int16_t servoNumber)                      { _gpio.detach
 void Drone::writeServo(int16_t servoNumber, int16_t data)         { _gpio.writeServo(servoNumber, data); }
 void Drone::interruptCallback(void (*cb)(void), int16_t interrupt){ _gpio.interruptCallback(cb, interrupt); }
 
+
 // Sync Getters
 uint32_t Drone::pulseInSync(int16_t pin, int16_t value)     { return _gpio.pulseInSync(pin, value); }
 uint32_t Drone::pulseInSync(int16_t pin, int16_t value, uint32_t timeout)     { return _gpio.pulseInSync(pin, value, timeout); }
@@ -222,3 +226,9 @@ void Drone::getSignalStrength() { _vitals.getSignalStrength(); }
 int16_t Drone::getSignalStrengthSync() { return _vitals.getSignalStrengthSync(); }
 void Drone::signalStrengthCallback(void (*cb)(int16_t)) { _vitals.signalStrengthCallback(cb); }
 void Drone::setErrorHandler(void (*cb)(int16_t)) { _vitals.setErrorHandler(cb); }
+
+//
+//Autopilot
+//
+
+void Drone::setAutopilotMode(int value)               {_autopilot.setAutopilotMode(value);}
