@@ -18,6 +18,7 @@ namespace resourceID {
   const int16_t servo = 18;
   const int16_t vitals = 19;
   const int16_t error = 20;
+  const int16_t transmitterSupport = 21;
 }
 
 namespace actionID {
@@ -102,6 +103,13 @@ namespace actionID {
   const int16_t invalidI2CAddress = 25;
   const int16_t unsetI2CAddress = 27;
   const int16_t gpsError = 28;
+
+  //Transmitter Support
+  const int16_t startTransmitterSupport = 1;
+  const int16_t stopTransmitterSupport = 2;
+  const int16_t getTransmitterType = 3;
+  const int16_t startTransmitterCalibration = 4;
+  const int16_t stopTransmitterCalibration = 5;
 }
 
 #endif // IDs_h

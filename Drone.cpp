@@ -20,6 +20,7 @@ Drone::Drone() {
   _gpio = GPIO(&_serialIO, &_callback, &_incomingPacketReader);
   _i2c = I2C(&_serialIO, &_callback, &_incomingPacketReader);
   _pose = Pose(&_serialIO, &_callback, &_incomingPacketReader);
+  _transmitterSupport = TranmistterSupport(&_serialIO, &_callback, &_incomingPacketReader);
 }
 
 Drone::Drone(SerialPort serialPort) {
@@ -32,6 +33,7 @@ Drone::Drone(SerialPort serialPort) {
   _gpio = GPIO(&_serialIO, &_callback, &_incomingPacketReader);
   _i2c = I2C(&_serialIO, &_callback, &_incomingPacketReader);
   _pose = Pose(&_serialIO, &_callback, &_incomingPacketReader);
+  _transmitterSupport = TranmistterSupport(&_serialIO, &_callback, &_incomingPacketReader);
 }
 
 Drone::Drone(int txPin, int rxPin) {
@@ -44,6 +46,7 @@ Drone::Drone(int txPin, int rxPin) {
   _gpio = GPIO(&_serialIO, &_callback, &_incomingPacketReader);
   _i2c = I2C(&_serialIO, &_callback, &_incomingPacketReader);
   _pose = Pose(&_serialIO, &_callback, &_incomingPacketReader);
+  _transmitterSupport = TranmistterSupport(&_serialIO, &_callback, &_incomingPacketReader);
 }
 
 //
