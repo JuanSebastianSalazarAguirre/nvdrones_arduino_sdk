@@ -12,7 +12,7 @@ _incomingPacketReader(incomingPacketReader)
 
 }
 
-void TransmitterSupport::startTransmitterSupport(uint8_t type){
+void TransmitterSupport::startTransmitterSupport(uint16_t type){
 
 }
 
@@ -25,7 +25,7 @@ void TransmitterSupport::getTransmitterType() {
 }
 
 int16_t TransmitterSupport::getTransmitterTypeSync() {
-	
+
 }
 
 void TransmitterSupport::startTransmitterCalibration() {

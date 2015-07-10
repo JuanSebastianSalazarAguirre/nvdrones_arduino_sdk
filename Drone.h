@@ -952,9 +952,9 @@ public:
   */
   void setErrorHandler(void (*cb)(int));
 
-  void startTransmitterSupport(uint8_t type);
+  void startTransmitterSupport(int16_t type);
 
-  void stopTransmitterType();
+  void stopTransmitterSupport();
 
   void getTransmitterType();
 

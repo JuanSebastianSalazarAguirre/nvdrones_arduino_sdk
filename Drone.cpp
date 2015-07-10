@@ -21,7 +21,7 @@ Drone::Drone() {
   _i2c = I2C(&_serialIO, &_callback, &_incomingPacketReader);
   _pose = Pose(&_serialIO, &_callback, &_incomingPacketReader);
   _autopilot = Autopilot(&_serialIO, &_callback, &_incomingPacketReader);
-  _transmitterSupport = TranmistterSupport(&_serialIO, &_callback, &_incomingPacketReader);
+  _transmitterSupport = TransmitterSupport(&_serialIO, &_callback, &_incomingPacketReader);
 }
 
 Drone::Drone(SerialPort serialPort) {
@@ -35,7 +35,7 @@ Drone::Drone(SerialPort serialPort) {
   _i2c = I2C(&_serialIO, &_callback, &_incomingPacketReader);
   _pose = Pose(&_serialIO, &_callback, &_incomingPacketReader);
   _autopilot = Autopilot(&_serialIO, &_callback, &_incomingPacketReader);
-  _transmitterSupport = TranmistterSupport(&_serialIO, &_callback, &_incomingPacketReader);
+  _transmitterSupport = TransmitterSupport(&_serialIO, &_callback, &_incomingPacketReader);
 }
 
 Drone::Drone(int txPin, int rxPin) {
@@ -49,7 +49,7 @@ Drone::Drone(int txPin, int rxPin) {
   _i2c = I2C(&_serialIO, &_callback, &_incomingPacketReader);
   _pose = Pose(&_serialIO, &_callback, &_incomingPacketReader);
   _autopilot = Autopilot(&_serialIO, &_callback, &_incomingPacketReader);
-  _transmitterSupport = TranmistterSupport(&_serialIO, &_callback, &_incomingPacketReader);
+  _transmitterSupport = TransmitterSupport(&_serialIO, &_callback, &_incomingPacketReader);
 }
 
 //
@@ -218,20 +218,31 @@ int16_t Drone::i2cAvailableSync() { return _i2c.availableSync(); }
 // Vitals Methods
 //
 
-void Drone::heartbeatLostCallback(void (*cb)(void))   { _vitals.heartbeatLostCallback(cb); }
-void Drone::heartbeatFoundCallback(void (*cb)(void))  { _vitals.heartbeatFoundCallback(cb); }
-
-void Drone::getVoltage() { _vitals.getVoltage(); }
-int16_t Drone::getVoltageSync() { return _vitals.getVoltageSync(); }
-void Drone::voltageCallback(void (*cb)(int16_t)) { _vitals.voltageCallback(cb); }
-
-void Drone::getSignalStrength() { _vitals.getSignalStrength(); }
-int16_t Drone::getSignalStrengthSync() { return _vitals.getSignalStrengthSync(); }
-void Drone::signalStrengthCallback(void (*cb)(int16_t)) { _vitals.signalStrengthCallback(cb); }
-void Drone::setErrorHandler(void (*cb)(int16_t)) { _vitals.setErrorHandler(cb); }
+void Drone::heartbeatLostCallback(void (*cb)(void))       { _vitals.heartbeatLostCallback(cb); }
+void Drone::heartbeatFoundCallback(void (*cb)(void))      { _vitals.heartbeatFoundCallback(cb); }
+void Drone::getVoltage()                                  { _vitals.getVoltage(); }
+int16_t Drone::getVoltageSync()                           { return _vitals.getVoltageSync(); }
+void Drone::voltageCallback(void (*cb)(int16_t))          { _vitals.voltageCallback(cb); }
+void Drone::getSignalStrength()                           { _vitals.getSignalStrength(); }
+int16_t Drone::getSignalStrengthSync()                    { return _vitals.getSignalStrengthSync(); }
+void Drone::signalStrengthCallback(void (*cb)(int16_t))   { _vitals.signalStrengthCallback(cb); }
+void Drone::setErrorHandler(void (*cb)(int16_t))          { _vitals.setErrorHandler(cb); }
 
 //
 //Autopilot
 //
 
 void Drone::setAutopilotMode(int value)               {_autopilot.setAutopilotMode(value);}
+
+//
+//Transmitter Support Methods
+//
+
+void Drone::startTransmitterSupport(int16_t type)         { _transmitterSupport.startTransmitterSupport(type); }
+void Drone::stopTransmitterSupport()                      { _transmitterSupport.stopTransmitterSupport(); }
+void Drone::getTransmitterType()                          { _transmitterSupport.getTransmitterType(); }
+void Drone::startTransmitterCalibration()                { _transmitterSupport.startTransmitterCalibration(); }
+void Drone::stopTransmitterCalibration()                 { _transmitterSupport.stopTransmitterCalibration(); }
+
+//Sync Getters
+int16_t Drone::getTransmitterTypeSync()                  {return _transmitterSupport.getTransmitterTypeSync(); }
