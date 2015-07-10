@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "I2C.h"
 #include "ResponseHandler.h"
 #include "Vitals.h"
+#include "Transmittersupport.h"
 
 /**
 
@@ -60,6 +61,7 @@ private:
   Callback _callback;
   Pose _pose;
   Autopilot _autopilot;
+  TransmitterSupport _transmitterSupport;
 //\endcond
 
 public:
@@ -949,6 +951,18 @@ public:
 
   */
   void setErrorHandler(void (*cb)(int));
+
+  void startTransmitterSupport(uint8_t type);
+
+  void stopTransmitterType();
+
+  void getTransmitterType();
+
+  int16_t getTransmitterTypeSync();
+
+  void startTransmitterCalibration();
+
+  void stopTransmitterCalibration();
 
 };
 
