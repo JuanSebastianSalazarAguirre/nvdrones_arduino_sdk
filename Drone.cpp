@@ -214,6 +214,7 @@ void Drone::i2cAvailableCallback(void (*cb)(int16_t)) { _i2c.availableCallback(c
 int16_t Drone::i2cReadSync()      { return _i2c.readSync(); }
 int16_t Drone::i2cAvailableSync() { return _i2c.availableSync(); }
 
+
 //
 // Vitals Methods
 //
@@ -229,6 +230,7 @@ void Drone::getSignalStrength() { _vitals.getSignalStrength(); }
 int16_t Drone::getSignalStrengthSync() { return _vitals.getSignalStrengthSync(); }
 void Drone::signalStrengthCallback(void (*cb)(int16_t)) { _vitals.signalStrengthCallback(cb); }
 void Drone::setErrorHandler(void (*cb)(int16_t)) { _vitals.setErrorHandler(cb); }
+
 
 //
 //Autopilot

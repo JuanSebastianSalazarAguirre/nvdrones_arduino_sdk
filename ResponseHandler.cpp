@@ -93,6 +93,11 @@ void ResponseHandler::listen() {
       case resourceID::error:
         _callbacks->errorHandler(p.actionID);
         break;
+        case resourceID::autoPilot:
+            if(p.actionID == actionID::manualTakeover) _callbacks->takeover(dataToFloat(p.data)); 
+            if(p.actionID == actionID::indoorHover) _callbacks->indoorHover(dataToFloat(p.data));
+            if(p.actionID == actionID::outdoorHover)  _callbacks->outdoorHover(dataToFloat(p.data));
+            break;
       default:
         LOG("Invalid resourceID ", p.resourceID);
         break;

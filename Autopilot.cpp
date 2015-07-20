@@ -30,17 +30,19 @@ void Autopilot::outdoorHoverCallback(void (*cb)(float)) {
 }
 
 void Autopilot::setAutopilotMode(int value){
+	Serial.print(" Mode: ");Serial.print(value);
 	switch(value){
 		case 0:
+			Serial.print("taking over");
 			setModeTakeover();
 			break;
 		case 1:
+			Serial.print("switching to autopilot");
 			setModeIndoorHover();
 			break;
 		case 2:
+			Serial.print("swithing to autopilot");
 			setModeOutdoorHover();
 			break;
-		default:
-			setModeTakeover();
 	}
 }
