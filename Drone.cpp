@@ -167,9 +167,9 @@ int16_t Drone::getElevatorSync()                        { return _rc.getElevator
 int16_t Drone::getThrottleSync()                        { return _rc.getThrottleSync(); }
 int16_t Drone::getRudderSync()                          { return _rc.getRudderSync(); }
 int16_t Drone::getFlightModeSync()                      { return _rc.getFlightModeSync(); }
-int16_t Drone::getSonarAltitudeSync()                   { _autopilot.getSonarAltitudeSync();}
-int16_t Drone::getSonarPositionXSync()                  { _autopilot.getSonarPositionXSync();}
-int16_t Drone::getSonarPositionYSync()                  { _autopilot.getSonarPositionYSync();}
+int16_t Drone::getSonarAltitudeSync()                   { return _autopilot.getSonarAltitudeSync();}
+int16_t Drone::getSonarPositionXSync()                  { return _autopilot.getSonarPositionXSync();}
+int16_t Drone::getSonarPositionYSync()                  { return _autopilot.getSonarPositionYSync();}
 
 //
 // GPIO Methods
