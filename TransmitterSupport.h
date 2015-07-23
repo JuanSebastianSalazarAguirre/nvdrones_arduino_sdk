@@ -27,7 +27,7 @@ public:
   TransmitterSupport();
   TransmitterSupport(SerialIO *serialIO, Callback *callback, IncomingPacketReader *incomingPacketReader);
 
-  void startTransmitterSupport(uint8_t type);
+  void startTransmitterSupport(uint16_t type);
   void stopTransmitterSupport();
   void getTransmitterType();
   int16_t getTransmitterTypeSync();
