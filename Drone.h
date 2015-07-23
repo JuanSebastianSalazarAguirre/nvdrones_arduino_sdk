@@ -554,6 +554,35 @@ public:
   */
   void setAutopilotMode(int value);
 
+  /**
+  gets the current Sonar based altitude reading if any
+  returns -1 else
+
+  */
+  int getSonarAltitudeSync();
+
+  /**
+  gets the current Sonar based x-position reading if any
+  returns -1 else
+
+  */
+  int getSonarPositionXSync();
+
+  /**
+  gets the current Sonar based y-position reading if any
+  returns -1 else
+
+  */
+  int getSonarPositionYSync();
+
+  /**
+  gets the current Sonar based x-position reading if any
+  returns -1 else
+
+  */
+  int getSonarPositionXSync();
+
+
 
   /**
    

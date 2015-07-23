@@ -42,6 +42,9 @@ namespace actionID {
   const int16_t manualTakeover = 47;
   const int16_t indoorHover = 48;
   const int16_t outdoorHover = 49;
+  const int16_t getSonarAltitude = 50;
+  const int16_t getSonarPositionX = 51;
+  const int16_t getSonarPositionY = 52;
 
   // Pose
   const int16_t getAllPose = 1;

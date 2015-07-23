@@ -24,6 +24,10 @@ public:
   void indoorHoverCallback(void (*function)(float));
   void outdoorHoverCallback(void (*function)(float));
   void takeoverCallback(void(*function)(float));
+  int16_t getSonarAltitudeSync();
+  int16_t getSonarPositionXSync();
+  int16_t getSonarPositionYSync();
+
 };
 
 #endif //NV_AUTOPILOT
