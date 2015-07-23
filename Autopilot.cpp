@@ -48,20 +48,18 @@ void Autopilot::setAutopilotMode(int value){
 }
 
 int16_t Autopilot::getSonarAltitudeSync(){
-	//_serialIO->sendPacket((int8_t)0, resourceID::rc, actionID::getElevator);
-	//return (int8_t)Utils::blockForByteData(resourceID::rc, actionID::getElevator, _incomingPacketReader);
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarAltitude);
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarAltiude, incomingPacketReader);
+	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarAltitude, _incomingPacketReader);
 
 }
 
 int16_t Autopilot::getSonarPositionXSync(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarPositionX);
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarPositionX, incomingPacketReader);
+	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarPositionX, _incomingPacketReader);
 }
 
 int16_t Autopilot::getSonarPositionYSync(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarPositionY);
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarPositionY, incomingPacketReader);
+	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarPositionY, _incomingPacketReader);
 
 }

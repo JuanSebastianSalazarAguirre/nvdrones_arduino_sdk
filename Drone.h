@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "I2C.h"
 #include "ResponseHandler.h"
 #include "Vitals.h"
-#include "Transmittersupport.h"
+#include "TransmitterSupport.h"
 
 /**
 
@@ -574,15 +574,6 @@ public:
 
   */
   int getSonarPositionYSync();
-
-  /**
-  gets the current Sonar based x-position reading if any
-  returns -1 else
-
-  */
-  int getSonarPositionXSync();
-
-
 
   /**
    
