@@ -952,17 +952,15 @@ public:
   */
   void setErrorHandler(void (*cb)(int));
 
-  void startTransmitterSupport(int16_t type);
+  void startTransmitterSupport();
 
   void stopTransmitterSupport();
-
-  void getTransmitterType();
-
-  int16_t getTransmitterTypeSync();
 
   void startTransmitterCalibration();
 
   void stopTransmitterCalibration();
+
+
 
 };
 

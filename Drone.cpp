@@ -238,11 +238,7 @@ void Drone::setAutopilotMode(int value)               {_autopilot.setAutopilotMo
 //Transmitter Support Methods
 //
 
-void Drone::startTransmitterSupport(int16_t type)         { _transmitterSupport.startTransmitterSupport(type); }
-void Drone::stopTransmitterSupport()                      { _transmitterSupport.stopTransmitterSupport(); }
-void Drone::getTransmitterType()                          { _transmitterSupport.getTransmitterType(); }
+void Drone::startTransmitterSupport()                    { _transmitterSupport.startTransmitterSupport(); }
+void Drone::stopTransmitterSupport()                     { _transmitterSupport.stopTransmitterSupport(); }
 void Drone::startTransmitterCalibration()                { _transmitterSupport.startTransmitterCalibration(); }
 void Drone::stopTransmitterCalibration()                 { _transmitterSupport.stopTransmitterCalibration(); }
-
-//Sync Getters
-int16_t Drone::getTransmitterTypeSync()                  {return _transmitterSupport.getTransmitterTypeSync(); }

@@ -112,11 +112,8 @@ namespace actionID {
   const int16_t gpsError = 28;
 
   //Transmitter Support
-  const int16_t startTransmitterSupport = 1;
-  const int16_t stopTransmitterSupport = 2;
-  const int16_t getTransmitterType = 3;
-  const int16_t startTransmitterCalibration = 4;
-  const int16_t stopTransmitterCalibration = 5;
+  const int16_t setTransmitterSupportState = 1;
+  const int16_t getTransmitterSupportState = 2;
 }
 
 #endif // IDs_h

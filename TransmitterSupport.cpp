@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include "TransmitterSupport.h"
 #include "IDs.h"
+#include "SerialIO.h"
 
 TransmitterSupport::TransmitterSupport(){}
 
@@ -12,26 +13,19 @@ _incomingPacketReader(incomingPacketReader)
 
 }
 
-void TransmitterSupport::startTransmitterSupport(uint16_t type){
-
+void TransmitterSupport::startTransmitterSupport(){
+	_serialIO->sendPacket(int8_t(1), resourceID::transmitterSupport, actionID::setTransmitterSupportState);
+	Serial.println("starting trans Support");
 }
 
 void TransmitterSupport::stopTransmitterSupport() {
-
-}
-
-void TransmitterSupport::getTransmitterType() {
-
-}
-
-int16_t TransmitterSupport::getTransmitterTypeSync() {
-
+	_serialIO->sendPacket(int8_t(0), resourceID::transmitterSupport, actionID::setTransmitterSupportState);
 }
 
 void TransmitterSupport::startTransmitterCalibration() {
-
+	_serialIO->sendPacket(int8_t(2), resourceID::transmitterSupport, actionID::setTransmitterSupportState);
 }
 
 void TransmitterSupport::stopTransmitterCalibration() {
-
+	_serialIO->sendPacket(int8_t(0), resourceID::transmitterSupport, actionID::setTransmitterSupportState);
 }

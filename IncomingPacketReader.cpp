@@ -25,7 +25,7 @@ IncomingPacket IncomingPacketReader::read() {
   LOG("start byte: ", startByte);
   if (startByte == '!') return IncomingPacket::heartbeatPacket;
   if (startByte != '$') {
-    Serial.println("Invalid start byte");
+    Serial.print("Invalid start byte: "); Serial.println("startByte");
     return IncomingPacket::emptyPacket;
   }
 

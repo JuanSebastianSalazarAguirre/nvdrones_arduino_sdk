@@ -1,6 +1,6 @@
 #include <Drone.h>
 
-Drone drone(serialPort1);
+Drone drone(serialPort2);
 
 unsigned long time = millis();
 
@@ -16,7 +16,7 @@ void loop() {
 
   if (now > time + 3000) {
     Serial.println("Arming");
-    drone.arm();
+    //drone.startTransmitterSupport();
     time = now;
   }
   
