@@ -167,6 +167,9 @@ int16_t Drone::getElevatorSync()                        { return _rc.getElevator
 int16_t Drone::getThrottleSync()                        { return _rc.getThrottleSync(); }
 int16_t Drone::getRudderSync()                          { return _rc.getRudderSync(); }
 int16_t Drone::getFlightModeSync()                      { return _rc.getFlightModeSync(); }
+int16_t Drone::getSonarAltitudeSync()                   { return _autopilot.getSonarAltitudeSync();}
+int16_t Drone::getSonarPositionXSync()                  { return _autopilot.getSonarPositionXSync();}
+int16_t Drone::getSonarPositionYSync()                  { return _autopilot.getSonarPositionYSync();}
 
 //
 // GPIO Methods
@@ -214,6 +217,7 @@ void Drone::i2cAvailableCallback(void (*cb)(int16_t)) { _i2c.availableCallback(c
 int16_t Drone::i2cReadSync()      { return _i2c.readSync(); }
 int16_t Drone::i2cAvailableSync() { return _i2c.availableSync(); }
 
+
 //
 // Vitals Methods
 //
@@ -227,6 +231,7 @@ void Drone::getSignalStrength()                           { _vitals.getSignalStr
 int16_t Drone::getSignalStrengthSync()                    { return _vitals.getSignalStrengthSync(); }
 void Drone::signalStrengthCallback(void (*cb)(int16_t))   { _vitals.signalStrengthCallback(cb); }
 void Drone::setErrorHandler(void (*cb)(int16_t))          { _vitals.setErrorHandler(cb); }
+
 
 //
 //Autopilot
@@ -242,3 +247,9 @@ void Drone::startTransmitterSupport()                    { _transmitterSupport.s
 void Drone::stopTransmitterSupport()                     { _transmitterSupport.stopTransmitterSupport(); }
 void Drone::startTransmitterCalibration()                { _transmitterSupport.startTransmitterCalibration(); }
 void Drone::stopTransmitterCalibration()                 { _transmitterSupport.stopTransmitterCalibration(); }
+<<<<<<< HEAD
+=======
+
+//Sync Getters
+int16_t Drone::getTransmitterTypeSync()                  {return _transmitterSupport.getTransmitterTypeSync(); }
+>>>>>>> origin/master

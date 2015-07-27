@@ -30,17 +30,36 @@ void Autopilot::outdoorHoverCallback(void (*cb)(float)) {
 }
 
 void Autopilot::setAutopilotMode(int value){
+	Serial.print(" Mode: ");Serial.print(value);
 	switch(value){
 		case 0:
+			Serial.print("taking over");
 			setModeTakeover();
 			break;
 		case 1:
+			Serial.print("switching to autopilot");
 			setModeIndoorHover();
 			break;
 		case 2:
+			Serial.print("swithing to autopilot");
 			setModeOutdoorHover();
 			break;
-		default:
-			setModeTakeover();
 	}
+}
+
+int16_t Autopilot::getSonarAltitudeSync(){
+	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarAltitude);
+	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarAltitude, _incomingPacketReader);
+
+}
+
+int16_t Autopilot::getSonarPositionXSync(){
+	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarPositionX);
+	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarPositionX, _incomingPacketReader);
+}
+
+int16_t Autopilot::getSonarPositionYSync(){
+	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarPositionY);
+	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarPositionY, _incomingPacketReader);
+
 }
