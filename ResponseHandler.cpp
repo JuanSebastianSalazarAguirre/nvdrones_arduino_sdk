@@ -24,12 +24,13 @@ _incomingPacketReader(incomingPacketReader)
 void ResponseHandler::listen() {
   while (_serialIO->available() > 0) {
 
+    IncomingPacket p = _incomingPacketReader->read();
+    
     if (p.isHearbeat()) {
       _vitals->receiveHeartbeat();
       continue;
     }
-    
-    IncomingPacket p = _incomingPacketReader->read();
+
     if (p.isEmpty()) { continue; }
 
 
