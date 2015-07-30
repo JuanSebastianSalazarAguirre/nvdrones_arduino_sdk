@@ -121,6 +121,10 @@ void Drone::yawCallback(void (*cb)(float))         { _pose.yawCallback(cb); }
 void Drone::pitchAngleCallback(void (*cb)(float))  { _pose.pitchAngleCallback(cb); }
 void Drone::rollAngleCallback(void (*cb)(float))   { _pose.rollAngleCallback(cb); }
 
+void Drone::getSonarAltitude()                     { _autopilot.getSonarAltitude();}
+void Drone::getSonarXPosition()                    { _autopilot.getSonarXPosition();}    
+void Drone::getSonarYPosition()                    { _autopilot.getSonarYPosition();}
+
 // Sync Getters
 float Drone::getLatitudeSync()      { return _pose.getLatitudeSync(); }
 float Drone::getLongitudeSync()     { return _pose.getLongitudeSync(); }
@@ -154,6 +158,9 @@ void Drone::getFlightMode()                          { _rc.getFlightMode(); }
 void Drone::aileronCallback(void (*cb)(int16_t))     { _rc.aileronCallback(cb); }
 void Drone::flightModeCallback(void (*cb)(int16_t))  { _rc.flightModeCallback(cb); }
 void Drone::throttleCallback(void (*cb)(int16_t))    { _rc.throttleCallback(cb); }
+void Drone::sonarAltitudeCallback(void (*cb)(float)) { _autopilot.sonarAltitudeCallback(cb); }
+void Drone::sonarXPositionCallback(void (*cb)(float)){ _autopilot.sonarXPositionCallback(cb); }
+void Drone::sonarYPositionCallback(void (*cb)(float)){ _autopilot.sonarYPositionCallback(cb); }
 void Drone::rudderCallback(void (*cb)(int16_t))      { _rc.rudderCallback(cb); }
 void Drone::elevatorCallback(void (*cb)(int16_t))    { _rc.elevatorCallback(cb); }
 void Drone::setAileronElevatorRudderThrottle(int16_t aileron,
@@ -247,9 +254,4 @@ void Drone::startTransmitterSupport()                    { _transmitterSupport.s
 void Drone::stopTransmitterSupport()                     { _transmitterSupport.stopTransmitterSupport(); }
 void Drone::startTransmitterCalibration()                { _transmitterSupport.startTransmitterCalibration(); }
 void Drone::stopTransmitterCalibration()                 { _transmitterSupport.stopTransmitterCalibration(); }
-<<<<<<< HEAD
-=======
 
-//Sync Getters
-int16_t Drone::getTransmitterTypeSync()                  {return _transmitterSupport.getTransmitterTypeSync(); }
->>>>>>> origin/master

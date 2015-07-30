@@ -100,6 +100,9 @@ void ResponseHandler::listen() {
         if(p.actionID == actionID::manualTakeover) _callbacks->takeover(dataToFloat(p.data)); 
         if(p.actionID == actionID::indoorHover) _callbacks->indoorHover(dataToFloat(p.data));
         if(p.actionID == actionID::outdoorHover)  _callbacks->outdoorHover(dataToFloat(p.data));
+        if(p.actionID == actionID::getSonarAltitude) _callbacks->sonarAltitude(dataToFloat(p.data));
+        if(p.actionID == actionID::getSonarXPosition) _callbacks->sonarXPosition(dataToFloat(p.data));
+        if(p.actionID == actionID::getSonarYPosition) _callbacks->sonarYPosition(dataToFloat(p.data));
         break;
       default:
         LOG("Invalid resourceID ", p.resourceID);

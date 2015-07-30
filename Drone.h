@@ -554,6 +554,15 @@ public:
   */
   void setAutopilotMode(int value);
 
+  void getSonarAltitude();
+  void getSonarXPosition();
+  void getSonarYPosition();
+  
+  //Drone Sonar positioning callbacks
+  void sonarAltitudeCallback(void (*cb)(float));
+  void sonarXPositionCallback(void (*cb)(float));
+  void sonarYPositionCallback(void (*cb)(float));
+
   /**
   gets the current Sonar based altitude reading if any
   returns -1 else

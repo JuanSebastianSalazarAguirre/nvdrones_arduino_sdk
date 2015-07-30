@@ -17,6 +17,9 @@ public:
   void (*indoorHover)(float);
   void (*outdoorHover)(float);
   void (*takeover)(float);
+  void (*sonarAltitude)(float);
+  void (*sonarXPosition)(float);
+  void (*sonarYPosition)(float);
 
   // GPS
   void (*longitude)(float);

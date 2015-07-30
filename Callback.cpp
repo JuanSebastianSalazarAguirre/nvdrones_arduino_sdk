@@ -204,6 +204,18 @@ void defaultTakeoverCallback(float) {
   defaultCallback("Takeover");
 }
 
+void defaultSonarAltitudeCallback(float) {
+  defaultCallback("Sonar altitude");
+}
+
+void defaultSonarXPositionCallback(float) {
+  defaultCallback("Sonar X_Position");
+}
+
+void defaultSonarYPositionCallback(float) {
+  defaultCallback("Sonar Y_Position");
+}
+
 Callback::Callback():
 i2cRead(&defaultI2CReadCallback),
 i2cAvailable(&defaultI2CAvailableCallback),
@@ -259,7 +271,10 @@ errorHandler(&defaultErrorHandler),
 
 indoorHover(&defaultIndoorHoverCallback),
 outdoorHover(&defaultOutdoorHoverCallback),
-takeover(&defaultTakeoverCallback)
+takeover(&defaultTakeoverCallback),
+sonarAltitude(&defaultSonarAltitudeCallback),
+sonarXPosition(&defaultSonarXPositionCallback),
+sonarYPosition(&defaultSonarYPositionCallback)
 {
 
 }
