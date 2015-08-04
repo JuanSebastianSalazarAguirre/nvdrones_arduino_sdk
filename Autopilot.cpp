@@ -137,6 +137,18 @@ void Autopilot::getSonarYPosition(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarPositionY);
 }
 
+void Autopilot::sonarAltitudeCallback(void  (*cb)(float)){
+	_callbacks->sonarAltitude = cb;
+}
+
+void Autopilot::sonarXPositionCallback(void (*cb)(float)){
+	_callbacks->sonarXPosition = cb;
+}
+
+void Autopilot::sonarYPositionCallback(void (*cb)(float)){
+	_callbacks->sonarYPosition = cb;
+}
+
 void Autopilot::getAltitudeKp(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getAltitudeKp);
 }
@@ -195,18 +207,6 @@ void Autopilot::getYPositionReference(){
  
 void Autopilot::getYPositionTolerance(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getYPositionTolerance);
-}
-
-void Autopilot::sonarAltitudeCallback(void  (*cb)(float)){
-	_callbacks->sonarAltitude = cb;
-}
-
-void Autopilot::sonarXPositionCallback(void (*cb)(float)){
-	_callbacks->sonarXPosition = cb;
-}
-
-void Autopilot::sonarYPositionCallback(void (*cb)(float)){
-	_callbacks->sonarYPosition = cb;
 }
 
 int16_t Autopilot::getAltitudeBaseSync(){
@@ -292,9 +292,7 @@ int16_t Autopilot::getSonarXPositionSync(){
 int16_t Autopilot::getSonarYPositionSync(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarPositionY);
 	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarPositionY, _incomingPacketReader);
-
 }
-
 int16_t Autopilot::getSonarAltitudeSync(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarAltitude);
 	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarAltitude, _incomingPacketReader);

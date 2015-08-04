@@ -591,7 +591,6 @@ public:
   void getYPositionReference();
   void getYPositionTolerance();
 
-
   //Drone Sonar positioning callbacks
   void sonarAltitudeCallback(void (*cb)(float));
   void sonarXPositionCallback(void (*cb)(float));
@@ -633,7 +632,6 @@ public:
   int16_t getYPositionKdSync();
   float getYPositionReferenceSync();
   float getYPositionToleranceSync();
-  
   
   /**
   gets the current Sonar based altitude reading if any

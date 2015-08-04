@@ -356,7 +356,6 @@ getYPositionKi(&defaultYPositionKiCallback),
 getYPositionKd(&defaultYPositionKdCallback),
 getYPositionReference(&defaultYPositionReferenceCallback),
 getYPositionTolerance(&defaultYPositionToleranceCallback)
-
 {
 
 }

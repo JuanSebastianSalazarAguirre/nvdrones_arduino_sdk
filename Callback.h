@@ -35,8 +35,6 @@ public:
   void (*getYPositionKd)(int16_t);
   void (*getYPositionReference)(float);
   void (*getYPositionTolerance)(float);
-  
-  
 
   // GPS
   void (*longitude)(float);

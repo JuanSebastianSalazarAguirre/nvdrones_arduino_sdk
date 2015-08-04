@@ -130,7 +130,6 @@ void Drone::getSonarAltitude()                     { _autopilot.getSonarAltitude
 void Drone::getSonarXPosition()                    { _autopilot.getSonarXPosition();}    
 void Drone::getSonarYPosition()                    { _autopilot.getSonarYPosition();}
 
-
 void Drone::longitudeCallback(void (*cb)(float))   { _pose.longitudeCallback(cb); }
 void Drone::latitudeCallback(void (*cb)(float))    { _pose.latitudeCallback(cb); }
 void Drone::altitudeCallback(void (*cb)(float))    { _pose.altitudeCallback(cb); }
