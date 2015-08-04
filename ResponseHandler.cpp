@@ -100,6 +100,24 @@ void ResponseHandler::listen() {
         if(p.actionID == actionID::manualTakeover) _callbacks->takeover(dataToFloat(p.data)); 
         if(p.actionID == actionID::indoorHover) _callbacks->indoorHover(dataToFloat(p.data));
         if(p.actionID == actionID::outdoorHover)  _callbacks->outdoorHover(dataToFloat(p.data));
+        if(p.actionID == actionID::getSonarAltitude) _callbacks->sonarAltitude(dataToFloat(p.data));
+        if(p.actionID == actionID::getSonarPositionX) _callbacks->sonarXPosition(dataToFloat(p.data));
+        if(p.actionID == actionID::getSonarPositionY) _callbacks->sonarYPosition(dataToFloat(p.data));
+        if(p.actionID == actionID::getAltitudeKp) _callbacks->getAltitudeKp((int16_t)p.data);
+        if(p.actionID == actionID::getAltitudeKi) _callbacks->getAltitudeKi((int16_t)p.data);
+        if(p.actionID == actionID::getAltitudeBase) _callbacks->getAltitudeBase((int16_t)p.data);
+        if(p.actionID == actionID::getAltitudeReference) _callbacks->getAltitudeReference(dataToFloat(p.data));
+        if(p.actionID == actionID::getAltitudeTolerance) _callbacks->getAltitudeTolerance(dataToFloat(p.data));
+        if(p.actionID == actionID::getXPositionKp) _callbacks->getXPositionKp((int16_t)p.data);
+        if(p.actionID == actionID::getXPositionKi) _callbacks->getXPositionKi((int16_t)p.data);
+        if(p.actionID == actionID::getXPositionKd) _callbacks->getXPositionKd((int16_t)p.data);
+        if(p.actionID == actionID::getXPositionReference) _callbacks->getXPositionReference(dataToFloat(p.data));
+        if(p.actionID == actionID::getXPositionTolerance) _callbacks->getXPositionTolerance(dataToFloat(p.data));
+        if(p.actionID == actionID::getYPositionKp) _callbacks->getYPositionKp((int16_t)p.data);
+        if(p.actionID == actionID::getYPositionKi) _callbacks->getYPositionKi((int16_t)p.data);
+        if(p.actionID == actionID::getYPositionKd) _callbacks->getYPositionKd((int16_t)p.data);
+        if(p.actionID == actionID::getYPositionReference) _callbacks->getYPositionReference(dataToFloat(p.data));
+        if(p.actionID == actionID::getYPositionTolerance) _callbacks->getYPositionTolerance(dataToFloat(p.data));
         break;
       default:
         LOG("Invalid resourceID ", p.resourceID);

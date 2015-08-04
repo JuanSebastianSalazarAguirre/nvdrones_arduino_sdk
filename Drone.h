@@ -554,6 +554,87 @@ public:
   */
   void setAutopilotMode(int value);
 
+  void getSonarAltitude();
+  void getSonarXPosition();
+  void getSonarYPosition();
+
+  void setAltitudeReference(float value);
+  void setAltitudeTolerance(float value);
+  void setAltitudeKp(int value);
+  void setAltitudeKi(int value);
+  void setAltitudeBase(int value);
+  void getAltitudeKp(); 
+  void getAltitudeKi(); 
+  void getAltitudeBase();
+  void getAltitudeReference();
+  void getAltitudeTolerance();
+
+  void setXPositionReference(float value);
+  void setXPositionTolerance(float value);
+  void setXPositionKp(int value);
+  void setXPositionKi(int value);
+  void setXPositionKd(int value);
+  void getXPositionKp(); 
+  void getXPositionKi(); 
+  void getXPositionKd();
+  void getXPositionReference();
+  void getXPositionTolerance();
+
+  void setYPositionReference(float value);
+  void setYPositionTolerance(float value);
+  void setYPositionKp(int value);
+  void setYPositionKi(int value);
+  void setYPositionKd(int value);
+  void getYPositionKp(); 
+  void getYPositionKi(); 
+  void getYPositionKd();
+  void getYPositionReference();
+  void getYPositionTolerance();
+
+
+  //Drone Sonar positioning callbacks
+  void sonarAltitudeCallback(void (*cb)(float));
+  void sonarXPositionCallback(void (*cb)(float));
+  void sonarYPositionCallback(void (*cb)(float));
+
+  void AltitudeBaseCallback(void (*cb)(int16_t));
+  void AltitudeKpCallback(void (*cb)(int16_t));
+  void AltitudeKiCallback(void (*cb)(int16_t));
+  void AltitudeReferenceCallback(void (*cb)(float));
+  void AltitudeToleranceCallback(void (*cb)(float));
+
+  
+  void XPositionKdCallback(void (*cb)(int16_t));
+  void XPositionKpCallback(void (*cb)(int16_t));
+  void XPositionKiCallback(void (*cb)(int16_t));
+  void XPositionReferenceCallback(void (*cb)(float));
+  void XPositionToleranceCallback(void (*cb)(float));
+
+  void YPositionKdCallback(void (*cb)(int16_t));
+  void YPositionKpCallback(void (*cb)(int16_t));
+  void YPositionKiCallback(void (*cb)(int16_t));
+  void YPositionReferenceCallback(void (*cb)(float));
+  void YPositionToleranceCallback(void (*cb)(float));
+
+  int16_t getAltitudeKpSync();
+  int16_t getAltitudeKiSync();
+  int16_t getAltitudeBaseSync();
+  float getAltitudeReferenceSync();
+  float getAltitudeToleranceSync();
+
+  int16_t getXPositionKpSync();
+  int16_t getXPositionKiSync();
+  int16_t getXPositionKdSync();
+  float getXPositionReferenceSync();
+  float getXPositionToleranceSync();
+  
+  int16_t getYPositionKpSync();
+  int16_t getYPositionKiSync();
+  int16_t getYPositionKdSync();
+  float getYPositionReferenceSync();
+  float getYPositionToleranceSync();
+  
+  
   /**
   gets the current Sonar based altitude reading if any
   returns -1 else

@@ -45,6 +45,36 @@ namespace actionID {
   const int16_t getSonarAltitude = 50;
   const int16_t getSonarPositionX = 51;
   const int16_t getSonarPositionY = 52;
+  const int16_t setAltitudeKp = 53;
+  const int16_t setAltitudeKi = 54;
+  const int16_t setAltitudeBase = 55;
+  const int16_t getAltitudeKp = 56;
+  const int16_t getAltitudeKi = 57;
+  const int16_t getAltitudeBase = 58;
+  const int16_t setAltitudeReference = 59;
+  const int16_t setAltitudeTolerance = 60;
+  const int16_t getAltitudeReference = 61;
+  const int16_t getAltitudeTolerance = 62;
+  const int16_t setXPositionKp = 63;
+  const int16_t setXPositionKi = 64;
+  const int16_t setXPositionKd = 65;
+  const int16_t getXPositionKp = 66;
+  const int16_t getXPositionKi = 67;
+  const int16_t getXPositionKd = 68;
+  const int16_t setXPositionReference = 69; 
+  const int16_t getXPositionReference = 70;
+  const int16_t setXPositionTolerance = 71; 
+  const int16_t getXPositionTolerance = 72;
+  const int16_t setYPositionKp = 73; 
+  const int16_t setYPositionKi = 74;
+  const int16_t setYPositionKd = 75;
+  const int16_t getYPositionKp = 76;
+  const int16_t getYPositionKi = 77;
+  const int16_t getYPositionKd = 78;
+  const int16_t setYPositionReference = 79;
+  const int16_t getYPositionReference = 80;
+  const int16_t setYPositionTolerance = 81;
+  const int16_t getYPositionTolerance = 82;
 
   // Pose
   const int16_t getAllPose = 1;

@@ -17,6 +17,26 @@ public:
   void (*indoorHover)(float);
   void (*outdoorHover)(float);
   void (*takeover)(float);
+  void (*sonarAltitude)(float);
+  void (*sonarXPosition)(float);
+  void (*sonarYPosition)(float);
+  void (*getAltitudeKp)(int16_t);
+  void (*getAltitudeKi)(int16_t);
+  void (*getAltitudeBase)(int16_t);
+  void (*getAltitudeReference)(float);
+  void (*getAltitudeTolerance)(float);
+  void (*getXPositionKp)(int16_t);
+  void (*getXPositionKi)(int16_t);
+  void (*getXPositionKd)(int16_t);
+  void (*getXPositionReference)(float);
+  void (*getXPositionTolerance)(float);
+  void (*getYPositionKp)(int16_t);
+  void (*getYPositionKi)(int16_t);
+  void (*getYPositionKd)(int16_t);
+  void (*getYPositionReference)(float);
+  void (*getYPositionTolerance)(float);
+  
+  
 
   // GPS
   void (*longitude)(float);

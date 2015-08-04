@@ -204,6 +204,81 @@ void defaultTakeoverCallback(float) {
   defaultCallback("Takeover");
 }
 
+void defaultSonarAltitudeCallback(float) {
+  defaultCallback("Sonar altitude");
+}
+
+void defaultSonarXPositionCallback(float) {
+  defaultCallback("Sonar X_Position");
+}
+
+void defaultSonarYPositionCallback(float) {
+  defaultCallback("Sonar Y_Position");
+}
+
+void defaultAltitudeBaseCallback(int16_t){
+  defaultCallback("Altitude Base");
+}
+
+void defaultAltitudeKpCallback(int16_t){
+  defaultCallback("Altitude Kp");
+}
+
+void defaultAltitudeKiCallback(int16_t){
+  defaultCallback("Altitude Ki");
+}
+
+void defaultAltitudeReferenceCallback(float){
+  defaultCallback("Altitude reference");
+}
+
+void defaultAltitudeToleranceCallback(float){
+  defaultCallback("Altitude Tolerance");
+}
+
+void defaultXPositionKdCallback(int16_t){
+  defaultCallback("XPosition Kd");
+}
+
+void defaultXPositionKpCallback(int16_t){
+  defaultCallback("XPosition Kp");
+}
+
+void defaultXPositionKiCallback(int16_t){
+  defaultCallback("XPosition Ki");
+}
+
+void defaultXPositionReferenceCallback(float){
+  defaultCallback("XPosition reference");
+}
+
+void defaultXPositionToleranceCallback(float){
+  defaultCallback("XPosition Tolerance");
+}
+
+
+void defaultYPositionKdCallback(int16_t){
+  defaultCallback("YPosition Kd");
+}
+
+void defaultYPositionKpCallback(int16_t){
+  defaultCallback("YPosition Kp");
+}
+
+void defaultYPositionKiCallback(int16_t){
+  defaultCallback("YPosition Ki");
+}
+
+void defaultYPositionReferenceCallback(float){
+  defaultCallback("YPosition reference");
+}
+
+void defaultYPositionToleranceCallback(float){
+  defaultCallback("YPosition Tolerance");
+}
+
+
+
 Callback::Callback():
 i2cRead(&defaultI2CReadCallback),
 i2cAvailable(&defaultI2CAvailableCallback),
@@ -259,7 +334,29 @@ errorHandler(&defaultErrorHandler),
 
 indoorHover(&defaultIndoorHoverCallback),
 outdoorHover(&defaultOutdoorHoverCallback),
-takeover(&defaultTakeoverCallback)
+takeover(&defaultTakeoverCallback),
+sonarAltitude(&defaultSonarAltitudeCallback),
+sonarXPosition(&defaultSonarXPositionCallback),
+sonarYPosition(&defaultSonarYPositionCallback),
+
+getAltitudeKp(&defaultAltitudeKpCallback),
+getAltitudeKi(&defaultAltitudeKiCallback),
+getAltitudeBase(&defaultAltitudeBaseCallback),
+getAltitudeReference(&defaultAltitudeReferenceCallback),
+getAltitudeTolerance(&defaultAltitudeToleranceCallback),
+
+getXPositionKp(&defaultXPositionKpCallback),
+getXPositionKi(&defaultXPositionKiCallback),
+getXPositionKd(&defaultXPositionKdCallback),
+getXPositionReference(&defaultXPositionReferenceCallback),
+getXPositionTolerance(&defaultXPositionToleranceCallback),
+
+getYPositionKp(&defaultYPositionKpCallback),
+getYPositionKi(&defaultYPositionKiCallback),
+getYPositionKd(&defaultYPositionKdCallback),
+getYPositionReference(&defaultYPositionReferenceCallback),
+getYPositionTolerance(&defaultYPositionToleranceCallback)
+
 {
 
 }
