@@ -1,46 +1,72 @@
-//This Example demonstrates how send the drone 10 feet ahead
 #include <Drone.h>
 
-//create an instance of Avant
-//0 means Serial, 1 is Serial1, 2 is Serial2, 3 is Serial3
-//If the Xbee is connected to software serial ports
-//Specify the RX, TX port like myTrans(rx, tx)
+//
+//This is Drone Support Testing Code:
+//
+//Usages:
+//1.) Serial Write 'I' to test the IMU Getters 
+//2.) Serial Write 'A' to test the Autopilot Getters
+//3.) Serial write 'G' to test the GPS Getters
+//5.) Serial write 'R' to test the RC Getters
+//6.) Serial write 'S' to test the Setters
+//
+
 Drone myTrans(serialPort3); 
                             
                             
 void setupTransmitter() {
   //setbuttons to inputs
-  myTrans.setFlightMode(10);
   Serial.begin(57600);  //Start the Serial Serial Port
 }
 
+
+/*
+*Functions used for callback support*/
+
+//Satellite Getters
+void printLongitude(float Long){
+  Serial.print("Long");Serial.println(Long);
+}
+void printLatitude(float Lat){
+  Serial.print("Lat");Serial.println(Lat);
+}
+void printAltitude(float Alt){
+  Serial.print("Alt");Serial.println(Alt);
+}
+void printSpeed(float Spd){
+  Serial.print("Spd");Serial.println(Spd);
+}
+void printSatelites(int Sat){
+  Serial.print("Sat");Serial.println(Sat);
+}
+
+//RC Getters
 void printThrottle(int16_t throt){
   Serial.print("T");Serial.println(throt);
 }
-
 void printAileron(int16_t ail){
   Serial.print("A");Serial.println(ail);
 }
 void printElevator(int16_t ele){
   Serial.print("E");Serial.println(ele);
 }
+void printRudder(int16_t rud){
+  Serial.print("R");Serial.println(rud);
+}
 
+//Autopilot Getters
 void printSonarAlt(float Alt){
   Serial.print("Z");Serial.println(Alt);
 }
-
 void printSonarX(float XP){
   Serial.print("X");Serial.println(XP);
 }
-
 void printSonarY(float YP){
   Serial.print("Y");Serial.println(YP);
 }
-
 void printAltitudeBase(int16_t B){
   Serial.print("B");Serial.println(B);
 }
-
 void printAltitudeTolerance(float TOL){
   Serial.print("ATOL");Serial.println(TOL);
 }
@@ -56,7 +82,6 @@ void printAltitudeReference(float Ref){
 void printXKd(int16_t B){
   Serial.print("XB");Serial.println(B);
 }
-
 void printXTolerance(float TOL){
   Serial.print("XTOL");Serial.println(TOL);
 }
@@ -69,11 +94,9 @@ void printXKi(int16_t KI){
 void printXReference(float Ref){
   Serial.print("XREF");Serial.println(Ref);
 }
-
 void printYKd(int16_t B){
   Serial.print("YB");Serial.println(B);
 }
-
 void printYTolerance(float TOL){
   Serial.print("YTOL");Serial.println(TOL);
 }
@@ -86,14 +109,16 @@ void printYKi(int16_t KI){
 void printYReference(float Ref){
   Serial.print("YREF");Serial.println(Ref);
 }
+
+//IMU Getters
 void printPitch(float P){
   Serial.print("Pit");Serial.println(P);
 }
 void printRoll(float R){
   Serial.print("Rol");Serial.println(R);
 }
-void printYaw(float Ya){
-  Serial.print("Yaw");Serial.println(Ya);
+void printYaw(float Y){
+  Serial.print("Yaw");Serial.println(Y);
 }
 
 
@@ -101,8 +126,10 @@ unsigned long manualTimer = 0;
 unsigned long previousMillis=0;
 
 void setup() {
+
   setupTransmitter();
-  
+
+  //Callback Setup
   myTrans.throttleCallback(printThrottle);
   myTrans.aileronCallback(printAileron);
   myTrans.elevatorCallback(printElevator);
@@ -127,11 +154,18 @@ void setup() {
   myTrans.yawCallback(printYaw);
   myTrans.pitchAngleCallback(printPitch);
   myTrans.rollAngleCallback(printRoll);  
+  myTrans.rudderCallback(printRudder);
+  myTrans.altitudeCallback(printAltitude);
+  myTrans.longitudeCallback(printLongitude);
+  myTrans.latitudeCallback(printLatitude);
+  myTrans.satelliteCallback(printSatelites);
+  myTrans.speedCallback(printSpeed);
   
 }
-void sendShit(int val){
+void sendData(int val){
+
   //
-  //Setters Setup
+  //Setters Test
   //
   switch(val){
     case 0:
@@ -179,100 +213,124 @@ void sendShit(int val){
     case 14:
       myTrans.setYPositionKd(50);
       break;
+    case 15:
+      myTrans.setAileron(23);
+      break;
+    case 16:
+      myTrans.setElevator(33);
+      break;
+    case 17:
+      myTrans.setThrottle(43);
+      break;
+    case 18:
+      myTrans.setRudder(53);
+      break;
+    case 19:
+      myTrans.setFlightMode(63);
+      break;
   }  
 }
 
 long timer = 0;
 int counter = 0;
 int switcher = 0;
+
+//used to store the variable read from Serial
+char incomingByte;
+
 void loop() {
-  
-  
-  if(counter >= 300){
-    
-    if(switcher <=14)
-      sendShit(switcher);
-      
-    if(switcher == 0){
-      myTrans.getThrottle();
-      switcher = 1;
-    }else if(switcher == 1){
-      myTrans.getAileron();
-      switcher = 2;
-    }else if(switcher == 2){
-      myTrans.getElevator();
-      switcher = 3;
-    }else if(switcher == 3){
-      myTrans.getYaw();
-      switcher = 4;
-    }else if(switcher == 4){
-      myTrans.getPitchAngle();
-      switcher = 5;
-    }else if(switcher == 5){
-      myTrans.getRollAngle();
-      switcher = 6;
-    }else if(switcher == 6){
+
+  if(Serial.available() > 0){
+
+    incomingByte = Serial.read(); //check the serial line
+
+    if(incomingByte == 'A' || incomingByte == 'a'){
+
       myTrans.getAltitudeKp();
-      switcher = 7;
-    }else if(switcher == 7){
+      
       myTrans.getAltitudeKi();
-      switcher = 8;
-    }else if(switcher == 8){
+      
       myTrans.getAltitudeBase();
-      switcher = 9;
-    }else if(switcher == 9){
+      
       myTrans.getAltitudeReference();
-      switcher = 10;
-    }else if(switcher == 10){
+
       myTrans.getAltitudeTolerance();
-      switcher = 11;
-    }else if(switcher == 11){
+
       myTrans.getXPositionKp();
-      switcher = 12;
-    }else if(switcher == 12){
+
       myTrans.getXPositionKi();
-      switcher = 13;
-    }else if(switcher == 13){
+
       myTrans.getXPositionKd();
-      switcher = 14;
-    }else if(switcher == 14){
+
       myTrans.getXPositionReference();
-      switcher = 15;
-    }else if(switcher == 15){
+
       myTrans.getXPositionTolerance();
-      switcher = 16;
-    }else if(switcher == 16){
+
       myTrans.getYPositionKp();
-      switcher = 17;
-    }else if(switcher == 17){
+
       myTrans.getYPositionKi();
-      switcher = 18;
-    }else if(switcher == 18){
+
       myTrans.getYPositionKd();
-      switcher = 19;
-    }else if(switcher == 19){
+
       myTrans.getYPositionReference();
-      switcher = 20;
-    }else if(switcher == 20){
+
       myTrans.getYPositionTolerance();
-      switcher = 0;
+
+      myTrans.getSonarAltitude();
+
+      myTrans.getSonarYPosition();
+
+      myTrans.getSonarXPosition();
+
+    }else if(incomingByte == 'G' || incomingByte =='g'){
+
+      myTrans.getSatellites();
+
+      myTrans.getSpeed();
+
+      myTrans.getAltitude();
+
+      myTrans.getLatitude();
+
+      myTrans.getLongitude();
+
+    }else if(incomingByte == 'I' || incomingByte == 'i'){
+
+      myTrans.getYaw(); 
+
+      myTrans.getRollAngle();
+
+      myTrans.getPitchAngle();
+
+    }else if(incomingByte == 'R' || incomingByte == 'r'){
+
+      myTrans.getThrottle(); 
+
+      myTrans.getAileron();
+
+      myTrans.getElevator();
+
+      myTrans.getRudder();
+
+    }else if(incomingByte == 'S' || incomingByte == 's'){
+
+      for(int i = 0; i < 20; ){
+
+        if( (millis() - previousMillis) >= 50){
+          sendData(i);
+          ++i;
+          previousMillis = millis();
+        }
+      
+      }
+
+    }else{
+      Serial.println("Incorrect usage: Please refer to the comments at the beginning of this document");
     }
-    counter = 0;
+
   }
-  counter++;
 
   //process Callbacks
   myTrans.listen();
   
 }
-
-
-
-
-
-
-
-
-
-
-
