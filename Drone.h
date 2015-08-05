@@ -560,9 +560,9 @@ public:
 
   void setAltitudeReference(float value);
   void setAltitudeTolerance(float value);
-  void setAltitudeKp(int value);
-  void setAltitudeKi(int value);
-  void setAltitudeBase(int value);
+  void setAltitudeKp(float value);
+  void setAltitudeKi(float value);
+  void setAltitudeBase(float value);
   void getAltitudeKp(); 
   void getAltitudeKi(); 
   void getAltitudeBase();
@@ -571,9 +571,9 @@ public:
 
   void setXPositionReference(float value);
   void setXPositionTolerance(float value);
-  void setXPositionKp(int value);
-  void setXPositionKi(int value);
-  void setXPositionKd(int value);
+  void setXPositionKp(float value);
+  void setXPositionKi(float value);
+  void setXPositionKd(float value);
   void getXPositionKp(); 
   void getXPositionKi(); 
   void getXPositionKd();
@@ -582,9 +582,9 @@ public:
 
   void setYPositionReference(float value);
   void setYPositionTolerance(float value);
-  void setYPositionKp(int value);
-  void setYPositionKi(int value);
-  void setYPositionKd(int value);
+  void setYPositionKp(float value);
+  void setYPositionKi(float value);
+  void setYPositionKd(float value);
   void getYPositionKp(); 
   void getYPositionKi(); 
   void getYPositionKd();
@@ -596,40 +596,40 @@ public:
   void sonarXPositionCallback(void (*cb)(float));
   void sonarYPositionCallback(void (*cb)(float));
 
-  void AltitudeBaseCallback(void (*cb)(int));
-  void AltitudeKpCallback(void (*cb)(int));
-  void AltitudeKiCallback(void (*cb)(int));
+  void AltitudeBaseCallback(void (*cb)(float));
+  void AltitudeKpCallback(void (*cb)(float));
+  void AltitudeKiCallback(void (*cb)(float));
   void AltitudeReferenceCallback(void (*cb)(float));
   void AltitudeToleranceCallback(void (*cb)(float));
 
   
-  void XPositionKdCallback(void (*cb)(int));
-  void XPositionKpCallback(void (*cb)(int));
-  void XPositionKiCallback(void (*cb)(int));
+  void XPositionKdCallback(void (*cb)(float));
+  void XPositionKpCallback(void (*cb)(float));
+  void XPositionKiCallback(void (*cb)(float));
   void XPositionReferenceCallback(void (*cb)(float));
   void XPositionToleranceCallback(void (*cb)(float));
 
-  void YPositionKdCallback(void (*cb)(int));
-  void YPositionKpCallback(void (*cb)(int));
-  void YPositionKiCallback(void (*cb)(int));
+  void YPositionKdCallback(void (*cb)(float));
+  void YPositionKpCallback(void (*cb)(float));
+  void YPositionKiCallback(void (*cb)(float));
   void YPositionReferenceCallback(void (*cb)(float));
   void YPositionToleranceCallback(void (*cb)(float));
 
-  int getAltitudeKpSync();
-  int getAltitudeKiSync();
-  int getAltitudeBaseSync();
+  float getAltitudeKpSync();
+  float getAltitudeKiSync();
+  float getAltitudeBaseSync();
   float getAltitudeReferenceSync();
   float getAltitudeToleranceSync();
 
-  int getXPositionKpSync();
-  int getXPositionKiSync();
-  int getXPositionKdSync();
+  float getXPositionKpSync();
+  float getXPositionKiSync();
+  float getXPositionKdSync();
   float getXPositionReferenceSync();
   float getXPositionToleranceSync();
   
-  int getYPositionKpSync();
-  int getYPositionKiSync();
-  int getYPositionKdSync();
+  float getYPositionKpSync();
+  float getYPositionKiSync();
+  float getYPositionKdSync();
   float getYPositionReferenceSync();
   float getYPositionToleranceSync();
   

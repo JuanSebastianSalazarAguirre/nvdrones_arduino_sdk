@@ -64,46 +64,46 @@ void printSonarX(float XP){
 void printSonarY(float YP){
   Serial.print("Y");Serial.println(YP);
 }
-void printAltitudeBase(int16_t B){
+void printAltitudeBase(float B){
   Serial.print("B");Serial.println(B);
 }
 void printAltitudeTolerance(float TOL){
   Serial.print("ATOL");Serial.println(TOL);
 }
-void printAltitudeKp(int16_t KP){
+void printAltitudeKp(float KP){
   Serial.print("AKP");Serial.println(KP);
 }
-void printAltitudeKi(int16_t KI){
+void printAltitudeKi(float KI){
   Serial.print("AKI");Serial.println(KI);
 }
 void printAltitudeReference(float Ref){
   Serial.print("AREF");Serial.println(Ref);
 }
-void printXKd(int16_t B){
+void printXKd(float B){
   Serial.print("XB");Serial.println(B);
 }
 void printXTolerance(float TOL){
   Serial.print("XTOL");Serial.println(TOL);
 }
-void printXKp(int16_t KP){
+void printXKp(float KP){
   Serial.print("XKP");Serial.println(KP);
 }
-void printXKi(int16_t KI){
+void printXKi(float KI){
   Serial.print("XKI");Serial.println(KI);
 }
 void printXReference(float Ref){
   Serial.print("XREF");Serial.println(Ref);
 }
-void printYKd(int16_t B){
+void printYKd(float B){
   Serial.print("YB");Serial.println(B);
 }
 void printYTolerance(float TOL){
   Serial.print("YTOL");Serial.println(TOL);
 }
-void printYKp(int16_t KP){
+void printYKp(float KP){
   Serial.print("YKP");Serial.println(KP);
 }
-void printYKi(int16_t KI){
+void printYKi(float KI){
   Serial.print("YKI");Serial.println(KI);
 }
 void printYReference(float Ref){
@@ -175,13 +175,13 @@ void sendData(int val){
       myTrans.setAltitudeTolerance(50.0);
       break;
     case 2:
-      myTrans.setAltitudeKp(100);
+      myTrans.setAltitudeKp(100.0);
       break;
     case 3:
-      myTrans.setAltitudeKi(50);
+      myTrans.setAltitudeKi(50.0);
       break;
     case 4:
-      myTrans.setAltitudeBase(25);
+      myTrans.setAltitudeBase(25.0);
       break;
     case 5:
       myTrans.setXPositionReference(100.0);
@@ -190,13 +190,13 @@ void sendData(int val){
       myTrans.setXPositionTolerance(50.0);
       break;
     case 7:
-      myTrans.setXPositionKp(100);
+      myTrans.setXPositionKp(100.0);
       break;
     case 8:
-      myTrans.setXPositionKi(50);
+      myTrans.setXPositionKi(50.0);
       break;
     case 9:
-      myTrans.setXPositionKd(25);
+      myTrans.setXPositionKd(25.0);
       break;
     case 10:
       myTrans.setYPositionReference(100.0);
@@ -205,13 +205,13 @@ void sendData(int val){
       myTrans.setYPositionTolerance(50.0);
       break;
     case 12:
-      myTrans.setYPositionKp(100);
+      myTrans.setYPositionKp(100.0);
       break;
     case 13:
-      myTrans.setYPositionKi(50);
+      myTrans.setYPositionKi(50.0);
       break;
     case 14:
-      myTrans.setYPositionKd(50);
+      myTrans.setYPositionKd(50.0);
       break;
     case 15:
       myTrans.setAileron(23);
@@ -311,6 +311,8 @@ void loop() {
       myTrans.getElevator();
 
       myTrans.getRudder();
+
+      myTrans.getFlightMode();
 
     }else if(incomingByte == 'S' || incomingByte == 's'){
 

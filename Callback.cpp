@@ -216,15 +216,15 @@ void defaultSonarYPositionCallback(float) {
   defaultCallback("Sonar Y_Position");
 }
 
-void defaultAltitudeBaseCallback(int16_t){
+void defaultAltitudeBaseCallback(float){
   defaultCallback("Altitude Base");
 }
 
-void defaultAltitudeKpCallback(int16_t){
+void defaultAltitudeKpCallback(float){
   defaultCallback("Altitude Kp");
 }
 
-void defaultAltitudeKiCallback(int16_t){
+void defaultAltitudeKiCallback(float){
   defaultCallback("Altitude Ki");
 }
 
@@ -236,15 +236,15 @@ void defaultAltitudeToleranceCallback(float){
   defaultCallback("Altitude Tolerance");
 }
 
-void defaultXPositionKdCallback(int16_t){
+void defaultXPositionKdCallback(float){
   defaultCallback("XPosition Kd");
 }
 
-void defaultXPositionKpCallback(int16_t){
+void defaultXPositionKpCallback(float){
   defaultCallback("XPosition Kp");
 }
 
-void defaultXPositionKiCallback(int16_t){
+void defaultXPositionKiCallback(float){
   defaultCallback("XPosition Ki");
 }
 
@@ -257,15 +257,15 @@ void defaultXPositionToleranceCallback(float){
 }
 
 
-void defaultYPositionKdCallback(int16_t){
+void defaultYPositionKdCallback(float){
   defaultCallback("YPosition Kd");
 }
 
-void defaultYPositionKpCallback(int16_t){
+void defaultYPositionKpCallback(float){
   defaultCallback("YPosition Kp");
 }
 
-void defaultYPositionKiCallback(int16_t){
+void defaultYPositionKiCallback(float){
   defaultCallback("YPosition Ki");
 }
 
