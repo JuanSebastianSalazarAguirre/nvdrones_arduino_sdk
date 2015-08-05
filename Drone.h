@@ -596,40 +596,40 @@ public:
   void sonarXPositionCallback(void (*cb)(float));
   void sonarYPositionCallback(void (*cb)(float));
 
-  void AltitudeBaseCallback(void (*cb)(int16_t));
-  void AltitudeKpCallback(void (*cb)(int16_t));
-  void AltitudeKiCallback(void (*cb)(int16_t));
+  void AltitudeBaseCallback(void (*cb)(int));
+  void AltitudeKpCallback(void (*cb)(int));
+  void AltitudeKiCallback(void (*cb)(int));
   void AltitudeReferenceCallback(void (*cb)(float));
   void AltitudeToleranceCallback(void (*cb)(float));
 
   
-  void XPositionKdCallback(void (*cb)(int16_t));
-  void XPositionKpCallback(void (*cb)(int16_t));
-  void XPositionKiCallback(void (*cb)(int16_t));
+  void XPositionKdCallback(void (*cb)(int));
+  void XPositionKpCallback(void (*cb)(int));
+  void XPositionKiCallback(void (*cb)(int));
   void XPositionReferenceCallback(void (*cb)(float));
   void XPositionToleranceCallback(void (*cb)(float));
 
-  void YPositionKdCallback(void (*cb)(int16_t));
-  void YPositionKpCallback(void (*cb)(int16_t));
-  void YPositionKiCallback(void (*cb)(int16_t));
+  void YPositionKdCallback(void (*cb)(int));
+  void YPositionKpCallback(void (*cb)(int));
+  void YPositionKiCallback(void (*cb)(int));
   void YPositionReferenceCallback(void (*cb)(float));
   void YPositionToleranceCallback(void (*cb)(float));
 
-  int16_t getAltitudeKpSync();
-  int16_t getAltitudeKiSync();
-  int16_t getAltitudeBaseSync();
+  int getAltitudeKpSync();
+  int getAltitudeKiSync();
+  int getAltitudeBaseSync();
   float getAltitudeReferenceSync();
   float getAltitudeToleranceSync();
 
-  int16_t getXPositionKpSync();
-  int16_t getXPositionKiSync();
-  int16_t getXPositionKdSync();
+  int getXPositionKpSync();
+  int getXPositionKiSync();
+  int getXPositionKdSync();
   float getXPositionReferenceSync();
   float getXPositionToleranceSync();
   
-  int16_t getYPositionKpSync();
-  int16_t getYPositionKiSync();
-  int16_t getYPositionKdSync();
+  int getYPositionKpSync();
+  int getYPositionKiSync();
+  int getYPositionKdSync();
   float getYPositionReferenceSync();
   float getYPositionToleranceSync();
   
@@ -638,21 +638,21 @@ public:
   returns -1 else
 
   */
-  int getSonarAltitudeSync();
+  float getSonarAltitudeSync();
 
   /**
   gets the current Sonar based x-position reading if any
   returns -1 else
 
   */
-  int getSonarPositionXSync();
+  float getSonarPositionXSync();
 
   /**
   gets the current Sonar based y-position reading if any
   returns -1 else
 
   */
-  int getSonarPositionYSync();
+  float getSonarPositionYSync();
 
   /**
    
