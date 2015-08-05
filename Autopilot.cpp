@@ -17,21 +17,21 @@ void Autopilot::setModeTakeover(){_serialIO->sendPacket((int8_t)0, resourceID::a
 void Autopilot::setModeIndoorHover(){_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::indoorHover);}
 void Autopilot::setModeOutdoorHover(){_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::outdoorHover);}
 
-void Autopilot::setAltitudeKp(int value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setAltitudeKp);}
-void Autopilot::setAltitudeKi(int value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setAltitudeKi);}
-void Autopilot::setAltitudeBase(int value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setAltitudeBase);}
+void Autopilot::setAltitudeKp(int8_t value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setAltitudeKp);}
+void Autopilot::setAltitudeKi(int8_t value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setAltitudeKi);}
+void Autopilot::setAltitudeBase(int8_t value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setAltitudeBase);}
 void Autopilot::setAltitudeReference(float value){_serialIO->sendPacket((float)value, resourceID::autopilot, actionID::setAltitudeReference);} 
 void Autopilot::setAltitudeTolerance(float value){_serialIO->sendPacket((float)value, resourceID::autopilot, actionID::setAltitudeTolerance);}
 
-void Autopilot::setXPositionKp(int value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setXPositionKp);}
-void Autopilot::setXPositionKi(int value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setXPositionKi);}
-void Autopilot::setXPositionKd(int value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setXPositionKd);}
+void Autopilot::setXPositionKp(int8_t value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setXPositionKp);}
+void Autopilot::setXPositionKi(int8_t value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setXPositionKi);}
+void Autopilot::setXPositionKd(int8_t value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setXPositionKd);}
 void Autopilot::setXPositionReference(float value){_serialIO->sendPacket((float)value, resourceID::autopilot, actionID::setXPositionReference);} 
 void Autopilot::setXPositionTolerance(float value){_serialIO->sendPacket((float)value, resourceID::autopilot, actionID::setXPositionTolerance);}
 
-void Autopilot::setYPositionKp(int value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setYPositionKp);}
-void Autopilot::setYPositionKi(int value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setYPositionKi);}
-void Autopilot::setYPositionKd(int value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setYPositionKd);}
+void Autopilot::setYPositionKp(int8_t value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setYPositionKp);}
+void Autopilot::setYPositionKi(int8_t value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setYPositionKi);}
+void Autopilot::setYPositionKd(int8_t value){_serialIO->sendPacket((int8_t)value, resourceID::autopilot, actionID::setYPositionKd);}
 void Autopilot::setYPositionReference(float value){_serialIO->sendPacket((float)value, resourceID::autopilot, actionID::setYPositionReference);} 
 void Autopilot::setYPositionTolerance(float value){_serialIO->sendPacket((float)value, resourceID::autopilot, actionID::setYPositionTolerance);}
 

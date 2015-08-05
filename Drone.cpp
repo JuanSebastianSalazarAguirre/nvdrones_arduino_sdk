@@ -218,7 +218,7 @@ float Drone::getAltitudeToleranceSync()                 { return _autopilot.getA
 
 int16_t Drone::getXPositionKpSync()                     { return _autopilot.getXPositionKpSync();}
 int16_t Drone::getXPositionKiSync()                     { return _autopilot.getXPositionKiSync();}
-int16_t Drone::getXPositionKdSync()                      { return _autopilot.getXPositionKdSync();}
+int16_t Drone::getXPositionKdSync()                     { return _autopilot.getXPositionKdSync();}
 float Drone::getXPositionReferenceSync()                { return _autopilot.getXPositionReferenceSync();}
 float Drone::getXPositionToleranceSync()                { return _autopilot.getXPositionToleranceSync();}
 

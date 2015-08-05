@@ -22,21 +22,21 @@ public:
   void setModeOutdoorHover();
   void setAutopilotMode(int);
   
-  void setAltitudeKp(int);
-  void setAltitudeKi(int);
-  void setAltitudeBase(int);
+  void setAltitudeKp(int8_t);
+  void setAltitudeKi(int8_t);
+  void setAltitudeBase(int8_t);
   void setAltitudeReference(float);
   void setAltitudeTolerance(float);
 
-  void setXPositionKp(int);
-  void setXPositionKi(int);
-  void setXPositionKd(int);
+  void setXPositionKp(int8_t);
+  void setXPositionKi(int8_t);
+  void setXPositionKd(int8_t);
   void setXPositionReference(float);
   void setXPositionTolerance(float);
 
-  void setYPositionKp(int);
-  void setYPositionKi(int);
-  void setYPositionKd(int);
+  void setYPositionKp(int8_t);
+  void setYPositionKi(int8_t);
+  void setYPositionKd(int8_t);
   void setYPositionReference(float);
   void setYPositionTolerance(float);
 
