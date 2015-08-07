@@ -86,6 +86,16 @@ namespace actionID {
   const int16_t getYaw = 7;
   const int16_t getPitchAngle = 8;
   const int16_t getRollAngle = 9;
+  const int16_t getRawAccelX = 10;
+  const int16_t getRawAccelY = 11;
+  const int16_t getRawAccelZ = 12;
+  const int16_t getRawGyroX = 13;
+  const int16_t getRawGyroY = 14;
+  const int16_t getRawGyroZ = 15;
+  const int16_t getRawMagnetometerX = 16;
+  const int16_t getRawMagnetometerY = 17;
+  const int16_t getRawMagnetometerZ = 18;
+  const int16_t getAltitudeBarometer = 19;
 
   // I2C
   const int16_t setI2CDeviceAddress = 1;

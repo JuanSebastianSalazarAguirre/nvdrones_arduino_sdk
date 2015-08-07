@@ -51,6 +51,16 @@ void ResponseHandler::listen() {
         else if (p.actionID == actionID::getYaw) _callbacks->yaw(dataToFloat(p.data));
         else if (p.actionID == actionID::getPitchAngle) _callbacks->pitchAngle(dataToFloat(p.data));
         else if (p.actionID == actionID::getRollAngle) _callbacks->rollAngle(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRawAccelX) _callbacks->rawAccelX(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRawAccelY) _callbacks->rawAccelY(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRawGyroZ) _callbacks->rawGyroZ(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRawGyroX) _callbacks->rawGyroX(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRawGyroY) _callbacks->rawGyroY(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRawAccelZ) _callbacks->rawAccelZ(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRawMagnetometerX) _callbacks->rawMagnetometerX(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRawMagnetometerY) _callbacks->rawMagnetometerY(dataToFloat(p.data));
+        else if (p.actionID == actionID::getRawMagnetometerZ) _callbacks->rawMagnetometerZ(dataToFloat(p.data));
+        else if (p.actionID == actionID::getAltitudeBarometer) _callbacks->altitudeBarometer(dataToFloat(p.data));
         break;
       case resourceID::i2c:
         if (p.actionID == actionID::readI2C) _callbacks->i2cRead(p.data[0]);

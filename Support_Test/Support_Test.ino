@@ -7,8 +7,11 @@
 //1.) Serial Write 'I' to test the IMU Getters 
 //2.) Serial Write 'A' to test the Autopilot Getters
 //3.) Serial write 'G' to test the GPS Getters
+//4.) Serial write 'P' to test GPIO Getters
 //5.) Serial write 'R' to test the RC Getters
-//6.) Serial write 'S' to test the Setters
+//6.) Serial.print 'C' to test the i2c getters
+//7.) Serial.print 'V' to test the Vitals getters
+//8.) Serial write 'S' to test the Setters
 //
 
 Drone myTrans(serialPort3); 
@@ -120,6 +123,75 @@ void printRoll(float R){
 void printYaw(float Y){
   Serial.print("Yaw");Serial.println(Y);
 }
+void printAccelX(float X){
+  Serial.print("RawX");Serial.println(X);
+}
+void printAccelY(float Y){
+  Serial.print("RawY");Serial.println(Y);
+}
+void printAccelZ(float Z){
+  Serial.print("RawZ");Serial.println(Z);
+}
+void printGyroX(float X){
+  Serial.print("RawX");Serial.println(X);
+}
+void printGyroY(float Y){
+  Serial.print("RawY");Serial.println(Y);
+}
+void printGyroZ(float Z){
+  Serial.print("RawZ");Serial.println(Z);
+}
+void printMagX(float X){
+  Serial.print("RawX");Serial.println(X);
+}
+void printMagY(float Y){
+  Serial.print("RawY");Serial.println(Y);
+}
+void printMagZ(float Z){
+  Serial.print("RawZ");Serial.println(Z);
+}
+void printAltitudeBarometer(float b){
+  Serial.print("Alt B");Serial.println(b);
+}
+
+//gpio getters
+void printPinMode(int val){
+  Serial.print("Pin val");Serial.println(val);
+}
+
+void printPulseIn(int val){
+  Serial.print("Pulse in");Serial.println(val);
+}
+
+void printAnalogRead(int val){
+  Serial.print("A Val");Serial.println(val);
+}
+
+void printInterrupt(){
+  Serial.print("Interrupt Detected");
+}
+
+//i2c getters
+void printRead(uint8_t val){
+  Serial.print("I2C V");Serial.println(val);
+}
+void printAvailable(int val){
+  Serial.print("I2C Ava");Serial.println(val);
+}
+
+//vitals getters
+void printVoltage(int vol){
+  Serial.print("Volts");Serial.println(vol);
+}
+void printSignalStrength(int str){
+  Serial.print("Strength");Serial.println(str);
+}
+void printHeartbeat(){
+  Serial.println("BEAT");
+}
+void printHeartbeatLost(){
+  Serial.print("LOST");
+}
 
 
 unsigned long manualTimer = 0;
@@ -160,8 +232,36 @@ void setup() {
   myTrans.latitudeCallback(printLatitude);
   myTrans.satelliteCallback(printSatelites);
   myTrans.speedCallback(printSpeed);
-  
+  for(int i = 1; i < 9; i++){
+    myTrans.digitalReadCallback(printPinMode, i);  
+  }
+  for(int i = 1; i < 5; i++){
+    myTrans.analogReadCallback(printAnalogRead, i);
+  }
+  myTrans.interruptCallback(printInterrupt,0);
+  myTrans.interruptCallback(printInterrupt,1);
+    for(int i = 1; i < 9; i++){
+    myTrans.digitalReadCallback(printPulseIn, i);  
+  }
+  myTrans.i2cReadCallback(printRead);
+  myTrans.i2cAvailableCallback(printAvailable);
+  myTrans.heartbeatLostCallback(printHeartbeatLost);
+  myTrans.heartbeatFoundCallback(printHeartbeat);
+  myTrans.voltageCallback(printVoltage);
+  myTrans.signalStrengthCallback(printSignalStrength);
+  myTrans.rawAccelXCallback(printAccelX);
+  myTrans.rawAccelYCallback(printAccelY);
+  myTrans.rawAccelZCallback(printAccelZ);
+  myTrans.rawGyroXCallback(printGyroX);
+  myTrans.rawGyroYCallback(printGyroY);
+  myTrans.rawGyroZCallback(printGyroZ);
+  myTrans.rawMagnetometerXCallback(printMagX);
+  myTrans.rawMagnetometerYCallback(printMagY);
+  myTrans.rawMagnetometerZCallback(printMagZ);
+  myTrans.altitudeBarometerCallback(printAltitudeBarometer);
+
 }
+
 void sendData(int val){
 
   //
@@ -227,6 +327,31 @@ void sendData(int val){
       break;
     case 19:
       myTrans.setFlightMode(63);
+      break;
+    case 20:
+      for(int i = 0; i < 8; i++)
+        myTrans.digitalWrite(i, 1);
+      break;
+    case 21:
+      for(int i = 0; i < 4; i++)
+        myTrans.digitalWrite(i,125);
+      break;
+    case 22:
+      Serial.print("Setting Device Adress");
+      myTrans.i2cSetDeviceAddress(33);
+      break;
+    case 23: 
+      Serial.print("i2c begin trans.");
+      myTrans.i2cBeginTransmission();
+      myTrans.i2cWrite(23);
+      myTrans.i2cEndTransmission();
+      Serial.print("i2c end transmission");
+      break;
+    case 24:
+      Serial.print("Starting Transmitter Support");
+      myTrans.startTransmitterSupport();
+      Serial.print("Ending TRansmitter Support");
+      myTrans.stopTransmitterSupport();
       break;
   }  
 }
@@ -314,7 +439,26 @@ void loop() {
 
       myTrans.getFlightMode();
 
-    }else if(incomingByte == 'S' || incomingByte == 's'){
+    }else if(incomingByte == 'V' || incomingByte == 'v'){
+
+      myTrans.getVoltage();
+
+      myTrans.getSignalStrength();
+
+    }else if(incomingByte == 'P' || incomingByte == 'p'){
+
+      for(int i = 1; i < 9; i++){
+        Serial.print("Pin: ");Serial.println(i);
+        myTrans.digitalRead(i);
+      }
+
+      for(int i = 1; i < 5; i++){
+        Serial.print("Pin ");Serial.println(i);
+        myTrans.analogRead(i);
+      }
+
+
+    }if(incomingByte == 'S' || incomingByte == 's'){
 
       for(int i = 0; i < 20; ){
 

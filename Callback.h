@@ -45,6 +45,17 @@ public:
   void (*yaw)(float);
   void (*pitchAngle)(float);
   void (*rollAngle)(float);
+  void (*rawAccelX)(float);
+  void (*rawAccelY)(float);
+  void (*rawAccelZ)(float);
+  void (*rawGyroX)(float);
+  void (*rawGyroY)(float);
+  void (*rawGyroZ)(float);
+  void (*rawMagnetometerX)(float);
+  void (*rawMagnetometerY)(float);
+  void (*rawMagnetometerZ)(float);
+  void (*altitudeBarometer)(float);
+
 
   // RC
   void (*flightMode)(int16_t);

@@ -335,6 +335,41 @@ public:
   */
   void rollAngleCallback(void (*cb)(float));
 
+
+void getRawAccelX();          
+void getRawAccelY();           
+void getRawAccelZ();            
+void getRawGyroX();             
+void getRawGyroY();             
+void getRawGyroZ();               
+void getRawMagnetometerX();                
+void getRawMagnetometerY();                 
+void getRawMagnetometerZ();   
+void getAltitudeBarometer();
+
+void rawAccelXCallback(void (*cb)(float));
+void rawAccelYCallback(void (*cb)(float));
+void rawAccelZCallback(void (*cb)(float));
+void rawGyroXCallback(void (*cb)(float));
+void rawGyroYCallback(void (*cb)(float));
+void rawGyroZCallback(void (*cb)(float));
+void rawMagnetometerXCallback(void (*cb)(float));
+void rawMagnetometerYCallback(void (*cb)(float));
+void rawMagnetometerZCallback(void (*cb)(float));
+void altitudeBarometerCallback(void (*cb)(float));
+
+float getRawAccelXSync();          
+float getRawAccelYSync();           
+float getRawAccelZSync();            
+float getRawGyroXSync();             
+float getRawGyroYSync();             
+float getRawGyroZSync();               
+float getRawMagnetometerXSync();                
+float getRawMagnetometerYSync();                 
+float getRawMagnetometerZSync();   
+float getAltitudeBarometerSync();
+
+
   /**
 
   This method calls getLatitude(), getLongitude(), getAltitude(), getSatellites(), getSpeed(), and getYaw().

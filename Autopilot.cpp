@@ -211,90 +211,90 @@ void Autopilot::getYPositionTolerance(){
 
 float Autopilot::getAltitudeBaseSync(){
 	getAltitudeBase();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getAltitudeBase, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getAltitudeBase, _incomingPacketReader);
 }
 
 float Autopilot::getAltitudeKpSync(){
 	getAltitudeKp();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getAltitudeKp, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getAltitudeKp, _incomingPacketReader);
 }
 
 float Autopilot::getAltitudeKiSync(){
 	getAltitudeKi();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getAltitudeKi, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getAltitudeKi, _incomingPacketReader);
 }
 
 float Autopilot::getAltitudeReferenceSync(){
 	getAltitudeReference();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getAltitudeReference, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getAltitudeReference, _incomingPacketReader);
 }
 
 float Autopilot::getAltitudeToleranceSync(){
 	getAltitudeTolerance();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getAltitudeTolerance, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getAltitudeTolerance, _incomingPacketReader);
 }
 
 float Autopilot::getXPositionKdSync(){
 	getXPositionKd();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getXPositionKd, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getXPositionKd, _incomingPacketReader);
 }
 
 float Autopilot::getXPositionKpSync(){
 	getXPositionKp();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getXPositionKp, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getXPositionKp, _incomingPacketReader);
 }
 
 float Autopilot::getXPositionKiSync(){
 	getXPositionKi();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getXPositionKi, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getXPositionKi, _incomingPacketReader);
 }
 
 float Autopilot::getXPositionReferenceSync(){
 	getXPositionReference();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getXPositionReference, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getXPositionReference, _incomingPacketReader);
 }
 
 float Autopilot::getXPositionToleranceSync(){
 	getXPositionTolerance();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getXPositionTolerance, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getXPositionTolerance, _incomingPacketReader);
 }
 
 float Autopilot::getYPositionKdSync(){
 	getYPositionKd();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getYPositionKd, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getYPositionKd, _incomingPacketReader);
 }
 
 float Autopilot::getYPositionKpSync(){
 	getYPositionKp();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getYPositionKp, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getYPositionKp, _incomingPacketReader);
 }
 
 float Autopilot::getYPositionKiSync(){
 	getYPositionKi();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getYPositionKi, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getYPositionKi, _incomingPacketReader);
 }
 
 float Autopilot::getYPositionReferenceSync(){
 	getYPositionReference();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getYPositionReference, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getYPositionReference, _incomingPacketReader);
 }
 
 float Autopilot::getYPositionToleranceSync(){
 	getYPositionTolerance();
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getYPositionTolerance, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getYPositionTolerance, _incomingPacketReader);
 }
 
 float Autopilot::getSonarXPositionSync(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarPositionX);
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarPositionX, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getSonarPositionX, _incomingPacketReader);
 }
 
 float Autopilot::getSonarYPositionSync(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarPositionY);
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarPositionY, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getSonarPositionY, _incomingPacketReader);
 }
 float Autopilot::getSonarAltitudeSync(){
 	_serialIO->sendPacket((int8_t)0, resourceID::autopilot, actionID::getSonarAltitude);
-	return (int8_t)Utils::blockForByteData(resourceID::autopilot, actionID::getSonarAltitude, _incomingPacketReader);
+	return (int8_t)Utils::blockForFloatData(resourceID::autopilot, actionID::getSonarAltitude, _incomingPacketReader);
 
 }

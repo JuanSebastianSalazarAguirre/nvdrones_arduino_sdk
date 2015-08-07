@@ -111,6 +111,17 @@ void Drone::getSpeed()                             { _pose.getSpeed(); }
 void Drone::getYaw()                               { _pose.getYaw(); }
 void Drone::getPitchAngle()                        { _pose.getPitchAngle(); }
 void Drone::getRollAngle()                         { _pose.getRollAngle(); }
+void Drone::getRawAccelX()                         { _pose.getRawAccelX();}
+void Drone::getRawAccelY()                         { _pose.getRawAccelY();}
+void Drone::getRawAccelZ()                         { _pose.getRawAccelZ();}
+void Drone::getRawGyroX()                          { _pose.getRawGyroX();}
+void Drone::getRawGyroY()                          { _pose.getRawGyroY();}
+void Drone::getRawGyroZ()                          { _pose.getRawGyroZ();}
+void Drone::getRawMagnetometerX()                  { _pose.getRawMagnetometerX();}
+void Drone::getRawMagnetometerY()                  { _pose.getRawMagnetometerY();}
+void Drone::getRawMagnetometerZ()                  { _pose.getRawMagnetometerZ();}
+void Drone::getAltitudeBarometer()                 { _pose.getAltitudeBarometer();}
+
 void Drone::getAltitudeKp()                        { _autopilot.getAltitudeKp();}
 void Drone::getAltitudeKi()                        { _autopilot.getAltitudeKi();}
 void Drone::getAltitudeBase()                      { _autopilot.getAltitudeBase();}
@@ -138,17 +149,36 @@ void Drone::speedCallback(void (*cb)(float))       { _pose.speedCallback(cb); }
 void Drone::yawCallback(void (*cb)(float))         { _pose.yawCallback(cb); }
 void Drone::pitchAngleCallback(void (*cb)(float))  { _pose.pitchAngleCallback(cb); }
 void Drone::rollAngleCallback(void (*cb)(float))   { _pose.rollAngleCallback(cb); }
+void Drone::rawAccelXCallback(void(*cb)(float))    { _pose.rawAccelXCallback(cb); }
+void Drone::rawAccelYCallback(void(*cb)(float))    { _pose.rawAccelYCallback(cb); }
+void Drone::rawAccelZCallback(void(*cb)(float))    { _pose.rawAccelZCallback(cb); }
+void Drone::rawGyroXCallback(void(*cb)(float))      { _pose.rawGyroXCallback(cb); }
+void Drone::rawGyroYCallback(void(*cb)(float))      { _pose.rawGyroYCallback(cb); }
+void Drone::rawGyroZCallback(void(*cb)(float))      { _pose.rawGyroZCallback(cb); }
+void Drone::rawMagnetometerXCallback(void(*cb)(float))  { _pose.rawMagnetometerXCallback(cb); }
+void Drone::rawMagnetometerYCallback(void(*cb)(float))  { _pose.rawMagnetometerYCallback(cb); }
+void Drone::rawMagnetometerZCallback(void(*cb)(float))  { _pose.rawMagnetometerZCallback(cb); }
+void Drone::altitudeBarometerCallback(void(*cb)(float)) { _pose.altitudeBarometerCallback(cb);}
 
 // Sync Getters
-float Drone::getLatitudeSync()      { return _pose.getLatitudeSync(); }
-float Drone::getLongitudeSync()     { return _pose.getLongitudeSync(); }
-float Drone::getAltitudeSync()      { return _pose.getAltitudeSync(); }
-int16_t Drone::getSatellitesSync()  { return _pose.getSatellitesSync(); }
-float Drone::getSpeedSync()         { return _pose.getSpeedSync(); }
-float Drone::getYawSync()           { return _pose.getYawSync(); }
-float Drone::getPitchAngleSync()    { return _pose.getPitchAngleSync(); }
-float Drone::getRollAngleSync()     { return _pose.getRollAngleSync(); }
-
+float Drone::getLatitudeSync()          { return _pose.getLatitudeSync(); }
+float Drone::getLongitudeSync()         { return _pose.getLongitudeSync(); }
+float Drone::getAltitudeSync()          { return _pose.getAltitudeSync(); }
+int16_t Drone::getSatellitesSync()      { return _pose.getSatellitesSync(); }
+float Drone::getSpeedSync()             { return _pose.getSpeedSync(); }
+float Drone::getYawSync()               { return _pose.getYawSync(); }
+float Drone::getPitchAngleSync()        { return _pose.getPitchAngleSync(); }
+float Drone::getRollAngleSync()         { return _pose.getRollAngleSync(); }
+float Drone::getRawAccelXSync()         { return _pose.getRawAccelXSync();}
+float Drone::getRawAccelYSync()         { return _pose.getRawAccelYSync();}
+float Drone::getRawAccelZSync()         { return _pose.getRawAccelZSync();}
+float Drone::getRawGyroXSync()          { return _pose.getRawGyroXSync();}
+float Drone::getRawGyroYSync()          { return _pose.getRawGyroYSync();}
+float Drone::getRawGyroZSync()          { return _pose.getRawGyroZSync();}
+float Drone::getRawMagnetometerXSync()  { return _pose.getRawMagnetometerXSync();}
+float Drone::getRawMagnetometerYSync()  { return _pose.getRawMagnetometerYSync();}
+float Drone::getRawMagnetometerZSync()  { return _pose.getRawMagnetometerZSync();}
+float Drone::getAltitudeBarometerSync() { return _pose.getAltitudeBarometerSync();}
 
 //
 // TODO: rename RC
@@ -177,19 +207,19 @@ void Drone::elevatorCallback(void (*cb)(int16_t))    { _rc.elevatorCallback(cb);
 void Drone::sonarAltitudeCallback(void (*cb)(float))        { _autopilot.sonarAltitudeCallback(cb); }
 void Drone::sonarXPositionCallback(void (*cb)(float))       { _autopilot.sonarXPositionCallback(cb); }
 void Drone::sonarYPositionCallback(void (*cb)(float))       { _autopilot.sonarYPositionCallback(cb); }
-void Drone::AltitudeKpCallback(void (*cb)(float))         { _autopilot.altitudeKpCallback(cb); }
-void Drone::AltitudeKiCallback(void (*cb)(float))         { _autopilot.altitudeKiCallback(cb); }
+void Drone::AltitudeKpCallback(void (*cb)(float))           { _autopilot.altitudeKpCallback(cb); }
+void Drone::AltitudeKiCallback(void (*cb)(float))           { _autopilot.altitudeKiCallback(cb); }
 void Drone::AltitudeReferenceCallback(void (*cb)(float))    { _autopilot.altitudeReferenceCallback(cb); }
 void Drone::AltitudeToleranceCallback(void (*cb)(float))    { _autopilot.altitudeToleranceCallback(cb); }
-void Drone::AltitudeBaseCallback(void (*cb)(float))       { _autopilot.altitudeBaseCallback(cb); }
-void Drone::XPositionKpCallback(void (*cb)(float))        { _autopilot.XPositionKpCallback(cb); }
-void Drone::XPositionKiCallback(void (*cb)(float))        { _autopilot.XPositionKiCallback(cb); }
-void Drone::XPositionKdCallback(void (*cb)(float))        { _autopilot.XPositionKdCallback(cb); }
+void Drone::AltitudeBaseCallback(void (*cb)(float))         { _autopilot.altitudeBaseCallback(cb); }
+void Drone::XPositionKpCallback(void (*cb)(float))          { _autopilot.XPositionKpCallback(cb); }
+void Drone::XPositionKiCallback(void (*cb)(float))          { _autopilot.XPositionKiCallback(cb); }
+void Drone::XPositionKdCallback(void (*cb)(float))          { _autopilot.XPositionKdCallback(cb); }
 void Drone::XPositionReferenceCallback(void (*cb)(float))   { _autopilot.XPositionReferenceCallback(cb); }
 void Drone::XPositionToleranceCallback(void (*cb)(float))   { _autopilot.XPositionToleranceCallback(cb); } 
-void Drone::YPositionKpCallback(void (*cb)(float))        { _autopilot.YPositionKpCallback(cb); }
-void Drone::YPositionKiCallback(void (*cb)(float))        { _autopilot.YPositionKiCallback(cb); }
-void Drone::YPositionKdCallback(void (*cb)(float))        { _autopilot.YPositionKdCallback(cb); }
+void Drone::YPositionKpCallback(void (*cb)(float))          { _autopilot.YPositionKpCallback(cb); }
+void Drone::YPositionKiCallback(void (*cb)(float))          { _autopilot.YPositionKiCallback(cb); }
+void Drone::YPositionKdCallback(void (*cb)(float))          { _autopilot.YPositionKdCallback(cb); }
 void Drone::YPositionReferenceCallback(void (*cb)(float))   { _autopilot.YPositionReferenceCallback(cb); }
 void Drone::YPositionToleranceCallback(void (*cb)(float))   { _autopilot.YPositionToleranceCallback(cb); } 
 void Drone::setAileronElevatorRudderThrottle(int16_t aileron,
@@ -206,25 +236,25 @@ int16_t Drone::getThrottleSync()                        { return _rc.getThrottle
 int16_t Drone::getRudderSync()                          { return _rc.getRudderSync(); }
 int16_t Drone::getFlightModeSync()                      { return _rc.getFlightModeSync(); }
 
-float Drone::getSonarAltitudeSync()                   { return _autopilot.getSonarAltitudeSync();}
-float Drone::getSonarPositionXSync()                  { return _autopilot.getSonarXPositionSync();}
-float Drone::getSonarPositionYSync()                  { return _autopilot.getSonarYPositionSync();}
+float Drone::getSonarAltitudeSync()                     { return _autopilot.getSonarAltitudeSync();}
+float Drone::getSonarPositionXSync()                    { return _autopilot.getSonarXPositionSync();}
+float Drone::getSonarPositionYSync()                    { return _autopilot.getSonarYPositionSync();}
 
-float Drone::getAltitudeKpSync()                      { return _autopilot.getAltitudeKpSync();}
-float Drone::getAltitudeKiSync()                      { return _autopilot.getAltitudeKiSync();}
-float Drone::getAltitudeBaseSync()                    { return _autopilot.getAltitudeBaseSync();}
+float Drone::getAltitudeKpSync()                        { return _autopilot.getAltitudeKpSync();}
+float Drone::getAltitudeKiSync()                        { return _autopilot.getAltitudeKiSync();}
+float Drone::getAltitudeBaseSync()                      { return _autopilot.getAltitudeBaseSync();}
 float Drone::getAltitudeReferenceSync()                 { return _autopilot.getAltitudeReferenceSync();}
 float Drone::getAltitudeToleranceSync()                 { return _autopilot.getAltitudeToleranceSync();}
 
-float Drone::getXPositionKpSync()                     { return _autopilot.getXPositionKpSync();}
-float Drone::getXPositionKiSync()                     { return _autopilot.getXPositionKiSync();}
-float Drone::getXPositionKdSync()                     { return _autopilot.getXPositionKdSync();}
+float Drone::getXPositionKpSync()                       { return _autopilot.getXPositionKpSync();}
+float Drone::getXPositionKiSync()                       { return _autopilot.getXPositionKiSync();}
+float Drone::getXPositionKdSync()                       { return _autopilot.getXPositionKdSync();}
 float Drone::getXPositionReferenceSync()                { return _autopilot.getXPositionReferenceSync();}
 float Drone::getXPositionToleranceSync()                { return _autopilot.getXPositionToleranceSync();}
 
-float Drone::getYPositionKpSync()                     { return _autopilot.getYPositionKpSync();}
-float Drone::getYPositionKiSync()                     { return _autopilot.getYPositionKiSync();}
-float Drone::getYPositionKdSync()                     { return _autopilot.getYPositionKdSync();}
+float Drone::getYPositionKpSync()                       { return _autopilot.getYPositionKpSync();}
+float Drone::getYPositionKiSync()                       { return _autopilot.getYPositionKiSync();}
+float Drone::getYPositionKdSync()                       { return _autopilot.getYPositionKdSync();}
 float Drone::getYPositionReferenceSync()                { return _autopilot.getYPositionReferenceSync();}
 float Drone::getYPositionToleranceSync()                { return _autopilot.getYPositionToleranceSync();}
 
@@ -294,24 +324,24 @@ void Drone::setErrorHandler(void (*cb)(int16_t))          { _vitals.setErrorHand
 //Autopilot
 //
 
-void Drone::setAutopilotMode(int value)               {_autopilot.setAutopilotMode(value);}
-void Drone::setAltitudeKp(float value)                  {_autopilot.setAltitudeKp(value);}
-void Drone::setAltitudeKi(float value)                  {_autopilot.setAltitudeKi(value);}
-void Drone::setAltitudeBase(float value)                {_autopilot.setAltitudeBase(value);}
-void Drone::setAltitudeReference(float value)         {_autopilot.setAltitudeReference(value);}
-void Drone::setAltitudeTolerance(float value)         {_autopilot.setAltitudeTolerance(value);}
+void Drone::setAutopilotMode(int value)                { _autopilot.setAutopilotMode(value);}
+void Drone::setAltitudeKp(float value)                 { _autopilot.setAltitudeKp(value);}
+void Drone::setAltitudeKi(float value)                 { _autopilot.setAltitudeKi(value);}
+void Drone::setAltitudeBase(float value)               { _autopilot.setAltitudeBase(value);}
+void Drone::setAltitudeReference(float value)          { _autopilot.setAltitudeReference(value);}
+void Drone::setAltitudeTolerance(float value)          { _autopilot.setAltitudeTolerance(value);}
 
-void Drone::setXPositionKp(float value)                  {_autopilot.setXPositionKp(value);}
-void Drone::setXPositionKi(float value)                  {_autopilot.setXPositionKi(value);}
-void Drone::setXPositionKd(float value)                  {_autopilot.setXPositionKd(value);}
-void Drone::setXPositionReference(float value)         {_autopilot.setXPositionReference(value);}
-void Drone::setXPositionTolerance(float value)         {_autopilot.setXPositionTolerance(value);}
+void Drone::setXPositionKp(float value)                { _autopilot.setXPositionKp(value);}
+void Drone::setXPositionKi(float value)                { _autopilot.setXPositionKi(value);}
+void Drone::setXPositionKd(float value)                { _autopilot.setXPositionKd(value);}
+void Drone::setXPositionReference(float value)         { _autopilot.setXPositionReference(value);}
+void Drone::setXPositionTolerance(float value)         { _autopilot.setXPositionTolerance(value);}
 
-void Drone::setYPositionKp(float value)                  {_autopilot.setYPositionKp(value);}
-void Drone::setYPositionKi(float value)                  {_autopilot.setYPositionKi(value);}
-void Drone::setYPositionKd(float value)                  {_autopilot.setYPositionKd(value);}
-void Drone::setYPositionReference(float value)         {_autopilot.setYPositionReference(value);}
-void Drone::setYPositionTolerance(float value)         {_autopilot.setYPositionTolerance(value);}
+void Drone::setYPositionKp(float value)                { _autopilot.setYPositionKp(value);}
+void Drone::setYPositionKi(float value)                { _autopilot.setYPositionKi(value);}
+void Drone::setYPositionKd(float value)                { _autopilot.setYPositionKd(value);}
+void Drone::setYPositionReference(float value)         { _autopilot.setYPositionReference(value);}
+void Drone::setYPositionTolerance(float value)         { _autopilot.setYPositionTolerance(value);}
 
 //
 //Transmitter Support Methods

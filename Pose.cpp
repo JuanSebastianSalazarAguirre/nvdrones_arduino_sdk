@@ -119,3 +119,67 @@ float Pose::getRollAngleSync() {
   getRollAngle();
   return Utils::blockForFloatData(resourceID::pose, actionID::getRollAngle, _incomingPacketReader);
 }
+
+
+void Pose::rawAccelXCallback(void (*cb)(float)){ _callbacks->rawAccelX = cb;}
+void Pose::rawAccelYCallback(void (*cb)(float)){ _callbacks->rawAccelY = cb;}
+void Pose::rawAccelZCallback(void (*cb)(float)){ _callbacks->rawAccelZ = cb;}
+void Pose::rawGyroXCallback(void (*cb)(float)){ _callbacks->rawGyroX = cb;}
+void Pose::rawGyroYCallback(void (*cb)(float)){ _callbacks->rawGyroY = cb;}
+void Pose::rawGyroZCallback(void (*cb)(float)){ _callbacks->rawGyroZ = cb;}
+void Pose::rawMagnetometerXCallback(void (*cb)(float)){ _callbacks->rawMagnetometerX = cb;}
+void Pose::rawMagnetometerYCallback(void (*cb)(float)){ _callbacks->rawMagnetometerY = cb;}
+void Pose::rawMagnetometerZCallback(void (*cb)(float)){ _callbacks->rawMagnetometerZ = cb;}
+void Pose::altitudeBarometerCallback(void (*cb)(float)){ _callbacks->altitudeBarometer = cb;}
+
+void Pose::getRawAccelX(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRawAccelX);}
+void Pose::getRawAccelY(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRawAccelY);}
+void Pose::getRawAccelZ(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRawAccelZ);}
+void Pose::getRawGyroX(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRawGyroX);}
+void Pose::getRawGyroY(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRawGyroX);}
+void Pose::getRawGyroZ(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRawGyroX);}
+void Pose::getRawMagnetometerX(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRawMagnetometerX);}
+void Pose::getRawMagnetometerY(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRawMagnetometerX);}
+void Pose::getRawMagnetometerZ(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getRawMagnetometerX);}
+void Pose::getAltitudeBarometer(){ _serialIO->sendPacket((int8_t)0, resourceID::pose, actionID::getAltitudeBarometer);}
+
+float Pose::getRawAccelXSync(){
+  getRawAccelX();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRawAccelX, _incomingPacketReader);
+}
+float Pose::getRawAccelYSync(){
+  getRawAccelY();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRawAccelY, _incomingPacketReader);
+}
+float Pose::getRawAccelZSync(){
+  getRawAccelZ();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRawAccelZ, _incomingPacketReader);
+}
+float Pose::getRawGyroXSync(){
+  getRawGyroX();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRawGyroX, _incomingPacketReader);
+}
+float Pose::getRawGyroYSync(){
+  getRawGyroY();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRawGyroY, _incomingPacketReader);
+}
+float Pose::getRawGyroZSync(){
+  getRawGyroZ();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRawGyroZ, _incomingPacketReader);
+}
+float Pose::getRawMagnetometerXSync(){
+  getRawMagnetometerX();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRawMagnetometerX, _incomingPacketReader);
+}
+float Pose::getRawMagnetometerYSync(){
+  getRawMagnetometerY();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRawMagnetometerY, _incomingPacketReader);
+}
+float Pose::getRawMagnetometerZSync(){
+  getRawMagnetometerZ();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getRawMagnetometerZ, _incomingPacketReader);
+}
+float Pose::getAltitudeBarometerSync(){
+  getAltitudeBarometer();
+  return Utils::blockForFloatData(resourceID::pose, actionID::getAltitudeBarometer, _incomingPacketReader);
+}

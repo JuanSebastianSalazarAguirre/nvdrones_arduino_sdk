@@ -277,7 +277,45 @@ void defaultYPositionToleranceCallback(float){
   defaultCallback("YPosition Tolerance");
 }
 
+void defaultRawAccelXCallback(float){
+  defaultCallback("Raw Accel");
+}
 
+void defaultRawAccelYCallback(float){
+  defaultCallback("Raw Accel");
+}
+
+void defaultRawAccelZCallback(float){
+  defaultCallback("Raw Accel");
+}
+
+void defaultRawGyroXCallback(float){
+  defaultCallback("Raw Accel");
+}
+
+void defaultRawGyroYCallback(float){
+  defaultCallback("Raw Gyro");
+}
+
+void defaultRawGyroZCallback(float){
+  defaultCallback("Raw Accel");
+}
+
+void defaultRawMagnetometerXCallback(float){
+  defaultCallback("Raw Magnetometer");
+}
+
+void defaultRawMagnetometerYCallback(float){
+  defaultCallback("Raw Magnetometer");
+}
+
+void defaultRawMagnetometerZCallback(float){
+  defaultCallback("Raw Magnetometer");
+}
+
+void defaultAltitudeBarometerCallback(float){
+  defaultCallback("Barometer Callback");
+}
 
 Callback::Callback():
 i2cRead(&defaultI2CReadCallback),
@@ -290,6 +328,17 @@ satellite(&defaultSatelliteCallback),
 yaw(&defaultYawCallback),
 pitchAngle(&defaultPitchAngleCallback),
 rollAngle(&defaultRollAngleCallback),
+rawAccelX(&defaultRawAccelXCallback),
+rawAccelY(&defaultRawAccelYCallback),
+rawAccelZ(&defaultRawAccelZCallback),
+rawGyroX(&defaultRawGyroXCallback),
+rawGyroY(&defaultRawGyroYCallback),
+rawGyroZ(&defaultRawGyroZCallback),
+rawMagnetometerX(&defaultRawMagnetometerXCallback),
+rawMagnetometerY(&defaultRawMagnetometerYCallback),
+rawMagnetometerZ(&defaultRawMagnetometerZCallback),
+altitudeBarometer(&defaultAltitudeBarometerCallback),
+
 flightMode(&defaultFlightModeCallback),
 elevator(&defaultElevatorCallback),
 aileron(&defaultAileronCallback),
@@ -344,13 +393,11 @@ getAltitudeKi(&defaultAltitudeKiCallback),
 getAltitudeBase(&defaultAltitudeBaseCallback),
 getAltitudeReference(&defaultAltitudeReferenceCallback),
 getAltitudeTolerance(&defaultAltitudeToleranceCallback),
-
 getXPositionKp(&defaultXPositionKpCallback),
 getXPositionKi(&defaultXPositionKiCallback),
 getXPositionKd(&defaultXPositionKdCallback),
 getXPositionReference(&defaultXPositionReferenceCallback),
 getXPositionTolerance(&defaultXPositionToleranceCallback),
-
 getYPositionKp(&defaultYPositionKpCallback),
 getYPositionKi(&defaultYPositionKiCallback),
 getYPositionKd(&defaultYPositionKdCallback),
